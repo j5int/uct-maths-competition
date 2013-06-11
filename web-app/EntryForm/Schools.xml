@@ -1,0 +1,3267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataroot xmlns:od="urn:schemas-microsoft-com:officedata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="Schools.xsd" generated="2012-03-09T09:52:46">
+<Schools>
+<Name>Abbott&amp;#039s Coll. Claremont</Name>
+<Key>002</Key>
+<Language>e</Language>
+<Address>P O Box 2317
+CLAREINCH
+7740</Address>
+<Phone>021 671-1173</Phone>
+<Fax>021 671-2630</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>bjacoby@abbotts.co.za</Email>
+</Schools>
+<Schools>
+<Name>Abbott&amp;#039s Coll. Milnerton</Name>
+<Key>003</Key>
+<Language>e</Language>
+<Address>8 Eddison Way
+Century Gate
+Century Cit
+7441</Address>
+<Phone>021 551 4090</Phone>
+<Fax>021 551 4093</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>kate@abbottsm.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Alexander Sinton High</Name>
+<Key>004</Key>
+<Language>e</Language>
+<Address>Thornton Road
+Crawford
+7764</Address>
+<Phone>021 697 1350</Phone>
+<Fax>021 696 1756</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Arcadia Sec. School</Name>
+<Key>005</Key>
+<Language>e</Language>
+<Address>03 Karee Road
+BONTEHEUWEL
+7764</Address>
+<Phone>021 694 9941</Phone>
+<Fax>021 694 1736</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Athlone High School</Name>
+<Key>006</Key>
+<Language>e</Language>
+<Address>Calendula Road
+SILVERTOWN
+0184</Address>
+<Phone>021 637 6930</Phone>
+<Fax>021 637 4151</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Atlantis Sek. Skool</Name>
+<Key>007</Key>
+<Language>a</Language>
+<Address>P O Box 3019
+Atlantis
+7349</Address>
+<Phone>021 572 3330</Phone>
+<Fax>021 572 7963</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>admin@atlantissec.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Belgravia High School</Name>
+<Key>009</Key>
+<Language>e</Language>
+<Address>Veld Road
+BELGRAVIA ESTATE
+7764
+</Address>
+<Phone>021 696 5188</Phone>
+<Fax>021 697 0370</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@belgravia.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Bellville South S. School</Name>
+<Key>010</Key>
+<Language>e</Language>
+<Address>P O Box 367
+KASSELSVLEI
+BELLVILLE SOUTH
+7533</Address>
+<Phone> 021 951 6600</Phone>
+<Fax>021 951 5270</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>postmaster@bellvillesouthsss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Bellville H S</Name>
+<Key>011</Key>
+<Language>e</Language>
+<Address>De La Haye Laan
+BELLVILLE
+7530</Address>
+<Phone>021 948 4140</Phone>
+<Fax>021 948 1801</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>general@bellvillehigh.co.za</Email>
+</Schools>
+<Schools>
+<Name>Bellville Technical H S</Name>
+<Key>012</Key>
+<Language>e</Language>
+<Address>Private Bag X4
+SANLAMHOF
+7532</Address>
+<Phone>021 948 6951</Phone>
+<Fax>021 946 3752</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Bergvliet High School</Name>
+<Key>013</Key>
+<Language>e</Language>
+<Address>Firgrove Way
+BERGVLIET
+7945</Address>
+<Phone>021 712 0284</Phone>
+<Fax>021 715 0631</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>jenny@bhs.wcape.school.co.za</Email>
+</Schools>
+<Schools>
+<Name>Bloemhof H Meisiesskool</Name>
+<Key>014</Key>
+<Language>a</Language>
+<Address>Posbus 188
+STELLENBOSCH
+7599</Address>
+<Phone> 021 887 3067</Phone>
+<Fax>021 887 3044</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Boland Landbouskool </Name>
+<Key>015</Key>
+<Language>a</Language>
+<Address>Privaatsak X01
+WINDMEUL
+7630</Address>
+<Phone>021 869-8143</Phone>
+<Fax>021869-8144</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>hlb@mweb.co.za</Email>
+</Schools>
+<Schools>
+<Name>Bredasdorp H S</Name>
+<Key>016</Key>
+<Language>a</Language>
+<Address>Posbus 255
+BREDASDORP
+7280</Address>
+<Phone>028 424 2207</Phone>
+<Fax>028 424 1210</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>brdhighadm@brd.dorea.co.za</Email>
+</Schools>
+<Schools>
+<Name>Bridge House School</Name>
+<Key>017</Key>
+<Language>e</Language>
+<Address>P O Box 444
+FRANSCHHOEK
+7690</Address>
+<Phone>021 874-1790</Phone>
+<Fax>021 874-1923</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>alaadl@bridgehouse.org.za</Email>
+</Schools>
+<Schools>
+<Name>Buren Hoerskool</Name>
+<Key>018</Key>
+<Language>e</Language>
+<Address>Poole Street
+YSTERPLAAT
+7405</Address>
+<Phone>021 511-1912</Phone>
+<Fax>021 510 8206</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>mwbhs@mweb.co.za</Email>
+</Schools>
+<Schools>
+<Name>Camps Bay High School</Name>
+<Key>019</Key>
+<Language>e</Language>
+<Address>Lower Kloof Road
+CAMPS BAY
+8005</Address>
+<Phone>021 438 1507</Phone>
+<Fax>021 438 5912</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Cathkin High School</Name>
+<Key>020</Key>
+<Language>e</Language>
+<Address>5th Street
+HEIDEVELD
+7764</Address>
+<Phone>021 637 5366</Phone>
+<Fax>021 633 2701</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Ned Doman H S</Name>
+<Key>075</Key>
+<Language>e</Language>
+<Address>Buckley Avenue
+ATHLONE
+7764</Address>
+<Phone>021 696 5114</Phone>
+<Fax>021 696 6275</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin1@neddoman.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Ocean View Sec School</Name>
+<Key>076</Key>
+<Language>e</Language>
+<Address>Hydra Avenue
+OCEAN VIEW
+7995</Address>
+<Phone>021 783 1623</Phone>
+<Fax>021 783 3593</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>ovhigh@worldonline.co.za</Email>
+</Schools>
+<Schools>
+<Name>Paarl Boy&amp;#039s High School</Name>
+<Key>077</Key>
+<Language>e</Language>
+<Address>P O Box 11
+PAARL
+7646</Address>
+<Phone>021 872 2875</Phone>
+<Fax>021 872 5246</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>info@paarlboyshigh.org.za</Email>
+</Schools>
+<Schools>
+<Name>Paarl Gimnasium </Name>
+<Key>078</Key>
+<Language>a</Language>
+<Address>Posbus 281
+PAARL
+7620</Address>
+<Phone>021 872 1541</Phone>
+<Fax>021 872 8654</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>hoof@paarlgim.co.za</Email>
+</Schools>
+<Schools>
+<Name>Paarl Girls&amp;#039 High School</Name>
+<Key>079</Key>
+<Language>a</Language>
+<Address>Posbus 50
+PAARL
+7622</Address>
+<Phone>021 872 1730</Phone>
+<Fax>021 872 9102</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>principal@paarlgirlshigh.org.za</Email>
+</Schools>
+<Schools>
+<Name>Parel Vallei High School</Name>
+<Key>080</Key>
+<Language>e</Language>
+<Address>Posbus 400
+SOMERSET WES
+7129</Address>
+<Phone>021 852 1228</Phone>
+<Fax>021 852 5005</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>aprinsloo@pvallei.co.za</Email>
+</Schools>
+<Schools>
+<Name>Parklands College of Educ.</Name>
+<Key>081</Key>
+<Language>e</Language>
+<Address>P O Box 11546
+BLOUBERGRANDT
+7443</Address>
+<Phone>021 557 8428</Phone>
+<Fax>021 557 8421</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>fdupreez@parklands.co.za</Email>
+</Schools>
+<Schools>
+<Name>Paul Roos Gymnasium</Name>
+<Key>082</Key>
+<Language>e</Language>
+<Address>Suidwal Road
+STELLENBOSCH
+7600</Address>
+<Phone>021 887 0017</Phone>
+<Fax>021 883 8461</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Pinelands H S</Name>
+<Key>083</Key>
+<Language>e</Language>
+<Address>Forest Drive
+PINELANDS
+7405</Address>
+<Phone>021 531 7410</Phone>
+<Fax>021 531 7415</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>neddy@phs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Plumstead High School</Name>
+<Key>084</Key>
+<Language>e</Language>
+<Address>Basil Road
+PLUMSTEAD
+7800</Address>
+<Phone>021 761 8066</Phone>
+<Fax>021 797 8494</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Portland High School</Name>
+<Key>085</Key>
+<Language>e</Language>
+<Address>C/O Merrydale &amp;
+Morgenster Roads
+PORTLAND
+7785</Address>
+<Phone>021 374 4141/2</Phone>
+<Fax>021 374 3107</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>President H S </Name>
+<Key>086</Key>
+<Language>a</Language>
+<Address>Tygerbergstraaat
+VRIJZEE
+7460</Address>
+<Phone>021 591 5183</Phone>
+<Fax>021 591 5181</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>root@hspres.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Proteus Senior Sek Skool</Name>
+<Key>087</Key>
+<Language>a</Language>
+<Address>P O Box 952
+REYGERSDAL
+ATLANTIS
+7352</Address>
+<Phone>021 572 6277</Phone>
+<Fax>021 572 1540</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>proteus@interkom.co.za</Email>
+</Schools>
+<Schools>
+<Name>Queens Park High School</Name>
+<Key>088</Key>
+<Language>e</Language>
+<Address>Balfour Road
+WOODSTOCK
+7945</Address>
+<Phone>021 448 1997/8</Phone>
+<Fax>021 448 3043</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Reddam Coll. Constantia</Name>
+<Key>089</Key>
+<Language>e</Language>
+<Address>Private Bag X14
+CONSTANTIA
+7848</Address>
+<Phone>021 702 2322</Phone>
+<Fax>021 702 2366</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>jwilson@reddamh.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Rhenish Girls&amp;#039 H S</Name>
+<Key>090</Key>
+<Language>e</Language>
+<Address>P O Box 87
+STELLENBOSCH
+7599</Address>
+<Phone>021 887 6807</Phone>
+<Fax>021 887 8090</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>principal@rhenish.co.za</Email>
+</Schools>
+<Schools>
+<Name>Rhodes High School</Name>
+<Key>091</Key>
+<Language>e</Language>
+<Address>Montreal Avenue
+MOWBRAY
+7700</Address>
+<Phone>021 689 8228</Phone>
+<Fax>021 689 2404</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Cedar House</Name>
+<Key>021</Key>
+<Language>e</Language>
+<Address>5 Ascot Road
+KENILWORTH
+7708</Address>
+<Phone>021 762 0649</Phone>
+<Fax>021 761 8556</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Citrusdal H S</Name>
+<Key>022</Key>
+<Language>a</Language>
+<Address>Privaatsak X2
+CITRUSDAL
+7340</Address>
+<Phone>022 921 3931</Phone>
+<Fax>022 921 2100</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>citrushigh@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>Constantia Waldorf</Name>
+<Key>023</Key>
+<Language>e</Language>
+<Address>Spaanschemat River Rd
+CONSTANTIA
+7806</Address>
+<Phone>021 794 2103</Phone>
+<Fax>021 794 1105</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>waldorf@iafrica.com</Email>
+</Schools>
+<Schools>
+<Name>Curro Private School</Name>
+<Key>024</Key>
+<Language>e</Language>
+<Address>P O Box 2436
+DURBANVILLE
+7530</Address>
+<Phone>021 975 6377</Phone>
+<Fax>021 975 7539</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>currohigh@curro.co.za</Email>
+</Schools>
+<Schools>
+<Name>De Kuilen H S </Name>
+<Key>025</Key>
+<Language>a</Language>
+<Address>Posbus 301
+KUILSRIVIER
+7579</Address>
+<Phone>021 903 5121</Phone>
+<Fax>021 903 0317</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@dekuilenhighschool.co.za</Email>
+</Schools>
+<Schools>
+<Name>D F Malan H S </Name>
+<Key>026</Key>
+<Language>a</Language>
+<Address>Frans Conradieierylaan
+BELLVILLE
+7530</Address>
+<Phone>021 948 2996</Phone>
+<Fax>021 948 8781</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>isentrum@dfmalan.com</Email>
+</Schools>
+<Schools>
+<Name>Deutsche Schule Kapstadt</Name>
+<Key>027</Key>
+<Language>e</Language>
+<Address>28 Bayview Avenue
+TAMBOERSKLOOF
+8001</Address>
+<Phone>021 423 6325</Phone>
+<Fax>021 423 8349</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>dsk@admin.dsk.wcape.school</Email>
+</Schools>
+<Schools>
+<Name>Bishops </Name>
+<Key>028</Key>
+<Language>e</Language>
+<Address>Campground road
+RONDBOSCH
+7700</Address>
+<Phone>021 659 1000</Phone>
+<Fax>021 659 1013</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>mbizony@dcwcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Durbanville H S</Name>
+<Key>029</Key>
+<Language>a</Language>
+<Address>Posbus 417
+DURBANVILLE
+7551</Address>
+<Phone>021 976 3189</Phone>
+<Fax>021 976 3188</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@dhs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Eben Donges High School</Name>
+<Key>030</Key>
+<Language>e</Language>
+<Address>Van der Bijlstraat
+KRAAIFONTEIN
+7570</Address>
+<Phone>021 988 7439</Phone>
+<Fax>021 988 1441</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>head@edonges.org.za</Email>
+</Schools>
+<Schools>
+<Name>Edgemead High School</Name>
+<Key>031</Key>
+<Language>e</Language>
+<Address>Letchworth Drive
+EDGEMEAD
+7441</Address>
+<Phone>021 558 1132</Phone>
+<Fax>021 558 4407</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>bootsmak@ehs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>El Shaddai Christian Sch</Name>
+<Key>032</Key>
+<Language>e</Language>
+<Address>P O Box 1980
+DURBANVILLE
+7551</Address>
+<Phone>021 975 1980</Phone>
+<Fax>021 975 1985</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>lbudge@escs.org.za</Email>
+</Schools>
+<Schools>
+<Name>Fairbairn College</Name>
+<Key>033</Key>
+<Language>e</Language>
+<Address>Hugo Street
+GOODWOOD
+7460</Address>
+<Phone>021 591 7117</Phone>
+<Fax>021 591 0107</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Fish Hoek High School</Name>
+<Key>035</Key>
+<Language>e</Language>
+<Address>13th Avenue
+FISH HOEK
+7975</Address>
+<Phone>021 782 1107</Phone>
+<Fax>021 782 5438</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Garlandale High School</Name>
+<Key>036</Key>
+<Language>e</Language>
+<Address>General Street
+ATHLONE
+7780</Address>
+<Phone>021 696 7908</Phone>
+<Fax>021 696 9313</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>garlandh@mweb.co.za</Email>
+</Schools>
+<Schools>
+<Name>Cosat (Centre Science &amp; T)</Name>
+<Key>037</Key>
+<Language>e</Language>
+<Address>P O Box 376
+MITCHELLS PLAIN
+7789</Address>
+<Phone>021 361 3430</Phone>
+<Fax>021 361 8880</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>dumisani@cosat.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Good Hope Seminary H S</Name>
+<Key>038</Key>
+<Language>e</Language>
+<Address>Hope Street
+GARDENS  Cape Town
+8000</Address>
+<Phone>021 465 2330</Phone>
+<Fax>021 461 3902</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>ghshs@iafrica.com</Email>
+</Schools>
+<Schools>
+<Name>Rocklands Sec School</Name>
+<Key>092</Key>
+<Language>e</Language>
+<Address>c/o Cedar &amp; Eisleben Roads
+Rocklands MITCHELL&amp;#039S PLAIN 
+7798</Address>
+<Phone>021 392 7139/0</Phone>
+<Fax>021 391 1653</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>admin@rss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Rondebosch Boys&amp;#039 H S</Name>
+<Key>093</Key>
+<Language>e</Language>
+<Address>Canigou Avenue
+RONDEBOSCH
+7700</Address>
+<Phone>021 686 3987</Phone>
+<Fax>021 689 9726</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Rustenburg High School</Name>
+<Key>094</Key>
+<Language>e</Language>
+<Address>Camp Ground Road
+RONDEBOSCH
+7700</Address>
+<Phone>021 686 4066</Phone>
+<Fax>021 686 7114</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Sama High School</Name>
+<Key>095</Key>
+<Language>e</Language>
+<Address>75 Main Road
+DIEP RIVER
+7940</Address>
+<Phone>021 715 4777</Phone>
+<Fax>021 715 2112</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>samahigh@mweb.co.za</Email>
+</Schools>
+<Schools>
+<Name>Sans Souci Girls&amp;#039 H S</Name>
+<Key>096</Key>
+<Language>e</Language>
+<Address>Sans Souci Girls’ High School
+PO Box 44330
+Claremont 
+7735
+
+</Address>
+<Phone>021 671 7188</Phone>
+<Fax>021 683 4090</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>office@sanssouci.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Sarepta High School</Name>
+<Key>097</Key>
+<Language>e</Language>
+<Address>P O Box 22
+KUILS RIVER
+7579</Address>
+<Phone>021 903 2179</Phone>
+<Fax>021 903 8298</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@sareptass.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Settlers High School</Name>
+<Key>098</Key>
+<Language>e</Language>
+<Address>P O Box 599
+BELLVILLE
+7535</Address>
+<Phone>021 948 6116</Phone>
+<Fax>021 949 0859</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>postmaster@settlers.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Simunye High School</Name>
+<Key>099</Key>
+<Language>e</Language>
+<Address>P O Box 3050
+DELFT
+7102</Address>
+<Phone>021 955 2056</Phone>
+<Fax>021 955 0106</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>SA College High School</Name>
+<Key>100</Key>
+<Language>e</Language>
+<Address>Newlands Avenue
+NEWLANDS
+7800</Address>
+<Phone>021 689 4164</Phone>
+<Fax>021 685 2669</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>hornbothar@sacs.school.wcape.za</Email>
+</Schools>
+<Schools>
+<Name>Table View High School</Name>
+<Key>101</Key>
+<Language>e</Language>
+<Address>Janssens Avenue
+TABLEVIEW
+7441</Address>
+<Phone>021 557 3602</Phone>
+<Fax>021 557 7779</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>tvh@tvh.co.za</Email>
+</Schools>
+<Schools>
+<Name>Somerset College</Name>
+<Key>102</Key>
+<Language>e</Language>
+<Address>P O Box 2440
+SOMERSET WEST
+7129</Address>
+<Phone>021 842 3035</Phone>
+<Fax>021 842 3908</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>njakins@somcol.co.za</Email>
+</Schools>
+<Schools>
+<Name>South Peninsula H S</Name>
+<Key>103</Key>
+<Language>e</Language>
+<Address>Old Kendal Road
+DIEP RIVER
+7945
+</Address>
+<Phone>021 712 9318</Phone>
+<Fax>021 715 0291</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@spenhs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Springfield Convent</Name>
+<Key>104</Key>
+<Language>e</Language>
+<Address>St Johns Road
+WYNBERG
+7800</Address>
+<Phone>021 797 6169</Phone>
+<Fax>021 762 7930</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Star International H S</Name>
+<Key>105</Key>
+<Language>e</Language>
+<Address>P O Box 10
+ATHLONE
+7760</Address>
+<Phone>021 697 1094</Phone>
+<Fax>021 697 0536</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>star@myhorizon.org</Email>
+</Schools>
+<Schools>
+<Name>St Cyprian&amp;#039s School</Name>
+<Key>106</Key>
+<Language>e</Language>
+<Address>Belmont Avenue
+ORANJEZICHT
+8001</Address>
+<Phone>021 461 1090</Phone>
+<Fax>021 461 8473</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>St Joseph&amp;#039s Marist College</Name>
+<Key>107</Key>
+<Language>e</Language>
+<Address>Belmont Road
+RONDEBOSCH
+7700</Address>
+<Phone>021 685 7334</Phone>
+<Fax>021 689 1205</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>heidi@mariststjosephs.co.za</Email>
+</Schools>
+<Schools>
+<Name>Steenberg High School</Name>
+<Key>108</Key>
+<Language>e</Language>
+<Address>Cnr Symphony &amp;
+Orchestra Street
+STEENBERG
+7945</Address>
+<Phone>021 701 2281</Phone>
+<Fax>021 702 882</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Stellenberg H S</Name>
+<Key>109</Key>
+<Language>e</Language>
+<Address>Privaatsak X2
+TYGERPARK
+7536</Address>
+<Phone>021 919 3420</Phone>
+<Fax>021 919 1029</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>scientia@stellenberg.org.za</Email>
+</Schools>
+<Schools>
+<Name>Stellenbosch H S</Name>
+<Key>110</Key>
+<Language>a</Language>
+<Address>P/Bag 5025
+STELLENBSOCH
+7600</Address>
+<Phone>021 887 3082</Phone>
+<Fax>021 887 6758</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>vh@stellies.com</Email>
+</Schools>
+<Schools>
+<Name>Strand H S</Name>
+<Key>111</Key>
+<Language>a</Language>
+<Address>Sarel Cilliersstraat 205
+STRAND
+7140</Address>
+<Phone>021 854 6759</Phone>
+<Fax>021 853 1056</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@strandhigh.co.za</Email>
+</Schools>
+<Schools>
+<Name>Strandfontein Sec. S</Name>
+<Key>112</Key>
+<Language>e</Language>
+<Address>Frigate Road
+STRANDFONTEIN
+7798</Address>
+<Phone>021 393 2100</Phone>
+<Fax>021 393 4165</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@strandfonteinss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Swartland H S</Name>
+<Key>113</Key>
+<Language>a</Language>
+<Address>Posbus 253
+MALMESBURY
+7299</Address>
+<Phone>022 482 1469</Phone>
+<Fax>022 482 2177</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>hlesch@xsinet.co.za</Email>
+</Schools>
+<Schools>
+<Name>Tygerberg H S</Name>
+<Key>114</Key>
+<Language>a</Language>
+<Address>Fairfieldweg-Noord
+PAROW
+7500</Address>
+<Phone>021 939 2023</Phone>
+<Fax>021 930 6833</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>info@tiere.co.za</Email>
+</Schools>
+<Schools>
+<Name>Van Riebeeckstrand Mid.</Name>
+<Key>115</Key>
+<Language>a</Language>
+<Address>Dromedarisstraat
+MELKBOSSTRAND
+7441</Address>
+<Phone>021 553 3409</Phone>
+<Fax>021 553 4396</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Victoria-West High School</Name>
+<Key>116</Key>
+<Language>e</Language>
+<Address>P O Box 163
+VICTORIA WEST
+7070</Address>
+<Phone>053 621 0553</Phone>
+<Fax>053 621 0553</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Voorbrug Sec School</Name>
+<Key>117</Key>
+<Language>e</Language>
+<Address>Voorbrug Road
+VOORBRUG
+DELFT
+7100</Address>
+<Phone>021 954 3040</Phone>
+<Fax>021 954 4400</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Vredenburg H S</Name>
+<Key>118</Key>
+<Language>a</Language>
+<Address>Posbus 96
+VREDENBURG
+7380</Address>
+<Phone>022 713 1151</Phone>
+<Fax>022 713 3277</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>carenehlers@mweb.co.za</Email>
+</Schools>
+<Schools>
+<Name>Westerford High School</Name>
+<Key>119</Key>
+<Language>e</Language>
+<Address>Main Road
+RONDEBOSCH
+7700</Address>
+<Phone>021 689 9154</Phone>
+<Fax>021 685 5675</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Weston H S</Name>
+<Key>120</Key>
+<Language>a</Language>
+<Address>Posbus 519
+VREDENBURG
+7380</Address>
+<Phone>021 713 2083</Phone>
+<Fax>021 713 5279</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@westonhs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Westridge High School</Name>
+<Key>121</Key>
+<Language>e</Language>
+<Address>Silversands Avenue
+WESTRIDGE
+7785</Address>
+<Phone>021 371 7400</Phone>
+<Fax>021 374 6395</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@westridgess.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Wittebome High School</Name>
+<Key>122</Key>
+<Language>e</Language>
+<Address>Ottery Road
+WYNBERG
+7800
+</Address>
+<Phone>021 761 1535</Phone>
+<Fax>021 797 7819</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>ahendric@wittebomehs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Worcester Gymnasium</Name>
+<Key>123</Key>
+<Language>e</Language>
+<Address>P O Box 210
+WORCESTER
+6850
+</Address>
+<Phone>023 342 2700</Phone>
+<Fax>023 347 1129</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>wg@worcgim.co.za</Email>
+</Schools>
+<Schools>
+<Name>Wynberg Boys&amp;#039 H S</Name>
+<Key>124</Key>
+<Language>e</Language>
+<Address>Lovers Walk
+WYNBERG
+7800
+</Address>
+<Phone>021 797 4247</Phone>
+<Fax>021 761 0959</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>secretaries@wbhs.org.za</Email>
+</Schools>
+<Schools>
+<Name>Wynberg Girls&amp;#039 H S</Name>
+<Key>125</Key>
+<Language>e</Language>
+<Address>Aliwal Road
+WYNBERG
+7800
+</Address>
+<Phone>021 797 4163</Phone>
+<Fax>021 797 2846</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>bgotsmanl@wynbhs.co.za</Email>
+</Schools>
+<Schools>
+<Name>Zeekoevlei High School</Name>
+<Key>126</Key>
+<Language>e</Language>
+<Address>7th Avenue
+LOTUS RIVER
+7941</Address>
+<Phone>021 793 3797</Phone>
+<Fax>021 704 1692</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@zeekoevleiss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Grabouw H S</Name>
+<Key>039</Key>
+<Language>e</Language>
+<Address>Posbus 23
+GRABOUW
+7160</Address>
+<Phone>021 859 3629</Phone>
+<Fax>021 859 4203/4</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@grabouwhs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Grassy Park High School</Name>
+<Key>040</Key>
+<Language>e</Language>
+<Address>Victoria Road
+GRASSY PARK
+7945</Address>
+<Phone>021 706 2393/69</Phone>
+<Fax>021 706 3360</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Groenberg Secondary</Name>
+<Key>041</Key>
+<Language>e</Language>
+<Address>P O Box 116
+GRABOUW
+7160</Address>
+<Phone>021 859 2127</Phone>
+<Fax>021 859 3806</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Groote Schuur H S</Name>
+<Key>042</Key>
+<Language>e</Language>
+<Address>Palmyra Road
+NEWLANDS
+7700</Address>
+<Phone> 021 671 9436</Phone>
+<Fax>021 674 2165</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>sysop@gshs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Harold Cressy High School</Name>
+<Key>043</Key>
+<Language>e</Language>
+<Address>103 Roeland Street
+CAPE TOWN
+8001</Address>
+<Phone>021 461 3810</Phone>
+<Fax>021 461 6157</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Hebrew Academy</Name>
+<Key>044</Key>
+<Language>e</Language>
+<Address>2 Foyle Road
+CLAREMONT
+7700</Address>
+<Phone>021</Phone>
+<Fax>021</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>hebrew.academy@freemail.absa.co.za</Email>
+</Schools>
+<Schools>
+<Name>Heideveld Sekondere Sch</Name>
+<Key>045</Key>
+<Language>e</Language>
+<Address>Waterbergweg
+HEIDEVELD
+7764</Address>
+<Phone>021 637 8530</Phone>
+<Fax></Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Helderberg High School</Name>
+<Key>047</Key>
+<Language>e</Language>
+<Address>P O Box 22
+SOMERSET WEST
+7129</Address>
+<Phone>021 855 4949</Phone>
+<Fax>021 855 4955</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>helderberghigh@xsinet.co.za</Email>
+</Schools>
+<Schools>
+<Name>Hermanus High School</Name>
+<Key>048</Key>
+<Language>e</Language>
+<Address>P O Box 132
+HERMANUS
+7200</Address>
+<Phone>028 312 3760</Phone>
+<Fax>028 313 0814</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>wladewig@hhadmin.co.za</Email>
+</Schools>
+<Schools>
+<Name>Herschel High School</Name>
+<Key>049</Key>
+<Language>e</Language>
+<Address>21 Herschel Road
+CLAREMONT
+7708</Address>
+<Phone>021 671 7500</Phone>
+<Fax>921 674 2575</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>dmail@herschel.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Herzlia Middle School</Name>
+<Key>050</Key>
+<Language>e</Language>
+<Address>P O Box 3508
+CAPE TOWN
+8000</Address>
+<Phone>021 464 3305</Phone>
+<Fax>021 461 8647</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>lleigh@herzlia.com</Email>
+</Schools>
+<Schools>
+<Name>Herzlia Senior H S</Name>
+<Key>051</Key>
+<Language>e</Language>
+<Address>P O Box 3508
+CAPE TOWN
+8000
+</Address>
+<Phone>021 461 1035</Phone>
+<Fax>021 461 8834</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Holy Cross Convent H S</Name>
+<Key>052</Key>
+<Language>e</Language>
+<Address>165 Coronation Road
+MAITLAND
+7405</Address>
+<Phone>021 511 9365</Phone>
+<Fax>021 7991</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Hopefield High School</Name>
+<Key>053</Key>
+<Language>a</Language>
+<Address>P O Box 23
+HOPEFIELD
+7355
+</Address>
+<Phone>022 723 0040</Phone>
+<Fax>022 723 0369</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>bentheron1@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>Hottentots Holland H S</Name>
+<Key>054</Key>
+<Language>e</Language>
+<Address>P O Box 358
+SOMERSET WEST
+7129</Address>
+<Phone>021 852 1405</Phone>
+<Fax>021 851 3901</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Hugenot Hoerskool</Name>
+<Key>055</Key>
+<Language>a</Language>
+<Address>Privaatsak X9
+WELLINGTON
+7654</Address>
+<Phone>021 873 2111</Phone>
+<Fax>021 873 2941</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>hhskool@iafrica.com</Email>
+</Schools>
+<Schools>
+<Name>Int. School of Cape Town</Name>
+<Key>056</Key>
+<Language>e</Language>
+<Address>Woodland Heights
+Edinburgh Close
+WYNBERG
+7800</Address>
+<Phone>021 761-6202</Phone>
+<Fax>021 761 0129</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>woodlandshigh@isct.co.za</Email>
+</Schools>
+<Schools>
+<Name>Isaiah Christian Academy</Name>
+<Key>057</Key>
+<Language>e</Language>
+<Address>P O Box 30476
+TOKAI
+7966</Address>
+<Phone>021 843 3923</Phone>
+<Fax>021 843 3013</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Islamia Boys&amp;#039 College</Name>
+<Key>059</Key>
+<Language>e</Language>
+<Address>409 Lansdowne Road
+LANSDOWNE
+7780</Address>
+<Phone>021 696 5600</Phone>
+<Fax>021 696 5537</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>islamia@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>J G Meiring</Name>
+<Key>060</Key>
+<Language>e</Language>
+<Address>Merrimanweg
+GOODWOOD
+6450</Address>
+<Phone>021 592-2920</Phone>
+<Fax>021 591 3131</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Klein Nederburg</Name>
+<Key>061</Key>
+<Language>a</Language>
+<Address>c/o Paarl School Gov. Bodies
+11 Tanner Street
+Paarl
+7646</Address>
+<Phone>021 862 2720</Phone>
+<Fax>021 862 7272</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>postmaster@kns.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Labori H S</Name>
+<Key>062</Key>
+<Language>a</Language>
+<Address>Privaatsak X3013
+PAARL
+7620</Address>
+<Phone>021 872 7810</Phone>
+<Fax>021 872 8293</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Lavender Hill Secondary</Name>
+<Key>064</Key>
+<Language>a</Language>
+<Address>Depsiton Crescent
+RETREAT
+7945</Address>
+<Phone>021 701 9000</Phone>
+<Fax>021 701 9791</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@lavender.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Livingstone High School</Name>
+<Key>065</Key>
+<Language>e</Language>
+<Address>100 Lansdowne Road
+CLAREMONT
+7700</Address>
+<Phone>021 671 5986</Phone>
+<Fax>021 671 8552</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>dudley@livingstone.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Luckhoff S S School</Name>
+<Key>066</Key>
+<Language>a</Language>
+<Address>Posbus 4033
+IDASVALLEI
+7599</Address>
+<Phone>021 886 4766</Phone>
+<Fax>021 887 7209</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>rcarsten@luckhoff.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Malibu High School</Name>
+<Key>067</Key>
+<Language>e</Language>
+<Address>P O Box 451
+Eerste River
+7103</Address>
+<Phone>021 909 1105</Phone>
+<Fax>021 909 5500</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Scottsdene H S</Name>
+<Key>190</Key>
+<Language>a</Language>
+<Address>P O Box 321
+Kraaifontein
+7569</Address>
+<Phone>021 988-2835</Phone>
+<Fax>021 987-3501</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Mandlenkosi Sec. Sch.</Name>
+<Key>068</Key>
+<Language>e</Language>
+<Address>P O Box 606
+BEAUFORT WEST
+6970</Address>
+<Phone>023 415 2400</Phone>
+<Fax>023 415 2400</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@mandlenkosi.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Manzomthombo S S School</Name>
+<Key>069</Key>
+<Language>e</Language>
+<Address>P O Box 161
+BLACKHEATH
+7581</Address>
+<Phone>021 909 2010</Phone>
+<Fax>021 909 2016</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Michael Oak Waldorf Sch</Name>
+<Key>070</Key>
+<Language>e</Language>
+<Address>4 Marlow Road
+KENILWORTH
+7708</Address>
+<Phone>021 797 9728</Phone>
+<Fax>021 797 1207</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Milnerton High School</Name>
+<Key>071</Key>
+<Language>e</Language>
+<Address>Pienaar Road
+MILNERTON
+7441</Address>
+<Phone>021 551 2217</Phone>
+<Fax>021 551 3248</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Mitchell&amp;#039s Plain Islamic H</Name>
+<Key>072</Key>
+<Language>e</Language>
+<Address>37 Baobob Street
+Eastridge
+MITCHELL&amp;#039S PLAIN
+7785</Address>
+<Phone>021 391 5730</Phone>
+<Fax>021 392 5529</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Mondale Senior Sec S</Name>
+<Key>073</Key>
+<Language>e</Language>
+<Address>Merrydale Avenue
+Portlands
+MITCHELL&amp;#039S PLAIN
+7785</Address>
+<Phone>021 392 7031</Phone>
+<Fax>021 392 6988</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@mondale.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Muizenberg H S</Name>
+<Key>074</Key>
+<Language>e</Language>
+<Address>P O Box 6
+MUIZENBERG
+7950</Address>
+<Phone>021 788 1424</Phone>
+<Fax>021 788 6635</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>office@mbhs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Bosmansdam H S</Name>
+<Key>127</Key>
+<Language>e</Language>
+<Address>Adam Tas Avenue
+BOTHASIG
+7441</Address>
+<Phone>021 558 1070</Phone>
+<Fax>021 558 6380</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Brackenfell H S</Name>
+<Key>128</Key>
+<Language>e</Language>
+<Address>Privaatsak
+BRACKENFELL
+7560</Address>
+<Phone>021 981 5522</Phone>
+<Fax>021 981 6023</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Bulumko High School</Name>
+<Key>129</Key>
+<Language>e</Language>
+<Address>P O Box 64
+KHAYELITSHA
+7784</Address>
+<Phone>021 361 0257</Phone>
+<Fax>021 361 3662</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Cape Town High School</Name>
+<Key>130</Key>
+<Language>e</Language>
+<Address>P O Box 12207
+MILL STREET
+CAPE TOWN
+8010</Address>
+<Phone>021 424 2168</Phone>
+<Fax>021 424 4618</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Chris Hani Sec. School</Name>
+<Key>131</Key>
+<Language>e</Language>
+<Address>P O Box 15
+Macassar
+KHAYELITSHA
+7784</Address>
+<Phone>021 367-1838 / 362-6080</Phone>
+<Fax>021 362 4120</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Diazville Sek Skool</Name>
+<Key>132</Key>
+<Language>a</Language>
+<Address>Posbus 1221
+SALDANHA
+7395</Address>
+<Phone>022 714 1909</Phone>
+<Fax>022 714 1909</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Fairmont High School</Name>
+<Key>133</Key>
+<Language>e</Language>
+<Address>Private Bag X11
+DURBANVILLE
+7550
+</Address>
+<Phone>021 976 1147</Phone>
+<Fax>021 976 8735</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Jan Van Riebeeck H S</Name>
+<Key>134</Key>
+<Language>a</Language>
+<Address>Kloofstraat 129
+KAAPSTAD
+8001
+</Address>
+<Phone>021 423 6347</Phone>
+<Fax>021 424 5520</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>ontvangs@janvanriebeeck.co.za</Email>
+</Schools>
+<Schools>
+<Name>Kasselsvlei Comprehensive</Name>
+<Key>135</Key>
+<Language>e</Language>
+<Address>P O Box 723
+KASSELSVLEI
+7535</Address>
+<Phone>021 951 3427</Phone>
+<Fax>021 951 3910</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@kasselsvleiss.wcape.za</Email>
+</Schools>
+<Schools>
+<Name>La Rochelle H S</Name>
+<Key>136</Key>
+<Language>e</Language>
+<Address>Posbus 21
+PAARL
+7622</Address>
+<Phone>021 872 4367 </Phone>
+<Fax>021 872 7812</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Norman Henshilwood H S</Name>
+<Key>137</Key>
+<Language>e</Language>
+<Address>Constantia Road
+CONSTANTIA
+7800</Address>
+<Phone>021 797 8043</Phone>
+<Fax>021 797 3049</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Rylands High School</Name>
+<Key>138</Key>
+<Language>e</Language>
+<Address>P O Box 9
+GATESVILLE
+7764</Address>
+<Phone>021 637 4407</Phone>
+<Fax>021 638 7472</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>ismasneik@rylands.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Simon&amp;#039s Town H S</Name>
+<Key>140</Key>
+<Language>e</Language>
+<Address>Harrington Road
+SEAFORTH
+7995</Address>
+<Phone>021 786 1056</Phone>
+<Fax>021 786 1065</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>St George&amp;#039s Grammar S</Name>
+<Key>141</Key>
+<Language>e</Language>
+<Address>Bloemendal Road
+MOWBRAY
+7700</Address>
+<Phone>021 689 9354</Phone>
+<Fax>021 689 9361</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>info@sggs.co.za</Email>
+</Schools>
+<Schools>
+<Name>Phakama Sec. School</Name>
+<Key>143</Key>
+<Language>e</Language>
+<Address>P O Box 23223
+CLAREMONT
+7735</Address>
+<Phone>021 372-5749</Phone>
+<Fax>021 372-0219</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@phakama.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>CBC St John&amp;#039s Parklands</Name>
+<Key>144</Key>
+<Language>e</Language>
+<Address>Post Net Suite #34
+Private Bag X3
+BLOUBERGRANT
+7443</Address>
+<Phone>021 556-5969</Phone>
+<Fax>021 556-1160</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>office@cbcstjohns.co.za</Email>
+</Schools>
+<Schools>
+<Name>Cannons Creek H S</Name>
+<Key>145</Key>
+<Language>e</Language>
+<Address>P O Box 38578
+PINELANDS
+7430</Address>
+<Phone>021 531-0912</Phone>
+<Fax>021 531-0912</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>mwcreek@iafrica.com</Email>
+</Schools>
+<Schools>
+<Name>Cravenby Sec. School</Name>
+<Key>146</Key>
+<Language>e</Language>
+<Address>P O Box 6348
+PAROW EAST
+7501</Address>
+<Phone>021 931-4470</Phone>
+<Fax>021 933-4388</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>head@cravenbyss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Drostdy H T S</Name>
+<Key>147</Key>
+<Language>a</Language>
+<Address>Privaatsak X3037
+WORCESTER
+6849</Address>
+<Phone>023 342-2320</Phone>
+<Fax>023 347-3996</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>htsdrostdy@xpoint.co.za</Email>
+</Schools>
+<Schools>
+<Name>Esangweni S S S</Name>
+<Key>148</Key>
+<Language>e</Language>
+<Address>P O Box 22
+LINGELETHU
+7765</Address>
+<Phone>082 4321 987</Phone>
+<Fax>021 361 9886</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Heritage College</Name>
+<Key>149</Key>
+<Language>e</Language>
+<Address>225 Lansdowne Road  
+CLAREMONT
+7700
+</Address>
+<Phone>021 683-5544</Phone>
+<Fax>021 671-8153</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>heritage@netconnect.co.za</Email>
+</Schools>
+<Schools>
+<Name>John Wycliffe Christian S</Name>
+<Key>150</Key>
+<Language>e</Language>
+<Address>P O Box 92
+Plumstead
+7801</Address>
+<Phone>797-9661</Phone>
+<Fax>762-3399</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Reddam House A. S. B.</Name>
+<Key>151</Key>
+<Language>e</Language>
+<Address>P O Box 50608
+WATERFRONT
+8002</Address>
+<Phone>021 433-0105</Phone>
+<Fax>021 433-0109</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>cagasi@gmail.com</Email>
+</Schools>
+<Schools>
+<Name>Saili</Name>
+<Key>152</Key>
+<Language>e</Language>
+<Address>House Vincent
+Wynberg Mews
+10 Brodie Street
+Wynberg
+7800</Address>
+<Phone>021 763-7163</Phone>
+<Fax>021 763-7176</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>saili@chec.ac.za</Email>
+</Schools>
+<Schools>
+<Name>Sea Point High School</Name>
+<Key>153</Key>
+<Language>e</Language>
+<Address>P O Box 27177
+RHINE ROAD
+8050</Address>
+<Phone>021 434-9141</Phone>
+<Fax>021 439-8462</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Somerset Wes Privaat</Name>
+<Key>154</Key>
+<Language>a</Language>
+<Address>P O Box 3585
+SOMERSET WEST
+7129</Address>
+<Phone>021 852 8451</Phone>
+<Fax>021 851-2076</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>swps@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>Windsor High School</Name>
+<Key>155</Key>
+<Language>e</Language>
+<Address>Smuts Road
+RONDEBOSCH EAST
+7780</Address>
+<Phone>021 696-2974</Phone>
+<Fax>021 697-4775</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>amdin@amdin.windsor.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Woodlands High School</Name>
+<Key>156</Key>
+<Language>e</Language>
+<Address>Mitchell Avenue
+WOODLANDS
+MITCHELLS PLAIN
+7785</Address>
+<Phone>021 371-0610</Phone>
+<Fax>021 374-1445</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>woodlandshigh@freemail.absa.co.za</Email>
+</Schools>
+<Schools>
+<Name>Wynberg Secondary S</Name>
+<Key>157</Key>
+<Language>e</Language>
+<Address>Cheddar Road
+WYNBERG
+7800</Address>
+<Phone>021 797-00117</Phone>
+<Fax>021 762-0615</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Spes Bona</Name>
+<Key>158</Key>
+<Language>e</Language>
+<Address>P O Box 47
+ATHLONE
+7764</Address>
+<Phone>021 697-1100</Phone>
+<Fax>021 6969653</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@spesbona.hswcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>American Int. C T</Name>
+<Key>160</Key>
+<Language>e</Language>
+<Address>42 Soetvlei Avenue
+Constantia
+7806</Address>
+<Phone>021 713-2220</Phone>
+<Fax>021 713-2240</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>pcandler@aisct-org.za</Email>
+</Schools>
+<Schools>
+<Name>Icon Independent H S</Name>
+<Key>161</Key>
+<Language>e</Language>
+<Address>P O Box 4506
+CAPE TOWN
+8000</Address>
+<Phone>021 418-6688</Phone>
+<Fax>021 425-8957</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>info@iconhighschool.com</Email>
+</Schools>
+<Schools>
+<Name>Cape Acad. of Maths, Sci</Name>
+<Key>162</Key>
+<Language>e</Language>
+<Address>Private Bag X3
+TOKAI
+7966</Address>
+<Phone>021 794-5104</Phone>
+<Fax>021 794-0824</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Elkanah House</Name>
+<Key>163</Key>
+<Language>e</Language>
+<Address>P O Box 50479
+WEST BEACH
+7449</Address>
+<Phone>021 556-2730</Phone>
+<Fax>021 556-2732</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Harry Gwala High School</Name>
+<Key>164</Key>
+<Language>e</Language>
+<Address>Hlehla Street
+Makhaza
+KHAYELITSHA
+7784</Address>
+<Phone>021  362-7500</Phone>
+<Fax>021 362-7557</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@harrygwalawcape.co.za</Email>
+</Schools>
+<Schools>
+<Name>Ikamvalethu Secondary Sch</Name>
+<Key>165</Key>
+<Language>e</Language>
+<Address>Off Wash Drive 
+Zone 27
+LANGA
+7455</Address>
+<Phone>021 694-9933</Phone>
+<Fax>021 694-7242</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Immaculata Sec. School</Name>
+<Key>166</Key>
+<Language>e</Language>
+<Address>Clare Road
+WITTEBOME
+7800</Address>
+<Phone>021 797-8711</Phone>
+<Fax>021 761-1930</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>postmaster@immaculata.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Langenhoven Gimnasium</Name>
+<Key>167</Key>
+<Language>e</Language>
+<Address>Privaatsak X611
+OUDTSHOORN
+6620</Address>
+<Phone>044 272-2151/2</Phone>
+<Fax>044 272-6254</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>postmaster@lgim.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Leap Science &amp; Maths No.1</Name>
+<Key>168</Key>
+<Language>e</Language>
+<Address>P O Box 2229
+Clareinch
+7740</Address>
+<Phone>021 531-9715</Phone>
+<Fax>021 532-3714</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>info@leapschool.org.za</Email>
+</Schools>
+<Schools>
+<Name>Montana H S</Name>
+<Key>169</Key>
+<Language>a</Language>
+<Address>Posbus 1356
+WORCESTER
+6849</Address>
+<Phone>023 347-0476</Phone>
+<Fax>023 347-5021</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Zwartberg H S</Name>
+<Key>170</Key>
+<Language>e</Language>
+<Address>Pastorie Street
+PRINCE ALBERT
+6930</Address>
+<Phone>023 541-1570</Phone>
+<Fax>023 541-1739</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>French School</Name>
+<Key>173</Key>
+<Language>e</Language>
+<Address>101 Hope Street
+Gardens
+Cape Town
+8001</Address>
+<Phone>021 461-2508</Phone>
+<Fax>021 461-5312</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>apec@iafrica.com</Email>
+</Schools>
+<Schools>
+<Name>Int. School of Hout Bay</Name>
+<Key>174</Key>
+<Language>e</Language>
+<Address>Suite 164
+Private Bag X14
+Hout Bay
+7872</Address>
+<Phone>021 790-6285</Phone>
+<Fax>021 790-5814</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>infohigh@iscthoutbay.org.za</Email>
+</Schools>
+<Schools>
+<Name>Ladismith Sec. School</Name>
+<Key>175</Key>
+<Language>e</Language>
+<Address>P O Box 139
+Ladismith
+6655</Address>
+<Phone>028 551-1655</Phone>
+<Fax>028 551-1402</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Lentegeur Senior S S</Name>
+<Key>176</Key>
+<Language>e</Language>
+<Address>Rooikransweg
+Lentegeur
+Mitchells Plain
+7785</Address>
+<Phone>021 371 4161</Phone>
+<Fax>021 371-3317</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Oakhill School</Name>
+<Key>177</Key>
+<Language>e</Language>
+<Address>Private Bag X081
+Knysna
+6570</Address>
+<Phone>044 382-6506</Phone>
+<Fax>044 382 5753</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>peebec@oakhillschool.co.za</Email>
+</Schools>
+<Schools>
+<Name>Porterville High School</Name>
+<Key>178</Key>
+<Language>e</Language>
+<Address>P O Box 22
+Porterville
+6810</Address>
+<Phone>022 931 2174</Phone>
+<Fax>022 931 3321</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@porterhs.co.za</Email>
+</Schools>
+<Schools>
+<Name>Worcester Sek. Skool</Name>
+<Key>179</Key>
+<Language>e</Language>
+<Address>Posbus 581
+Worcester
+6850
+</Address>
+<Phone>023 342-0857</Phone>
+<Fax>023 347-2894</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Wynberg High School</Name>
+<Key>180</Key>
+<Language>e</Language>
+<Address>Cheddar Road
+Wynberg
+7800</Address>
+<Phone>021 797-0017</Phone>
+<Fax>021 762-0615</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@wss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Darul Arqam Islamic H</Name>
+<Key>185</Key>
+<Language>e</Language>
+<Address>P O Box 207
+Mitchells Plain
+7789</Address>
+<Phone>021 391-5730</Phone>
+<Fax>021 392-5229</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>darularkam@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>Progress College</Name>
+<Key>206</Key>
+<Language>e</Language>
+<Address>P O Box 113
+Newlands
+7725</Address>
+<Phone>021 689-2952</Phone>
+<Fax>021 686-3914</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>sampro@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>Roodezant</Name>
+<Key>171</Key>
+<Language>e</Language>
+<Address>Posbus 10
+Saron
+6812</Address>
+<Phone></Phone>
+<Fax></Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Qhayiya Secondary S</Name>
+<Key>181</Key>
+<Language>e</Language>
+<Address>P O Box 493
+Hermanus
+7200</Address>
+<Phone>028 315-0001</Phone>
+<Fax>028 313-2436</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Sinaka High School</Name>
+<Key>182</Key>
+<Language>e</Language>
+<Address>Khayelitsha</Address>
+<Phone>021 365-0600/1</Phone>
+<Fax></Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Christel House SA</Name>
+<Key>183</Key>
+<Language>e</Language>
+<Address>P O Box 767
+Howard Place
+7450</Address>
+<Phone>021 697-3037</Phone>
+<Fax>021 697 3017</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Chesterhouse</Name>
+<Key>184</Key>
+<Language>e</Language>
+<Address>P O Box 3915
+Durbanville
+7551</Address>
+<Phone>(021)975-6650</Phone>
+<Fax>(021)975-6649</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>infosenior@chesterhouse.co.za</Email>
+</Schools>
+<Schools>
+<Name>Al-Azhar High School</Name>
+<Key>186</Key>
+<Language>e</Language>
+<Address>Cnr. Newton Avenue &amp; Birdwood Road
+Athlone
+7764
+</Address>
+<Phone>021 696-5475</Phone>
+<Fax>021 696-5478</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>alazhar.hs.telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>Bridgetown Secondary</Name>
+<Key>187</Key>
+<Language>e</Language>
+<Address>Brushwood Road
+Bridgetown
+Athlone</Address>
+<Phone>021 637-1435</Phone>
+<Fax>021 637-5922</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@bridgetown.wcape.co.za</Email>
+</Schools>
+<Schools>
+<Name>Fezeka High School</Name>
+<Key>188</Key>
+<Language>e</Language>
+<Address>C/O Bishops
+Campground School
+Rondebosch
+7700</Address>
+<Phone>021 659-1000</Phone>
+<Fax></Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>neddy@bishops.org.za</Email>
+</Schools>
+<Schools>
+<Name>Intlanganiso Secondary</Name>
+<Key>189</Key>
+<Language>e</Language>
+<Address>P O Box 40396
+Elonwabeni
+7791</Address>
+<Phone>021 387-5143</Phone>
+<Fax>021 387-3147</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@intlanganisoss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Thembelihle S. S. School</Name>
+<Key>191</Key>
+<Language>e</Language>
+<Address>P O Box 3873
+Cape Town
+8000</Address>
+<Phone>021 364-2144/5</Phone>
+<Fax>021 364-2312</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@thembelihle.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>New Orleans S S School</Name>
+<Key>192</Key>
+<Language>e</Language>
+<Address>Suikerboslaan
+New Orleans
+Paarl 
+7646</Address>
+<Phone>021 862-0900</Phone>
+<Fax>021 862-4978</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>root@neworleans.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Paulus Joubert S S School</Name>
+<Key>193</Key>
+<Language>a</Language>
+<Address>c/o Paarl School of Gov. Bodies
+11 Tanner Street
+7646</Address>
+<Phone>021 862-3480</Phone>
+<Fax>021 862-3611</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@pjoubertss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Weltevrede Sekonder</Name>
+<Key>194</Key>
+<Language>e</Language>
+<Address>c/o Paarl School of Gov. Bodies
+11 Tanner Street
+Paarl
+7646</Address>
+<Phone>021 873-1559</Phone>
+<Fax>021 864-2759</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Beacon Hill High</Name>
+<Key>195</Key>
+<Language>e</Language>
+<Address>P O Box 148
+Beacon Valley
+7785</Address>
+<Phone>021 376-1300</Phone>
+<Fax>021 376-7536</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>admin@bhss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Schoonspruit Sec. S</Name>
+<Key>196</Key>
+<Language>a</Language>
+<Address>P O Box 1046
+Malmesbury
+7299</Address>
+<Phone>022 486-4598</Phone>
+<Fax>022 486-5639</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@schoonshs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Cape Town Studies</Name>
+<Key>197</Key>
+<Language>e</Language>
+<Address>70 Birkenhead Road
+Table View
+7441</Address>
+<Phone>021 556-3494</Phone>
+<Fax>021 556-3494</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>cst.michelle@gmail.com</Email>
+</Schools>
+<Schools>
+<Name>Oude Molen T H S</Name>
+<Key>198</Key>
+<Language>e</Language>
+<Address>Private Bag X5
+Howard Place
+7450</Address>
+<Phone>021 531-2109</Phone>
+<Fax>021 531-0758</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>Omths@mweb.co.za</Email>
+</Schools>
+<Schools>
+<Name>Islamia Girls&amp;#039 College</Name>
+<Key>199</Key>
+<Language>e</Language>
+<Address>409 Lansdown Road
+Lansdowne
+7780</Address>
+<Phone>021 696-5600</Phone>
+<Fax>021 696-5537</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>islamia@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>Kleinvlei H S</Name>
+<Key>200</Key>
+<Language>a</Language>
+<Address>P O Box 177
+Kleinvlei
+Eerste River
+7100</Address>
+<Phone>021 904-1217</Phone>
+<Fax>021 904-9600</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@kleinvleiss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Leap Science &amp; Maths No.2</Name>
+<Key>201</Key>
+<Language>e</Language>
+<Address>P O Box 2229
+Clareinch
+7740</Address>
+<Phone>021 531-9762</Phone>
+<Fax>021 532-3714</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>gavinlarsen@webmail.co.za</Email>
+</Schools>
+<Schools>
+<Name>Vuyiseka  Secondary</Name>
+<Key>202</Key>
+<Language>e</Language>
+<Address>Shefield Road
+Phillipi East
+7585</Address>
+<Phone>021 371-3008</Phone>
+<Fax>021 372-7566</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@vuyisekass.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Kwamfundo H S</Name>
+<Key>203</Key>
+<Language>e</Language>
+<Address>P O Box 35322
+Lingelethu West
+Khayeletsha
+7765</Address>
+<Phone>021 361-9347</Phone>
+<Fax>021 361-9348</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Khanyolwethu S.S School</Name>
+<Key>205</Key>
+<Language>e</Language>
+<Address>P O Box 441
+Strand
+7140</Address>
+<Phone>021 845-5290</Phone>
+<Fax>021 845-9446</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@khanyolwethu.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Melkbosstrand Private Sch</Name>
+<Key>207</Key>
+<Language>e</Language>
+<Address>P O Box 441
+Melkbosstrand
+7437</Address>
+<Phone>021 553-1530</Phone>
+<Fax>021 553-0610</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>danie@mpschool.co.za</Email>
+</Schools>
+<Schools>
+<Name>Imizamo Yethu Sec. School</Name>
+<Key>211</Key>
+<Language>e</Language>
+<Address>P O Box 2092
+George
+6530</Address>
+<Phone>044 880 1122</Phone>
+<Fax>044 880 2280</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Strand Secondary School</Name>
+<Key>220</Key>
+<Language>e</Language>
+<Address>P O Box 612
+Strand
+7140</Address>
+<Phone>021 853-2413</Phone>
+<Fax>021 854-4045</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@strandss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>The Leadership College</Name>
+<Key>224</Key>
+<Language>e</Language>
+<Address>61 Gauritz Road
+Manenberg
+7764</Address>
+<Phone>021 637 4661</Phone>
+<Fax>086 275 5676</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@theleadershipcollege.co.za</Email>
+</Schools>
+<Schools>
+<Name>Sophumelela</Name>
+<Key>204</Key>
+<Language>e</Language>
+<Address>c/o Oliver Tambo &amp; Vanguard Drives
+Somora Machel
+7785</Address>
+<Phone>021 372-1953</Phone>
+<Fax>021 372-1953</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Grassdale High School</Name>
+<Key>208</Key>
+<Language>e</Language>
+<Address>4th Avenue
+Grassy Park
+7941</Address>
+<Phone>021 706-1816</Phone>
+<Fax>021 706-0871</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@grassdalehs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Hout Bay High School</Name>
+<Key>209</Key>
+<Language>e</Language>
+<Address>Marlin Crescent
+Hout Bay
+7872</Address>
+<Phone>021 790-4917</Phone>
+<Fax>021 790-5918</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@houtbaaiss.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Rusthof Secondary School</Name>
+<Key>210</Key>
+<Language>e</Language>
+<Address>Broadlandspark
+Strand
+7140</Address>
+<Phone>021 845-7081</Phone>
+<Fax>021 845-8015</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Vista High School</Name>
+<Key>212</Key>
+<Language>e</Language>
+<Address>Military Road
+Off Upper Whitford Street
+Bo-Kaap, Cape Town
+8001
+</Address>
+<Phone>021 424-7430</Phone>
+<Fax>021 423-1705</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@vistahswcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Cloetesville H S</Name>
+<Key>213</Key>
+<Language>e</Language>
+<Address>P O Box 2327
+Dennisig
+7601</Address>
+<Phone>021 889-5424</Phone>
+<Fax>021 889-6303</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Florida H S</Name>
+<Key>214</Key>
+<Language>e</Language>
+<Address>Stroebelstraat
+Ravensmead
+7493</Address>
+<Phone>021 931-8922</Phone>
+<Fax>021 931 9152</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@floridass.wcape.schools.za</Email>
+</Schools>
+<Schools>
+<Name>Mondeor Eco School</Name>
+<Key>215</Key>
+<Language>e</Language>
+<Address>P O Box 1015
+Strand
+7139</Address>
+<Phone>021 858-1309</Phone>
+<Fax>021 858-1883</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>henfred@mweb.co.za</Email>
+</Schools>
+<Schools>
+<Name>Spine Road H School</Name>
+<Key>216</Key>
+<Language>e</Language>
+<Address>Cnr. Spine &amp; Merrydale Roads
+Rocklands
+Mitchells Plain
+7785</Address>
+<Phone>021 392-9463</Phone>
+<Fax>021 391-4965</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@spineroadhs.wcape.za</Email>
+</Schools>
+<Schools>
+<Name>Trafalgar H School</Name>
+<Key>217</Key>
+<Language>e</Language>
+<Address>P O Box 556
+Cape Town
+8000</Address>
+<Phone>021 465-2969</Phone>
+<Fax>021 461-3680</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Gardens Commercial H S</Name>
+<Key>218</Key>
+<Language>e</Language>
+<Address>Paddock Avenue
+Gardens
+Cape Town
+8000</Address>
+<Phone>021 465-1236</Phone>
+<Fax>021 465-1448</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Oracle Academy</Name>
+<Key>219</Key>
+<Language>e</Language>
+<Address>P O Box 196
+Ottery
+7808</Address>
+<Phone>021 704-4915</Phone>
+<Fax>021 704-4916</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>oracleacademy@gmail.com</Email>
+</Schools>
+<Schools>
+<Name>Int. Sch.of Helderberg/Som</Name>
+<Key>221</Key>
+<Language>e</Language>
+<Address>Postnet Suite 214
+Private Bag X29
+Somerset West
+7129</Address>
+<Phone>021 851-6290/1</Phone>
+<Fax>021 851-6292</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>annette.austin@iesedu.com</Email>
+</Schools>
+<Schools>
+<Name>Sinenjongo High School</Name>
+<Key>222</Key>
+<Language>e</Language>
+<Address>P O Box 841
+Milnerton
+7435</Address>
+<Phone>021 552-8750</Phone>
+<Fax>021 552-8750</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>pamrob@futurenet.co.za</Email>
+</Schools>
+<Schools>
+<Name>Darul Islam High School</Name>
+<Key>223</Key>
+<Language>e</Language>
+<Address>Cnr.Genootskap &amp; Wilhelmus Roads
+Greenhaven
+7764</Address>
+<Phone>021-637-9902</Phone>
+<Fax>021 638-7460</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>shirfaan@anansi.com</Email>
+</Schools>
+<Schools>
+<Name>Claremont High School</Name>
+<Key>225</Key>
+<Language>e</Language>
+<Address>Molteno Road
+Claremont
+7708</Address>
+<Phone>021 671 0645</Phone>
+<Fax>021 671 5076</Fax>
+<Contact></Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>mng@whs.wcape.school.za</Email>
+</Schools>
+<Schools>
+<Name>Scottsville High School</Name>
+<Key>226</Key>
+<Language>e</Language>
+<Address>Petunia Street
+Kraaifontein
+</Address>
+<Phone>021 988-4825</Phone>
+<Fax></Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>njadams@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>De Villiers Graaff H S</Name>
+<Key>227</Key>
+<Language>e</Language>
+<Address>Posbus 32
+Villiersdorp
+6848</Address>
+<Phone>028 840 1640</Phone>
+<Fax>028 840 2246 </Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Western Cape Sport School</Name>
+<Key>228</Key>
+<Language>e</Language>
+<Address>P O Box 900
+Kuils River
+7579</Address>
+<Phone>021 200-8447</Phone>
+<Fax>021 906-0375</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Gihon Christian Academy</Name>
+<Key>229</Key>
+<Language>e</Language>
+<Address>3 Magellaan Street
+Forest Glade
+7100</Address>
+<Phone>021 904-4568</Phone>
+<Fax>086 536 8889</Fax>
+<Contact>R Andries</Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email>gacademy@telkomsa.net</Email>
+</Schools>
+<Schools>
+<Name>Zola Secondary School</Name>
+<Key>230</Key>
+<Language>e</Language>
+<Address>P O Box 101
+Elonwabeni
+7791</Address>
+<Phone>021 387-3888</Phone>
+<Fax>021 387-5551</Fax>
+<Contact>Principal</Contact>
+<Entered>1</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+<Schools>
+<Name>Oscar Mpetha</Name>
+<Key>231</Key>
+<Language>e</Language>
+<Address>P O Box 106
+Guguluthu
+7751</Address>
+<Phone>021 386-3498</Phone>
+<Fax>021 385-1051</Fax>
+<Contact>The Principal</Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@oscarmphetha.wcape.school.za</Email>
+</Schools>
+
+<Schools>
+<Name>Uxolo</Name>
+<Key>232</Key>
+<Language>e</Language>
+<Address>Bathandwa Ndondo Road
+Mandela Park
+Khayelitsha
+7785</Address>
+<Phone>021 367-3706</Phone>
+<Fax>021 367-3707</Fax>
+<Contact>The Principal</Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+
+<Schools>
+<Name>Oval North S S School</Name>
+<Key>233</Key>
+<Language>e</Language>
+<Address>Oval North Street
+Eastridge
+Mitchells Plain
+7785</Address>
+<Phone>021 376-1067</Phone>
+<Fax>021 376-1368</Fax>
+<Contact>The Principal</Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@ovalnorthss.wcape.school.za</Email>
+</Schools>
+
+<Schools>
+<Name>Masiyle High School</Name>
+<Key>052</Key>
+<Language>e</Language>
+<Address>Cnr. Bonga Drive and Pama Road
+Khayletsha
+7784</Address>
+<Phone>021 364-1656</Phone>
+<Fax>021 361-1793</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+
+<Schools>
+<Name>Percy Mdala High School</Name>
+<Key>234</Key>
+<Language>e</Language>
+<Address>Sigcu Street
+Khayalethu South
+Knysna 6583</Address>
+<Phone>044 375-0020</Phone>
+<Fax>044 375-0191</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>percymdalahs@gmail.com</Email>
+</Schools>
+
+<Schools>
+<Name>Manyano</Name>
+<Key>235</Key>
+<Language>e</Language>
+<Address></Address>
+<Phone></Phone>
+<Fax></Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+
+<Schools>
+<Name>Iqhyiya Senior S School</Name>
+<Key>237</Key>
+<Language>e</Language>
+<Address>Mateta Street
+I-Section
+Khayelitsha
+7784</Address>
+<Phone>021 361-5563</Phone>
+<Fax>021 361-7669</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@iqhayiya.wcape.school.za</Email>
+</Schools>
+
+
+<Schools>
+<Name>Luhlaza High School</Name>
+<Key>238</Key>
+<Language>e</Language>
+<Address>Makabeni Road
+Khayelitsha
+7784</Address>
+<Phone>021 361-3424</Phone>
+<Fax>021 361-3425</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email>admin@luhlaza.wcape.school.za</Email>
+</Schools>
+
+ 
+<Schools>
+<Name>Monument Park</Name>
+<Key>239</Key>
+<Language>e</Language>
+<Address>40 Dan King Road
+Kraaifontein
+7570</Address>
+<Phone>021 987-1630</Phone>
+<Fax>021 988-5755</Fax>
+<Contact></Contact>
+<Entered>0</Entered>
+<Score>0</Score>
+<Email></Email>
+</Schools>
+
+
+</dataroot>
