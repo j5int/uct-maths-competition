@@ -1,0 +1,795 @@
+<HTML>     
+<HEAD>         
+<TITLE>UCT Mathematics Competition Database</TITLE>  
+   
+<SCRIPT type="text/VBScript">
+Dim oConn 
+Dim strPath
+Dim recordSet
+
+strPath = Replace( document.location, "mcq.html", "", 9, 1, 1 )
+strPath = Replace( strPath, "%20", " " )
+If InStr( strPath, "?" ) > 1 Then
+	strPath = Mid( strPath, 1, InStr( strPath, "?" ) - 1 )
+End If
+
+Set oConn = CreateObject("ADODB.Connection")
+oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  
+
+Function markdownString( strIn )
+	Dim strRet
+
+	strRet = Replace( strIn, "&#039", "'" )
+	strRet = Replace( strRet, "&quot;", """" )
+
+	markdownString = strRet
+End Function
+
+
+Function getCSVEntry( fFile )
+	Dim strRet
+	Dim strCurrent
+
+	strRet = ""
+
+	Do While fFile.AtEndOfLine <> True And strCurrent <> ","
+		strCurrent = fFile.Read(1)
+
+		If strCurrent = """" Then
+			Do While fFile.AtEndOfLine <> True
+				strCurrent = fFile.Read(1)
+				If strCurrent = """" Then
+					strCurrent = fFile.Read(1)
+				Else
+					Do While fFile.AtEndOfLine <> True And strCurrent = ","
+						strCurrent = fFile.Read(1)
+					Loop
+				End If
+
+				If strCurrent = "," Then
+					Exit Do
+				End If
+
+				If Asc( strCurrent ) <> 13 Then
+					strRet = strRet & strCurrent
+				End If
+			Loop
+		Else
+			If strCurrent <> "," Then
+				strRet = strRet & strCurrent
+			End If
+
+			Do While fFile.AtEndOfLine <> True And strCurrent <> ","
+				strCurrent = fFile.Read(1)
+
+				If Asc( strCurrent ) <> 13 And strCurrent <> "," Then
+					strRet = strRet & strCurrent
+				End If
+			Loop
+		End If
+	Loop
+
+	getCSVEntry = strRet
+End Function
+
+</SCRIPT>  
+
+</HEAD>      
+
+<BODY BGCOLOR="White" topmargin="10" leftmargin="10"><font face="Verdana, Arial, Helvetica">
+
+<!-- Heading 			-->
+<table width="100%">
+	<tr>
+		<td align="center" width=26%>
+			<IMAGE src="uct.gif" alt="UCT Logo">
+		</td>
+		<td align="center">
+			<font size="6" face="Arial, Helvetica"><b>UCT Mathematics Competition</b></font><br>      
+		</td>
+		<td align="center" width=26%>
+			<IMAGE src="maths.gif" alt="Mathematics Competition Logo">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<hr size="1" color="#000000">
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="3">
+			<big><b>Multiple Choice Question Interface</big></b>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 align=right>
+			<a href="maths_competition.html">Back to main menu</a>
+		</td>
+	</tr>
+</table>
+<!-- End Heading 		-->
+
+<p>
+The UCT Mathematics Competition is a multiple choice competition.  The Multiple Choice Question Interface 
+allows for interacting easily with the automated marking process of the Data Capture group.
+</p>
+<p>
+All the files are available in <SCRIPT type="text/VBScript">document.write strPath</SCRIPT>.  The download and upload 
+options below are made available for the ease of the user.
+</p>
+
+<table>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>PRN files</b>
+		</td>
+	</tr>
+	<tr>
+		<FORM action="mcq.html" method="get" name="genPRN">
+		<td>
+			Generate PRN files
+			<INPUT type="button" name="generate" value="Generate Now">
+<SCRIPT type="text/VBScript">
+
+Function getName
+	Dim name1
+	Dim name2
+	Dim strRet
+
+	strRet = ""
+
+	name1 = Trim( recordSet( 1 ) )
+	If name1 = "" Then
+		name1 = Left( Trim( recordSet(0) ), 1 )
+	Else
+		name1 = name1 & ", " & Left( Trim( recordSet(0) ), 1 )
+	End If
+
+	If ( 0 + Right( recordSet(2), 2 ) ) > 5 Then
+		name2 = ""
+		recordSet.MoveNext
+		name2 = recordSet( 0 )
+		If name2 = "" Then
+			name2 = Left( Trim( recordSet(1) ), 1 )
+		Else
+			name2 = name2 & ", " & Left( Trim( recordSet(1) ), 1 )
+		End If
+
+'		If name1 = "" And name2 = "" Then
+			strRet = "Pair / Paar "
+			Select Case ( Right( recordSet(2), 2 ) )
+				Case "06"
+					strRet = strRet & "A"
+				Case "07"
+					strRet = strRet & "B"
+				Case "08"
+					strRet = strRet & "C"
+				Case "09"
+					strRet = strRet & "D"
+				Case "10"
+					strRet = strRet & "E"
+			End Select
+'		Else
+'			If name1 = "" Then
+'				name2 = name1
+'				name1 = ""
+'			End If
+'
+'			If name1 = "" Or name2 = "" Then
+'				' Only one partner named and it is in name1
+'				strRet = name1 & " / partner"
+'			Else
+'				strRet = name1 & " / " & name2
+'			End If
+'		End If
+	Else
+		' Working with individuals
+		If name1 = "" Then
+			strRet = "Individual " & Right( recordSet(2), 1 ) 
+		Else
+			strRet = name1
+		End If
+	End If
+	
+	getName = strRet
+End Function
+
+
+Sub generate_OnClick
+
+	Dim fileSystem
+	Dim iGrade
+	Dim bContinue
+
+	document.all.item( "genPRN_text" ).innerText = "  Generating PRN files..."
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+
+	If Not fileSystem.FolderExists( strPath & "PRN_Files\" ) Then
+		fileSystem.CreateFolder( strPath & "PRN_Files\" )
+	End If
+
+	For iGrade = 8 To 12	
+		If fileSystem.FileExists( strPath & "PRN_Files\PRGR" & iGrade & ".PRN" ) Or fileSystem.FileExists( strPath & "PRN_Files\INDGR" & iGrade & ".PRN" ) Then
+			Exit For
+		End If
+	Next
+
+	bContinue = true
+	If fileSystem.FileExists( strPath & "PRN_Files\PRGR" & iGrade & ".PRN" ) Or fileSystem.FileExists( strPath & "PRN_Files\INDGR" & iGrade & ".PRN" ) Then
+		Dim iRemove
+
+		iRemove = MsgBox( "The PRN files already have been generated.  Do you wish to replace these?", vbYesNo )
+		If iRemove = vbNo Then
+			bContinue = false
+		End If
+	End If
+
+	If bContinue Then
+		Dim fPairs
+		Dim fIndividuals
+
+		document.all.item( "genPRN_text" ).innerText = "  Generating PRN files..."
+
+		For iGrade = 8 to 12
+			' Get the files
+			Set fPairs = fileSystem.CreateTextFile( strPath & "PRN_Files\PRGR" & iGrade & ".PRN", True )
+			Set fIndividuals = fileSystem.CreateTextFile( strPath & "PRN_Files\INDGR" & iGrade & ".PRN", True )
+
+			' Get the data
+			Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Grade=" & iGrade & " ORDER BY School, Reference" )
+			Do While Not recordSet.eof
+				If ( 0 + Right( recordSet(2), 2 ) ) > 5 Then
+					fPairs.Write recordSet(2) & "    "
+
+					If recordSet(8) = "e" Then
+						fPairs.Write "ENG "
+					Else
+						fPairs.Write "SCI "
+					End If
+
+					fPairs.WriteLine Left( markdownString( recordSet(3) ), 10 ) & markdownString( getName )
+				Else
+					fIndividuals.Write recordSet(2) & "    "
+
+					If recordSet(8) = "e" Then
+						fIndividuals.Write "ENG "
+					Else
+						fIndividuals.Write "SCI "
+					End If
+
+					fIndividuals.WriteLine Left( markdownString( recordSet(3) ), 10 ) & "; " & markdownString( getName )
+				End If
+
+				recordSet.MoveNext
+			Loop
+
+			fPairs.Close
+			fIndividuals.Close
+		Next
+
+		document.all.item( "genPRN_text" ).innerText = "  Finished generating PRN files."
+	Else
+		document.all.item( "genPRN_text" ).innerText = "  PRN file generation aborted."
+	End If
+End Sub
+
+</SCRIPT>
+		</td>
+		</FORM>
+		<td>
+			<p id="genPRN_text"></p>
+		</td>
+	</tr>
+	<tr>
+<SCRIPT type="text/VBScript">
+	document.write "<FORM name=downloadDirForm action=""" & strPath & "PRN_Files\"" method=GET target=_blank>"
+</SCRIPT>
+		
+		<td colspan=2>
+			Download PRN files <BR>&nbsp;&nbsp;&nbsp;
+			Open the folder <INPUT type="submit" name="openDir" value="Open">
+<SCRIPT type="text/VBScript">
+Sub openDir_OnClick
+	Dim fileSystem
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+
+	If Not fileSystem.FolderExists( strPath & "PRN_Files\" ) Then
+		fileSystem.CreateFolder( strPath & "PRN_Files\" )
+	End If
+End Sub
+</SCRIPT>
+			&nbsp; <b><i>or</i></b> &nbsp;
+			Enter folder to download directly to:
+			<INPUT type="text"   name="PRNdirectory" value="a:">
+			<INPUT type="button" name="PRNgen" value="Download Now">
+<SCRIPT type="text/VBScript">
+Sub PRNgen_OnClick
+	Dim fileSystem
+	Dim bContinue
+	Dim iMsgRet
+	On Error Resume Next
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+	bContinue = true
+
+	document.all.item( "genPRN_text" ).innerText = "  Copying PRN files..."
+
+	Do While bContinue = true
+		fileSystem.CopyFile strPath & "PRN_Files\*.prn", document.all.item( "PRNdirectory" ).value, true 
+
+		If Err.Number <> 0 Then
+			Select Case Err.Number
+			Case 76
+				' No disk
+				iMsgRet = MsgBox( "Drive " & fileSystem.GetDriveName( document.all.item( "PRNdirectory" ).value ) & " is not ready.  Press Retry when it is ready or select cancel", vbRetryCancel )
+				If iMsgRet = vbCancel Then
+					bContinue = false
+				End If
+			Case -2147024784
+				' Out of disk space
+				iMsgRet = MsgBox( "Drive " & fileSystem.GetDriveName( document.all.item( "PRNdirectory" ).value ) & " is too full.  Please clear it or enter a new disk.  Press Retry when the disk is ready or select cancel", vbRetryCancel )
+				If iMsgRet = vbCancel Then
+					bContinue = false
+				End If
+			Case Else
+				MsgBox Err.Number
+				bContinue = false
+			End Select
+			Err.Clear
+		Else
+			bContinue = false
+		End If
+	Loop
+
+	If iMsgRet = vbCancel Then
+		document.all.item( "genPRN_text" ).innerText = "  Copying of PRN files was canceled."
+	Else
+		document.all.item( "genPRN_text" ).innerText = "  Finished copying PRN files."
+	End If
+End Sub
+</SCRIPT>
+		</td>
+		</FORM>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2>
+			<b>MCQ Results</b>
+		</td>
+	</tr>
+	<tr>
+<SCRIPT type="text/VBScript">
+	document.write "<FORM name=resultsForm action=""" & strPath & "Results\"" method=GET target=_blank>"
+</SCRIPT>
+		<td>
+			Upload Result Files 
+		</td>
+		<td>
+			<p id=resultsID></p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2>
+			&nbsp;&nbsp;&nbsp;
+			Open the folder <INPUT type="submit" name="openResultsDir" value="Open">
+<SCRIPT type="text/VBScript">
+Sub openResultsDir_OnClick
+	Dim fileSystem
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+
+	If Not fileSystem.FolderExists( strPath & "Results\" ) Then
+		fileSystem.CreateFolder( strPath & "Results\" )
+	End If
+End Sub
+</SCRIPT>
+			&nbsp; <b><i>or</i></b> &nbsp;
+			Enter folder to upload directly from: <INPUT type=text name=resultsDir value="a:">
+			<INPUT type="button" name="uploadResults" value="Upload Now">
+<SCRIPT type="text/VBScript">
+
+Function copyExtension( extension )
+	Dim iGrade
+	Dim fileSystem
+	Dim iMsgRet
+
+	iMsgRet = vbRetry
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+
+	For iGrade = 8 to 12
+		iMsgRet = vbRetry
+		Do While iMsgRet = vbRetry
+			If fileSystem.FileExists( document.all.item( "resultsDir" ).value & "\INDGR" & iGrade & extension ) Then
+				fileSystem.CopyFile document.all.item( "resultsDir" ).value & "\INDGR" & iGrade & extension, strPath & "Results\", true 
+				iMsgRet = vbOK
+			Else
+				iMsgRet = MsgBox( "Warning: The file '" & document.all.item( "resultsDir" ).value & "\INDGR" & iGrade & extension & "' does not exist!", vbAbortRetryIgnore )
+				If iMsgRet = vbAbort Then
+					Exit For
+				End If
+			End If
+		Loop
+
+		If Err.Number <> 0 Then 
+			Exit For
+		End If
+
+		iMsgRet = vbRetry
+		Do While iMsgRet = vbRetry
+			If fileSystem.FileExists( document.all.item( "resultsDir" ).value & "\PRGR" & iGrade & extension ) Then
+				fileSystem.CopyFile document.all.item( "resultsDir" ).value & "\PRGR" & iGrade & extension, strPath & "Results\", true 
+				iMsgRet = vbOK
+			Else
+				iMsgRet = MsgBox( "Warning: The file '" & document.all.item( "resultsDir" ).value & "\PRGR" & iGrade & extension & "' does not exist!", vbAbortRetryIgnore )
+				If iMsgRet = vbAbort Then
+					Exit For
+				End If
+			End If
+		Loop
+
+		If Err.Number <> 0 Then 
+			Exit For
+		End If
+	Next
+
+	copyExtension = iMsgRet
+End Function
+
+Sub uploadResults_OnClick
+	Dim bContinue
+	Dim iMsgRet
+	On Error Resume Next
+
+	bContinue = true
+
+	document.all.item( "resultsID" ).innerText = "  Copying results files..."
+
+	Do While bContinue = true
+		iMsgRet = copyExtension( ".EAD" )
+		If Err.Number = 0 And iMsgRet <> vbAbort Then
+			iMsgRet = copyExtension( ".RES" )
+			If Err.Number = 0  And iMsgRet <> vbAbort Then
+				iMsgRet = copyExtension( ".ITM" )
+			End If
+		End If
+
+		If Err.Number <> 0 Then
+			Select Case Err.Number
+			Case 71
+				' No disk
+				iMsgRet = MsgBox( "Drive " & fileSystem.GetDriveName( document.all.item( "analysisDir" ).value ) & " is not ready.  Press Retry when it is ready or select cancel", vbRetryCancel )
+				If iMsgRet = vbCancel Then
+					bContinue = false
+				End If
+			Case 76
+				' No disk
+				iMsgRet = MsgBox( "Drive " & fileSystem.GetDriveName( document.all.item( "analysisDir" ).value ) & " is not ready.  Press Retry when it is ready or select cancel", vbRetryCancel )
+				If iMsgRet = vbCancel Then
+					bContinue = false
+				End If
+			Case -2147024784
+				' Out of disk space
+				iMsgRet = MsgBox( "Drive " & fileSystem.GetDriveName( document.all.item( "analysisDir" ).value ) & " is too full.  Please clear it or enter a new disk.  Press Retry when the disk is ready or select cancel", vbRetryCancel )
+				If iMsgRet = vbCancel Then
+					bContinue = false
+				End If
+			Case Else
+				MsgBox Err.Number
+				bContinue = false
+			End Select
+			Err.Clear
+		Else
+			bContinue = false
+		End If
+	Loop
+
+	If iMsgRet = vbCancel Or iMsgRet = vbAbort Then
+		document.all.item( "resultsID" ).innerText = "  Copying of results files was canceled."
+	Else
+		document.all.item( "resultsID" ).innerText = "  Finished copying results files."
+	End If
+End Sub
+</SCRIPT>
+		</td>
+		</FORM>
+	</tr>
+	<tr>
+		<FORM action=mcq.html method=get name=importForm>
+		<td>
+			Import Results
+			<INPUT type="button" name="importResults" value="Import Now">
+<SCRIPT type="text/VBScript">
+Sub doSchoolRanks
+	Dim recordSet2
+	Dim iStudents
+	Dim iScore
+
+	Set recordSet = oConn.Execute( "SELECT Name FROM Schools ORDER BY Name" )
+	Do While Not recordSet.eof
+		iStudents = 0
+		iScore    = 0
+
+		' -1 = Absent, so don't add list students where score < 0 
+		Set recordSet2 = oConn.Execute( "SELECT DISTINCT Reference, Score FROM Students WHERE School='" & recordSet(0) & "' AND Score>=0 ORDER BY Score DESC" )
+		Do While Not recordSet2.eof And iStudents < 30
+			iScore = iScore + recordSet2(1)
+			iStudents = iStudents + 1
+			recordSet2.MoveNext
+		Loop
+
+		Set recordSet2 = oConn.Execute( "UPDATE Schools SET Score=" & iScore & " WHERE Name='" & recordSet(0) & "'" )
+
+		recordSet.MoveNext
+	Loop
+End Sub
+
+Sub importResults_OnClick
+	Dim iGrade
+	Dim fPairs
+	Dim fIndividuals
+	Dim fErr
+	Dim fileSystem
+	Dim strReference
+	Dim strLanguage
+	Dim strSchool
+	Dim iScore
+	Dim iRank
+	Dim bError
+
+	document.all.item( "import_text" ).innerText = " Importing data..."
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+
+	Set fErr = fileSystem.CreateTextFile( strPath & "errors.html" )
+	fErr.WriteLine "<HTML><BODY><p><big><b>Errors:</b></big></p>"
+
+	bError = false
+
+	For iGrade = 8 To 12
+
+		fErr.WriteLine "<table><tr><td colspan=5><b><big>Grade " & iGrade & ", Individuals</big></b></td></tr>"
+
+		If Not fileSystem.FileExists( strPath & "Results/INDGR" & iGrade & ".RES" ) Then
+			fErr.WriteLine "<tr><td colspan=5>File <b>" & strPath & "Results/INDGR" & iGrade & ".RES" & "</b> not found!</td><tr>"
+			bError = true
+		Else
+			fErr.WriteLine "<tr><td><b>Reference</b></td><td><b>Language</b></td><td><b>School</b></td><td><b>Score</b></td><td><b>Rank</b></td></tr>"
+
+			Set fIndividuals = fileSystem.OpenTextFile( strPath & "Results/INDGR" & iGrade & ".RES" )
+
+			Do While Not fIndividuals.AtEndOfStream
+				strReference = Trim( getCSVEntry( fIndividuals ) )
+				Do While Len( strReference ) < 7 
+					strReference = "0" & strReference
+				Loop
+				strLanguage = getCSVEntry( fIndividuals )
+				strSchool = getCSVEntry( fIndividuals )
+
+				If StrComp( getCSVEntry( fIndividuals ), "ABSENT" ) = 0 Then
+					iScore = -1
+					iRank  = -1
+				Else
+					getCSVEntry( fIndividuals )
+					getCSVEntry( fIndividuals )
+					iScore = 0 + ( getCSVEntry( fIndividuals ) )
+					getCSVEntry( fIndividuals )
+					getCSVEntry( fIndividuals )
+					iRank  = 0 + ( getCSVEntry( fIndividuals ) )
+					getCSVEntry( fIndividuals )
+				End If
+
+				If Not fIndividuals.AtEndOfStream Then
+					Do While Not fIndividuals.AtEndOfLine
+						fIndividuals.Read(1)
+					Loop
+
+					Do While Not fIndividuals.AtEndOfStream And fIndividuals.AtEndOfLine
+						fIndividuals.Read(1)
+					Loop
+				End If
+
+				If strLanguage = "ENG" Then
+					strLanguage = "e"
+				Else
+					strLanguage = "a"
+				End If
+
+				Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Reference='" & strReference & "'" )
+				If Not recordSet.eof Then
+					' Update the info
+					oConn.Execute( "UPDATE Students SET Score=" & iScore & ", Language='" & strLanguage & "', Rank=" & iRank & " WHERE Reference='" & strReference & "'" )
+				Else
+					' Add to error file.
+					fErr.WriteLine "<tr><td>" & strReference & "</td><td>" & strLanguage & "</td><td>" & strSchool & "</td><td>" & iScore & "</td><td>" & iRank & "</td></tr>"
+					bError = true
+				End If
+			Loop
+
+			fIndividuals.Close
+		End If
+
+		fErr.WriteLine "</table><BR>"
+		fErr.WriteLine "<table><tr><td colspan=5><b><big>Grade " & iGrade & ", Pairs</b></big></td></tr>"
+
+		If Not fileSystem.FileExists( strPath & "Results/PRGR" & iGrade & ".RES" ) Then
+			fErr.WriteLine "<tr><td colspan=5>File <b>" & strPath & "Results/PRGR" & iGrade & ".RES" & "</b> not found!</td><tr>"
+			bError = true
+		Else
+			fErr.WriteLine "<tr><td><b>Reference</b></td><td><b>Language</b></td><td><b>School</b></td><td><b>Score</b></td><td><b>Rank</b></td></tr>"
+
+			Set fPairs = fileSystem.OpenTextFile( strPath & "Results/PRGR" & iGrade & ".RES" )
+
+			Do While Not fPairs.AtEndOfStream
+				strReference = Trim( getCSVEntry( fPairs ) )
+				Do While Len( strReference ) < 7 
+					strReference = "0" & strReference
+				Loop
+
+				strLanguage  = getCSVEntry( fPairs )
+				strSchool    = getCSVEntry( fPairs )
+
+				If StrComp( getCSVEntry( fPairs ), "ABSENT" ) = 0 Then
+					iScore = -1
+					iRank  = -1
+				Else
+					getCSVEntry( fPairs )
+					getCSVEntry( fPairs )
+					iScore = 0 + ( getCSVEntry( fPairs ) )
+					getCSVEntry( fPairs )
+					getCSVEntry( fPairs )
+					iRank  = 0 + ( getCSVEntry( fPairs ) )
+					getCSVEntry( fPairs )
+				End If
+
+				If Not fPairs.AtEndOfStream Then
+					Do While Not fPairs.AtEndOfLine
+						fPairs.Read(1)
+					Loop
+
+					Do While Not fPairs.AtEndOfStream And fPairs.AtEndOfLine
+						fPairs.Read(1)
+					Loop
+				End If
+
+				Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Reference='" & strReference & "'" )
+				If Not recordSet.eof Then
+					' Update the info
+					If strLanguage = "ENG" Then
+						strLanguage = "e"
+					Else
+						strLanguage = "a"
+					End If
+
+					oConn.Execute( "UPDATE Students SET Score=" & iScore & ", Rank=" & iRank & ", Language='" & strLanguage & "' WHERE Reference='" & strReference & "'" )
+				Else
+					' Add to error file.
+					fErr.WriteLine "<tr><td>" & strReference & "</td><td>" & strLanguage & "</td><td>" & strSchool & "</td><td>" & iScore & "</td><td>" & iRank & "</td></tr>"
+					bError = true
+				End If
+			Loop
+
+			fPairs.Close
+		End If	
+
+		fErr.WriteLine "</table><BR>"
+	Next
+
+	fErr.Close
+
+	document.all.item( "import_text" ).innerText = " Generating School ranking..."
+	doSchoolRanks()
+
+	If bError Then
+		document.all.item( "import_text" ).innerHTML = " Finished Import.  There were errors.  Click <a href=errors.html target=_blank>here</a> to view errors."
+	Else
+		document.all.item( "import_text" ).innerText = " Finished Import."
+	End If
+End Sub
+</SCRIPT>
+		</td>
+		</FORM>
+		<td>
+			<p id=import_text></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<FORM action="runme.bat" method=get name=itemanalForm>
+		<td>
+			Generate Item Analysis Reports
+			<INPUT type="submit" name="itemanal" value="Generate Now">
+		</td>
+		<td>
+			<p id=analysisID></p>
+		</td>
+		</FORM>
+	</tr>
+	<tr>
+		<td colspan=2>
+<SCRIPT type="text/VBScript">
+	document.write "<FORM name=analysisForm action=""" & strPath & "Analysis\"" method=GET target=_blank>"
+</SCRIPT>
+		<FORM action="mcq.html" method=get name=analysis>
+			Download Item Analysis Reports <BR>&nbsp;&nbsp;&nbsp;
+			Open the folder <INPUT type="submit" name="openAnalysisDir" value="Open">
+<SCRIPT type="text/VBScript">
+Sub openAnalysisDir_OnClick
+	Dim fileSystem
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+
+	If Not fileSystem.FolderExists( strPath & "Analysis\" ) Then
+		fileSystem.CreateFolder( strPath & "Analysis\" )
+	End If
+End Sub
+</SCRIPT>
+			&nbsp; <b><i>or</i></b> &nbsp;
+			Enter Folder to download directly to:
+			<INPUT type="text"   name="analysisDir" value="a:">
+			<INPUT type="button" name="downloadAnalysis" value="Download Now">
+<SCRIPT type="text/VBScript">
+Sub downloadAnalysis_OnClick
+	Dim fileSystem
+	Dim bContinue
+	Dim iMsgRet
+	On Error Resume Next
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+	bContinue = true
+
+	document.all.item( "analysisID" ).innerText = "  Copying Analysis files..."
+
+	Do While bContinue = true
+		fileSystem.CopyFile strPath & "Analysis\*.tex", document.all.item( "analysisDir" ).value, true 
+
+		If Err.Number <> 0 Then
+			Select Case Err.Number
+			Case 76
+				' No disk
+				iMsgRet = MsgBox( "Drive " & fileSystem.GetDriveName( document.all.item( "analysisDir" ).value ) & " is not ready.  Press Retry when it is ready or select cancel", vbRetryCancel )
+				If iMsgRet = vbCancel Then
+					bContinue = false
+				End If
+			Case -2147024784
+				' Out of disk space
+				iMsgRet = MsgBox( "Drive " & fileSystem.GetDriveName( document.all.item( "analysisDir" ).value ) & " is too full.  Please clear it or enter a new disk.  Press Retry when the disk is ready or select cancel", vbRetryCancel )
+				If iMsgRet = vbCancel Then
+					bContinue = false
+				End If
+			Case Else
+				MsgBox Err.Number
+				bContinue = false
+			End Select
+			Err.Clear
+		Else
+			bContinue = false
+		End If
+	Loop
+
+	If iMsgRet = vbCancel Then
+		document.all.item( "analysisID" ).innerText = "  Copying of Analysis files was canceled."
+	Else
+		document.all.item( "analysisID" ).innerText = "  Finished copying Analysis files."
+	End If
+End Sub
+</SCRIPT>
+		</td>
+		</FORM>
+	</tr>
+</table>

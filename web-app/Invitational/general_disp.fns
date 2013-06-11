@@ -1,0 +1,3033 @@
+<?
+
+function cheader()
+
+{
+
+?>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 11">
+<link rel=File-List href="Page_files/filelist.xml">
+<style id="UCT Invitational Challenge and Maths Circles_4334_Styles">
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+.xl244334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl254334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl264334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl274334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl284334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl294334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl304334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl314334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl324334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl334334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl344334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl354334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl364334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl374334
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:italic;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+-->
+</style>
+
+<style id="UCT Invitational Challenge and Maths Circles_7630_Styles">
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+.xl247630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl257630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl267630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl277630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl287630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl297630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl307630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl317630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl327630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl337630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:italic;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl347630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:italic;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl357630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl367630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl377630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl387630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl397630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl407630
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Arial;
+	mso-generic-font-family:auto;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+-->
+</style>
+
+</head>
+
+    <body bgcolor="#FFCCAA">
+
+    <table align="center" border="0" cellpadding="0" >
+ 	<tr valign="center">
+	    <td width="91">
+     		<img height="120" src="graphics/logo140.gif" border="0">
+	    </td>
+	    <td width="730">
+		<font color="red">
+		    <h1 align="center">UCT Invitational Mathematics Challenge</h1>
+		</font>			
+	    </td>
+	    <td width="100">
+		<img height="120" src="graphics/uct.gif" border="0">
+	    </td>
+	</tr>
+    </table>
+
+    <hr align="center">
+
+<?
+
+}
+
+function news()
+{
+
+?>
+
+<h2 align="center">News</h2>
+
+<p>This website is still under constuction and therefore doesn't have all the information on it yet. It therefore also lacks in the visual department. More information and improvements is to come soon.</p>
+
+<p>The results for the 2007 UCT Invitational Mathematics Challenge and the papers with solutions have just been uploaded.</p>
+
+<?
+
+}
+
+function description()
+{
+
+?>
+
+<h2 align="center">Description</h2>
+
+<p>
+The UCT Invitational Mathematics Challenge is the follow-up event to the UCT Mathematics Competition, which is written in April every year. The Invitational Challenge is written between the UCT Mathematics Competition and the prizegiving as to also be able to mention these results at the prizegiving. The best 10% of the Individual Participants in each grade is invited to write the Invitational Challenge as well as the top 3 pairs and some special invitees.
+</p>
+
+<?
+
+}
+
+function papers()
+{
+
+?>
+
+<h2 align=center>Papers</h2>
+
+<p>The 2007 papers as well as solutions can be downloaded beneath.</p>
+
+<a href="documents/Juniors_2007.pdf"> Junior 2007 Paper </a><br>
+<a href="documents/Juniors_2007_Memo.pdf"> Junior 2007 Solutions </a><br>
+<a href="documents/Seniors_2007.pdf"> Senior 2007 Paper </a><br>
+<a href="documents/Seniors_2007_Memo.pdf"> Senior 2007 Solutions </a><br>
+
+<?
+
+}
+
+function juniors()
+{
+
+?>
+
+    <h2 align=center>Junior Results</h2>
+
+<div id="UCT Invitational Challenge and Maths Circles_4334" align=center
+x:publishsource="Excel">
+
+<table x:str border=0 cellpadding=0 cellspacing=0 width=597 class=xl04334
+ style='border-collapse:collapse;table-layout:fixed;width:449pt'>
+ <col class=xl364334 width=39 style='mso-width-source:userset;mso-width-alt:
+ 1426;width:29pt'>
+ <col class=xl04334 width=97 style='mso-width-source:userset;mso-width-alt:
+ 3547;width:73pt'>
+ <col class=xl04334 width=90 style='mso-width-source:userset;mso-width-alt:
+ 3291;width:68pt'>
+ <col class=xl04334 width=197 style='mso-width-source:userset;mso-width-alt:
+ 7204;width:148pt'>
+ <col class=xl334334 width=46 style='mso-width-source:userset;mso-width-alt:
+ 1682;width:35pt'>
+ <col class=xl334334 width=64 style='width:48pt'>
+ <col class=xl04334 width=64 style='width:48pt'>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl354334 width=39 style='height:12.75pt;width:29pt'>Rank</td>
+  <td class=xl284334 width=97 style='border-left:none;width:73pt'>First Name</td>
+  <td class=xl284334 width=90 style='border-left:none;width:68pt'>Surname</td>
+  <td class=xl284334 width=197 style='border-left:none;width:148pt'>School</td>
+  <td class=xl274334 width=46 style='border-left:none;width:35pt'>Grade</td>
+  <td class=xl274334 width=64 style='border-left:none;width:48pt'>Mark</td>
+  <td class=xl04334 width=64 style='width:48pt'></td>
+ </tr>
+ <tr class=xl374334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>1</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Dessi</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Nikolov</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Eunice</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>66</td>
+  <td class=xl374334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>2</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Tiaan</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Munnik</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>D F Malan
+  Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>61</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>3</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Sean</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Wentzel</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Westerford High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>59</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>4</td>
+  <td class=xl244334 style='border-top:none;border-left:none' x:str="Benjamin ">Benjamin<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Swart</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Bellville High
+  School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>48</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>5</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Rehan</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Visser</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Bridge House
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>47</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>6</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Vaughan</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Newton</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Bridge House
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>46</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>7</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Jin Won</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Seo</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Bishops ">Bishops<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>46</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>8</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Rowan</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Nicholls</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Bishops ">Bishops<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>46</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>9</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Ashraf</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Moolla</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>45</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>10</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Janneke</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Lötter</td>
+  <td class=xl244334 style='border-top:none;border-left:none'
+  x:str="Stellenbosch Hoërskool ">Stellenbosch Hoërskool<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>45</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>11</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Duel Rim ">Duel
+  Rim<span style='mso-spacerun:yes'> </span></td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Choi</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Wynberg Boys'
+  High School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>44</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>12</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Ursula</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Westwood</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Westerford High
+  School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>43</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>13</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Jeremy</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Burgess</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Fairmont High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>41</td>
+  <td class=xl294334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>14</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Jessica ">Jessica<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl264334 style='border-top:none;border-left:none'>du Toit</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Bergvliet High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>39</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>15</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Bonita</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Dominion</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Reddam House
+  Constantia</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>38</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>16</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Pieter</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Klue</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Langenhoven
+  Gimnasium</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>38</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>17</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Daron ">Daron<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Golden</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Herzlia Middle
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>37</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>18</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Julia</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Hwang</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Settlers High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>37</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>19</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Lezanne</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Lötter</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Stellenbosch
+  Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>36</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>20</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Christian Beyer</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Roelofse</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Boland
+  Landbouskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>36</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>21</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Matthew</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Deacon</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>El Shaddai
+  Christian School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>36</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>22</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Melissa</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Greeff</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Herschel High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>35</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>23</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Rita</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Griebenow</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Pinelands High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>35</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>24</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Ashleigh</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Avenant</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Westerford High
+  School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>35</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>25</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Johan</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>de Klerk</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Paul Roos
+  Gimnasium</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>35</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>26</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Hendrik</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Wessels</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Jan van Riebeeck
+  Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>33</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>27</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Laurie</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Scarborough</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Rustenburg Girls'
+  High School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>32</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>28</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Ceridwen</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Oakley</td>
+  <td class=xl244334 style='border-top:none;border-left:none'
+  x:str="Springfield Convent ">Springfield Convent<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>32</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>29</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Kira</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Düsterwald</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Springfield
+  Convent</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>30</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>30</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Michael John</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Heyns</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Hermanus</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>30</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>31</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Dirkie</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Myburgh</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Swartland
+  Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>30</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>32</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Nicholas</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Santrucek</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Bridge House
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>30</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>33</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Devon</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Morillion</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Somerset College</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>30</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>34</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Jaco</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>du Plessis</td>
+  <td class=xl244334 style='border-top:none;border-left:none'
+  x:str="De Kuilen Hoërskool ">De Kuilen Hoërskool<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>30</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>35</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Charl</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>du Plessis</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Stellenberg High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>29</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>36</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Frans</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Pretorius</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Paul Roos
+  Gimnasium</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>28</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>37</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Chloe</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Blyth</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Herschel Girls'
+  High School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>27</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>38</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Yasmin</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Skibbe</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Bloemhof</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>27</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>39</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Charl</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Cillié</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Parel Vallei
+  Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>26</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>40</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Robert</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Cloete</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>26</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>41</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Jin-Su</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Kim</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Stellenberg High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>26</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>42</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Willie</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Pretorius</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Tygerberg
+  Hoërskool</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>26</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>43</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Greg</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Jackson</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Bishops ">Bishops<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>26</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>44</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Nicholas</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Colli</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>26</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>45</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Jana</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Booysen</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>D F Malan
+  Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>25</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>46</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Louisa</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Wang</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Settlers High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>25</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>47</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Jessica ">Jessica<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Rockey</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Herschel Girls'
+  High School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>24</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>48</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Cornelius</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Verwey</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Stellenberg
+  Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>24</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>49</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Zavier</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Haddad</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Bergvliet High
+  School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>24</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>50</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Pierre Ruan</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Olivier</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Bellville High
+  School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>24</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>51</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Helene</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Comitis</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Herschel High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>22</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>52</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>William</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Meyer</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Langenhoven
+  Gimnasium</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>22</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>53</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Willie</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>van der Merwe</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Brackenfell<span
+  style='mso-spacerun:yes'>  </span>Hoërskool</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>22</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>54</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Alexander</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Borysov</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>International
+  School of Hout Bay</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>22</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>55</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Alice</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Clegg</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Herschel Girls'
+  High School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>21</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>56</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Caitlin</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Hayward</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Herschel High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>21</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>57</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Carla</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Kroon</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Jan van Riebeeck
+  Hoërskool</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>21</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>58</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Nina ">Nina<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Frenz</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>El Shaddai
+  Christian School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>20</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>59</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Cor</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Retief</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Strand Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>20</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>60</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Zubayr</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Abrahams</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>20</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>61</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Blair</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>van der Watt</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>20</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>62</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Charlie</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Min</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Curro Private
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>17</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>63</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Adrienne</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Lees</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Herschel High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>17</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>64</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Iain</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Craven</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Bishops</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>16</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>65</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Emma</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Matthews</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Herschel High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>15</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>66</td>
+  <td class=xl264334 style='border-top:none;border-left:none' x:str="Nina ">Nina<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Nicholas</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Jan van Riebeeck
+  Hoërskool</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>14</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>67</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Nicola</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Roux</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Rustenburg Girls'
+  High School</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>13</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>68</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Chris</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Erlangsen</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>13</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>69</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Emile</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Taljaard</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Langenhoven
+  Gimnasium</td>
+  <td class=xl344334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>13</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>70</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Michael</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Fautley</td>
+  <td class=xl264334 style='border-top:none;border-left:none'
+  x:str="Elkanah House ">Elkanah House<span style='mso-spacerun:yes'> </span></td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl254334 style='height:12.75pt;border-top:none' x:num>71</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>Anna-Marie</td>
+  <td class=xl264334 style='border-top:none;border-left:none'>du Plooy</td>
+  <td class=xl244334 style='border-top:none;border-left:none'>Pinelands High
+  School</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl324334 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl04334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl334334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=17 style='height:12.75pt'>
+  <td height=17 class=xl314334 style='height:12.75pt'></td>
+  <td class=xl304334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl294334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=19 style='mso-height-source:userset;height:14.25pt'>
+  <td height=19 class=xl314334 style='height:14.25pt'></td>
+  <td class=xl304334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl294334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <tr class=xl04334 height=19 style='mso-height-source:userset;height:14.25pt'>
+  <td height=19 class=xl364334 style='height:14.25pt'></td>
+  <td class=xl304334></td>
+  <td class=xl04334></td>
+  <td class=xl304334></td>
+  <td class=xl294334></td>
+  <td class=xl334334></td>
+  <td class=xl04334></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=39 style='width:29pt'></td>
+  <td width=97 style='width:73pt'></td>
+  <td width=90 style='width:68pt'></td>
+  <td width=197 style='width:148pt'></td>
+  <td width=46 style='width:35pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</div>
+
+<?
+
+}
+
+function seniors()
+{
+
+?>
+
+<h2 align=center>Senior Results</h2>
+
+<div id="UCT Invitational Challenge and Maths Circles_7630" align=center
+x:publishsource="Excel">
+
+<table x:str border=0 cellpadding=0 cellspacing=0 width=574 class=xl07630
+ style='border-collapse:collapse;table-layout:fixed;width:432pt'>
+ <col class=xl367630 width=31 style='mso-width-source:userset;mso-width-alt:
+ 1133;width:23pt'>
+ <col class=xl07630 width=97 style='mso-width-source:userset;mso-width-alt:
+ 3547;width:73pt'>
+ <col class=xl07630 width=90 style='mso-width-source:userset;mso-width-alt:
+ 3291;width:68pt'>
+ <col class=xl07630 width=197 style='mso-width-source:userset;mso-width-alt:
+ 7204;width:148pt'>
+ <col class=xl317630 width=46 style='mso-width-source:userset;mso-width-alt:
+ 1682;width:35pt'>
+ <col class=xl317630 width=49 style='mso-width-source:userset;mso-width-alt:
+ 1792;width:37pt'>
+ <col class=xl07630 width=64 style='width:48pt'>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 width=31 style='height:12.75pt;width:23pt'>&nbsp;</td>
+  <td class=xl277630 width=97 style='border-left:none;width:73pt'>First Name</td>
+  <td class=xl277630 width=90 style='border-left:none;width:68pt'>Surname</td>
+  <td class=xl277630 width=197 style='border-left:none;width:148pt'>School</td>
+  <td class=xl267630 width=46 style='border-left:none;width:35pt'>Grade</td>
+  <td class=xl267630 width=49 style='border-left:none;width:37pt'>Mark</td>
+  <td class=xl07630 width=64 style='width:48pt'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>1</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Kylie</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Fenner</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Reddam House
+  Atlantic Seaboard</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>41</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl347630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>2</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Francois</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Conradie</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>De Kuilen
+  Hoërskool</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl337630 style='border-top:none;border-left:none' x:num>40</td>
+  <td class=xl347630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>3</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Thomas</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Weighill</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Paarl Boys' High
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>40</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>4</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Haroon</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Moolla</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Rondebosch Boys'
+  H S</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>38</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>5</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Rudi</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Botha</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Rustenburg Girls'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>37</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>6</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>John</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Nicholas</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Jan Van Riebeeck
+  Hoërskool</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>33</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>7</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Liam</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Baker</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Mondale High
+  School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>31</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>8</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kosie</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>van der Merwe</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Brackenfell<span
+  style='mso-spacerun:yes'>  </span>Hoërskool</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>28</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>9</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Robert</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Ketteringham</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>27</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>10</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Robert</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Shaff</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Herzlia High
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>26</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>11</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Yumin</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Park</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Wynberg Boys'
+  High School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>26</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>12</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Adriaan</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Mouton</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Paarl Boys' High
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>25</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>13</td>
+  <td class=xl247630 style='border-top:none;border-left:none' x:str="Tristan ">Tristan<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Hands</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Somerset College</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>25</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>14</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>James</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Combrink</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Reddam House
+  Constantia</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>22</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>15</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Nic</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kerkmann</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Bridge House
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>22</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>16</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Mark</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Roux</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>22</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>17</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Graham</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Ziervogel</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bridge House
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>20</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>18</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Suzette</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>du Plessis</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>De Kuilen
+  Hoërskool</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>19</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>19</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Douglas</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Whistance</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>19</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>20</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Simon</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bergman</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>18</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>21</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Julia</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bingham</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Westerford High
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>18</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>22</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bronwyn</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Horn</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Herschel Girls'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>17</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>23</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Jae-Hee</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Shin</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Wynberg Boys'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>17</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>24</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Stefan</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Enthoven</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Somerset College</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>17</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>25</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Maximilian</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Kraus</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Reddam House
+  Constantia</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>17</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>26</td>
+  <td class=xl247630 style='border-top:none;border-left:none' x:str="Maggie ">Maggie<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Lu</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Herschel Girls'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>16</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>27</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Malie</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>McGregor</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bridge House
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>16</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>28</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Malan</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kriel</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Paul Roos
+  Gimnasium</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>16</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>29</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Altaaf</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Harnaker</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Islamia Boys'
+  College</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>16</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>30</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Boyun</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kim</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>El Shaddai
+  Christian School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>15</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>31</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Francois</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>van Niekerk</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Parel Vallei High
+  School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>15</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>32</td>
+  <td class=xl257630 style='border-top:none;border-left:none' x:str="Eun Byul ">Eun
+  Byul<span style='mso-spacerun:yes'> </span></td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Cho</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Springfield
+  Convent School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>15</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>33</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Willem Stefaan</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Conradie</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Westerford High
+  School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>15</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>34</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Pieter</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>de<span
+  style='mso-spacerun:yes'>  </span>Wet</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Paul Roos
+  Gimnasium</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>13</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>35</td>
+  <td class=xl257630 style='border-top:none;border-left:none' x:str="Benjamin ">Benjamin<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Greenwood</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Somerset College</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>13</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>36</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bhivek</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Singh</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Brackenfell High
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>37</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Min Kyung</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kim</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Abbott's College
+  Milnerton</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>38</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Gordon</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Robertson</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Curro Private
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>39</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Andrew</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Winstanly</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Reddam House
+  Constantia</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>40</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Jonathan</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Oettle</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Boland
+  Landbouskool</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>41</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Gareth</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Cawood</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Parel Vallei High
+  School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>42</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Meeka</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Tulleken</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Wynberg Girls'
+  High School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>43</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Azhar</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Desai</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Westerford High
+  School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>44</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Adriaan</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Engelbrecht</td>
+  <td class=xl247630 style='border-top:none;border-left:none'
+  x:str="Stellenbosch Hoërskool ">Stellenbosch Hoërskool<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>45</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kim</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Whitmore</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Springfield
+  Convent High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>46</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Landi</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Nesenberend</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Hoërskool
+  Bredasdorp</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>9</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>47</td>
+  <td class=xl247630 style='border-top:none;border-left:none' x:str="Daniel ">Daniel<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Suh</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Reddam House
+  Constantia</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>48</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Antonia</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Cronje</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Herschel Girls'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>49</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bianca</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Howell</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Fairbairn College</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>50</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Fatima</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Mowzer</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Islamia Girls'
+  College</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>8</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>51</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Carl</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Eriksen</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Rondebosch Boys'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>7</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='mso-height-source:userset;height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>52</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Ineke</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>van der Berg</td>
+  <td class=xl247630 style='border-top:none;border-left:none'
+  x:str="Stellenbosch Hoërskool ">Stellenbosch Hoërskool<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>7</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>53</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Matthew</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Laten</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Fairmont High
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>7</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>54</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Conrad</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>van Deventer</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Swartland
+  Hoërskool</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>7</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>55</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Gerhard</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>van Deventer</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Swartland
+  Hoërskool</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>7</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>56</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Hae Na</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kim</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Herschel Girls'
+  High School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>6</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>57</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Sam</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Besser</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Herzlia High
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>6</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>58</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Jared</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kretzmann</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>El Shaddai
+  Christian School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>6</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>59</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Sarah</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Norman</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Bridge House
+  School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>6</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>60</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Liam</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Moses</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bergvliet High
+  School</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>5</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>61</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Jacques</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>de Villiers</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>De Kuilen
+  Hoërskool</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>5</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>62</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Brian</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Kang</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Bishops</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>5</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>63</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Muneer</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Ahmed</td>
+  <td class=xl257630 style='border-top:none;border-left:none'>Belgravia High
+  School</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>12</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>5</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>64</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Callum</td>
+  <td class=xl247630 style='border-top:none;border-left:none' x:str="Budge ">Budge<span
+  style='mso-spacerun:yes'> </span></td>
+  <td class=xl247630 style='border-top:none;border-left:none'>South African
+  College H S</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>11</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>4</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl357630 style='height:12.75pt;border-top:none' x:num>65</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Deodonne</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>le Roux</td>
+  <td class=xl247630 style='border-top:none;border-left:none'>Brackenfell<span
+  style='mso-spacerun:yes'>  </span>Hoërskool</td>
+  <td class=xl327630 style='border-top:none;border-left:none' x:num>10</td>
+  <td class=xl307630 style='border-top:none;border-left:none' x:num>1</td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl287630></td>
+  <td class=xl287630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl407630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl377630></td>
+  <td class=xl377630></td>
+  <td class=xl377630></td>
+  <td class=xl387630></td>
+  <td class=xl397630></td>
+  <td class=xl407630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl297630></td>
+  <td class=xl287630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <tr class=xl07630 height=17 style='height:12.75pt'>
+  <td height=17 class=xl367630 style='height:12.75pt'></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl07630></td>
+  <td class=xl317630></td>
+  <td class=xl317630></td>
+  <td class=xl07630></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=31 style='width:23pt'></td>
+  <td width=97 style='width:73pt'></td>
+  <td width=90 style='width:68pt'></td>
+  <td width=197 style='width:148pt'></td>
+  <td width=46 style='width:35pt'></td>
+  <td width=49 style='width:37pt'></td>
+  <td width=64 style='width:48pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</div>
+
+<?
+
+}
+
+function links()
+{
+
+?>
+
+<h2 align=center>Links</h2>
+
+<a href="http://www.uctmathcomp.co.za">The UCT Mathematics Enrichment</a><br>
+
+<?
+
+}
+
+
+function mc_login_form()
+
+{
+
+?>
+
+<form action="private/member.php" method="post"> 
+    <table align="center" border="0" cellpadding="0">
+	<tr valign="center">
+	    <td width="100">
+	        Username
+	    </td>
+	    <td>
+	        <input type="text" name="username" size="16" maxlength="16"><br>
+	    </td>
+	</tr>
+        <tr valign="center">
+	    <td width="100">
+	        <br>
+	    </td>
+	    <td>
+	        <br>
+	    </td>
+        </tr>
+	<tr valign="center">
+	    <td width="100">
+	        Password
+	    </td>
+	    <td>
+	        <input type="password" name="password" size="16" maxlength="16"><br>
+	    </td>
+	</tr>
+    </table><br>	
+
+    <table align="center" border="0" cellpadding="0">
+        <tr valign="top">
+	    <td>
+	        <input type="submit" value="Login">
+	    </td>
+        </tr>
+    </table>
+
+    <input type="hidden" name="page" value="news">
+    <input type="hidden" name="language" value="eng">
+
+</form>
+
+<?
+
+}
+
+?>

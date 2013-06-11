@@ -1,0 +1,256 @@
+<HTML>     
+<HEAD>         
+<TITLE>UCT Mathematics Competition Database</TITLE>     
+
+<SCRIPT type="text/VBScript"> 
+
+	Dim oConn 
+	Dim strPath
+
+	strPath = Replace( document.location, "maths_competition.html", "", 9, 1, 1 )
+	strPath = Replace( strPath, "%20", " " )
+	If InStr( strPath, "?" ) > 1 Then
+		strPath = Mid( strPath, 1, InStr( strPath, "?" ) - 1 )
+	End If
+
+	Set oConn = CreateObject("ADODB.Connection")
+	oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"   
+
+</SCRIPT>
+
+</HEAD>      
+
+<BODY BGCOLOR="White" topmargin="10" leftmargin="10" link="#3333CC" vlink="#3333CC"><font face="Verdana, Arial, Helvetica">
+
+<!-- Heading 			-->
+<table width="100%">
+	<tr>
+		<td align="center" width=26%>
+			<IMAGE src="uct.gif" alt="UCT Logo">
+		</td>
+		<td align="center">
+			<font size="6" face="Arial, Helvetica"><b>UCT Mathematics Competition</b></font><br>      
+		</td>
+		<td align="center" width=26%>
+			<IMAGE src="maths.gif" alt="Mathematics Competition Logo">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<hr size="1" color="#000000">
+		</td>
+	</tr>
+</table>
+<!-- End Heading 		-->
+
+<table width="100%">
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td width=60%>
+			<table width="100%">
+			
+				<tr>
+					<td>
+					<a href="import.html">Import Data from Web-based entry form</a><br><br><br>
+					</td>
+				</tr>
+			
+				<tr>
+					<FORM name=enterForm action=insert.html method=get>
+					<td>
+						Enter A School:
+						<SELECT name="school">
+<SCRIPT type="text/VBScript"> 
+
+Dim recordSet
+
+Set recordSet = oConn.Execute( "SELECT DISTINCT Name FROM Schools ORDER BY Name" )
+
+Do While Not recordSet.eof
+	document.write "<OPTION>" & recordSet(0) & "</OPTION>"
+	recordSet.MoveNext
+Loop
+
+</SCRIPT>
+						<INPUT type=button name=enter value="Enter">
+<SCRIPT type="text/VBScript">
+Sub enter_OnClick
+	Dim recordSet
+	Dim iMsgRet
+	Dim strSchool
+	Dim index
+
+	Set recordSet = oConn.Execute( "SELECT DISTINCT Name FROM Schools ORDER BY Name" )
+	For index = 0 to document.enterForm.school.selectedIndex - 1
+		If Not recordSet.eof Then
+			recordSet.MoveNext
+		End If
+	Next
+	
+	If Not recordSet.eof Then
+		strSchool = recordSet(0)
+		Set recordSet = oConn.Execute( "UPDATE Schools SET Entered=-1 WHERE Name='" & recordSet(0) & "'" )
+
+		iMsgRet = MsgBox( "Do you wish to add students for this school now?", vbYesNo )
+		If iMsgRet = vbYes Then
+			oConn.Execute( "DELETE FROM params WHERE type='School'" )
+			oConn.Execute( "INSERT INTO params VALUES ('School', '" & strSchool & "')" )
+			document.enterForm.Submit
+		End If
+	End If
+End Sub
+</SCRIPT>
+					</td>
+					</FORM>
+				</tr>
+				<tr>
+					<td>
+						<a href="search.html">Browse/Edit</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="insert.html">Insert Data</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<BR>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="reports.html">Reports</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="labels.html">Labels</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="mcq.html">Multiple Choice Questions Interface</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<BR>
+					</td>
+				</tr>
+				<tr>
+					<FORM name=clearDB>
+					<td>
+						Clear Database<BR>
+						<INPUT type=password name=pswd value="">
+						<INPUT type=button name=clear value="Clear Now">
+<SCRIPT type="text/VBScript">
+Sub clear_OnClick
+	Dim iMsgRet
+
+	If document.clearDB.pswd.value = "mathscomp" Then
+		iMsgRet = MsgBox( "Do you really wish to clear the database for a new year?", vbYesNo )
+		If iMsgRet = vbYes Then
+			oConn.Execute( "DELETE FROM Students" )
+			oConn.Execute( "DELETE From params" )
+			oConn.Execute( "UPDATE Schools SET Entered=0, Score=0, Contact=''" )
+
+			Set fileSystem = CreateObject("Scripting.FileSystemObject")
+
+			If fileSystem.FolderExists( strPath & "PRN_Files/" ) Then
+				If fileSystem.FileExists( strPath & "PRN_Files/*.prn" ) Then
+					fileSystem.DeleteFile strPath & "PRN_Files/*.prn", True
+				End If
+			End If
+
+			If fileSystem.FolderExists( strPath & "Results/" ) Then
+				If fileSystem.FileExists( strPath & "Results/*.res" ) Then
+					fileSystem.DeleteFile strPath & "Results/*.res", True
+				End If
+
+				If fileSystem.FileExists( strPath & "Results/*.ead" ) Then
+					fileSystem.DeleteFile strPath & "Results/*.ead", True
+				End If
+
+				If fileSystem.FileExists( strPath & "Results/*.itm" ) Then
+					fileSystem.DeleteFile strPath & "Results/*.itm", True
+				End If
+			End If
+
+			If fileSystem.FolderExists( strPath & "Analysis/" ) Then
+				If fileSystem.FileExists( strPath & "Analysis/*.tex" ) Then
+					fileSystem.DeleteFile strPath & "Analysis/*.tex", True
+				End If
+			End If
+
+			document.execCommand("Refresh")
+		End If
+	Else
+		MsgBox "Wrong password"
+	End If
+
+	document.clearDB.pswd.value = ""
+End Sub
+</SCRIPT>
+					</td>
+					</FORM>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table>
+				<tr>
+					<td colspan=3>
+						<big><b>Registrations:</big></b> <BR>
+					</td>
+				</tr>
+				<tr>
+					<td align=center>
+						<i>Grade</i>
+					</td>
+					<td align=center>
+						<i>Individuals</i>
+					</td>
+					<td align=center>
+						<i>Pairs</i>
+					</td>
+				</tr>
+<SCRIPT type="text/VBScript"> 
+Dim iGrade
+Dim recordSet
+Dim iIndividual
+Dim iPair
+
+For iGrade = 8 to 12
+	iPair       = 0
+	iIndividual = 0
+
+	Set recordSet = oConn.Execute( "SELECT DISTINCT Reference FROM Students WHERE Grade=" & iGrade )
+	Do While Not recordSet.eof
+		If 0 + Right( recordSet(0), 2 ) < 6 Then
+			iIndividual = iIndividual + 1
+		Else
+			iPair = iPair + 1
+		End If
+
+		recordSet.MoveNext
+	Loop
+
+	document.write "<tr><td align=center>" & iGrade & "</td><td align=center>" & iIndividual & "</td><td align=center>" & iPair & "</td></tr>"
+Next
+
+</SCRIPT>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+</BODY> 
+</HTML> 
+ 

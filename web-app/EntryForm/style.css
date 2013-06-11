@@ -1,0 +1,133 @@
+body {
+margin: 0;
+padding: 0;
+font: 62.5% arial, sans serif;
+text-align: center;
+color: #000;
+background: #fff url(logo2.gif) 90% 20px no-repeat;
+}
+
+h1, h2, h3, h4, h5 {
+font-size: 1em;
+clear: both;
+}
+
+#wrapper {
+width: 85%;
+margin: 0 auto;
+font-size: 1.25em;
+background: transparent url(logo1.gif) 0 20px no-repeat;
+/*padding: 1em 0 2em;*/
+}
+
+#header {
+padding-bottom: 4em;
+}
+
+h1 {
+font-size: 1.5em;
+}
+
+label {
+font-size: 1.25em;
+}
+
+.label_column_english, .label_column_afrikaans {
+float: left;
+width: 30%;
+}
+
+.label_column_english {
+text-align: right;
+clear: both;
+}
+
+.label_column_afrikaans {
+text-align: left;
+}
+
+.input_column {
+float: left;
+width: 39%;
+}
+
+#continue {
+clear: both;
+text-align: center;
+padding: 2em 0;
+}
+
+table {
+margin: 0 auto;
+}
+
+thead {
+text-align: left;
+}
+
+.language {
+text-align: center;
+}
+
+h3 {
+font-size: 1.25em;
+}
+
+
+#responsible_teacher {
+margin-top: 2em;
+}
+
+#responsible_teacher .rtl{
+display: block;
+}
+
+label.error {
+display: block;
+color: #900;
+font-size: 0.9em;
+}
+
+#back {
+/* margin-right: 2em; */
+color: #000;
+}
+
+#review {
+font-size: 0.5em;
+}
+
+#review table input{
+background: #eee;
+}
+
+#review #header {
+padding-bottom: 0;
+}
+
+#review #pairs_header, #review h5 {
+margin: 0;
+}
+
+#review h5 {
+font-size: 1.5em;
+}
+
+
+
+#sent table {
+text-align: left;
+}
+
+#sent table.student-table  {
+display: inline;
+}
+
+#review table input {
+color: #000;
+font-weight: bold;
+}
+/*
+input {
+	padding: 2px 5px;
+}*/

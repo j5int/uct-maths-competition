@@ -1,0 +1,1903 @@
+<HTML>     
+<HEAD>         
+<TITLE>UCT Mathematics Competition Database</TITLE>     
+
+<SCRIPT type="text/VBScript">
+
+Dim oConn 
+Dim strPath
+Dim recordSet
+
+strPath = Replace( document.location, "search.html", "", 9, 1, 1 )
+strPath = Replace( strPath, "%20", " " )
+
+If InStr( strPath, "?" ) > 1 Then
+	strPath = Mid( strPath, 1, InStr( strPath, "?" ) - 1 )
+End If
+
+Set oConn = CreateObject("ADODB.Connection")
+oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  
+
+Sub showSchoolRecord
+	Dim item
+	Dim index
+	
+	Set item = document.all.item( "current_school" )
+
+	If recordSet.eof Then
+		item.innerText = "No Schools currently entered."
+
+		Set item = document.all.item( "current_key" )
+		item.innerText = ""
+	
+		Set item = document.all.item( "current_lang" )
+		item.innerText = ""
+
+		Set item = document.all.item( "current_addr" )
+		item.innerText = ""
+		item.readOnly = "true"
+
+		Set item = document.all.item( "current_phone" )
+		item.innerText = ""
+
+		Set item = document.all.item( "current_fax" )
+		item.innerText = ""
+
+		Set item = document.all.item( "current_contact" )
+		item.innerText = ""
+
+		Set item = document.all.item( "current_email" )
+		item.innerText = ""
+
+		Set item = document.all.item( "current_entered" )
+		item.innerText = ""
+
+		hideStudents_OnClick
+	Else
+		item.innerHTML = "<b>" & recordSet(0) & "</b>"
+
+		Set item = document.all.item( "current_key" )
+		item.innerText = recordSet(1)
+	
+		Set item = document.all.item( "current_lang" )
+		If recordSet(2) = "a" Then
+			item.innerText = "Afrikaans"
+		Else
+			item.innerText = "English"
+		End If
+
+		Set item = document.all.item( "current_addr" )
+		item.value = recordSet(3)
+		item.readOnly = "true"
+
+		Set item = document.all.item( "current_phone" )
+		item.innerText = recordSet(4)
+
+		Set item = document.all.item( "current_fax" )
+		item.innerText = recordSet(5)
+
+		Set item = document.all.item( "current_contact" )
+		item.innerHTML = recordSet(6)
+
+		Set item = document.all.item( "current_email" )
+		item.innerHTML = recordSet(9)
+
+		Set item = document.all.item( "current_entered" )
+
+		If recordSet(7) = 0 Then
+			item.innerText = "No"
+		Else
+			item.innerText = "Yes"
+		End If
+
+		Set item = document.all.item( "students" )
+		If item.style.display <> "none" Then
+			Set item = document.all.item( "current_school" )
+			recordSet.close
+			Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE School='" & markupString( item.innerText ) & "' ORDER BY Reference" )
+			showStudent
+		End If
+	End If
+
+	For index = 8 to 12
+		showCount index, 0
+		showCount index, 1
+	Next
+End Sub
+
+Sub showVenueRecord
+	Dim item
+
+	Set item = document.all.item( "saveVenue" )
+	item.style.display = "none"
+	
+	Set item = document.all.item( "resetVenue" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "cancelVenue" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "firstVenue" )
+	item.style.display = ""
+
+	Set item = document.all.item( "prevVenue" )
+	item.style.display = ""
+
+	Set item = document.all.item( "nextVenue" )
+	item.style.display = ""
+
+	Set item = document.all.item( "lastVenue" )
+	item.style.display = ""
+
+	Set item = document.all.item( "current_venue" )
+
+	If recordSet.eof Then
+		item.innerText = "No Venues currently entered."
+
+		Set item = document.all.item( "current_building" )
+		item.innerText = ""
+	
+		Set item = document.all.item( "current_seats" )
+		item.innerText = ""
+
+		Set item = document.all.item( "current_bums" )
+		item.innerText = ""
+
+		Set item = document.all.item( "current_grade" )
+		item.innerText = ""
+
+		Set item = document.all.item( "current_type" )
+		item.innerText = ""
+	Else
+		item.innerHTML = "<b>" & recordSet(0) & "</b>"
+
+		Set item = document.all.item( "current_building" )
+		item.innerHTML = recordSet(1)
+	
+		Set item = document.all.item( "current_seats" )
+		item.innerText = recordSet(2)
+
+		Set item = document.all.item( "current_bums" )
+		item.innerText = recordSet(3)
+
+		Set item = document.all.item( "current_grade" )
+		item.innerText = recordSet(4)
+
+		Set item = document.all.item( "current_type" )
+
+		If recordSet(5) = 0 Then
+			item.innerText = "Individuals"
+		Else
+			item.innerText = "Pairs"
+		End If
+	End If
+End Sub
+
+Sub showStudent
+	Dim item
+
+	Set item = document.all.item( "saveStudent" )
+	item.style.display = "none"
+	
+	Set item = document.all.item( "cancelStudent" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "resetStudent" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "firstStudent" )
+	item.style.display = ""
+	
+	Set item = document.all.item( "nextStudent" )
+	item.style.display = ""
+
+	Set item = document.all.item( "prevStudent" )
+	item.style.display = ""
+
+	Set item = document.all.item( "lastStudent" )
+	item.style.display = ""
+
+	If recordSet.eof Then
+		Set item = document.all.item( "student_type" )
+		item.innerText = "No students entered for this school yet."
+
+		Set item = document.all.item( "student_school" )
+		item.innerText = ""
+
+		Set item = document.all.item( "student_grade" )
+		item.innerText = ""
+
+		Set item = document.all.item( "student_firstname" )
+		item.innerText = ""
+
+		Set item = document.all.item( "student_surname" )
+		item.innerText = ""
+
+		Set item = document.all.item( "student_sex" )
+		item.innerText = ""
+
+		Set item = document.all.item( "student_language" )
+		item.innerText = ""
+
+		Set item = document.all.item( "student_reference" )
+		item.innerText = ""
+
+		Set item = document.all.item( "partner_name" )
+		item.innerText = ""
+
+		Set item = document.all.item( "partner_surname" )
+		item.innerText = ""
+
+		Set item = document.all.item( "partner_sex" )
+		item.innerText = ""
+
+		Set item = document.all.item( "partner_language" )
+		item.innerText = ""
+	Else
+		Dim entry
+		entry = Right( recordSet(2), 2 )
+
+		Set item = document.all.item( "student_type" )
+		If entry > 5 Then
+			item.innerText = "Pair"
+		Else
+			item.innerText = "Individual"
+		End If
+
+		Set item = document.all.item( "student_reference" )
+		item.innerHTML = recordSet(2)
+
+		Set item = document.all.item( "student_school" )
+		item.innerHTML = recordSet(3)
+
+		Set item = document.all.item( "student_grade" )
+		item.innerText = recordSet(6)
+
+		Set item = document.all.item( "student_firstname" )
+		item.innerHTML = recordSet(0)
+
+		Set item = document.all.item( "student_surname" )
+		item.innerHTML = recordSet(1)
+
+		Set item = document.all.item( "student_sex" )
+		If recordSet(7) = "f" Or recordSet(7) = "v" Then
+			item.innerText = "Female"
+		Else
+			If recordSet(7) = "m" Then
+				item.innerText = "Male"
+			Else
+				item.innerText = "Unknown"
+			End IF
+		End If
+
+		Set item = document.all.item( "student_language" )
+		If recordSet(8) = "a" Then
+			item.innerText = "Afrikaans"
+		Else
+			item.innerText = "English"
+		End If
+
+		If entry > 5 Then
+			recordSet.MoveNext
+			If Not recordSet.eof Then
+				Set item = document.all.item( "partner_name" )
+				item.innerText = recordSet(0)
+
+				Set item = document.all.item( "partner_surname" )
+				item.innerText = recordSet(1)
+
+				Set item = document.all.item( "partner_sex" )
+				If recordSet(7) = "f" Or recordSet(7) = "v" Then
+					item.innerText = "Female"
+				Else
+					If recordSet(7) = "m" Then
+						item.innerText = "Male"
+					Else
+						item.innerText = "Unknown"
+					End IF
+				End If
+
+				Set item = document.all.item( "partner_language" )
+				If recordSet(8) = "a" Then
+					item.innerText = "Afrikaans"
+				Else
+					item.innerText = "English"
+				End If
+			End If
+		Else
+			Set item = document.all.item( "partner_name" )
+			item.innerHTML = "<i>N/A</i>"
+
+			Set item = document.all.item( "partner_surname" )
+			item.innerHTML = "<i>N/A</i>"
+
+			Set item = document.all.item( "partner_sex" )
+			item.innerHTML = "<i>N/A</i>"
+
+			Set item = document.all.item( "partner_language" )
+			item.innerHTML = "<i>N/A</i>"
+		End If
+	End If
+End Sub
+
+Sub showCount( iGrade, bType )
+	Dim strReference
+	Dim iCount
+	Dim strItemName
+	Dim item
+
+	iCount = 0
+
+	strItemName = "grade_" & iGrade & "_"
+
+	Set recordSet = oConn.Execute( "SELECT Key FROM Schools WHERE Name='" & markupString( document.all.item( "current_school" ).innerText ) & "'" )
+	If Not recordSet.eof Then
+		strReference = recordSet(0)
+
+		If( Len( "" & iGrade ) = 1 ) Then
+			strReference = strReference & "0"
+		End If
+		strReference = strReference & iGrade
+
+		If bType = 0 Then
+			' Individuals
+			strItemName = strItemName & "i"
+			Set recordSet = oConn.Execute( "SELECT Reference FROM Students WHERE Reference > '" & strReference & "00' AND Reference <'" & strReference & "06'" )
+
+			' Count them as Access doesn't like to return the record count...
+			Do While Not recordSet.eof
+				recordSet.MoveNext
+				iCount = iCount + 1
+			Loop
+		Else
+			' Pairs
+			strItemName = strItemName & "p"
+			Set recordSet = oConn.Execute( "SELECT DISTINCT Reference FROM Students WHERE Reference > '" & strReference & "05' AND Reference <'" & strReference & "11'" )
+
+			' Count them as Access doesn't like to return the record count...
+			Do While Not recordSet.eof
+				recordSet.MoveNext
+				iCount = iCount + 1
+			Loop
+		End If
+
+		Set item = document.all.item( strItemName )
+		item.innerText = iCount
+	End If
+End Sub
+
+Function markupString( strIn )
+	Dim strRet
+
+	strRet = Replace( strIn, "'", "&#039" )
+	strRet = Replace( strRet, """", "&quot;"  )
+
+	markupString = strRet
+End Function
+
+</SCRIPT>
+
+</HEAD>      
+
+<BODY BGCOLOR="White" topmargin="10" leftmargin="10"><font face="Verdana, Arial, Helvetica">
+
+<!-- Heading 			-->
+<table width="100%">
+	<tr>
+		<td align="center" width=26%>
+			<IMAGE src="uct.gif" alt="UCT Logo">
+		</td>
+		<td align="center">
+			<font size="6" face="Arial, Helvetica"><b>UCT Mathematics Competition</b></font><br>      
+		</td>
+		<td align="center" width=26%>
+			<IMAGE src="maths.gif" alt="Mathematics Competition Logo">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<hr size="1" color="#000000">
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="3">
+			<big><b>Search</big></b>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 align=right>
+			<a href="maths_competition.html">Back to main menu</a>
+		</td>
+	</tr>
+</table>
+<!-- End Heading 		-->
+
+<table width="100%">
+	<tr>
+		<td>
+			<BR>
+			<b>Schools:</b>
+		</td>
+	</tr>
+	<FORM method="get" action="search.html" name="search_school">
+	<tr>
+		<td width="10%">
+		</td>
+		<td align="right" width="30%">
+			Go to School:
+		</td>
+		<td>
+			<SELECT name="school">
+<SCRIPT type="text/VBScript"> 
+			Set recordSet = oConn.Execute( "SELECT Name FROM Schools ORDER BY Name" )
+
+			Do While Not recordSet.eof
+				document.write "<OPTION>" & recordSet(0) & "</OPTION>"
+				recordSet.MoveNext
+			Loop
+
+			recordSet.close
+</SCRIPT>
+			</SELECT>
+			<INPUT type="button" name="goSchool" value="Go">
+<SCRIPT type="text/VBScript">
+
+Sub goSchool_OnClick
+	Dim index
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools ORDER BY Name" )
+
+	For index = 0 to document.search_school.school.selectedindex - 1
+		If Not recordSet.eof Then
+			recordSet.MoveNext
+		End If
+	Next
+
+	If recordSet.eof Then
+		MsgBox "School not found.  Please press refresh (F5) and try again."
+	Else
+		showSchoolRecord
+	End If
+
+	recordSet.close
+End Sub
+
+</SCRIPT>
+		</td>
+	</tr>
+	</FORM>
+	<FORM method="get" action="search.html" name="search_key">
+	<tr>
+		<td>
+		</td>
+		<td align="right" width="30%">
+			Go to Key:
+		</td>
+		<td>
+			<SELECT name="key">
+<SCRIPT type="text/VBScript"> 
+			Set recordSet = oConn.Execute( "SELECT Key FROM Schools ORDER BY Key" )
+
+			Do While Not recordSet.eof
+				document.write "<OPTION>" & recordSet(0) & "</OPTION>"
+				recordSet.MoveNext
+			Loop
+
+			recordSet.close
+</SCRIPT>
+			</SELECT>
+			<INPUT type="button" name="goKey" value="Go">
+<SCRIPT type="text/VBScript">
+
+Sub goKey_OnClick
+	Dim index
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools ORDER BY Key" )
+
+	For index = 0 to document.search_school.school.selectedindex - 1
+		If Not recordSet.eof Then
+			recordSet.MoveNext
+		End If
+	Next
+
+	If recordSet.eof Then
+		MsgBox "Key not found.  Please press refresh (F5) and try again."
+	Else
+		showSchoolRecord
+	End If
+
+	recordSet.close
+End Sub
+
+</SCRIPT>
+		</td>
+	</tr>
+	</FORM>
+	<tr>
+		<FORM method="get" action="insert.html">
+		<td valign="bottom">
+			<INPUT type="submit" name="add" value="Add School&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+		</td>
+		</FORM>
+		<td>
+		</td>
+		<td align="left">
+			<BR>
+			<FORM name=edit_school method=get action=search.html>
+			<p id="current_school"></p>
+		</td>
+		<td colspan="3" width="5%" nowrap>
+			Currently Entered:
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<INPUT type="button" name="editSchool" value="Edit School&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+<SCRIPT type="text/VBScript">
+Sub editSchool_OnClick
+	Dim item
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools" )
+
+	If Not recordSet.eof Then
+	
+		Set item = document.all.item( "current_school" )
+		Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Name='" & markupString( item.innerText ) & "'" )
+
+		If Not recordSet.eof Then
+			item.innerHTML = "<INPUT type=hidden name=old_name value=""" & recordSet(0) & """><INPUT type=text name=new_name value=""" & recordSet(0) & """ size=26 maxlength=26>"
+
+			Set item = document.all.item( "current_key" )
+			item.innerHTML = "<INPUT type=hidden name=old_key value=""" & recordSet(1) & """><INPUT type=text name=key value=""" & recordSet(1) & """ size=3 maxlength=3>"
+	
+			Set item = document.all.item( "current_lang" )
+			If StrComp( item.innerText, "English", vbTextCompare ) = 0 Then
+				item.innerHTML = "<SELECT name=language><OPTION selected>English</OPTION><OPTION>Afrikaans</OPTION></SELECT>"
+			Else
+				item.innerHTML = "<SELECT name=language><OPTION>English</OPTION><OPTION selected>Afrikaans</OPTION></SELECT>"
+			End If
+
+			Set item = document.all.item( "current_addr" )
+			item.readOnly = "false"
+
+			Set item = document.all.item( "current_phone" )
+			item.innerHTML = "<INPUT type=text name=phone value=""" & recordSet(4) & """>"
+
+			Set item = document.all.item( "current_fax" )
+			item.innerHTML = "<INPUT type=text name=fax value=""" & recordSet(5) & """>"
+
+			Set item = document.all.item( "current_contact" )
+			item.innerHTML = "<INPUT type=text name=contact value=""" & recordSet(6) & """>"
+
+			Set item = document.all.item( "current_email" )
+			item.innerHTML = "<INPUT type=text name=email value=""" & recordSet(9) & """>"
+
+			Set item = document.all.item( "current_entered" )
+			If StrComp( item.innerText, "No", vbTextCompare ) = 0 Then
+				item.innerHTML = "<SELECT name=entered><OPTION selected>No</OPTION><OPTION>Yes</OPTION></SELECT>"
+			Else
+				item.innerHTML = "<SELECT name=entered><OPTION>No</OPTION><OPTION selected>Yes</OPTION></SELECT>"
+			End If
+
+			Set item = document.all.item( "save" )
+			item.style.display = ""
+
+			Set item = document.all.item( "cancel" )
+			item.style.display = ""
+
+			Set item = document.all.item( "reset" )
+			item.style.display = "" 
+
+
+			Set item = document.all.item( "first" )
+			item.style.display = "none"
+
+			Set item = document.all.item( "next" )
+			item.style.display = "none"
+
+			Set item = document.all.item( "prev" )
+			item.style.display = "none"
+
+			Set item = document.all.item( "last" )
+			item.style.display = "none"
+		End If	
+	End If
+End Sub
+
+</SCRIPT>
+		</td>
+		<td align="right">
+			<b>Key:</b>
+			&nbsp;
+		</td>
+		<td align="left">
+			<p id="current_key"></p>
+		</td>
+		<td align=center>
+			Grade
+		</td>
+		<td align=center>
+			Ind
+		</td>
+		<td align=center>
+			Pair
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<INPUT type="button" name="delSchool" value="Delete School">
+<SCRIPT type="text/VBScript">
+Sub delSchool_OnClick
+	Dim strSchool
+	Dim strKey
+	Dim iMsgBoxRet
+	Dim index
+
+	strSchool = document.all.item( "current_school" ).innerText
+
+	Set recordSet = oConn.Execute( "SELECT Key FROM Schools WHERE Name='" & markupString( strSchool ) & "'" )
+	If Not recordSet.eof Then
+		iMsgBoxRet = MsgBox( "Are you sure you want to delete " & strSchool & " permanently from the database?", vbYesNo )
+		If iMsgBoxRet = vbYes Then
+
+			If Not recordSet.eof Then
+				strKey = recordSet(0)
+		
+				Set recordSet = oConn.Execute( "SELECT Key FROM Schools WHERE Key <= '" & strKey & "' ORDER BY Key" )
+				index = 0
+				Do While Not recordSet.eof
+					index = index + 1
+					recordSet.MoveNext
+				Loop
+				document.search_key.key.remove( index - 1 )
+				document.search_key.reset
+			
+				Set recordSet = oConn.Execute( "SELECT Name FROM Schools WHERE Name <= '" & markupString( strSchool ) & "' ORDER BY Name" )
+				index = 0
+				Do While Not recordSet.eof
+					index = index + 1
+					recordSet.MoveNext
+				Loop
+				document.search_school.school.remove( index - 1 )
+				document.search_school.reset
+
+				Set recordSet = oConn.Execute( "DELETE FROM Schools WHERE Name='" & markupString( strSchool ) & "'" )
+				Set recordSet = oConn.Execute( "DELETE FROM Students WHERE School='" & markupString( strSchool ) & "'" )
+				Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Name < '" & markupString( strSchool ) & "' ORDER BY Name DESC" )
+				If recordSet.eof Then
+					Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Name > '" & markupString( strSchool ) & "' ORDER BY Name" )
+				End If
+
+				showSchoolRecord
+				recordSet.close
+			End If
+		End If
+	End If
+End Sub
+</SCRIPT>
+		</td>
+		<td align="right">
+			<b>Language:</b>
+			&nbsp;
+		</td>
+		<td align="left">
+			<p id="current_lang"></p>
+		</td>
+		<td align=center>
+			8
+		</td>
+		<td align="center">
+			<p id="grade_8_i"></p>
+		</td>
+		<td align="center">
+			<p id="grade_8_p"></p>
+		</td>
+	</tr>
+	<tr>
+		<td rowspan=4 valign="top">
+			<INPUT type="button" name="showStudents" value="Show Students">
+<SCRIPT type="text/VBScript">
+Sub showStudents_OnClick
+	Dim item
+
+	Set item = document.all.item( "hideStudents" )
+	item.style.display = ""
+
+	Set item = document.all.item( "showStudents" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "students" )
+	item.style.display = ""
+
+	Set item = document.all.item( "addStudent" )
+	item.style.display = ""
+
+	Set item = document.all.item( "editStudent" )
+	item.style.display = ""
+
+	Set item = document.all.item( "delStudent" )
+	item.style.display = ""
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE School='" & markupString( document.all.item( "current_school" ).innerText ) & "' ORDER BY Reference" )
+	showStudent
+	recordSet.close
+End Sub
+</SCRIPT>
+		</td>
+		<td align="right" valign="top" rowspan=4>
+			<b>Address:</b>
+			&nbsp;
+		</td>
+		<td align="left" valign="top" rowspan=4>
+			<TEXTAREA name="current_addr" rows=4 readonly></TEXTAREA>
+		</td>
+		<td align=center>
+			9
+		</td>
+		<td align="center">
+			<p id="grade_9_i"></p>
+		</td>
+		<td align="center">
+			<p id="grade_9_p"></p>
+		</td>
+	</tr>
+	<tr>
+		<td align=center>
+			10
+		</td>
+		<td align="center">
+			<p id="grade_10_i"></p>
+		</td>
+		<td align="center">
+			<p id="grade_10_p"></p>
+		</td>
+	</tr>
+	<tr>
+		<td align=center>
+			11
+		</td>
+		<td align="center">
+			<p id="grade_11_i"></p>
+		</td>
+		<td align="center">
+			<p id="grade_11_p"></p>
+		</td>
+	</tr>
+	<tr>
+		<td align=center>
+			12
+		</td>
+		<td align="center">
+			<p id="grade_12_i"></p>
+		</td>
+		<td align="center">
+			<p id="grade_12_p"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			<b>Fax:</b>
+			&nbsp;
+		</td>
+		<td align="left">
+			<p id="current_fax"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			<b>Phone:</b>
+			&nbsp;
+		</td>
+		<td align="left">
+			<p id="current_phone"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			<b>Contact Name:</b>
+			&nbsp;
+		</td>
+		<td align="left">
+			<p id="current_contact"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			<b>Email Address:</b>
+			&nbsp;
+		</td>
+		<td align="left">
+			<p id="current_email"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			<b>Entered:</b>
+			&nbsp;
+		</td>
+		<td align="left">
+			<p id="current_entered"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+		</td>
+		<td align="left">
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+		</td>
+		<td align="left">
+			<INPUT type="button" name="first" value="<<">
+<SCRIPT type="text/VBScript">
+Sub first_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools ORDER BY Name" )
+	showSchoolRecord
+	recordSet.close
+End Sub
+</SCRIPT>
+			<INPUT type="button" name="prev" value="<">
+<SCRIPT type="text/VBScript">
+Sub prev_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Name < '" & markupString( document.all.item( "current_school" ).innerText ) & "' ORDER BY Name DESC" )
+	If Not recordSet.eof Then
+		showSchoolRecord
+	End If
+	recordSet.close
+End Sub
+</SCRIPT>
+			<INPUT type="button" name="next" value=">">
+<SCRIPT type="text/VBScript">
+Sub next_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Name > '" & markupString( document.all.item( "current_school" ).innerText ) & "' ORDER BY Name" )
+	If Not recordSet.eof Then
+		showSchoolRecord
+	End If
+	recordSet.close
+End Sub
+</SCRIPT>
+			<INPUT type="button" name="last" value=">>">
+<SCRIPT type="text/VBScript">
+Sub last_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools ORDER BY Name DESC" )
+	showSchoolRecord
+	recordSet.close
+End Sub
+</SCRIPT>
+			<INPUT type="button" name="save" value="Save Changes">
+<SCRIPT type=text/VBScript>
+Dim item
+Set item = document.all.item( "save" )
+item.style.display = "none"
+
+Sub save_OnClick
+	Dim bool
+	Dim item
+	Dim schoolForm
+
+	Set schoolForm = document.edit_school
+
+	If schoolForm.new_name.value = "" Or document.edit_school.key.value = "" Then
+		MsgBox "Both the School Name and the Key must be valid school."
+	Else
+		If Not IsNumeric( schoolForm.key.value ) Or schoolForm.key.value = "" Then
+			MsgBox "The Key must be numeric."
+		Else
+			If Len( schoolForm.key.value ) = 1 Then
+				schoolForm.key.value = "00" & schoolForm.key.value
+			Else
+				If Len( schoolForm.key.value ) = 2 Then
+					schoolForm.key.value = "0" & schoolForm.key.value
+				End If
+			End If
+
+			Set recordSet = oConn.Execute( "SELECT Key FROM Schools WHERE Key='" & schoolForm.key.value & "'" )
+			bool = true
+			If Not recordSet.eof Then
+				If StrComp( recordSet(0), schoolForm.old_key.value, vbTextCompare ) <> 0 Then
+					MsgBox "Key is already in use."
+					bool = False
+				End If
+			End If
+
+			If bool = True Then
+				Set recordSet = oConn.Execute( "SELECT Name FROM Schools WHERE Name='" & markupString( schoolForm.new_name.value ) & "'" )
+
+				If Not recordSet.eof And schoolForm.new_name.value <> schoolForm.old_name.value Then
+					MsgBox "School already exists.  Unable to add a second copy. Please edit the existing copy."
+					bool = False
+				End If
+
+				If bool = True Then
+					Dim strLanguage
+					Dim bEntered
+
+					If schoolForm.language.selectedIndex = 0 Then
+						strLanguage = "e"
+					Else
+						strLanguage = "a"
+					End If
+
+					If schoolForm.entered.selectedIndex = 0 Then
+						bEntered = 0
+					Else
+						bEntered = 1
+					End If
+
+					recordSet.close
+					Set recordSet = oConn.Execute( "UPDATE Schools SET Name='" & markupString( schoolForm.new_name.value ) & "', Key='" & schoolForm.key.value & "', Language='" & strLanguage & "', Address='" & markupString( schoolForm.current_addr.value ) & "', Phone='" & schoolForm.phone.value & "', Fax='" & schoolForm.fax.value & "', Contact='" & markupString( schoolForm.contact.value ) & "', Email='" & markupString( schoolForm.email.value ) & "', Entered=" & bEntered & " WHERE Name='" & markupString( schoolForm.old_name.value ) & "'" )
+
+					' Like isn't liked in this complex for with Access 97 :(
+'					Set recordSet = oConn.Execute( "UPDATE Students SET Reference=( '" & schoolForm.key.value & "' & RIGHT( Reference, 4 ) ) WHERE Reference LIKE('" & schoolForm.old_key.value & "%%%%')" )
+
+					' So we loop instead...
+					Dim iGrade
+					For iGrade = 8 to 12
+						If iGrade < 10 Then
+							Set recordSet = oConn.Execute( "SELECT DISTINCT Reference FROM Students WHERE Reference>'" & schoolForm.old_key.value & "0" & iGrade & "00' AND Reference<'" & schoolForm.old_key.value & "0" & iGrade & "11'" )
+						Else
+							Set recordSet = oConn.Execute( "SELECT DISTINCT Reference FROM Students WHERE Reference>'" & schoolForm.old_key.value & iGrade & "00' AND Reference<'" & schoolForm.old_key.value & iGrade & "11'" )
+						End If
+
+						Do While Not recordSet.eof
+							oConn.Execute( "UPDATE Students SET Reference='" & schoolForm.key.value & Right( recordSet(0), 4 ) & "' WHERE Reference='" & recordSet(0) & "'" )
+							recordSet.MoveNext
+						Loop
+
+					Next
+
+					Set recordSet = oConn.Execute( "UPDATE Students SET School='" & markupString( schoolForm.new_name.value ) & "' WHERE School='" & markupString( schoolForm.old_name.value ) & "'" )
+
+					Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Name='" & markupString( document.edit_school.new_name.value ) & "' ORDER BY Name" )
+					showSchoolRecord
+					recordSet.close
+
+					Set item = document.all.item( "last" )
+					item.style.display = "" 
+
+					Set item = document.all.item( "prev" )
+					item.style.display = "" 
+		
+					Set item = document.all.item( "next" )
+					item.style.display = "" 
+
+					Set item = document.all.item( "first" )
+					item.style.display = "" 
+
+					Set item = document.all.item( "cancel" )
+					item.style.display = "none" 
+
+					Set item = document.all.item( "save" )
+					item.style.display = "none" 
+
+					Set item = document.all.item( "reset" )
+					item.style.display = "none" 
+				End If
+			End If	
+		End If
+	End If
+End Sub
+
+</SCRIPT>
+			<INPUT type="button" name="cancel" value="Cancel Edit">
+			<INPUT type="reset" name="reset" value="Reset">
+			</FORM>
+<SCRIPT type=text/VBScript>
+Dim item
+Set item = document.all.item( "cancel" )
+item.style.display = "none"
+
+Set item = document.all.item( "reset" )
+item.style.display = "none"
+
+Sub cancel_OnClick
+	Dim item
+	Set item = document.all.item( "last" )
+	item.style.display = "" 
+
+	Set item = document.all.item( "prev" )
+	item.style.display = "" 
+
+	Set item = document.all.item( "next" )
+	item.style.display = "" 
+
+	Set item = document.all.item( "first" )
+	item.style.display = "" 
+
+	Set item = document.all.item( "cancel" )
+	item.style.display = "none" 
+
+	Set item = document.all.item( "save" )
+	item.style.display = "none" 
+
+	Set item = document.all.item( "reset" )
+	item.style.display = "none" 
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Name='" & markupString( document.edit_school.old_name.value ) & "' ORDER BY Name" )
+	showSchoolRecord
+	recordSet.close
+End Sub
+
+</SCRIPT>
+	<tr>
+		<td valign="top">
+			<INPUT type="button" name="hideStudents" value="Hide Students">
+<SCRIPT type="text/VBScript">
+Dim item
+Set item = document.all.item( "hideStudents" )
+item.style.display = "none"
+
+Sub hideStudents_OnClick
+	Dim item
+	Set item = document.all.item( "hideStudents" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "showStudents" )
+	item.style.display = ""
+
+	Set item = document.all.item( "students" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "addStudent" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "editStudent" )
+	item.style.display = "none"
+
+	Set item = document.all.item( "delStudent" )
+	item.style.display = "none"
+End Sub
+</SCRIPT>
+		</td>
+		<td colspan="3" rowspan="9">
+			<FORM method="get" action="search.html" name="studentForm">
+			<table width="100%" id="students">
+				<tr>
+					<td align="right">
+						<b>Grade:<b>
+						&nbsp;
+					</td>
+					<td>
+						<p id="student_grade"></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="right" width="32%">
+						<b>Entry Type:<b>
+						&nbsp;
+					</td>
+					<td colspan="3">
+						<p id="student_type"></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="right" width="32%">
+						<b>Reference:<b>
+						&nbsp;
+					</td>
+					<td>
+						<p id="student_reference"></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<b>School:<b>
+						&nbsp;
+					</td>
+					<td>
+						<p id="student_school"></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<b>Surname:<b>
+						&nbsp;
+					</td>
+					<td>
+						<p id="student_surname"></p>
+					</td>
+					<td align="right">
+						<b>Partner Surname:</b>
+					</td>
+					<td>
+						<p id=partner_surname></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<b>First Name:<b>
+						&nbsp;
+					</td>
+					<td>
+						<p id="student_firstname"></p>
+					</td>
+					<td align="right">
+						<b>Partner First Name:</b>
+					</td>
+					<td width="20%">
+						<p id=partner_name></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<b>Sex:<b>
+						&nbsp;
+					</td>
+					<td>
+						<p id="student_sex"></p>
+					</td>
+					<td align="right">
+						<b>Partner Sex:</b>
+					</td>
+					<td>
+						<p id=partner_sex></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<b>Language:<b>
+						&nbsp;
+					</td>
+					<td>
+						<p id="student_language"></p>
+					</td>
+					<td align="right">
+						<b>Partner Language:</b>
+					</td>
+					<td>
+						<p id=partner_language></p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					</td>
+					<td align="left" nowrap colspan="3">
+						<INPUT type="button" name="firstStudent" value="<<">
+<SCRIPT type="text/VBScript">
+Sub firstStudent_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE School='" & markupString( document.all.item( "current_school" ).innerText ) & "' ORDER BY Reference" )
+	showStudent
+	recordSet.close
+End Sub
+</SCRIPT>
+						<INPUT type="button" name="prevStudent" value="<">
+<SCRIPT type="text/VBScript">
+Sub prevStudent_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Reference < '" & document.all.item( "student_reference" ).innerText & "' AND School='" & markupString( document.all.item( "current_school" ).innerText ) & "' ORDER BY Reference DESC" )
+	If Not recordSet.eof Then
+		showStudent
+	End If
+	recordSet.close
+End Sub
+</SCRIPT>
+						<INPUT type="button" name="nextStudent" value=">">
+<SCRIPT type="text/VBScript">
+Sub nextStudent_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Reference > '" & document.all.item( "student_reference" ).innerText & "' AND School='" & markupString( document.all.item( "current_school" ).innerText ) & "' ORDER BY Reference" )
+	If Not recordSet.eof Then
+		showStudent
+	End If
+	recordSet.close
+End Sub
+</SCRIPT>
+						<INPUT type="button" name="lastStudent" value=">>">
+<SCRIPT type="text/VBScript">
+Sub lastStudent_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE School='" & markupString( document.all.item( "current_school" ).innerText ) & "' ORDER BY Reference DESC" )
+	showStudent
+	recordSet.close
+End Sub
+</SCRIPT>
+						<INPUT type="button" name="saveStudent" value="Save Changes">
+<SCRIPT type="text/VBScript">
+Sub saveStudent_OnClick
+	Dim strLanguage
+	Dim strSex
+	Dim iScore
+	Dim iRank
+
+	If document.studentForm.edit_language.selectedIndex = 0 Then
+		strLanguage = "e"
+	Else
+		strLanguage = "a"
+	End If
+
+	If document.studentForm.edit_sex.selectedIndex = 0 Then
+		strSex = "f"
+	Else
+		If document.studentForm.edit_sex.selectedIndex = 1 Then
+			strSex = "m"
+		Else
+			strSex = "u"
+		End If
+	End If
+	
+	Set recordSet = oConn.Execute( "SELECT Score, Rank FROM Students WHERE Reference='" & document.all.item( "student_reference" ).innerText & "'" )
+	If Not recordSet.eof Then
+		iScore = recordSet(0)
+		iRank  = recordSet(1)
+	Else
+		iScore = 0
+		iRank  = 0
+	End If
+
+	Set recordSet = oConn.Execute( "DELETE FROM Students WHERE Reference='" & document.all.item( "student_reference" ).innerText & "'" )
+	Set recordSet = oConn.Execute( "INSERT INTO Students VALUES ( '" & markupString( document.studentForm.edit_firstname.value ) & "', '" & markupString( document.studentForm.edit_surname.value ) & "', '" & document.all.item( "student_reference" ).innerText & "', '" & markupString( document.all.item( "current_school" ).innerText ) & "', " & iScore & ", " & iRank & ", " & document.all.item( "student_grade" ).innerText & ", '" & strSex & "','" & strLanguage & "', '')" )
+
+	Dim entry
+	entry = Right( document.all.item( "student_reference" ).innerText, 2 )
+
+	If entry > 5 Then
+		If document.studentForm.edit_partnersex.selectedIndex = 0 Then
+			strSex = "f"
+		Else
+			If document.studentForm.edit_partnersex.selectedIndex = 1 Then
+				strSex = "m"
+			Else
+				strSex = "u"
+			End If
+		End If
+	
+		If document.studentForm.edit_partnerlanguage.selectedIndex = 0 Then
+			strLanguage = "e"
+		Else
+			strLanguage = "a"
+		End If
+
+		Set recordSet = oConn.Execute( "INSERT INTO Students VALUES ( '" & markupString( document.studentForm.edit_partnername.value ) & "', '" & markupString( document.studentForm.edit_partnersurname.value ) & "', '" & document.all.item( "student_reference" ).innerText & "', '" & document.all.item( "current_school" ).innerText & "', " & iScore & ", " & iRank & ", " & document.all.item( "student_grade" ).innerText & ", '" & strSex & "', '" & strLanguage & "', '')" )
+	End If
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Reference='" & document.all.item( "student_reference" ).innerText & "'" )
+	showStudent
+	recordSet.close
+End Sub
+</SCRIPT>
+						<INPUT type="button" name="cancelStudent" value="Cancel Edit">
+<SCRIPT type="text/VBScript">
+Sub cancelStudent_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Reference='" & document.all.item( "student_reference" ).innerText & "'" )
+	showStudent
+	recordSet.close
+End Sub
+</SCRIPT>
+						<INPUT type="reset" name="resetStudent" value="Reset">
+					</td>
+				</tr>
+			</table>
+			</FORM>
+		</td>
+	</tr>
+	<tr>
+		<FORM method="get" action="insert.html" name="addStudentForm">
+		<td valign="top">
+			<INPUT type=submit name=addStudent value="Add Student">
+<SCRIPT type="text/VBScript">
+Sub addStudent_OnClick
+	recordSet = oConn.Execute( "INSERT INTO Params (Type, Data) VALUES ('School', '" & markupString( document.all.item( "current_school" ).innerText ) & "')" )
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<INPUT type=button name=editStudent value="Edit Student">
+<SCRIPT type="text/VBScript">
+Sub editStudent_OnClick
+	Dim item
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Reference='" & document.all.item( "student_reference" ).innerText & "'" )
+	If Not recordSet.eof Then
+		Set item = document.all.item( "student_firstname" )
+		item.innerHTML = "<INPUT type=text name=edit_firstname value=""" & recordSet(0) & """>"
+
+		Set item = document.all.item( "student_surname" )
+		item.innerHTML = "<INPUT type=text name=edit_surname value=""" & recordSet(1) & """>"
+
+		Set item = document.all.item( "student_sex" )
+		If recordSet(7) = "f" Or recordSet(7) = "v" Then
+			item.innerHTML = "<SELECT name=edit_sex><OPTION selected>Female/Vroulik</OPTION><OPTION>Male/Manlik</OPTION><OPTION>Unknown</OPTION></SELECT>"
+		Else
+			If recordSet(7) = "m" Then
+				item.innerHTML = "<SELECT name=edit_sex><OPTION>Female/Vroulik</OPTION><OPTION selected>Male/Manlik</OPTION><OPTION>Unknown</OPTION></SELECT>"
+			Else
+				item.innerHTML = "<SELECT name=edit_sex><OPTION>Female/Vroulik</OPTION><OPTION>Male/Manlik</OPTION><OPTION selected>Unknown</OPTION></SELECT>"
+			End IF
+		End If
+
+		Set item = document.all.item( "student_language" )
+		If recordSet(8) = "a" Then
+			item.innerHTML = "<SELECT name=edit_language><OPTION>English</OPTION><OPTION selected>Afrikaans</OPTION></SELECT>"
+		Else
+			item.innerHTML = "<SELECT name=edit_language><OPTION selected>English</OPTION><OPTION>Afrikaans</OPTION></SELECT>"
+		End If
+
+		Dim entry
+		entry = Right( recordSet(2), 2 )
+
+		If entry > 5 Then
+			recordSet.MoveNext
+			If Not recordSet.eof Then
+				Set item = document.all.item( "partner_name" )
+				item.innerHTML = "<INPUT type=text name=edit_partnername value=""" & recordSet(0) & """>"
+
+				Set item = document.all.item( "partner_surname" )
+				item.innerHTML = "<INPUT type=text name=edit_partnersurname value=""" & recordSet(1) & """>"
+
+				Set item = document.all.item( "partner_sex" )
+				If recordSet(7) = "f" Or recordSet(7) = "v" Then
+					item.innerHTML = "<SELECT name=edit_partnersex><OPTION selected>Female/Vroulik</OPTION><OPTION>Male/Manlik</OPTION><OPTION>Unknown</OPTION></SELECT>"
+				Else
+					If recordSet(7) = "m" Then
+						item.innerHTML = "<SELECT name=edit_partnersex><OPTION>Female/Vroulik</OPTION><OPTION selected>Male/Manlik</OPTION><OPTION>Unknown</OPTION></SELECT>"
+					Else
+						item.innerHTML = "<SELECT name=edit_partnersex><OPTION>Female/Vroulik</OPTION><OPTION>Male/Manlik</OPTION><OPTION selected>Unknown</OPTION></SELECT>"
+					End IF
+				End If
+
+				Set item = document.all.item( "partner_language" )
+				If recordSet(8) = "a" Then
+					item.innerHTML = "<SELECT name=edit_partnerlanguage><OPTION>English</OPTION><OPTION selected>Afrikaans</OPTION></SELECT>"
+				Else
+					item.innerHTML = "<SELECT name=edit_partnerlanguage><OPTION selected>English</OPTION><OPTION>Afrikaans</OPTION></SELECT>"
+				End If
+			End If
+		End If
+
+		Set item = document.all.item( "saveStudent" )
+		item.style.display = ""
+
+		Set item = document.all.item( "cancelStudent" )
+		item.style.display = ""
+
+		Set item = document.all.item( "resetStudent" )
+		item.style.display = ""
+
+		Set item = document.all.item( "firstStudent" )
+		item.style.display = "none"
+
+		Set item = document.all.item( "prevStudent" )
+		item.style.display = "none"
+
+		Set item = document.all.item( "nextStudent" )
+		item.style.display = "none"
+
+		Set item = document.all.item( "lastStudent" )
+		item.style.display = "none"
+	End If
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<INPUT type=button name=delStudent value="Delete Student">
+<SCRIPT type="text/VBScript">
+Sub delStudent_OnClick
+	Dim strReference
+	Dim strSchool
+	Dim iMsgBoxRet
+
+	strReference = document.all.item( "student_reference" ).innerText
+
+	iMsgBoxRet = MsgBox( "Are you sure you want to delete this entry permanently from the database?", vbYesNo )
+	If iMsgBoxRet = vbYes Then
+		Set recordSet = oConn.Execute( "SELECT School FROM Students WHERE Reference='" & strReference & "'" )
+		If Not recordSet.eof Then
+			strSchool = recordSet(0)
+			Set recordSet = oConn.Execute( "DELETE FROM Students WHERE Reference='" & strReference & "'" )
+			Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Reference < '" & strReference & "' AND School='" & strSchool & "' ORDER BY Name DESC" )
+			If recordSet.eof Then
+				Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Reference > '" & strReference & "' AND School='" & strSchool & "' ORDER BY Name" )
+			End If
+			showStudent
+			recordSet.close
+		End If
+	End If
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+<SCRIPT type="text/VBScript">
+
+Set recordSet = oConn.Execute( "SELECT Data FROM Params WHERE Type='School'" )
+If Not recordSet.eof Then
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Name='" & recordSet(0) & "'" )
+	If recordSet.eof Then
+		Set recordSet = oConn.Execute( "SELECT * FROM Schools ORDER BY Name" )
+	Else
+		Dim recordSet2 
+		Set recordSet2 = oConn.Execute( "DELETE FROM Params WHERE Type='School'" )
+	End If
+Else
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools ORDER BY Name" )
+End If
+
+showSchoolRecord
+recordSet.close
+
+Dim item
+Set item = document.all.item( "hideStudents" )
+item.style.display = "none"
+
+Set item = document.all.item( "showStudents" )
+item.style.display = ""
+
+Set item = document.all.item( "students" )
+item.style.display = "none"
+
+Set item = document.all.item( "addStudent" )
+item.style.display = "none"
+
+Set item = document.all.item( "editStudent" )
+item.style.display = "none"
+
+Set item = document.all.item( "delStudent" )
+item.style.display = "none"
+
+Set item = document.all.item( "saveStudent" )
+item.style.display = "none"
+
+Set item = document.all.item( "cancelStudent" )
+item.style.display = "none"
+
+Set item = document.all.item( "resetStudent" )
+item.style.display = "none"
+
+</SCRIPT>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="6">
+			<BR><BR>
+			<HR width="80%" size="2">
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Venues:</b>
+		</td>
+	</tr>
+	<FORM action="search.html" method="get" name="venue_search">
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			Go to Venue:
+			<a name="venue_ref"></a>
+		</td>
+		<td>
+			<SELECT name="venue">
+<SCRIPT type="text/VBScript">
+				Dim index
+
+				Set recordSet = oConn.Execute( "SELECT Code FROM Venues ORDER BY Code" )
+
+				Do While Not recordSet.eof
+					document.write( "<OPTION>" & recordSet(0) & "</OPTION>" )
+					recordSet.MoveNext
+				Loop
+
+				recordSet.close
+</SCRIPT>
+			</SELECT>
+			<INPUT type="button" name="goVenue" value="Go">
+<SCRIPT type="text/VBScript">
+Sub goVenue_OnClick
+	Dim index
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Venues ORDER BY Code" )
+
+	For index = 0 to document.venue_search.venue.selectedindex - 1
+		If Not recordSet.eof Then
+			recordSet.MoveNext
+		End If
+	Next
+
+	If recordSet.eof Then
+		MsgBox "Venue not found.  Please press refresh (F5) and try again."
+	Else
+		showVenueRecord
+	End If
+
+	recordSet.close
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+	</FORM>
+	<FORM action="search.html" method="get" name="building_search">
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			Go to Building:
+		</td>
+		<td>
+			<SELECT name="building">
+<SCRIPT type="text/VBScript">
+				Dim index
+
+				Set recordSet = oConn.Execute( "SELECT DISTINCT Building FROM Venues ORDER BY Building" )
+
+				Do While Not recordSet.eof
+					document.write( "<OPTION>" & recordSet(0) & "</OPTION>" )
+					recordSet.MoveNext
+				Loop
+
+				recordSet.close
+</SCRIPT>
+			</SELECT>
+			<INPUT type="button" name="goBuilding" value="Go">
+<SCRIPT type="text/VBScript">
+Sub goBuilding_OnClick
+	Dim index
+
+	Set recordSet = oConn.Execute( "SELECT DISTINCT Building FROM Venues ORDER BY Building" )
+
+	For index = 0 to document.building_search.building.selectedindex - 1
+		If Not recordSet.eof Then
+			recordSet.MoveNext
+		End If
+	Next
+
+	If recordSet.eof Then
+		MsgBox "Venue not found.  Please press refresh (F5) and try again."
+	Else
+		Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Building='" & recordSet(0) & "' ORDER BY Code" )
+		showVenueRecord
+	End If
+
+	recordSet.close
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+	</FORM>
+	<tr>
+		<FORM name="addVenueForm" method=get action=insert.html>
+		<td>
+			<INPUT type=submit name=addVenue value="Add Venue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+<SCRIPT type="text/VBScript">
+Sub addVenue_OnClick
+	oConn.Execute( "INSERT INTO Params (Type, Data) VALUES ('Venue', '')" )
+End Sub
+</SCRIPT>
+		</td>
+		</FORM>
+		<td>
+		</td>
+		<td>
+			<BR>
+			<FORM name="editVenueForm">
+			<p id="current_venue"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<INPUT type=button name=editVenue value="Edit Venue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+<SCRIPT type="text/VBScript">
+Sub editVenue_OnClick
+	Dim item
+	Dim strHTML
+	Dim index
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Venues" )
+
+	If Not recordSet.eof Then
+	
+		Set item = document.all.item( "current_venue" )
+		Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Code='" & markupString( item.innerText ) & "'" )
+
+		If Not recordSet.eof Then
+			item.innerHTML = "<INPUT type=hidden name=old_code value=""" & recordSet(0) & """><INPUT type=text name=new_code value=""" & recordSet(0) & """ size=6 maxlength=6>"
+
+			Set item = document.all.item( "current_building" )
+			item.innerHTML = "<INPUT type=hidden name=old_building value=""" & recordSet(1) & """><INPUT type=text name=new_building value=""" & recordSet(1) & """ size=17 maxlength=17>"
+	
+			Set item = document.all.item( "current_seats" )
+			item.innerHTML = "<INPUT type=text name=seats value=""" & recordSet(2) & """>"
+
+			Set item = document.all.item( "current_bums" )
+			item.innerHTML = "<INPUT type=text name=bums value=""" & recordSet(3) & """>"
+
+			Set item = document.all.item( "current_grade" )
+			strHTML = "<SELECT name=grade>"
+			For index = 8 to 12
+				strHTML = strHTML & "<OPTION"
+				If index = 0 + item.innerText Then
+					strHTML = strHTML & " selected"
+				End If
+				strHTML = strHTML & ">" & index & "</OPTION>"
+			Next
+			item.innerHTML = strHTML & "</SELECT>"
+
+			Set item = document.all.item( "current_type" )
+			If recordSet(5) <> 0 Then
+				item.innerHTML = "<SELECT name=type><OPTION>Individuals</OPTION><OPTION selected>Pairs</OPTION></SELECT>"
+			Else
+				item.innerHTML = "<SELECT name=type><OPTION selected>Individuals</OPTION><OPTION>Pairs</OPTION></SELECT>"
+			End If
+
+			Set item = document.all.item( "saveVenue" )
+			item.style.display = ""
+
+			Set item = document.all.item( "cancelVenue" )
+			item.style.display = ""
+
+			Set item = document.all.item( "resetVenue" )
+			item.style.display = "" 
+
+			Set item = document.all.item( "firstVenue" )
+			item.style.display = "none"
+
+			Set item = document.all.item( "nextVenue" )
+			item.style.display = "none"
+
+			Set item = document.all.item( "prevVenue" )
+			item.style.display = "none"
+
+			Set item = document.all.item( "lastVenue" )
+			item.style.display = "none"
+		End If	
+	End If
+End Sub
+</SCRIPT>
+		</td>
+		<td align="right">
+			<b>Building:</b>
+			&nbsp;
+		</td>
+		<td>
+			<p id="current_building"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<INPUT type=button name=delVenue value="Delete Venue">
+<SCRIPT type="text/VBScript">
+Sub delVenue_OnClick
+	Dim strVenue
+	Dim strBuilding
+	Dim index
+
+	strVenue = document.all.item( "current_venue" ).innerText
+
+	iMsgBoxRet = MsgBox( "Are you sure you want to delete this venue permanently from the database?", vbYesNo )
+	If iMsgBoxRet = vbYes Then
+		Set recordSet = oConn.Execute( "SELECT Building FROM Venues WHERE Code='" & markupString( strVenue ) & "'" )
+		If Not recordSet.eof Then
+			strBuilding = recordSet(0)
+
+			Set recordSet = oConn.Execute( "DELETE FROM Venues WHERE Code='" & markupString( strVenue ) & "'" )
+			Set recordSet = oConn.Execute( "UPDATE Students SET Venue='' WHERE Venue='" & markupString( strBuilding ) & " " & markupString( strVenue ) & "'" )
+
+			Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Code < '" & markupString( document.all.item( "current_venue" ).innerText ) & "' ORDER BY Code DESC" )
+			If recordSet.eof Then
+				Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Code > '" & markupString( document.all.item( "current_venue" ).innerText ) & "' ORDER BY Code" )
+			End If
+
+			If Not recordSet.eof Then
+				oConn.Execute( "INSERT INTO Params VALUES ('Venue', '" & recordSet(0) & "')" )
+			End If
+
+			document.execCommand( "Refresh" )
+			recordSet.close
+		End If
+	End If
+End Sub
+</SCRIPT>
+		</td>
+		<td align="right">
+			<b>Seats:</b>
+			&nbsp;
+		</td>
+		<td>
+			<p id="current_seats"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			<b>Bums:</b>
+			&nbsp;
+		</td>
+		<td>
+			<p id="current_bums"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			<b>Grade:</b>
+			&nbsp;
+		</td>
+		<td>
+			<p id="current_grade"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td align="right">
+			<b>Type:</b>
+			&nbsp;
+		</td>
+		<td>
+			<p id="current_type"></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+		</td>
+		<td align="left">
+			<INPUT type="button" name="firstVenue" value="<<">
+<SCRIPT type="text/VBScript">
+Sub firstVenue_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Venues ORDER BY Building, Code" )
+	showVenueRecord
+	recordSet.close
+End Sub
+</SCRIPT>
+			<INPUT type="button" name="prevVenue" value="<">
+<SCRIPT type="text/VBScript">
+Sub prevVenue_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Code < '" & markupString( document.all.item( "current_venue" ).innerText ) & "' AND Building='" & markupString( document.all.item( "current_building" ).innerText ) & "' ORDER BY Building DESC, Code DESC" )
+	If recordSet.eof Then
+		Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Building<'" & markupString( document.all.item( "current_building" ).innerText ) & "' ORDER BY Building DESC, Code DESC" )
+	End If
+
+	If Not recordSet.eof Then
+		showVenueRecord
+	End If
+	recordSet.close
+End Sub
+</SCRIPT>
+			<INPUT type="button" name="nextVenue" value=">">
+<SCRIPT type="text/VBScript">
+Sub nextVenue_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Code > '" & markupString( document.all.item( "current_venue" ).innerText ) & "'AND Building='" & markupString( document.all.item( "current_building" ).innerText ) & "' ORDER BY Building, Code" )
+	If recordSet.eof Then
+		Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Building>'" & markupString( document.all.item( "current_building" ).innerText ) & "' ORDER BY Building, Code" )
+	End If
+
+	If Not recordSet.eof Then
+		showVenueRecord
+	End If
+	recordSet.close
+End Sub
+</SCRIPT>
+			<INPUT type="button" name="lastVenue" value=">>">
+<SCRIPT type="text/VBScript">
+Sub lastVenue_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Venues ORDER BY Building DESC, Code DESC" )
+	showVenueRecord
+	recordSet.close
+End Sub
+</SCRIPT>
+			<INPUT type="button" name="saveVenue" value="Save Changes">
+<SCRIPT type="text/VBScript">
+Set item = document.all.item( "saveVenue" )
+item.style.display = ""
+
+Sub saveVenue_OnClick
+	Dim venueForm
+	Dim strVenue
+	Dim bPairs
+
+	Set venueForm = document.editVenueForm
+
+	If venueForm.new_building.value = "" Or venueForm.new_code.value = "" Then
+		MsgBox "Both the code and the building entries must be valid."
+	Else
+		If Not IsNumeric( venueForm.bums.value ) Or Not IsNumeric( venueForm.seats.value ) Then
+			MsgBox "Seats and Bums must be numeric values only."
+		Else
+			Set recordSet = oConn.Execute( "SELECT Code FROM Venues WHERE Code='" & UCase( markupString( venueForm.new_code.value ) ) & "'" )
+			If Not recordSet.eof And UCase( venueForm.new_code.value ) <> UCase( venueForm.old_code.value ) Then
+				MsgBox "This venue code is already in use. Use edit on the specific venue to modify its details."
+			Else
+				Set recordSet = oConn.Execute( "SELECT Code, Building FROM Venues WHERE Code='" & UCase( markupString( venueForm.old_code.value ) ) & "'" )
+				strVenue = recordSet(0) & " " & recordSet(1)
+
+				oConn.Execute( "UPDATE Venues SET Code='" & UCase( markupString( venueForm.new_code.value ) ) & "', Building='" & markupString( venueForm.new_building.value ) & "', Seats=" & venueForm.seats.value & ", Bums=" & venueForm.bums.value & ", Grade=" & ( venueForm.grade.selectedindex + 8 ) & ", Pairs=" & venueForm.type.selectedindex & " WHERE Code='" & UCase( markupString( venueForm.old_code.value ) ) & "'" )
+				oConn.Execute( "UPDATE Students SET Venue='" & markupString( venueForm.new_building.value ) & " " & UCase( markupString( venueForm.new_code.value ) ) & "' WHERE Venue='" & strVenue & "'" )
+
+				oConn.Execute( "INSERT INTO Params VALUES( 'Venue', '" & UCase( markupString( venueForm.new_code.value ) ) & "')" )
+
+				document.execCommand( "Refresh" )
+			End If
+		End If
+	End If
+End Sub
+
+</SCRIPT>
+			<INPUT type="button" name="cancelVenue" value="Cancel Edit">
+<SCRIPT type="text/VBScript">
+Set item = document.all.item( "cancelVenue" )
+item.style.display = ""
+
+Sub cancelVenue_OnClick
+	Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Code='" & markupString( document.editVenueForm.old_code.value ) & "'" )
+	showVenueRecord
+End Sub
+
+</SCRIPT>
+			<INPUT type="reset" name="resetVenue" value="Reset">
+<SCRIPT type="text/VBScript">
+Set item = document.all.item( "resetVenue" )
+item.style.display = ""
+</SCRIPT>
+		</td>
+		</FORM>
+	</tr>
+	<tr>
+		<td>
+			<BR><BR><BR><BR>
+		</td>
+	</tr>
+</table>
+
+<SCRIPT type="text/VBScript">
+Set recordSet = oConn.Execute( "SELECT Data FROM Params WHERE Type='Venue'" )
+If Not recordSet.eof Then
+	If recordSet(0) <> "" Then
+		Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Code='" & recordSet(0) & "'" )
+		showVenueRecord
+	Else
+		Set recordSet = oConn.Execute( "SELECT * FROM Venues ORDER BY Building, Code" )
+		showVenueRecord
+	End If
+
+	document.all.item( "venue_ref" ).scrollIntoView( true )
+	oConn.Execute( "DELETE FROM Params WHERE Type='Venue'" )
+Else
+	Set recordSet = oConn.Execute( "SELECT * FROM Venues ORDER BY Building, Code" )
+	showVenueRecord
+End If
+
+
+</SCRIPT>
+

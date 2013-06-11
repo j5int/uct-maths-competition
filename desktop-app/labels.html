@@ -1,0 +1,691 @@
+<HTML>     
+<HEAD>         
+<TITLE>UCT Mathematics Competition Database</TITLE>     
+<SCRIPT type="text/VBScript">
+Dim oConn 
+Dim strPath
+Dim recordSet
+
+strPath = Replace( document.location, "labels.html", "", 9, 1, 1 )
+strPath = Replace( strPath, "%20", " " )
+If InStr( strPath, "?" ) > 1 Then
+	strPath = Mid( strPath, 1, InStr( strPath, "?" ) - 1 )
+End If
+
+Set oConn = CreateObject("ADODB.Connection")
+oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  
+
+</SCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="White" topmargin="10" leftmargin="10"><font face="Verdana, Arial, Helvetica">
+
+<p id="showData"></p>
+<SCRIPT type="text/VBScript">
+	document.all.item( "showData" ).style.display = "none"
+</SCRIPT>
+
+<table id="showTable">
+<tr><td>
+
+<!-- Heading 			-->
+<table width="100%">
+	<tr>
+		<td align="center" width=26%>
+			<IMAGE src="uct.gif" alt="UCT Logo">
+		</td>
+		<td align="center">
+			<font size="6" face="Arial, Helvetica"><b>UCT Mathematics Competition</b></font><br>      
+		</td>
+		<td align="center" width=26%>
+			<IMAGE src="maths.gif" alt="Mathematics Competition Logo">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<hr size="1" color="#000000">
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="3">
+			<big><b>Labels</big></b>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 align=right>
+			<a href="maths_competition.html">Back to main menu</a>
+		</td>
+	</tr>
+</table>
+<!-- End Heading 		-->
+
+<table width=100%>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<big><b>Instructions:</b></big>&nbsp;
+		</td>
+		<td valign="top">
+			Select a label type.  The label data will then be generated into a .txt file to be imported into Word<BR>
+			The directory to upload the labels into word from is <b><SCRIPT type="text/VBScript">document.write "<a href=""" & strPath & "labels"" target=_blank>" & strPath & "labels</a>" </SCRIPT></b>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<td>
+			<INPUT type=button name=showSchoolLabels value="Generate Labels">
+		</td>
+		<td>
+			<b>School Labels</b>
+			<small>
+				- Labels for all the schools in the database.
+			</small>
+		</td>
+		<td width=35%>
+			<p id="schoolLabels"></p>
+		</td>
+<SCRIPT type="text/VBScript">
+
+Sub showSchoolLabels_OnClicK
+	Dim strField
+	Dim fileSystem
+	Dim schoolFile
+
+	document.all.item( "schoolLabels" ).innerText = "Generating school_labels.txt..."
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+	If Not fileSystem.FolderExists( strPath & "labels\" ) Then
+		fileSystem.CreateFolder( strPath & "labels\" )
+	End If
+
+	Set schoolFile = fileSystem.CreateTextFile( strPath & "labels\school_labels.txt", True )
+	schoolFile.Write "Contact,School_Name,Address"
+	schoolFile.Write Chr(13) & Chr(10)
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools ORDER BY Name" )
+	Do While Not recordSet.eof
+		' Contact Name
+		strField = recordSet(6)
+		If strField <> "" Then
+			strField = Replace( strField, "&#039", "'" )
+			strField = Replace( strField, "&quot;", """"""  )
+		End If
+		schoolFile.Write """" & strField & ""","
+
+		' School Name
+		strField = recordSet(0)
+		If strField <> "" Then
+			strField = Replace( strField, "&#039", "'" )
+			strField = Replace( strField, "&quot;", """"""  )
+		End If
+		schoolFile.Write """" & strField & ""","
+
+		' Address
+		strField = recordSet(3)
+		If strField <> "" Then
+			strField = Replace( strField, "&#039", "'" )
+			strField = Replace( strField, "&quot;", """"""  )
+		End If
+		schoolFile.Write """" & strField & """"
+		schoolFile.Write Chr(13) & Chr(10)
+
+		recordSet.MoveNext
+	Loop
+
+	document.all.item( "schoolLabels" ).innerText = "Finished generating school_labels.txt."
+
+	schoolFile.Close
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<INPUT type=button name=showEnteredLabels value="Generate Labels"> 
+		</td>
+		<td>
+			<b>School's Entered Labels</b>
+			<small> 
+				- Labels for all the schools that have entered.
+			</small>
+		</td>
+		<td>
+			<p id="schoolEntry"></p>
+		</td>
+<SCRIPT type="text/VBScript">
+Sub showEnteredLabels_OnClicK
+	Dim strField
+	Dim fileSystem
+	Dim schoolFile
+
+	document.all.item( "schoolEntry" ).innerText = "Generating schools_entered_labels.txt..."
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+	If Not fileSystem.FolderExists( strPath & "labels\" ) Then
+		fileSystem.CreateFolder( strPath & "labels\" )
+	End If
+
+	Set schoolFile = fileSystem.CreateTextFile( strPath & "labels\schools_entered_labels.txt", True )
+	schoolFile.Write "Contact,School_Name,Address"
+	schoolFile.Write Chr(13) & Chr(10)
+
+	Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Entered=1 ORDER BY Name" )
+	Do While Not recordSet.eof
+		' Contact Name
+		strField = recordSet(6)
+		If strField <> "" Then
+			strField = Replace( strField, "&#039", "'" )
+			strField = Replace( strField, "&quot;", """"""  )
+		End If
+		schoolFile.Write """" & strField & ""","
+
+		' School Name
+		strField = recordSet(0)
+		If strField <> "" Then
+			strField = Replace( strField, "&#039", "'" )
+			strField = Replace( strField, "&quot;", """"""  )
+		End If
+		schoolFile.Write """" & strField & ""","
+
+		' Address
+		strField = recordSet(3)
+		If strField <> "" Then
+			strField = Replace( strField, "&#039", "'" )
+			strField = Replace( strField, "&quot;", """"""  )
+		End If
+		schoolFile.Write """" & strField & """"
+		schoolFile.Write Chr(13) & Chr(10)
+
+		recordSet.MoveNext
+	Loop
+
+	document.all.item( "schoolEntry" ).innerText = "Finished generating schools_entered_labels.txt."
+
+	schoolFile.Close
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<BR>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<INPUT type=button name=showStudentLabels value="Generate Labels"> 
+		</td>
+		<td>
+			<b>Student Labels</b>
+			<small> 
+				- Labels for all the entries.
+			</small>
+		</td>
+		<td>
+			<p id="studentLabels"></p>
+		</td>
+<SCRIPT type="text/VBScript">
+
+
+Sub assignVenues( iStart, iEnd )
+	Dim recordSet2
+	Dim students
+	Dim studentBums
+	Dim iGrade
+	Dim iPairs
+	Dim iIndividuals
+	Dim strSchool
+
+	Dim strVenue
+	Dim iBumsLeft
+
+'	Set recordSet = oConn.Execute( "DROP TABLE temp" )
+	Set recordSet = oConn.Execute( "CREATE TABLE temp( School text, PairCount int, IndCount int )" )
+
+	For iGrade = iStart to iEnd
+		' First get the pair and individual counts
+		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Grade=" & iGrade & " AND Venue='' ORDER BY School, Reference" )
+		Do While Not recordSet.eof
+			strSchool    = recordSet(3)
+			iPairs       = 0
+			IIndividuals = 0
+
+			Do While Not recordSet.eof
+				If StrComp( strSchool, recordSet(3) ) <> 0 Then
+					Exit Do
+				End If
+
+				If 0 + Right( recordSet(2), 2) < 6 Then
+					iIndividuals = iIndividuals + 1
+				Else
+					iPairs = iPairs + 1
+				End If
+
+				recordSet.MoveNext
+			Loop
+		
+			recordSet2 = oConn.Execute( "INSERT INTO temp VALUES ( '" & strSchool & "'," & iPairs & "," & iIndividuals & ")" )
+		Loop
+
+		' Get the individual venues 
+		Set recordSet2 = oConn.Execute( "SELECT * FROM Venues WHERE Grade=" & iGrade & " AND Pairs=0 ORDER BY Bums DESC" )
+
+		iBumsLeft = 0
+		Do While Not recordSet2.eof And iBumsLeft <= 0 
+			' Set up the first venue's info
+			strVenue = recordSet2(1) & " " & recordSet2(0)
+			iBumsLeft = recordSet2(3)
+			Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+			Do While Not studentBums.eof
+				iBumsLeft = iBumsLeft - 1
+				studentBums.MoveNext
+			Loop
+
+			recordSet2.MoveNext
+		Loop
+
+		If recordSet2.eof And iBumsLeft = 0 Then
+			MsgBox "Insuffient space to handle Grade " & iGrade & ", Individuals."
+		Else
+			' Get the school individual counts
+			Set recordSet  = oConn.Execute( "SELECT * FROM temp WHERE IndCount > 0 ORDER BY IndCount, School" )
+
+			' Time to assign the individual venues
+			Do While Not recordSet.eof
+				Do While Not recordSet.eof 
+					If recordSet(2) < iBumsLeft Then
+						Exit Do
+					End If
+
+					recordSet.MoveNext
+				Loop
+
+				If Not recordSet.eof Then
+					strSchool = recordSet(0)
+
+					' Assign the venue...
+					Set students = oConn.Execute( "SELECT * FROM Students WHERE School='" & strSchool & "' AND Grade=" & iGrade & " ORDER BY Reference" )
+					Do While Not students.eof
+						If 0 + Right( students(2), 2 ) < 6 Then
+							oConn.Execute( "UPDATE Students SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
+							iBumsLeft = iBumsLeft - 1
+						Else
+							students.MoveNext
+						End If
+
+						If Not recordSet.eof Then
+							students.MoveNext
+						End If
+					Loop
+					oConn.Execute( "UPDATE temp SET IndCount=0 WHERE School='" & strSchool & "'" )
+		
+					recordSet.MoveNext
+					If recordSet.eof Then
+						Set recordSet  = oConn.Execute( "SELECT * FROM temp WHERE IndCount > 0 ORDER BY IndCount, School" )
+					End If
+
+					If iBumsLeft <= 0 Then
+						' We need another venue
+						iBumsLeft = 0
+						Do While Not recordSet2.eof And iBumsLeft <= 0 
+							' Set up the venue's info
+							strVenue = recordSet2(1) & " " & recordSet2(0)
+							iBumsLeft = recordSet2(3)
+							Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+							Do While Not studentBums.eof
+								iBumsLeft = iBumsLeft = 1
+							Loop
+			
+							recordSet2.MoveNext
+						Loop
+					
+						Set recordSet  = oConn.Execute( "SELECT * FROM temp WHERE IndCount > 0 ORDER BY IndCount, School" )
+						If Not recordSet.eof And recordSet2.eof And iBumsLeft = 0 Then
+							MsgBox "Insuffient space to handle Grade " & iGrade & ", Individuals."
+							Exit Do
+						End If
+
+					End If
+				Else
+					' We've been through the whole list, move onto another venue...
+					iBumsLeft = 0
+					Do While Not recordSet2.eof And iBumsLeft <= 0 
+						' Set up the venue's info
+						strVenue = recordSet2(1) & " " & recordSet2(0)
+						iBumsLeft = recordSet2(3)
+						Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+						Do While Not studentBums.eof
+							iBumsLeft = iBumsLeft - 1
+							studentBums.MoveNext
+						Loop
+			
+						recordSet2.MoveNext
+					Loop
+					
+					Set recordSet = oConn.Execute( "SELECT * FROM temp WHERE IndCount > 0 ORDER BY IndCount, School" )
+					If Not recordSet.eof And recordSet2.eof And iBumsLeft = 0 Then
+						MsgBox "Insuffient space to handle Grade " & iGrade & ", Individuals."
+						Exit Do
+					End If
+				End If
+			Loop
+		End If
+
+		' Get the Pair venues 
+		Set recordSet2 = oConn.Execute( "SELECT * FROM Venues WHERE Grade=" & iGrade & " AND Pairs<>0 ORDER BY Bums DESC" )
+
+		iBumsLeft = 0
+		Do While Not recordSet2.eof And iBumsLeft <= 0 
+			' Set up the first venue's info
+			strVenue = recordSet2(1) & " " & recordSet2(0)
+			iBumsLeft = recordSet2(3)
+			Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+			Do While Not studentBums.eof
+				iBumsLeft = iBumsLeft - 1
+				studentBums.MoveNext
+			Loop
+
+			recordSet2.MoveNext
+		Loop
+
+		If recordSet2.eof And iBumsLeft = 0 Then
+			MsgBox "Insuffient space to handle Grade " & iGrade & ", Pairs."
+		Else
+			' Get the school pair counts
+			Set recordSet  = oConn.Execute( "SELECT * FROM temp WHERE PairCount > 0 ORDER BY PairCount, School" )
+
+			' Time to assign the pair venues
+			Do While Not recordSet.eof
+				Do While Not recordSet.eof 
+					If recordSet(2) < iBumsLeft Then
+						Exit Do
+					End If
+
+					recordSet.MoveNext
+				Loop
+
+				If Not recordSet.eof Then
+					strSchool = recordSet(0)
+
+					' Assign the venue...
+					Set students = oConn.Execute( "SELECT * FROM Students WHERE School='" & strSchool & "' AND Grade=" & iGrade & " ORDER BY Reference" )
+					Do While Not students.eof
+						If 0 + Right( students(2), 2 ) > 5 Then
+							oConn.Execute( "UPDATE Students SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
+							iBumsLeft = iBumsLeft - 1
+						End If
+
+						students.MoveNext
+					Loop
+					oConn.Execute( "UPDATE temp SET PairCount=0 WHERE School='" & strSchool & "'" )
+		
+					recordSet.MoveNext
+					If recordSet.eof Then
+						Set recordSet  = oConn.Execute( "SELECT * FROM temp WHERE PairCount > 0 ORDER BY PairCount, School" )
+					End If
+
+					If iBumsLeft <= 0 Then
+						' We need another venue
+						iBumsLeft = 0
+						Do While Not recordSet2.eof And iBumsLeft <= 0 
+							' Set up the venue's info
+							strVenue = recordSet2(1) & " " & recordSet2(0)
+							iBumsLeft = recordSet2(3)
+							Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+							Do While Not studentBums.eof
+								iBumsLeft = iBumsLeft = 1
+							Loop
+			
+							recordSet2.MoveNext
+						Loop
+					
+						Set recordSet = oConn.Execute( "SELECT * FROM temp WHERE PairCount > 0 ORDER BY PairCount, School" )
+						If recordSet2.eof And Not recordSet.eof And iBumsLeft = 0 Then
+							MsgBox "Insuffient space to handle Grade " & iGrade & ", Pairs."
+							Exit Do
+						End If
+					End If
+				Else
+					' We've been through the whole list, move onto another venue...
+					iBumsLeft = 0
+					Do While Not recordSet2.eof And iBumsLeft <= 0 
+						' Set up the venue's info
+						strVenue = recordSet2(1) & " " & recordSet2(0)
+						iBumsLeft = recordSet2(3)
+						Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+						Do While Not studentBums.eof
+							iBumsLeft = iBumsLeft = 1
+						Loop
+			
+						recordSet2.MoveNext
+					Loop
+					
+					Set recordSet = oConn.Execute( "SELECT * FROM temp WHERE PairCount > 0 ORDER BY IndCount, School" )
+					If Not recordSet.eof And recordSet2.eof And iBumsLeft = 0 Then
+						MsgBox "Insuffient space to handle Grade " & iGrade & ", Pairs."
+						Exit Do
+					End If
+				End If
+			Loop
+		End If
+
+		Set recordSet2 = oConn.Execute( "DELETE FROM temp" )
+	Next
+
+	recordSet.Close
+'	recordSet2.Close
+	Set recordSet2 = oConn.Execute( "DROP TABLE temp" )
+End Sub
+
+Function getName
+	Dim name1
+	Dim name2
+	Dim strRet
+
+	strRet = ""
+
+	name1 = recordSet( 0 )
+	If name1 = "" Then
+		name1 = recordSet(1)
+	Else
+		name1 = name1 & " " & recordSet(1)
+	End If
+
+	If ( 0 + Right( recordSet(2), 2 ) ) > 5 Then
+		name2 = ""
+		recordSet.MoveNext
+		name2 = recordSet( 0 )
+		If name2 = "" Then
+			name2 = recordSet(1)
+		Else
+			name2 = name2 & " " & recordSet(1)
+		End If
+
+		If name1 = "" And name2 = "" Then
+			strRet = "Pair / Paar "
+			Select Case ( Right( recordSet(2), 2 ) )
+				Case "06"
+					strRet = strRet & "A"
+				Case "07"
+					strRet = strRet & "B"
+				Case "08"
+					strRet = strRet & "C"
+				Case "09"
+					strRet = strRet & "D"
+				Case "10"
+					strRet = strRet & "E"
+			End Select
+		Else
+			If name1 = "" Then
+				name2 = name1
+				name1 = ""
+			End If
+
+			If name1 = "" Or name2 = "" Then
+				' Only one partner named and it is in name1
+				strRet = name1 & " and partner"
+			Else
+				strRet = name1 & " / " & name2
+			End If
+		End If
+	Else
+		' Working with individuals
+		If name1 = "" Then
+			strRet = "Individual " & Right( recordSet(2), 1 ) 
+		Else
+			strRet = name1
+		End If
+	End If
+	' Only return max 26 Characters - otherwise labels don't work too well due to wrapping
+	getName = Mid( strRet, 1, 26 )
+End Function
+
+Sub showStudentLabels_OnClicK
+	Dim strField
+	Dim fileSystem
+	Dim studentFileInd
+	Dim studentFilePair
+	Dim iGrade
+
+	Set recordSet = oConn.Execute( "SELECT DISTINCT Venue FROM Students WHERE Venue=''" )
+	If Not recordSet.eof Then
+		' We have some empty entries
+
+		Set recordSet = oConn.Execute( "SELECT DISTINCT Venue FROM Students Where Venue<>''" )
+		If Not recordSet.eof Then
+			iMsgRet = MsgBox( "Would you like to only assign those entries that haven't been assigned yet? Note: This may mean that members of the same school could be split.", vbYesNo )
+			If iMsgRet = vbNo Then
+				Set recordSet = oConn.Execute( "UPDATE Students SET Venue='' WHERE Grade>=" & iStart & " AND Grade<=" & iEnd )
+			End If
+		End If
+		assignVenues 8, 12
+	End If
+
+	document.all.item( "studentLabels" ).innerText = "Generating student_labels.txt..."
+
+	Set fileSystem = CreateObject("Scripting.FileSystemObject")
+	If Not fileSystem.FolderExists( strPath & "labels\" ) Then
+		fileSystem.CreateFolder( strPath & "labels\" )
+	End If
+
+	For iGrade = 8 to 12 
+
+		Set studentFileInd  = fileSystem.CreateTextFile( strPath & "labels\student_labels_ind" & iGrade & ".txt", True )
+		Set studentFilePair = fileSystem.CreateTextFile( strPath & "labels\student_labels_pair" & iGrade & ".txt", True )
+
+		studentFileInd.Write "Reference,Name,School,Grade,Venue"
+		studentFileInd.Write Chr(13) & Chr(10)
+
+		studentFilePair.Write "Reference,Name,School,Grade,Venue"
+		studentFilePair.Write Chr(13) & Chr(10)
+
+		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Grade=" & iGrade & " ORDER BY School, Reference" )
+		Do While Not recordSet.eof
+			' Reference
+			strField = recordSet(2)
+
+			If 0 + Right( strField, 2 ) > 5 Then
+			' Write to pairs
+				studentFilePair.Write """" & strField & ""","
+		
+				' Name
+				strField = getName
+				If strField <> "" Then
+					strField = Replace( strField, "&#039", "'" )
+					strField = Replace( strField, "&quot;", """"""  )
+				End If
+				studentFilePair.Write """" & strField & ""","
+
+				' School
+				strField = recordSet(3)
+				If strField <> "" Then
+					strField = Replace( strField, "&#039", "'" )
+					strField = Replace( strField, "&quot;", """"""  )
+				End If
+				studentFilePair.Write """" & strField & ""","
+
+				' Grade
+				strField = recordSet(6)
+				studentFilePair.Write strField & ","
+
+				'Venue
+				strField = recordSet(9)
+				If strField <> "" Then
+					strField = Replace( strField, "&#039", "'" )
+					strField = Replace( strField, "&quot;", """"""  )
+				End If
+				studentFilePair.Write """" & strField & """" 
+				studentFilePair.Write Chr(13) & Chr(10)
+		
+				recordSet.MoveNext
+			Else
+			' Write to individuals
+				studentFileInd.Write """" & strField & ""","
+		
+				' Name
+				strField = getName
+				If strField <> "" Then
+					strField = Replace( strField, "&#039", "'" )
+					strField = Replace( strField, "&quot;", """"""  )
+				End If
+				studentFileInd.Write """" & strField & ""","
+
+				' School
+				strField = recordSet(3)
+				If strField <> "" Then
+					strField = Replace( strField, "&#039", "'" )
+					strField = Replace( strField, "&quot;", """"""  )
+				End If
+				studentFileInd.Write """" & strField & ""","
+
+				' Grade
+				strField = recordSet(6)
+				studentFileInd.Write strField & ","
+
+				'Venue
+				strField = recordSet(9)
+				If strField <> "" Then
+					strField = Replace( strField, "&#039", "'" )
+					strField = Replace( strField, "&quot;", """"""  )
+				End If
+				studentFileInd.Write """" & strField & """" 
+				studentFileInd.Write Chr(13) & Chr(10)
+		
+				recordSet.MoveNext
+			End If
+
+		Loop
+	Next
+
+	document.all.item( "studentLabels" ).innerText = "Finished generating student_labels.txt."
+
+	studentFilePair.Close
+	studentFileInd.Close
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+</table>
+
+</td></tr>
+</table>
+<!-- Closing showTable table... -->
+
+
