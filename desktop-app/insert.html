@@ -1,0 +1,889 @@
+<HTML>     
+<HEAD>         
+<TITLE>UCT Mathematics Competition Database</TITLE>     
+
+<SCRIPT type="text/VBScript">
+
+Dim oConn2 
+Dim strPath
+Dim recordSet
+
+strPath = Replace( document.location, "insert.html", "", 9, 1, 1 )
+strPath = Replace( strPath, "%20", " " )
+If InStr( strPath, "?" ) > 1 Then
+	strPath = Mid( strPath, 1, InStr( strPath, "?" ) - 1 )
+End If
+
+Set oConn2 = CreateObject("ADODB.Connection")
+oConn2.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"   
+
+Function markupString( strIn )
+	Dim strRet
+
+	strRet = Replace( strIn, "'", "&#039" )
+	strRet = Replace( strRet, """", "&quot;"  )
+
+	markupString = strRet
+End Function
+
+
+Sub showCount( iGrade, bType )
+	Dim strReference
+	Dim iCount
+	Dim item
+	Dim strData
+
+	strData = ""
+	iCount  = 0
+
+	Set recordSet = oConn2.Execute( "SELECT Name, Key FROM Schools ORDER BY Name" )
+	For index = 0 to document.student.school.selectedIndex - 1
+		If Not recordSet.eof Then
+			recordSet.MoveNext
+		End If
+	Next
+
+	If Not recordSet.eof Then
+		strReference = recordSet(1)
+
+		If( Len( "" & iGrade ) = 1 ) Then
+			strReference = strReference & "0"
+		End If
+		strReference = strReference & iGrade
+
+		If bType = 0 Then
+			' Individuals
+			Set recordSet = oConn2.Execute( "SELECT * FROM Students WHERE Reference > '" & strReference & "00' AND Reference <'" & strReference & "06'" )
+
+			' Count them as Access doesn't like to return the record count...
+			Do While Not recordSet.eof
+				iCount = iCount + 1
+				strData = strData & iCount & ") " & recordSet(1) & ", " & recordSet(0) & "<BR>"
+				recordSet.MoveNext
+			Loop
+
+			document.all.item( "individuals" ).innerHTML = "<small>" & strData & "</small>"
+
+			document.all.item( "individuals" ).style.display = ""
+			document.all.item( "pairs" ).style.display = "none"
+		Else
+			' Pairs
+			Set recordSet = oConn2.Execute( "SELECT DISTINCT Reference FROM Students WHERE Reference > '" & strReference & "05' AND Reference <'" & strReference & "11'" )
+
+			' Count them as Access doesn't like to return the record count...
+			Do While Not recordSet.eof
+				recordSet.MoveNext
+				iCount = iCount + 1
+			Loop
+
+			document.all.item( "individuals" ).style.display = "none"
+			document.all.item( "pairs" ).style.display = ""
+		End If
+	End If
+
+	Set item = document.all.item( "current_count" )
+	If iCount = 1 Then
+		item.innerText = "There is currently " & iCount & " entry in this category for this school."
+	Else
+		item.innerText = "There are currently " & iCount & " entries in this category for this school."
+	End If
+End Sub
+
+</SCRIPT>
+
+</HEAD>      
+
+<BODY BGCOLOR="White" topmargin="10" leftmargin="10"><font face="Verdana, Arial, Helvetica">
+
+<!-- Heading 			-->
+<table width="100%">
+	<tr>
+		<td align="center" width=26%>
+			<IMAGE src="uct.gif" alt="UCT Logo">
+		</td>
+		<td align="center">
+			<font size="6" face="Arial, Helvetica"><b>UCT Mathematics Competition</b></font><br>      
+		</td>
+		<td align="center" width=26%>
+			<IMAGE src="maths.gif" alt="Mathematics Competition Logo">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<hr size="1" color="#000000">
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="3">
+			<big><b>Insert Data</big></b>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 align=right>
+			<a href="maths_competition.html">Back to main menu</a>
+		</td>
+	</tr>
+</table>
+<!-- End Heading 		-->
+
+<table width="100%">
+	<FORM name="school" method="get" action="search.html">
+	<tr>
+		<td>
+			<BR>
+			<b>Insert School</b>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" width="30%">
+			School Name:
+		</td>
+		<td align="left" width="20%">
+			<INPUT type="text" name="name" value="" size=26 maxlength=26>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			School Key:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="key" value="" size="3" maxlength="3">
+			&nbsp;&nbsp;Largest:
+			<INPUT type="text" readonly name="largestKey" size="2">
+<SCRIPT type="text/VBScript">
+Set recordSet = oConn2.Execute( "SELECT Key FROM Schools ORDER BY Key DESC" )
+If Not recordSet.eof Then
+	document.all.item( "largestKey" ).value = recordSet(0)
+Else
+	document.all.item( "largestKey" ).value = "0"
+End If
+</SCRIPT>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Language:
+		</td>
+		<td align="left">
+			<SELECT name="language">
+				<OPTION>English</OPTION>
+				<OPTION>Afrikaans</OPTION>
+			</SELECT>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top">
+			Address:
+		</td>
+		<td align="left">
+			<TEXTAREA name="address" rows=4></TEXTAREA>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Phone Number:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="phone" value="">
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Fax Number:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="fax" value="">
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Contact Name:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="contact" value="">
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Email Address:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="email" value="">
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top">
+			Enter school?
+		</td>
+		<td align="left" valign="top">
+			<INPUT type="checkbox" name="entered"> Select if this school is to be entered into the competition now.
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+		</td>
+		<td align="left" colspan="4">
+			<INPUT type="button" name="addSchool" value="Add School">
+			<INPUT type="reset" name="addSchool_reset" value="Reset">
+<SCRIPT type="text/VBScript"> 
+
+Sub addSchool_OnClick
+	Dim schoolForm
+	Dim strSchool
+
+	Set schoolForm = document.school
+
+	If schoolForm.key.value = "" Or schoolForm.name.value = "" Then
+		MsgBox "Both the School Name and the Key must be valid to add a school."
+	Else
+		If Not IsNumeric( schoolForm.key.value ) Or schoolForm.key.value = "" Then
+			MsgBox "The Key must be numeric."
+		Else
+			If Len( schoolForm.key.value ) = 1 Then
+				schoolForm.key.value = "00" & schoolForm.key.value
+			Else
+				If Len( schoolForm.key.value ) = 2 Then
+					schoolForm.key.value = "0" & schoolForm.key.value
+				End If
+			End If
+
+			Set recordSet = oConn2.Execute( "SELECT Key FROM Schools WHERE Key='" & schoolForm.key.value & "'" )
+			If Not recordSet.eof Then
+				MsgBox "Key is already in use."
+			Else
+				recordSet.close
+
+				Set recordSet = oConn2.Execute( "SELECT Name FROM Schools WHERE Name='" & markupString( schoolForm.name.value ) & "'" )
+				If Not recordSet.eof Then
+					MsgBox "School already exists.  Unable to add it again."
+				Else
+					Dim strLanguage
+					Dim bEntered	
+
+					If schoolForm.language.selectedIndex = 0 Then
+						strLanguage = "e"
+					Else
+						strLanguage = "a"
+					End If
+
+					If schoolForm.entered.checked Then
+						bEntered = 1
+					Else
+						bEntered = 0
+					End If
+
+					recordSet.close
+
+					Set recordSet = oConn2.Execute( "INSERT INTO Schools (Name, Key, Language, Address, Phone, Fax, Contact, Entered, Score, Email) VALUES ('" & markupString( schoolForm.name.value ) & "','" & schoolForm.key.value & "','" & strLanguage & "','" & markupString( schoolForm.address.value ) & "','" & schoolForm.phone.value & "','" & schoolForm.fax.value & "','" & markupString( schoolForm.contact.value ) & "'," & bEntered & ", 0, '" & markupString( schoolForm.email.value ) & "')" )
+
+					Dim index
+					Dim newSchool
+
+					index = 0
+					Set recordSet = oConn2.Execute( "SELECT Name FROM Schools WHERE Name<'" & markupString( schoolForm.name.value ) & "'" )
+					Do While Not recordSet.eof
+						index = index + 1
+						recordSet.MoveNext
+					Loop
+
+					Set newSchool = document.createElement( "<OPTION>" )
+					newSchool.text = schoolForm.name.value
+					document.student.school.add newSchool, index
+
+					schoolForm.reset
+					schoolForm.name.focus
+
+					Set recordSet = oConn2.Execute( "SELECT Key FROM Schools ORDER BY Key DESC" )
+					If Not recordSet.eof Then
+						document.all.item( "largestKey" ).value = recordSet(0)
+					Else
+						document.all.item( "largestKey" ).value = "0"
+					End If
+				End If
+			End If	
+		End If
+	End If
+
+End Sub
+
+</SCRIPT>
+			<INPUT type=button name=done value="Done" onClick="history.go(-1)">
+			&nbsp;&nbsp;&nbsp;
+			<INPUT type="button" name="browseSchools" value="Browse All Schools">
+<SCRIPT type="text/VBScript">
+Sub browseSchools_OnClick
+	document.school.submit
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+	</FORM>
+	<tr>
+		<td colspan="4" align="center">
+			<BR>
+			<hr size="2" width="80%">
+		</td>
+	</tr>
+	<FORM name="student" method="get" action="search.html">
+	<tr>
+		<td>
+			<BR>
+			<b>Insert Student</b>
+			<a name="student_ref"></a>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			School:
+		</td>
+		<td align="left">
+			<SELECT name="school">
+<SCRIPT type="text/VBScript"> 
+
+			Dim strSchool
+
+			strSchool = ""
+
+			Set recordSet = oConn2.Execute( "SELECT Data FROM Params WHERE Type='School'" )
+			If Not recordSet.eof Then
+				strSchool = recordSet(0)
+			End If
+
+			Set recordSet = oConn2.Execute( "SELECT DISTINCT Name FROM Schools ORDER BY Name" )
+
+			Do While Not recordSet.eof
+				document.write "<OPTION"
+
+				If strSchool <> "" Then
+					If strSchool = recordSet(0) Then
+						document.write " selected"
+					End If
+				End If
+				document.write ">" & recordSet(0) & "</OPTION>"
+				recordSet.MoveNext
+			Loop
+
+</SCRIPT>
+			</SELECT>
+<SCRIPT type="text/VBScript">
+Sub school_OnChange
+	showCount document.student.grade.selectedindex + 8, document.student.type.selectedindex
+End Sub
+</SCRIPT>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Entry Type:
+		</td>
+		<td align="left">
+			<SELECT name="type">
+				<OPTION>Individual</OPTION>
+				<OPTION>Pair / Paar</OPTION>
+			</SELECT>
+		</td>
+<SCRIPT type="text/VBScript"> 
+
+Sub type_OnChange
+	If document.student.type.selectedindex = 1 Then
+		If document.student.first_name2.disabled = TRUE Then
+			document.student.first_name2.value = ""
+		End If
+		document.student.first_name2.disabled = FALSE
+
+		If document.student.surname2.disabled = TRUE Then
+			document.student.surname2.value       = ""
+		End If
+		document.student.surname2.disabled    = FALSE
+
+		document.student.sex2.disabled        = FALSE
+		document.student.language2.disabled   = FALSE
+
+		document.student.sex.selectedIndex = 2
+		document.student.sex2.selectedIndex = 2
+	Else
+		document.student.first_name2.value    = "Unavailable"
+		document.student.first_name2.disabled = TRUE
+		document.student.surname2.value       = "Unavailable"
+		document.student.surname2.disabled    = TRUE
+		document.student.sex2.disabled        = TRUE
+		document.student.language2.disabled   = TRUE
+	End If 
+
+	showCount document.student.grade.selectedindex + 8, document.student.type.selectedindex
+End Sub
+
+</SCRIPT>
+		<td colspan="2" rowspan="2" valign="top">
+			<p id="current_count"></p>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Grade:
+		</td>
+		<td align="left">
+			<SELECT name="grade">
+				<OPTION>8</OPTION>
+				<OPTION>9</OPTION>
+				<OPTION>10</OPTION>
+				<OPTION>11</OPTION>
+				<OPTION>12</OPTION>
+			</SELECT>
+		</td>
+<SCRIPT type="text/VBScript">
+Sub grade_OnChange
+	showCount document.student.grade.selectedindex + 8, document.student.type.selectedindex
+End Sub
+</SCRIPT>
+	</tr>
+	<tr>
+		<td align="right">
+			Surname:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="surname" value="">
+		</td>
+		<td align="right" width="20%">
+			Partner Surname:
+		</td>
+		<td align="left" width="30%">
+			<INPUT type="text" name="surname2" value="Unavailable" disabled>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" width="30%">
+			First Name:
+		</td>
+		<td align="left" width="20%">
+			<INPUT type="text" name="first_name" value="">
+		</td>
+		<td align="right" width="20%">
+			Partner First Name:
+		</td>
+		<td align="left" width="30%">
+			<INPUT type="text" name="first_name2" value="Unavailable" disabled>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Sex:
+		</td>
+		<td align="left">
+			<SELECT name="sex">
+				<OPTION>Female/Vroulik</OPTION>
+				<OPTION>Male/Manlik</OPTION>
+				<OPTION>Unknown</OPTION>
+			</SELECT>
+		</td>
+		<td align="right" width="20%">
+			Partner Sex:
+		</td>
+		<td align="left" width="30%">
+			<SELECT name="sex2" disabled>
+				<OPTION>Female/Vroulik</OPTION>
+				<OPTION>Male/Manlik</OPTION>
+				<OPTION>Unknown</OPTION>
+			</SELECT>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Language:
+		</td>
+		<td align="left">
+			<SELECT name="language">
+				<OPTION>English</OPTION>
+				<OPTION>Afrikaans</OPTION>
+			</SELECT>
+		</td>
+		<td align="right" width="20%">
+			Partner Language:
+		</td>
+		<td align="left" width="30%">
+			<SELECT name="language2" disabled>
+				<OPTION>English</OPTION>
+				<OPTION>Afrikaans</OPTION>
+			</SELECT>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+		</td>
+		<td align="left" colspan="4">
+			<INPUT type="button" name="addStudent" value="Add Student">
+			<INPUT type="reset" name="addStudent_reset" value="Reset">
+			<INPUT type=button name=done value="Done" onClick="history.go(-1)">
+			&nbsp;&nbsp;&nbsp;
+			<INPUT type="button" name="browseStudents" value="Browse Students"> 
+<SCRIPT type="text/VBScript">
+Sub browseStudents_OnClick
+	document.student.submit
+End Sub
+</SCRIPT>
+		</td>
+<SCRIPT type="text/VBScript"> 
+
+Sub addStudent_OnClick
+	Dim studentForm
+	Dim reference
+	Dim index
+	Dim strSchool
+	Dim strKey
+	Dim strNewReference
+	Dim strRefPart
+	Dim strLanguage
+	Dim strSex
+	Dim iMsgRet
+
+	Set studentForm = document.student
+
+	Set recordSet = oConn2.Execute( "SELECT DISTINCT Name, Key, Entered FROM Schools ORDER BY Name" )
+	For index = 0 to studentForm.school.selectedIndex - 1
+		If Not recordSet.eof Then
+			recordSet.MoveNext
+		End If
+	Next
+	
+	If Not recordSet.eof Then
+		strSchool = recordSet(0)
+		strKey	  = recordSet(1)
+
+		iMsgRet = vbYes
+		If recordSet(2) = 0 Then
+			iMsgRet = MsgBox( "This school has not yet been entered into the competition.  Would you like to enter it now?", vbYesNo )
+			If iMsgRet = vbYes Then
+				oConn2.Execute( "UPDATE Schools SET Entered=-1 WHERE Name='" & strSchool & "'" )
+			Else
+				MsgBox "Unable to add student to a school that has not been entered."
+			End If
+		End If
+
+		If iMsgRet = vbYes Then
+			strNewReference = ""
+			If( Len( strKey ) = 1 ) Then
+				strNewReference = "00"
+			Else
+				If( Len( strKey ) = 2 ) Then
+					strNewReference = "0"
+				End If
+			End If
+			strNewReference = strNewReference & strKey
+		
+			strKey = "" & ( studentForm.grade.selectedindex + 8 )
+			If( Len( strKey ) = 1 ) Then
+				strNewReference = strNewReference & "0"
+			End If
+			strNewReference = strNewReference & strKey
+
+			' Now work out a free entry...
+			If studentForm.type.selectedindex = 0 Then
+				' Individuals
+				strKey = 1
+				Set recordSet = oConn2.Execute( "SELECT Reference FROM Students WHERE Reference > '" & strNewReference & "00' AND Reference < '" & strNewReference & "06' ORDER BY Reference" )
+				Do While Not recordSet.eof 
+					If ( 0 + Right( recordSet(0), 2 ) ) <> strKey Then
+						Exit Do
+					End If
+
+					recordSet.MoveNext
+					strKey = strKey + 1
+				Loop
+				If strKey > 5 Then
+					strKey = 5
+				End If
+			Else
+				' Pairs
+				strKey = 6
+				Set recordSet = oConn2.Execute( "SELECT DISTINCT Reference FROM Students WHERE Reference > '" & strNewReference & "05' AND Reference < '" & strNewReference & "11' ORDER BY Reference" )
+				Do While Not recordSet.eof
+					If ( 0 + Right( recordSet(0), 2 ) ) <> strKey Then
+						Exit Do
+					End If
+	
+					recordSet.MoveNext
+					strKey = strKey + 1
+				Loop
+
+				If strKey > 10 Then
+					strKey = 10
+				End If
+			End If
+
+			strRefPart = strNewReference
+
+			If( Len( strKey ) = 1 ) Then
+				strNewReference = strNewReference & "0"
+			End If
+			strNewReference = strNewReference & strKey
+
+			recordSet.close
+			Set recordSet = oConn2.Execute( "SELECT Reference FROM Students WHERE Reference='" & strNewReference & "'" )
+			If recordSet.eof Or Not recordSet.eof And studentForm.type.selectedindex = 1 Then
+
+				If Not recordSet.eof Then
+					recordSet.MoveNext
+				End If
+
+				If Not recordSet.eof Then
+					MsgBox "This entry has already been entered for this school."
+				Else
+					If studentForm.language.selectedIndex = 0 Then
+						strLanguage = "e"
+					Else
+						strLanguage = "a"
+					End If
+
+					If studentForm.sex.selectedIndex = 0 Then
+						strSex = "f"
+					Else
+						If studentForm.sex.selectedIndex = 1 Then
+							strSex = "m"
+						Else
+							strSex = "u"
+						End If
+					End If
+					Set recordSet = oConn2.Execute( "INSERT INTO Students VALUES ('" & markupString( studentForm.first_name.value ) & "','" & markupString( studentForm.surname.value ) & "','" & strNewReference & "','" & markupString( strSchool ) & "'," & 0 & "," & 0 & "," & (studentForm.grade.selectedindex + 8) & ",'" & strSex & "','" & strLanguage & "','')" )
+
+					If studentForm.type.selectedindex = 1 Then
+						If studentForm.language2.selectedIndex = 0 Then
+							strLanguage = "e"
+						Else
+							strLanguage = "a"
+						End If
+
+						If studentForm.sex2.selectedIndex = 0 Then
+							strSex = "f"
+						Else
+							If studentForm.sex2.selectedIndex = 1 Then
+								strSex = "m"
+							Else
+								strSex = "u"
+							End If
+						End If
+						Set recordSet = oConn2.Execute( "INSERT INTO Students VALUES ('" & markupString( studentForm.first_name2.value ) & "','" & markupString( studentForm.surname2.value ) & "','" & strNewReference & "','" & markupString( strSchool ) & "'," & 0 & "," & 0 & "," & (studentForm.grade.selectedindex + 8) & ",'" & strSex & "','" & strLanguage & "','')" )
+					End If
+				End If
+
+				studentForm.first_name.value = ""
+				StudentForm.surname.value    = ""
+				If studentForm.first_name2.disabled = FALSE Then
+					studentForm.first_name2.value = ""
+					studentForm.surname2.value    = ""
+
+					studentForm.sex.selectedIndex = 2
+					studentForm.sex2.selectedIndex = 2
+				Else
+					studentForm.surname.focus
+				End If
+
+				showCount document.student.grade.selectedindex + 8, document.student.type.selectedindex
+			Else
+				MsgBox "A student has already been entered for this school for this entry type."
+			End If
+		End If
+	Else
+		MsgBox "School not in the database.  Select refresh to resynchronise this view."
+	End If
+End Sub
+
+</SCRIPT>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td colspan=2>
+			<p id=individuals></p>
+			<p id=pairs>
+				<BR>
+				Add pairs in bulk: 
+				<SELECT name=bulk>
+					<OPTION>1</OPTION>
+					<OPTION>2</OPTION>
+					<OPTION>3</OPTION>
+					<OPTION>4</OPTION>
+					<OPTION>5</OPTION>
+				</SELECT>
+				&nbsp;&nbsp;
+				<BUTTON name="bulkAdd">Bulk Add</BUTTON>
+			</p>
+<SCRIPT type="text/VBScript"> 
+
+Sub bulkAdd_OnClick
+	Dim iCount
+	Dim index
+
+	iCount = document.student.bulk.selectedIndex
+
+	For index = iCount to 0 Step -1
+		addStudent_OnClick
+	Next
+End Sub
+
+</SCRIPT>
+		</td>
+	</tr>
+	</FORM>
+	<tr>
+		<td colspan="4" align="center">
+			<BR>
+			<hr size="2" width="80%">
+		</td>
+	</tr>
+	<FORM name="venue" method="get" action="search.html">
+	<tr>
+		<td>
+			<BR>
+			<b>Insert Venue</b>
+			<a name="venue_ref"></a>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" width="30%">
+			Venue Code:
+		</td>
+		<td align="left" width="20%">
+			<INPUT type="text" name="code" value="" size=6 maxlength=6>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Building:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="building" value="" size=17 maxlength=17>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Seats:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="seats" value="">
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Bums:
+		</td>
+		<td align="left">
+			<INPUT type="text" name="bums" value="">
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Grade:
+		</td>
+		<td align="left">
+			<SELECT name="grade">
+				<OPTION>8</OPTION>
+				<OPTION>9</OPTION>
+				<OPTION>10</OPTION>
+				<OPTION>11</OPTION>
+				<OPTION>12</OPTION>
+			</SELECT>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			Type:
+		</td>
+		<td align="left">
+			<SELECT name="type">
+				<OPTION>Individual</OPTION>
+				<OPTION>Pairs</OPTION>
+			</SELECT>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+		</td>
+		<td align="left" colspan="4">
+			<INPUT type="button" name="addVenue" value="Add Venue">
+			<INPUT type="reset" name="addVenue_reset" value="Reset">
+			<INPUT type=button name=done value="Done" onClick="history.go(-1)">
+			&nbsp;&nbsp;&nbsp;
+			<INPUT type=button name="browseVenues" value="Browse All Venues"> 
+<SCRIPT type="text/VBScript">
+Sub browseVenues_OnClick
+	document.venue.submit
+End Sub
+</SCRIPT>
+		</td>
+<SCRIPT type="text/VBScript"> 
+
+Sub addVenue_OnClick
+	Dim venueForm
+	Dim bPairs
+	Dim iPairs
+	Dim iReplace
+
+	Set venueForm = document.venue
+
+	If venueForm.building.value = "" Or venueForm.code.value = "" Then
+		MsgBox "Both the code and the building entries must be valid."
+	Else
+		If Not IsNumeric( venueForm.bums.value ) Or Not IsNumeric( venueForm.seats.value ) Then
+			MsgBox "Seats and Bums must be numeric values only."
+		Else
+			Set recordSet = oConn2.Execute( "SELECT Grade, Pairs FROM Venues WHERE Code='" & UCase( markupString( venueForm.code.value ) ) & "'" )
+
+			If Not recordSet.eof Then
+				bPairs = recordSet( 1 )
+
+				If bPairs = 0 Then
+					iReplace = MsgBox( "This venue code has already been assigned to grade " & recordSet(0) & " individuals.  Would you like to replace this with the new data?", vbYesNo )
+				Else
+					iReplace = MsgBox( "This venue code has already been assigned to grade " & recordSet(0) & " pairs.  Would you like to replace this with the new data?", vbYesNo )
+				End If
+	
+				If iReplace = vbYes Then
+					bPairs = venueForm.type.selectedindex
+					oConn2.Execute( "UPDATE Venues SET Code='" & UCase( markupString( venueForm.code.value ) ) & "', Building='" & markupString( venueForm.building.value ) & "', Seats=" & venueForm.seats.value & ", Bums=" & venueForm.bums.value & ", Grade=" & ( venueForm.grade.selectedindex + 8 ) & ", Pairs=" & bPairs & " WHERE Code='" & UCase( markupString( venueForm.code.value ) ) & "'" )
+					venueForm.bums.value     = ""
+					venueForm.seats.value    = ""
+					venueForm.code.value     = ""
+					venueForm.building.value = ""
+				End If
+			Else
+				bPairs = venueForm.type.selectedindex
+				oConn2.Execute( "INSERT INTO Venues (Code, Building, Seats, Bums, Grade, Pairs) Values ('" & UCase( markupString( venueForm.code.value ) ) & "', '" & markupString( venueForm.building.value ) & "', " & venueForm.seats.value & ", " & venueForm.bums.value & ", " & ( venueForm.grade.selectedindex + 8 ) & ", " & bPairs & ")" )
+
+				venueForm.bums.value     = ""
+				venueForm.seats.value    = ""
+				venueForm.code.value     = ""
+				venueForm.building.value = ""
+			End If
+		End If
+	End If
+End Sub
+
+</SCRIPT>
+	</tr>
+	</tr>
+		<td>
+			<BR><BR><BR><BR><BR>
+		</td>
+	</tr>
+	</FORM>
+</table>
+
+<SCRIPT type="text/VBScript">
+Set recordSet = oConn2.Execute( "SELECT Data FROM Params WHERE Type='Venue'" )
+If Not recordSet.eof Then
+	document.all.item( "venue_ref" ).scrollIntoView( true )
+End If
+recordSet.close
+
+Set recordSet = oConn2.Execute( "SELECT Data FROM Params WHERE Type='School'" )
+If Not recordSet.eof Then
+	document.all.item( "student_ref" ).scrollIntoView( true )
+End If
+recordSet.close
+
+showCount document.student.grade.selectedindex + 8, document.student.type.selectedindex
+
+</SCRIPT>
+
+</BODY> 
+</HTML> 
