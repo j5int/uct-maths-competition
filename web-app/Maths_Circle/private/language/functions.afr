@@ -1,0 +1,616 @@
+<?
+
+//-------------------------------------------------
+//Title
+//-------------------------------------------------
+
+function ts_title()
+
+{
+
+?>
+
+Suid-Afrikaanse Wiskunde Talentsoektog
+
+<?
+
+}
+
+function ts_sponsor()
+{
+
+?>
+
+Geborg deur
+
+<?
+
+}
+
+//-------------------------------------------------
+//Wrong login
+//-------------------------------------------------
+
+function do_wrong_login_information()
+{
+
+?>
+
+<p align="center">
+Jammer, maar die username of password wat jy verskaf het is verkeerd. Daarom kon jy nie toegang verkry nie. As jy 'n geregistreerde gebruiker is probeer asseblief weer.
+</p>
+
+<table align="center">
+	<tr>
+		<td>
+			<form action="../Talent_Search.php" method="post"> 
+		    	<input type="hidden" name="page" value="login">
+			    <input type="hidden" name="logged_in" value="false">
+		    	<input type="hidden" name="graphics" value="low">
+		    	<input type="hidden" name="language" value="afr">
+		    	<input type="submit" value="Login">
+			</form>
+		</td>
+	</tr>
+</table>
+
+<?
+
+}
+
+//-------------------------------------------------
+//Login
+//-------------------------------------------------
+
+function do_login_message()
+{
+
+global $valid_user;
+
+?>
+
+<p align="center">Persoonlike area van <?echo "{$_SESSION['valid_user']}"; ?>.</p>
+<hr align="center">
+
+<?
+
+}
+
+//-------------------------------------------------
+//Navigation Buttons
+//-------------------------------------------------
+
+function ts_news_button()
+{
+
+	echo "Nuus";
+
+}
+
+function ts_details_button()
+{
+
+	echo "Besonderhede";
+
+}
+
+function ts_password_button()
+{
+
+	echo "Verander&#032Password";
+
+}
+
+function ts_senior_button()
+{
+
+	echo "Senior&#032Afdeling";
+
+}
+
+function ts_internet_button()
+{
+
+	echo "Internet&#032Afdeling";
+
+}
+
+//-------------------------------------------------
+//Page Information
+//-------------------------------------------------
+
+function ts_news()
+{
+
+?>
+
+    <hr align="center">
+
+	<h2 align="center"> Nuus </h2>
+
+<p align="center">Welkom by jou persoonlike area. Kyk gerus na jou uitslae.</p>
+
+
+<?
+
+}
+
+function ts_details()
+{
+
+?>
+
+    <hr align="center">
+
+	<h2 align="center"> Dateer Besonderhede Op</h2>
+
+<?
+
+ 	display_details_form();
+
+}
+
+function ts_password()
+{
+
+?>
+
+    <hr align="center">
+
+	<h2 align="center"> Verander Password </h2>
+
+<?
+
+ 	display_password_form();
+
+}
+
+function ts_senior()
+{
+
+?>
+
+    <hr align="center">
+
+	<h2 align="center"> Senior Afdeling </h2>
+
+	<br>
+
+	<h3 align="center"> Punte vir Senior Talentsoektog </h3>
+
+<?
+
+	display_senior_marks();
+
+?>
+
+	<h3 align="center"> Beste 20 </h3>
+
+<?
+
+	display_senior_top();
+
+}
+
+function ts_internet()
+{
+
+?>
+
+    <hr align="center">
+
+	<h2 align="center"> Internet Afdeling </h2>
+
+<?
+
+	display_internet_questions();
+
+}
+
+//-------------------------------------------------
+//Preferences
+//-------------------------------------------------
+
+function ts_language()
+{
+	
+    echo "afr";
+
+}
+
+function ts_graphics()
+{
+
+global $grap;										
+	
+    echo "{$_SESSION['grap']}";
+
+}
+
+//-------------------------------------------------
+//Update Details
+//-------------------------------------------------
+
+function ts_successful_update()
+{
+
+?>
+
+<p align="center">Jou besonderhede was suksesvol opgedateer.</p>
+
+<?
+
+}
+
+function ts_df_personal_info()
+{
+
+?>
+
+Persoonlike Inligting:
+
+<?
+
+}
+
+function ts_df_name()
+{
+
+?>
+
+Naam:
+
+<?
+
+}
+
+
+function ts_df_initials()
+{
+
+?>
+
+Voorletters:
+
+<?
+
+}
+
+function ts_df_surname()
+{
+
+?>
+
+Van:
+
+<?
+
+}
+
+function ts_df_birth()
+{
+
+?>
+
+Geboortedatum:
+
+<?
+
+}
+
+function ts_df_year()
+{
+
+?>
+
+Jaar
+
+<?
+
+}
+
+function ts_df_month()
+{
+
+?>
+
+Maand
+
+<?
+
+}
+
+function ts_df_day()
+{
+
+?>
+
+Dag
+
+<?
+
+}
+
+function ts_df_gender()
+{
+
+?>
+
+Geslag:
+
+<?
+
+}
+
+function ts_df_male()
+{
+
+?>
+
+Manlik
+
+<?
+
+}
+
+function ts_df_female()
+{
+
+?>
+
+Vroulik
+
+<?
+
+}
+
+function ts_df_language()
+{
+
+?>
+
+Taal:
+
+<?
+
+}
+
+function ts_df_contact_info()
+{
+
+?>
+
+Kontak Inligting:
+
+<?
+
+}
+
+function ts_df_email()
+{
+
+?>
+
+Epos Adres:
+
+<?
+
+}
+
+function ts_df_cell()
+{
+
+?>
+
+Selfoon Nommer:
+
+<?
+
+}
+
+function ts_df_telephone()
+{
+
+?>
+
+Telefoon Nommer:
+
+<?
+
+}
+
+function ts_df_town()
+{
+
+?>
+
+Dorp:
+
+<?
+
+}
+
+function ts_df_post_address()
+{
+
+?>
+
+Posadres:
+
+<?
+
+}
+
+function ts_df_post_code()
+{
+
+?>
+
+Poskode:
+
+<?
+
+}
+
+function ts_df_school()
+{
+
+?>
+
+Skool:
+
+<?
+
+}
+
+function ts_df_grade()
+{
+
+?>
+
+Graad:
+
+<?
+
+}
+
+function ts_df_preferences()
+{
+
+?>
+
+<h2>Talentsoektog Voorkeure:</h2>
+
+Wil jy as anoniem op die beste 20 verskyn?
+
+<?
+
+}
+
+function ts_df_yes()
+{
+
+?>
+
+Ja
+
+<?
+
+}
+
+function ts_df_no()
+{
+
+?>
+
+Nee
+
+<?
+
+}
+
+//-------------------------------------------------
+//Change Password
+//-------------------------------------------------
+
+function ts_pf_old()
+{
+
+?>
+
+Gee asseblief die ou password:
+
+<?
+
+}
+
+function ts_pf_new()
+{
+
+?>
+
+Gee asseblief die nuwe password:
+
+<?
+
+}
+
+function ts_pf_repeat()
+{
+
+?>
+
+Herhaal asseblief die nuwe password:
+
+<?
+
+}
+
+//-------------------------------------------------
+//Senior Section
+//-------------------------------------------------
+
+function ts_sen_round()
+{
+
+	echo "Rondte";
+
+}
+
+function ts_sen_total()
+{
+
+	echo "Totaal";
+
+}
+
+function ts_sen_no_results()
+{
+
+	echo "Geen resultate in databasis.<br/>";
+
+}
+
+function ts_sen_not_reg()
+{
+
+	echo "Jy is nie geregistreer vir die Senior Talentsoektog nie.";
+
+}
+
+function ts_sen_name()
+{
+
+	echo "Naam";
+
+}
+
+function ts_sen_surname()
+{
+
+	echo "Van";
+
+}
+
+function ts_sen_grade()
+{
+
+	echo "Graad";
+
+}
+
+function ts_sen_rounds()
+{
+
+	echo "Rondtes";
+
+}
+
+function ts_sen_anonymous()
+{
+
+	echo "Anoniem";
+
+}
+
+?>
