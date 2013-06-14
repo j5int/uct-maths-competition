@@ -21,7 +21,7 @@ class User(models.Model):
     last_login = models.DateField(null=True, blank=True)
     non_uct = models.IntegerField(db_column='Non_UCT') 
 
-class Schools(models.Model):
+class School(models.Model):
     name = models.CharField(max_length=40L, db_column='Name') 
     key = models.CharField(max_length=3L, db_column='Key') 
     language = models.CharField(max_length=1L, choices=(
@@ -36,7 +36,7 @@ class Schools(models.Model):
     score = models.IntegerField(null=True, db_column='Score', blank=True) 
     email = models.CharField(max_length=30L, db_column='Email', blank=True) 
 
-class SchoolStudents(models.Model):
+class SchoolStudent(models.Model):
     firstname = models.CharField(max_length=32L, db_column='First_name') 
     surname = models.CharField(max_length=32L, db_column='Surname')
     language = models.CharField(max_length=1L, choices=(
@@ -44,7 +44,7 @@ class SchoolStudents(models.Model):
         ('a', 'Afrikaans')
     ), db_column='Language')
     reference = models.CharField(max_length=7L, db_column='Reference') 
-    school = models.ForeignKey('Schools', db_column='School') 
+    school = models.ForeignKey('School', db_column='School') 
     score = models.IntegerField(null=True, db_column='Score', blank=True) 
     rank = models.IntegerField(null=True, db_column='Rank', blank=True) 
     grade = models.IntegerField(db_column='Grade', 
@@ -55,8 +55,8 @@ class SchoolStudents(models.Model):
     sex = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue = models.CharField(max_length=40L, db_column='Venue', blank=True) 
 
-class SchoolUsers(User):
-    school = models.ForeignKey('Schools', db_column='School') 
+class SchoolUser(User):
+    school = models.ForeignKey('School', db_column='School') 
     count = models.IntegerField()
     address = models.CharField(max_length=40L, db_column='Address') 
     town = models.CharField(max_length=20L, db_column='Town') 
