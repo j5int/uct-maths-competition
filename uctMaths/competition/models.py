@@ -8,6 +8,18 @@
 # into your database.
 from __future__ import unicode_literals
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+class User(models.Model):
+    username = models.CharField(max_length=16L)
+    password = models.CharField(max_length=16L)
+    language = models.CharField(max_length=1L, db_column='Language', choices=(
+        ('e', 'English'), 
+        ('a', 'Afrikaans')
+    )) 
+    counter = models.IntegerField()
+    last_login = models.DateField(null=True, blank=True)
+    non_uct = models.IntegerField(db_column='Non_UCT') 
 
 class Schools(models.Model):
     name = models.CharField(max_length=40L, db_column='Name') 
@@ -23,8 +35,6 @@ class Schools(models.Model):
     entered = models.IntegerField(null=True, db_column='Entered', blank=True) 
     score = models.IntegerField(null=True, db_column='Score', blank=True) 
     email = models.CharField(max_length=30L, db_column='Email', blank=True) 
-    class Meta:
-        db_table = 'uctmathcomp_school_info'
 
 class SchoolStudents(models.Model):
     firstname = models.CharField(max_length=32L, db_column='First_name') 
@@ -44,12 +54,9 @@ class SchoolStudents(models.Model):
         ])    
     sex = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue = models.CharField(max_length=40L, db_column='Venue', blank=True) 
-    class Meta:
-        db_table = 'uctmathcomp_school_students'
 
 class SchoolUsers(User):
     school = models.ForeignKey('Schools', db_column='School') 
-    last_login = models.DateField(null=True, blank=True)
     count = models.IntegerField()
     address = models.CharField(max_length=40L, db_column='Address') 
     town = models.CharField(max_length=20L, db_column='Town') 
@@ -59,20 +66,6 @@ class SchoolUsers(User):
     email = models.CharField(max_length=40L, db_column='Email', blank=True) 
     correction = models.IntegerField(db_column='Correction') 
     entered = models.IntegerField(db_column='Entered') 
-    class Meta:
-        db_table = 'uctmathcomp_school_users'
 
-class User(models.Model):
-    username = models.CharField(max_length=16L)
-    password = models.CharField(max_length=16L)
-    language = models.CharField(max_length=1L, db_column='Language', choices=(
-        ('e', 'English'), 
-        ('a', 'Afrikaans')
-    )) 
-    counter = models.IntegerField()
-    last_login = models.DateField(null=True, blank=True)
-) 
-    non_uct = models.IntegerField(db_column='Non_UCT') 
-    class Meta:
-        db_table = 'user'
+
 
