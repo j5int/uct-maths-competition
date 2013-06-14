@@ -22,7 +22,7 @@ class User(models.Model):
     non_uct = models.IntegerField(db_column='Non_UCT') 
     def __unicode__(self):
         return self.username
-    def Meta:
+    class Meta:
         ordering=['username']
 
 class School(models.Model):
@@ -41,7 +41,7 @@ class School(models.Model):
     email = models.CharField(max_length=30L, db_column='Email', blank=True) 
     def __unicode__(self):
         return self.name
-    def Meta:
+    class Meta:
         ordering=['name']
 
 class SchoolStudent(models.Model):
@@ -62,10 +62,10 @@ class SchoolStudent(models.Model):
         ])    
     sex = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue = models.CharField(max_length=40L, db_column='Venue', blank=True) 
-    def __unicode__(self):
-        return self.surname+", "+self.firstname
-    def Meta:
-        ordering=['surname', 'firstname']
+    def __str__(self):
+        return self.reference if self.surname == "" else self.surname+", "+self.firstname
+    class Meta:
+        ordering=['surname', 'firstname','reference']
 
 class SchoolUser(User):
     school = models.ForeignKey('School', db_column='School') 
@@ -78,7 +78,7 @@ class SchoolUser(User):
     email = models.CharField(max_length=40L, db_column='Email', blank=True) 
     correction = models.IntegerField(db_column='Correction') 
     entered = models.IntegerField(db_column='Entered')  
-    def Meta:
+    class Meta:
         ordering=['school']
 
 class Venues(models.Model):
