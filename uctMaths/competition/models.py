@@ -63,7 +63,7 @@ class SchoolStudent(models.Model):
     sex = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     def __str__(self):
-        return self.reference if self.surname == "" else self.surname+", "+self.firstname
+        return str(self.reference) if self.surname == "" else self.surname+", "+self.firstname
     class Meta:
         ordering=['surname', 'firstname','reference']
 
