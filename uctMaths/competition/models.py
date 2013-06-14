@@ -20,6 +20,8 @@ class User(models.Model):
     counter = models.IntegerField()
     last_login = models.DateField(null=True, blank=True)
     non_uct = models.IntegerField(db_column='Non_UCT') 
+    def __unicode__(self):
+        return self.username
 
 class School(models.Model):
     name = models.CharField(max_length=40L, db_column='Name') 
@@ -35,6 +37,8 @@ class School(models.Model):
     entered = models.IntegerField(null=True, db_column='Entered', blank=True) 
     score = models.IntegerField(null=True, db_column='Score', blank=True) 
     email = models.CharField(max_length=30L, db_column='Email', blank=True) 
+    def __unicode__(self):
+        return self.name
 
 class SchoolStudent(models.Model):
     firstname = models.CharField(max_length=32L, db_column='First_name') 
@@ -54,6 +58,8 @@ class SchoolStudent(models.Model):
         ])    
     sex = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue = models.CharField(max_length=40L, db_column='Venue', blank=True) 
+    def __unicode__(self):
+        return self.firstname+" "+self.surname
 
 class SchoolUser(User):
     school = models.ForeignKey('School', db_column='School') 
@@ -65,7 +71,7 @@ class SchoolUser(User):
     fax = models.CharField(max_length=15L, db_column='Fax', blank=True) 
     email = models.CharField(max_length=40L, db_column='Email', blank=True) 
     correction = models.IntegerField(db_column='Correction') 
-    entered = models.IntegerField(db_column='Entered') 
+    entered = models.IntegerField(db_column='Entered')  
 
 
 
