@@ -67,5 +67,13 @@ class SchoolUser(User):
     correction = models.IntegerField(db_column='Correction') 
     entered = models.IntegerField(db_column='Entered') 
 
+class Venues(models.Model):
+    code = models.IntegerField()
+    building = models.CharField(max_length=40L, db_column='Address') 
+    seats = models.IntegerField()
+    bums = models.IntegerField()
+    grade = models.IntegerField()
+    pairs = models.IntegerField()
+    
 
 
