@@ -81,7 +81,7 @@ class SchoolUser(User):
     class Meta:
         ordering=['school']
 
-class Venues(models.Model):
+class Venue(models.Model):
     code = models.IntegerField()
     building = models.CharField(max_length=40L, db_column='Address') 
     seats = models.IntegerField()
