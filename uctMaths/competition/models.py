@@ -73,13 +73,17 @@ class SchoolUser(User):
     class Meta:
         ordering=['school']
 
-class Venues(models.Model):
-    code = models.IntegerField()
-    building = models.CharField(max_length=40L, db_column='Address') 
-    seats = models.IntegerField()
-    bums = models.IntegerField()
-    grade = models.IntegerField()
-    pairs = models.IntegerField()
+class Venue(models.Model):
+    code = models.IntegerField(db_column='Code')
+    building = models.CharField(max_length=40L, db_column='Building') 
+    seats = models.IntegerField(db_column='Seats')
+    bums = models.IntegerField(db_column='Bums')
+    grade = models.IntegerField(db_column='Grade')
+    pairs = models.IntegerField(db_column='Pairs')
+    def __str__(self):
+        return self.building+", "+self.code
+    class Meta:
+        ordering=['building']
 
 
 
