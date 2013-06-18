@@ -5,3 +5,14 @@ CRUD methods
 	add, delete, update? school
 	add, delete, update? user
 	add, delete, update? school teacher
+
+Interface stuff
+	add, delete, update? interfaces for each type
+	front-end logging in
+
+User authentication
+	user management
+	social auth stuff
+	back-end logging in
+
+Permission setup

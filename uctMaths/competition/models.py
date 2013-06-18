@@ -3,15 +3,15 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 class User(models.Model):
-    username = models.CharField(max_length=16L)
-    password = models.CharField(max_length=16L)
+    username = models.CharField(max_length=16L, db_column='Name')
+    password = models.CharField(max_length=16L, db_column='Password')
     language = models.CharField(max_length=1L, db_column='Language', choices=(
         ('e', 'English'), 
         ('a', 'Afrikaans')
     )) 
-    counter = models.IntegerField()
-    last_login = models.DateField(null=True, blank=True)
-    non_uct = models.IntegerField(db_column='Non_UCT') 
+    counter = models.IntegerField(db_column='Count')
+    last_login = models.DateField(null=True, blank=True, db_column='Last Login')
+    non_uct = models.IntegerField(db_column='Non UCT') 
     def __str__(self):
         return self.username
     class Meta:
@@ -65,7 +65,7 @@ class SchoolUser(User):
     address = models.CharField(max_length=40L, db_column='Address') 
     town = models.CharField(max_length=20L, db_column='Town') 
     postal_code = models.CharField(max_length=4L, db_column='Postal_Code') 
-    telephone = models.CharField(max_length=15L, db_column='Telephone') 
+    phone = models.CharField(max_length=15L, db_column='Telephone') 
     fax = models.CharField(max_length=15L, db_column='Fax', blank=True) 
     email = models.CharField(max_length=40L, db_column='Email', blank=True) 
     correction = models.IntegerField(db_column='Correction') 
@@ -84,6 +84,28 @@ class Venue(models.Model):
         return self.building+", "+self.code
     class Meta:
         ordering=['building']
+
+class Invigilator(models.Model):
+    school = models.ForeignKey('School', db_column='School') 
+    name = models.CharField(max_length=40L, db_column='Name') 
+    grade = models.IntegerField(db_column='Grade', null=True
+        validators = [
+            MaxValueValidator(12),
+            MinValueValidator(0)
+        ])     venue = models.ForeignKey('Venue', db_column='Venue', blank=True) 
+    inv_reg = models.CharField(max_length=1L, choices=(
+        ('i', 'Invigilator'), 
+        ('r', 'Registrator')
+    ), db_column='Inv/Reg')
+    phone_h = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
+    phone_w = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
+    fax = models.CharField(max_length=15L, db_column='Fax', blank=True) 
+    fax_w = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
+    email = models.CharField(max_length=40L, db_column='Email', blank=True) 
+    responsible = models.CharField(max_length=40L, db_column='Name')
+    def __str__(self):
+        return name
+        
 
 
 
