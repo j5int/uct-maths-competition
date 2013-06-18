@@ -88,11 +88,12 @@ class Venue(models.Model):
 class Invigilator(models.Model):
     school = models.ForeignKey('School', db_column='School') 
     name = models.CharField(max_length=40L, db_column='Name') 
-    grade = models.IntegerField(db_column='Grade', null=True
+    grade = models.IntegerField(db_column='Grade', null=True,
         validators = [
             MaxValueValidator(12),
             MinValueValidator(0)
-        ])     venue = models.ForeignKey('Venue', db_column='Venue', blank=True) 
+        ])
+    venue = models.ForeignKey('Venue', db_column='Venue', blank=True) 
     inv_reg = models.CharField(max_length=1L, choices=(
         ('i', 'Invigilator'), 
         ('r', 'Registrator')
@@ -102,10 +103,9 @@ class Invigilator(models.Model):
     fax = models.CharField(max_length=15L, db_column='Fax', blank=True) 
     fax_w = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
     email = models.CharField(max_length=40L, db_column='Email', blank=True) 
-    responsible = models.CharField(max_length=40L, db_column='Name')
+    responsible = models.CharField(max_length=40L, db_column='Responsible')
     def __str__(self):
-        return name
+        return self.name +", "+self.school
+    class Meta:
+        ordering=['school', 'name']
         
-
-
-
