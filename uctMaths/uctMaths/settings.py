@@ -11,9 +11,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'uct_maths_competition',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'uct_maths_competition',   
         'USER': 'root',
         'PASSWORD': 'pass',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
@@ -102,6 +101,16 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+#allauth
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+#endallauth
+
 ROOT_URLCONF = 'uctMaths.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
@@ -111,7 +120,18 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    '/home/Desktop/uct-maths/uctMaths/competition/interface'
 )
+
+#allauth
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.request",
+    'django.contrib.auth.context_processors.auth',
+    "allauth.account.context_processors.account",
+    "allauth.socialaccount.context_processors.socialaccount",
+
+)
+#endallauth
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -122,10 +142,19 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'competition',
-    # Uncomment the next line to enable the admin:
+
+    #admin and admin docs
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+
+    #allauth apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.linkedin',
+    #endallauth
 )
 
 # A sample logging configuration. The only tangible logging

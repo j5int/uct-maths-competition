@@ -1,6 +1,7 @@
 from competition.models import *
 from django.contrib import admin
 
+#registers the models with admin
 admin.site.register(User)
 admin.site.register(SchoolUser)
 admin.site.register(School)

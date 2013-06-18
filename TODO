@@ -3,11 +3,13 @@ TODO:
 CRUD methods
 	add, delete, update? student
 	add, delete, update? school
-	add, delete, update? user
 	add, delete, update? school teacher
+	
+	add, delete, update? user
 
 Interface stuff
 	add, delete, update? interfaces for each type
+	views for the tables (eg. the school admin viewing the students they've registered)
 	front-end logging in
 
 User authentication
