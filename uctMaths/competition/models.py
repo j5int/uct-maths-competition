@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-class User(models.Model):
+class SiteUser(models.Model):
     username = models.CharField(max_length=16L, db_column='Name')
     password = models.CharField(max_length=16L, db_column='Password')
     language = models.CharField(max_length=1L, db_column='Language', choices=(
@@ -59,7 +59,7 @@ class SchoolStudent(models.Model):
     class Meta:
         ordering=['surname', 'firstname','reference']
 
-class SchoolUser(User):
+class SchoolUser(SiteUser):
     school = models.ForeignKey('School', db_column='School') 
     count = models.IntegerField()
     address = models.CharField(max_length=40L, db_column='Address') 
