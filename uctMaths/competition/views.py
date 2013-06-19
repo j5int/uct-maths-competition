@@ -10,11 +10,7 @@ def allauthtest(request):
 
 def content (request, ):
    #t = loader.get_template('base.html')
-<<<<<<< HEAD
    return render_to_response('contents.html',{})
-=======
-   return render_to_response('test.html',{})
->>>>>>> f3401bef9e3f2712bc4286fc7042659e4fa9a4ea
    #return HttpResponse(t.render(base.html))
 
 def main (request, ):
@@ -37,7 +33,7 @@ def search(request):
             errors.append('Enter a search term.')
         elif len(q) > 3:
             errors.append('Please enter at most 20 characters.')
-            return HttpResponse('You submisdsdsdstted')
+            return HttpResponse('You submitted')
         else:
             return HttpResponse('You submitted')
     else:

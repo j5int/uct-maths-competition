@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     #allauth
     url(r'^accounts/', include('allauth.urls')),
     #endallauth
+	
 	url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
 
 )
