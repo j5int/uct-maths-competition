@@ -1,75 +1,43 @@
+{% load url from future %}
+<!DOCTYPE html>
 <html>
-	
-<title>UCT Mathematics Competition</title>
-	
-<base target=main>
+  <head>
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
 
-<style type="text/css">
-	<!-- td {  font-family: Arial, Helvetica, sans-serif; font-size: 11pt} -->
-</style>
+    <em>Important: Authentication via OAuth based providers will not work until you <a href="/admin/socialaccount/socialapp/">setup proper applicaton credentials</a>.</em>
 
-<body bgcolor="#330077" text=#ffffff link=#ccccff alink=#ffffff vlink=#cccccc>
-	
-	<center>
+    {% if messages %}
+    <div>
+      <strong>Messages:</strong>
+      <ul>
+	{% for message in messages %}
+	<li>{{message}}</li>
+	{% endfor %}
+      </ul>
+    </div>
+    {% endif %}
 
-		<br>
-		<p align="center"><img src=/static/logo70b.gif width=70 height=70 border=0> </p>
-		<br>
-    
-		<table cellspacing=3 cellpadding=3>
-     		<tr> 
-				<td>
-					<b><a href=main.html>Home</a></b>
-				</td>
-			</tr>
-		    <tr> 
-	    		<td>
-					<b><a href=news.html>News</a></b>
-				</td>
-			</tr>
-		    <tr> 
-	    		<td>
-					<b><a href=login.html>Login</a></b>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><a href=documents/Rules2007.pdf>Rules</a> / <a href=documents/Reels2007.pdf>Re&euml;ls</a></b>
-				</td>
-			</tr>
-		    <tr> 
-	    		<td>
-					<b><a href=entries.html>Entries</a></b>
-				</td>
-			</tr>
-			<tr> 
-	    		<td>
-					<b><a href=awards.html>Awards</a></b>
-				</td>
-			</tr>
-		    <tr> 
-      			<td>
-					<b> <a href=book.html>Training Material</A> </b>
-				</td>
-		    </tr>
-		    <tr> 
-				<td>
-					<b> <a href=contact.html>Contact information</A> </b>
-				</td>
-    		</tr>
-    		<tr> 
-				<td>
-					<b><a href=credits.html>Credits</a> </b>
-				</td>
-    		</tr>
-		</table>
-	
-  <br>
-  <a href="http://www.casio.co.za" target=_blank><img src="graphics/Casio.gif" width="167" height="50" border=0></a>
-  <br>
-  <a href="http://www.oup.com/za" target=_blank><img src="graphics/OxfordUniversityPress.gif" width=167 height=50 border=0></a>
-	
-</center>
-
-</body>
+    <div>
+      <strong>Menu:</strong>
+      <ul>
+	{% if user.is_authenticated %}
+	<li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+	<li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+	{% else %}
+	<li><a href="{% url 'account_login' %}">Sign In</a></li>
+	<li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+	{% endif %}
+      </ul>
+    </div>
+    {% block content %}
+    {% endblock %}
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+  </body>
 </html>

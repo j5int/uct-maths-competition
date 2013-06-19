@@ -4,6 +4,8 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render, render_to_response
 from django.template import loader, Context
 
+def allauthtest(request):
+	return render_to_response('base.html', {})
 
 def current_datetime(request):
     now = datetime.datetime.now()
@@ -12,7 +14,7 @@ def current_datetime(request):
 
 def tester (request):
    #t = loader.get_template('base.html')
-   return render_to_response('base.html',{})
+   return render_to_response('test.html',{})
    #return HttpResponse(t.render(base.html))
 
 def index(request):
