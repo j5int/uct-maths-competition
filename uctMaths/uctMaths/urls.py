@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	#actual site urls
-	url(r'^$', views.allauthtest, name='allauthtest'),
+	#url(r'^$', views.allauthtest, name='allauthtest'),
     url(r'^competition/', include('competition.urls')),
     
 
