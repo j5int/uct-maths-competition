@@ -32,7 +32,6 @@ from . import app_settings
 from .adapter import get_adapter
 
 User = get_user_model()
-
 class RedirectAuthenticatedUserMixin(object):
     def dispatch(self, request, *args, **kwargs):
         # WORKAROUND: https://code.djangoproject.com/ticket/19316
@@ -57,6 +56,7 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
 
     def form_valid(self, form):
         success_url = self.get_success_url()
+        print "success_url", success_url
         return form.login(self.request, redirect_url=success_url)
 
     def get_success_url(self):
@@ -200,6 +200,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         return get_adapter().get_email_confirmation_redirect_url(self.request)
 
 confirm_email = ConfirmEmailView.as_view()
+for i in User.objects.all(): print i
 
 @login_required
 def email(request, **kwargs):
