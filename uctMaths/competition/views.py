@@ -12,6 +12,7 @@ from competition.models import SchoolStudent
 
 
 def allauthtest(request):
+	print "displaying base.html"
 	return render_to_response('base.html', {})
 
 def content (request, ):
@@ -58,7 +59,17 @@ def search_form(request):
 def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
+<<<<<<< HEAD
         return render(request, 'search_results.html',{})
+=======
+        if not q:
+            errors.append('Enter a search term.')
+        elif len(q) > 3:
+            errors.append('Please enter at most 20 characters.')
+            return HttpResponse('You submitted')
+        else:
+            return HttpResponse('You submitted')
+>>>>>>> 778efb3367ab51d86da75dc40a95eb4b9aa58c81
     else:
         return HttpResponse('Please submit a search term.')
 
