@@ -8,7 +8,6 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
@@ -109,6 +108,7 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
+ACCOUNT_AUTHENTICATION_METHOD ="username"
 #endallauth
 
 ROOT_URLCONF = 'uctMaths.urls'
@@ -120,7 +120,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/home/Desktop/uct-maths/uctMaths/competition/interface'
+    '/home/aureliad/Desktop/uct-maths/uctMaths/competition/interface'
 )
 
 #allauth

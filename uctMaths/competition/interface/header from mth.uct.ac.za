@@ -1,8 +1,0 @@
-<div id="header">
-	<img id="Image-Maps_1" src="/images/head5b.jpg"  alt="UCT - Department of Mathematics and Applied Mathematics" usemap="#Image-Maps_1" border="0" width="1000" height="200" />
-	<map id="_Image-Maps_1" name="Image-Maps_1">
-	<area shape="rect" coords="0,0,132,154" href="http://www.uct.ac.za" alt="UCT Home" title="UCT Home"    />
-	<area shape="rect" coords="130,0,994,195" href="http://www.math.uct.ac.za" alt="Department of Mathematics and Applied Mathematics" title="Department of Mathematics and Applied Mathematics"    />
-	<area shape="rect" coords="998,198,1000,200" href="http://www.image-maps.com/" alt="Image Map" title="Image Map" />
-	</map>
-</div>

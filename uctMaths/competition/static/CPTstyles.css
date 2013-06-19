@@ -269,7 +269,7 @@
 	#topnav li li a:hover,
 	#topnav li li a:active,
 	#topnav li li.sel a {
-		<! This is where you can make it bold when you hover over>
+		/* This is where you can make it bold when you hover over*/
 	}
 
 
