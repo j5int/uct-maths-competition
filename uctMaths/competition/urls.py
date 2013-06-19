@@ -5,6 +5,6 @@ from competition import views
 urlpatterns = patterns('',
   url(r'^$', views.tester, name='tester'),
   #url(r'^$', views.current_datetime, name='current_datetime')
-  
-    
+  url(r'^$', views.index, name='index'),
+
 )

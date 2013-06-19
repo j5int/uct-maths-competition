@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-class User(models.Model):
+class SiteUser(models.Model):
     username = models.CharField(max_length=16L, db_column='Name')
     password = models.CharField(max_length=16L, db_column='Password')
     language = models.CharField(max_length=1L, db_column='Language', choices=(
@@ -59,7 +59,7 @@ class SchoolStudent(models.Model):
     class Meta:
         ordering=['surname', 'firstname','reference']
 
-class SchoolUser(User):
+class SchoolUser(SiteUser):
     school = models.ForeignKey('School', db_column='School') 
     count = models.IntegerField()
     address = models.CharField(max_length=40L, db_column='Address') 
@@ -71,7 +71,7 @@ class SchoolUser(User):
     correction = models.IntegerField(db_column='Correction') 
     entered = models.IntegerField(db_column='Entered')  
     class Meta:
-        ordering=['school']
+        ordering=['school', 'username']
 
 class Venue(models.Model):
     code = models.IntegerField(db_column='Code')
@@ -83,11 +83,12 @@ class Venue(models.Model):
     def __str__(self):
         return self.building+", "+self.code
     class Meta:
-        ordering=['building']
+        ordering=['building', 'code']
 
 class Invigilator(models.Model):
     school = models.ForeignKey('School', db_column='School') 
-    name = models.CharField(max_length=40L, db_column='Name') 
+    firstname = models.CharField(max_length=32L, db_column='First_name') 
+    surname = models.CharField(max_length=32L, db_column='Surname')
     grade = models.IntegerField(db_column='Grade', null=True,
         validators = [
             MaxValueValidator(12),
@@ -105,8 +106,8 @@ class Invigilator(models.Model):
     email = models.CharField(max_length=40L, db_column='Email', blank=True) 
     responsible = models.CharField(max_length=40L, db_column='Responsible')
     def __str__(self):
-        return self.name +", "+self.school
+        return self.surname+", "+self.firstname
     class Meta:
-        ordering=['school', 'name']
+        ordering=['school', 'surname', 'firstname']
         
 
