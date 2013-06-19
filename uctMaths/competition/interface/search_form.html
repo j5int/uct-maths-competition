@@ -1,18 +1,31 @@
 <html>
 <head>
-    <title>Search</title>
+    <title>Adding Student</title>
 </head>
 <body>
-	 {% if errors %}
+    <h1>Adding Students</h1>
+
+    {% if errors %}
         <ul>
             {% for error in errors %}
             <li>{{ error }}</li>
             {% endfor %}
         </ul>
     {% endif %}
-    <form action="/competition/search/" method="get">
-        <input type="text" name="q">
-        <input type="submit" value="Search">
+
+    <form action="." method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>Name: <input type="text" name="firstname"></p>
+        <p>Surname: <input type="text" name="surname"></p>
+        <p>Language: <input type ="text" name="language"></p>
+        <p>Reference: <input type ="text" name="reference"></p>
+        <p>School: <input type ="text" name="school"></p>
+        <p>Grade: <input type ="text" name="grade"></p>
+        <p>Sex: <input type ="text" name="sex"></p>
+        
+        
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>
