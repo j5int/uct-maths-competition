@@ -4,10 +4,16 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render, render_to_response
 from django.template import loader, Context
 
+def allauthtest(request):
+	return render_to_response('base.html', {})
 
 def content (request, ):
    #t = loader.get_template('base.html')
+<<<<<<< HEAD
    return render_to_response('contents.html',{})
+=======
+   return render_to_response('test.html',{})
+>>>>>>> f3401bef9e3f2712bc4286fc7042659e4fa9a4ea
    #return HttpResponse(t.render(base.html))
 
 def main (request, ):
