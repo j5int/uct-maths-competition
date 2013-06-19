@@ -2,7 +2,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+
 class SiteUser(models.Model):
+    """All users of the site. This may become irrelevent (depending on the use of allauth User table. Should be associated with a username in User table"""
     username    = models.CharField(max_length=16L, db_column='Name')
     password    = models.CharField(max_length=16L, db_column='Password')
     language    = models.CharField(max_length=1L, db_column='Language', choices=(
@@ -15,9 +17,10 @@ class SiteUser(models.Model):
     def __str__(self):
         return self.username
     class Meta:
-        ordering = ['username']
+        ordering = ['username'] #defines the way the records are sorted.
 
 class School(models.Model):
+    """Contains school information. Duplicates should not be allowed."""
     name        = models.CharField(max_length=40L, db_column='Name') 
     key         = models.CharField(max_length=3L, db_column='Key') 
     language    = models.CharField(max_length=1L, choices=(
@@ -34,9 +37,10 @@ class School(models.Model):
     def __str__(self):
         return self.name
     class Meta:
-        ordering = ['name']
+        ordering = ['name']     #defines the way the records are sorted.
 
 class SchoolStudent(models.Model):
+    """A single student. Not a User. Score and Rank will added/updated by the admin."""
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
     surname     = models.CharField(max_length=32L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
@@ -57,9 +61,10 @@ class SchoolStudent(models.Model):
     def __str__(self):
         return "pair "+str(self.reference) if self.surname == "" else self.surname+", "+self.firstname
     class Meta:
-        ordering = ['surname', 'firstname','reference']
+        ordering = ['surname', 'firstname','reference'] #defines the way the records are sorted.
 
 class SchoolUser(SiteUser):
+    """The administrator for a single school. A User and SiteUser - can register/update/remove SchoolStudents and Invigilators."""
     school      = models.ForeignKey('School', db_column='School') 
     count       = models.IntegerField()
     address     = models.CharField(max_length=40L, db_column='Address') 
@@ -71,9 +76,10 @@ class SchoolUser(SiteUser):
     correction  = models.IntegerField(db_column='Correction') 
     entered     =  models.IntegerField(db_column='Entered')  
     class Meta:
-        ordering = ['school', 'username']
+        ordering = ['school', 'username'] #defines the way the records are sorted.
 
 class Venue(models.Model):
+    """Venues are locations for the event. Many SchoolStudents to one Venue."""
     code        = models.IntegerField(db_column='Code')
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
@@ -83,9 +89,10 @@ class Venue(models.Model):
     def __str__(self):
         return self.building+", "+self.code
     class Meta:
-        ordering = ['building', 'code']
+        ordering = ['building', 'code'] #defines the way the records are sorted.
 
 class Invigilator(models.Model):
+    """Invigilators registered by SchoolUsers. Many Invigilator to one School. Many Invigilators to one Venue."""
     school      = models.ForeignKey('School', db_column='School') 
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
     surname     = models.CharField(max_length=32L, db_column='Surname')
@@ -108,6 +115,6 @@ class Invigilator(models.Model):
     def __str__(self):
         return self.surname+", "+self.firstname
     class Meta:
-        ordering = ['school', 'surname', 'firstname']
+        ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
         
 

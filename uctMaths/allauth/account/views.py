@@ -32,9 +32,8 @@ from . import app_settings
 from .adapter import get_adapter
 
 def allauthtest(request):
-    print "displaying base.html"
     return render_to_response('base.html', {})
-    
+
 User = get_user_model()
 class RedirectAuthenticatedUserMixin(object):
     def dispatch(self, request, *args, **kwargs):

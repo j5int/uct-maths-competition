@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404, render, render_to_response
 from django.template import loader, Context
 
 def allauthtest(request):
-	print "displaying base.html"
 	return render_to_response('base.html', {})
 
 def content (request, ):
