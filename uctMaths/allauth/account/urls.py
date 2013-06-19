@@ -22,5 +22,5 @@ urlpatterns = patterns("",
     url(r"^password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$", views.password_reset_from_key, name="account_reset_password_from_key"),
     
     #localhost/accounts/
-    url(r'^$', views.allauthtest, name='test'),
+    url(r'^$', views.allauthtest, name='allauthtest'),
 )
