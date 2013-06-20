@@ -21,16 +21,19 @@ class StudentForm (forms.Form):
 
 #*********************************
 #FORM TO ENTER A NEW SCHOOL
-# class SchoolForm (ModelForm):
-#     class Meta:
-#         model=School
+class SchoolForm (ModelForm):
+    class Meta:
+        model=School
 
-# class SchoolForm (forms.Form):
-#         fields = ['firstname', 'surname', 'language', 'school','grade','sex','venue']
-#         firstname = forms.CharField()
-#         surname = forms.CharField()
-#         language = forms.CharField()
-#         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all())
-#         grade = forms.IntegerField()
-#         sex = forms.CharField ()      
+class SchoolForm (forms.Form):
+        fields = ['name', 'language', 'address','phone','fax','contact','email']
+        name = forms.CharField()
+        language = forms.CharField()
+        address = forms.CharField()
+        phone = forms.CharField()
+        fax = forms.CharField ()   
+        contact = forms.CharField()
+        email = forms.CharField ()    
+
+#********************************  
 
