@@ -1,9 +1,9 @@
 <html>
 <head>
-    <title>Adding School</title>
+    <title>Testing Display venue</title>
 </head>
 <body>
-    <h1>Adding School</h1>
+    <h1>Testing Display venue</h1>
 
     {% if errors %}
         <ul>
@@ -16,16 +16,13 @@
     <form action="." method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <p>Name: <input type="text" name="name"></p>
-        <p>Language: <select name = "language">
-            <option value="a">Afrikaans</option>
-            <option value="e">English</option>
-         </select></p></p>
-        <p>Address: <input type ="text" name="address"></p>
-        <p>Phone: <input type ="text" name="phone"></p>
-        <p>Fax: <input type ="text" name="fax"></p>
-        <p>Contact: <input type ="text" name="contact"></p>
-        <p>Email: <input type ="text" name="email"></p>
+         
+        <p>Tester: <input type="text" name="building"></p>
+        <p>School:
+            {% for entry in temp %}
+               {{ entry.code }}
+            {% endfor %}
+       </p>
 
 
 
