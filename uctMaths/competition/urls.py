@@ -13,7 +13,8 @@ urlpatterns = patterns('',
 
 	#new form for student registration (start)
 	url(r'^regStudent/', views.regStudent, name='regStudent'),
-	url(r'^regSchool/', views.regSchool, name='regStudent'),
+	url(r'^regSchool/', views.regSchool, name='regSchool'),
+	url(r'^regInvigilator/', views.regInvigilator, name='regInvigilator'),
 
 	#test search bars
 	#url(r'^search-form/$', views.search_form),
