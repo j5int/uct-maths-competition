@@ -14,19 +14,22 @@ from competition.models import SchoolStudent
 def allauthtest(request):
 	return render_to_response('base.html', {})
 
-def content (request, ):
+def content (request):
    #t = loader.get_template('base.html')
    return render_to_response('contents.html',{})
    #return HttpResponse(t.render(base.html))
 
-def main (request, ):
+def profile(request):
+    return render_to_response('profile.html',{})
+
+def main (request):
    return render_to_response('main.html',{})
 
-def regStudent (request, ):
+def regStudent (request):
    return render_to_response('regStudent.html',{})
 
-#def index(request):
- #   return render_to_response('onlinemaths.html', {})
+def index(request):
+    return render_to_response('onlinemaths.html', {})
     
 def search_form(request):
     if request.method == 'POST': # If the form has been submitted...

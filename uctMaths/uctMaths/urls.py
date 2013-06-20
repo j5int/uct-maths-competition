@@ -9,7 +9,7 @@ urlpatterns = patterns('',
 	#the sign in/up page at root
 	url(r'^$', views.allauthtest, name='allauthtest'),
 	
-	#Aurelia is not uite sure what this does. It make the login work.
+	#Aurelia is not quite sure what this does. It make the login work.
 	url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
 
 	#loads competitions/urls.py
