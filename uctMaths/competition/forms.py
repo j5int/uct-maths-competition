@@ -39,7 +39,7 @@ class SchoolForm (forms.Form):
 #FORM TO ENTER NEW INVIGILATOR
 class InvigilatorForm (ModelForm):
     class Meta:
-        model=School
+        model=Invigilator
 
 class InvigilatorForm (forms.Form):
         fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email','responsible']
@@ -55,5 +55,20 @@ class InvigilatorForm (forms.Form):
         fax_w= forms.CharField()
         email = forms.CharField ()  
         responsible = forms.CharField()
+
+#*****************************************
+#FORM TO ENTER NEW VENUE
+class VenueForm(ModelForm):
+    class Meta:
+        model=Venue
+
+class VenueForm(forms.Form):
+        fields = ['code','building','seats','bums','grade','pairs']
+        code = forms.IntegerField()
+        building = forms.CharField()
+        seats = forms.IntegerField ()   
+        bums = forms.IntegerField()
+        grade = forms.IntegerField ()  
+        pairs = forms.IntegerField()
 
 #*****************************************

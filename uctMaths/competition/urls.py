@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 	url(r'^regStudent/', views.regStudent, name='regStudent'),
 	url(r'^regSchool/', views.regSchool, name='regSchool'),
 	url(r'^regInvigilator/', views.regInvigilator, name='regInvigilator'),
+	url(r'^regVenue/', views.regVenue, name='regVenue'),
 
 	#test search bars
 

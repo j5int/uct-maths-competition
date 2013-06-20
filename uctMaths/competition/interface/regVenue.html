@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>Adding Venue</title>
+</head>
+<body>
+    <h1>Adding Venue</h1>
+
+    <form action="." method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>Code: <input type="text" name="code"></p>
+        <p>Building: <input type="text" name="building"></p>
+        <p>Seats: <input type ="text" name="seats"></p>
+        <p>Bums: <input type ="text" name="bums"></p>
+        <p>Grade: <input type ="text" name="grade"></p>
+        <p>Pairs: <input type ="text" name="pairs"></p>
+    
+    
+
+        
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

@@ -7,8 +7,8 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django import forms
-from competition.forms import StudentForm, SchoolForm, InvigilatorForm
-from competition.models import SchoolStudent, School, Invigilator 
+from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueForm
+from competition.models import SchoolStudent, School, Invigilator, Venue 
 
 
 def allauthtest(request):
@@ -132,7 +132,36 @@ def regInvigilator (request):
   c.update(csrf(request))
   return render_to_response('regInvigilator.html', c)
 
-  #***************************************
+#***************************************
+#ADDING VENUE TO DB
+def regVenue (request):
+  if request.method == 'POST': # If the form has been submitted...
+        form = VenueForm(request.POST) # A form bound to the POST data
+        #print "FORM ", form
+        print "here1", form
+        print "here2", form.is_valid()
+        if form.is_valid(): # All validation rules pass
+            # Process the data in form.cleaned_data
+            # ...
+            code = form.cleaned_data['code']
+            building = form.cleaned_data['building']
+            seats = form.cleaned_data['seats']
+            bums = form.cleaned_data['bums']
+            grade = form.cleaned_data['grade']
+            pairs = form.cleaned_data['pairs']
+                        
+            query = Venue(code = code , building = building  ,
+                seats = seats, bums = bums , grade = grade, pairs = pairs)
+            query.save()
 
+            return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+  else:
+        form = VenueForm() # An unbound form
+   
+  c = {}
+  c.update(csrf(request))
+  return render_to_response('regVenue.html', c)
+
+#******************************************  
     
     
