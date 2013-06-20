@@ -72,3 +72,7 @@ class VenueForm(forms.Form):
         pairs = forms.IntegerField()
 
 #*****************************************
+#TESTING TO FILTER
+class testForm(forms.Form):
+        building = forms.CharField()
+        

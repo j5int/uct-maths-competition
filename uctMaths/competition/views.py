@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django import forms
-from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueForm
+from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueForm, testForm
 from competition.models import SchoolStudent, School, Invigilator, Venue 
 
 
@@ -163,5 +163,24 @@ def regVenue (request):
   return render_to_response('regVenue.html', c)
 
 #******************************************  
-    
+def search_form (request):
+  building = ""
+  if request.method == 'POST': # If the form has been submitted...
+        form = testForm(request.POST) # A form bound to the POST data
+        #print "FORM ", form
+        print "here1", form
+        print "here2", form.is_valid()
+        if form.is_valid(): # All validation rules pass
+            # Process the data in form.cleaned_data
+            # ...
+            building = form.cleaned_data['building']
+            
+            #return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+  else:
+        form = testForm() # An unbound form
+  venueOptions = Venue.objects.filter(building=building)
+  print venueOptions
+  c = {'temp':venueOptions}
+  c.update(csrf(request))
+  return render_to_response('search_form.html', c)
     
