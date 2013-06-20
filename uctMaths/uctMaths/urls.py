@@ -6,8 +6,13 @@ from competition import views
 admin.autodiscover()
 
 urlpatterns = patterns('',
-	#actual site urls
-	#url(r'^$', views.allauthtest, name='allauthtest'),
+	#the sign in/up page at root
+	url(r'^$', views.allauthtest, name='allauthtest'),
+	
+	#Aurelia is not uite sure what this does. It make the login work.
+	url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
+
+	#loads competitions/urls.py
     url(r'^competition/', include('competition.urls')),
     
 
@@ -15,11 +20,7 @@ urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
-    #allauth
+    #load allauth/urls.py
     url(r'^accounts/', include('allauth.urls')),
-    #endallauth
-	
-	#url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
-
 
 )
