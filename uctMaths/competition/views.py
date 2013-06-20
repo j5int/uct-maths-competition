@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django import forms
 from competition.forms import StudentForm
-from competition.models import SchoolStudent
+from competition.models import SchoolStudent, School 
 
 
 def allauthtest(request):
@@ -22,13 +22,14 @@ def content (request, ):
 def main (request, ):
    return render_to_response('main.html',{})
 
-def regStudent (request, ):
-   return render_to_response('regStudent.html',{})
+# def regStudent (request, ):
+#    return render_to_response('regStudent.html',{})
 
 #def index(request):
  #   return render_to_response('onlinemaths.html', {})
     
-def search_form(request):
+def regStudent(request):
+
    if request.method == 'POST': # If the form has been submitted...
         form = StudentForm(request.POST) # A form bound to the POST data
         #print "FORM ", form
@@ -39,22 +40,22 @@ def search_form(request):
             # ...
             firstname = form.cleaned_data['firstname']
             surname = form.cleaned_data['surname']
-            language = form.cleaned_data['reference']
-            reference = form.cleaned_data['reference']
+            language = form.cleaned_data['language']
             school = form.cleaned_data['school']
             grade = form.cleaned_data['grade']
             sex = form.cleaned_data['sex']
             
-            query = SchoolStudent(firstname = firstname , surname = surname, language = language , reference = reference ,
+            query = SchoolStudent(firstname = firstname , surname = surname, language = language  ,
                 school = school, grade = grade , sex = sex)
             query.save()
 
             return HttpResponseRedirect('/thanks/') # Redirect after POST
    else:
         form = StudentForm() # An unbound form
-   c = {}
+   schoolOptions = School.objects.all()
+   c = {'schools':schoolOptions}
    c.update(csrf(request))
-   return render_to_response('search_form.html', c)
+   return render_to_response('regStudent.html', c)
 
 def search(request):
     if 'q' in request.GET and request.GET['q']:

@@ -19,9 +19,11 @@
         <p>Name: <input type="text" name="firstname"></p>
         <p>Surname: <input type="text" name="surname"></p>
         <p>Language: <input type ="text" name="language"></p>
-        <p>Reference: <input type ="text" name="reference"></p>
-        <p>School: <select name = "school"><option value="150">American Int. C T</option>
-</select></p>
+        <p>School: <select name = "school">
+            {% for entry in schools %}
+                <option value="{{ entry.id }}">{{ entry.name }}</option>
+            {% endfor %}
+        </select></p>
         <!-- <p>School: <input type ="checkbox" name="school"></p> -->
         <p>Grade: <input type ="text" name="grade"></p>
         <p>Sex: <input type ="text" name="sex"></p>
