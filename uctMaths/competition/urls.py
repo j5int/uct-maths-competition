@@ -4,7 +4,6 @@ from competition import views
 
 
 urlpatterns = patterns('',
-	#original mth.uct.ac.za home
 	url(r'^$', views.index, name='mths.uct.ac.za'),
 	#original umc sidebar
 	url(r'^content/', views.content, name='content'),
@@ -16,9 +15,8 @@ urlpatterns = patterns('',
 
 	#test search bars
 	url(r'^search-form/$', views.search_form),
-	url(r'^search/$', views.search),
+	url(r'^search/$', views.search),	
 	
 	url(r'^accounts/profile/$',views.profile),
-
 
 )

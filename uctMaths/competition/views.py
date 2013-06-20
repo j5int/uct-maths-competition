@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django import forms
-from competition.forms import TestContact
+from competition.forms import StudentForm
 from competition.models import SchoolStudent
 
 
@@ -32,9 +32,11 @@ def index(request):
     return render_to_response('onlinemaths.html', {})
     
 def search_form(request):
-    if request.method == 'POST': # If the form has been submitted...
-        form = TestContact(request.POST) # A form bound to the POST data
-       # print "FORM ", form.as_p ()
+   if request.method == 'POST': # If the form has been submitted...
+        form = StudentForm(request.POST) # A form bound to the POST data
+        #print "FORM ", form
+        print "here1", form
+        print "here2", form.is_valid()
         if form.is_valid(): # All validation rules pass
             # Process the data in form.cleaned_data
             # ...
@@ -45,22 +47,22 @@ def search_form(request):
             school = form.cleaned_data['school']
             grade = form.cleaned_data['grade']
             sex = form.cleaned_data['sex']
-            venue = form.cleaned_data['venue']
-
+            
             query = SchoolStudent(firstname = firstname , surname = surname, language = language , reference = reference ,
-                school = school, grade = grade , sex = sex, venue = venue)
+                school = school, grade = grade , sex = sex)
             query.save()
 
             return HttpResponseRedirect('/thanks/') # Redirect after POST
-    else:
-        form = TestContact() # An unbound form
-    c = {}
-    c.update(csrf(request))
-    return render_to_response('search_form.html', c)
+   else:
+        form = StudentForm() # An unbound form
+   c = {}
+   c.update(csrf(request))
+   return render_to_response('search_form.html', c)
 
 def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
+
         if not q:
             errors.append('Enter a search term.')
         elif len(q) > 3:
@@ -83,9 +85,6 @@ def student(request):
             query.save()
 
             return HttpResponseRedirect('/thanks/') # Redirect after POST
-    else:
-        form = TestContact() # An unbound form
 
-    return render_to_response('search_form.html', {
-        'form': form,
-    })
+    
+    
