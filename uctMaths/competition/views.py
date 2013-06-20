@@ -25,15 +25,7 @@ def profile(request):
 def main (request):
    return render_to_response('main.html',{})
 
-<<<<<<< HEAD
-def regStudent (request):
-   return render_to_response('regStudent.html',{})
 
-def index(request):
-    return render_to_response('onlinemaths.html', {})
-    
-def search_form(request):
-=======
 # def regStudent (request, ):
 #    return render_to_response('regStudent.html',{})
 
@@ -43,8 +35,6 @@ def search_form(request):
 #******************************************
 #ADDING STUDENT TO DB    
 def regStudent(request):
-
->>>>>>> 15e2793510d8fd37350319c28874882a4fa0eb86
    if request.method == 'POST': # If the form has been submitted...
         form = StudentForm(request.POST) # A form bound to the POST data
         #print "FORM ", form
