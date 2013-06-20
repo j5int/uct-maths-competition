@@ -2,8 +2,10 @@
 /* Form 1 style */
 
 .form1 {
-	width: 450px;
-	float: left;
+	width: 50%;
+	margin-left: 25%;
+	margin-right: 25%;
+	padding: 10px;
 	background: #fff;
 	color: #777;
 	-webkit-box-shadow: 0px 0px 8px 2px #d1d1d1;
@@ -32,8 +34,8 @@
 	color: #fff;
 	font-weight: bold;
 	border-bottom: 1px solid #00548f;
-	width: 430px;
-	background: #378fcd; /* Old browsers */
+/*	width: 430px;
+*/	background: #378fcd; /* Old browsers */
 	background: -moz-linear-gradient(top, #378fcd 0%, #2a6e9d 50%, #00548f 51%, #00548f 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#378fcd), color-stop(50%,#2a6e9d), color-stop(51%,#00548f), color-stop(100%,#00548f)); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top, #378fcd 0%,#2a6e9d 50%,#00548f 51%,#00548f 100%); /* Chrome10+,Safari5.1+ */
@@ -47,6 +49,7 @@
 	width: 410px;
 	border-bottom: 1px solid #ddd;
 	margin-bottom: 10px;
+	padding-left: 10px;
 	margin: 20px;
 	overflow: hidden;
 }
