@@ -8,7 +8,7 @@
     {% if errors %}
         <ul>
             {% for error in errors %}
-            <li>{{ error }}</li>
+             <p style="color: red;">ERROR</p>
             {% endfor %}
         </ul>
     {% endif %}
@@ -20,10 +20,12 @@
         <p>Surname: <input type="text" name="surname"></p>
         <p>Language: <input type ="text" name="language"></p>
         <p>Reference: <input type ="text" name="reference"></p>
-        <p>School: <input type ="text" name="school"></p>
+        <p>School: <select name = "school"><option value="150">American Int. C T</option>
+</select></p>
+        <!-- <p>School: <input type ="checkbox" name="school"></p> -->
         <p>Grade: <input type ="text" name="grade"></p>
         <p>Sex: <input type ="text" name="sex"></p>
-        
+
         
         <input type="submit" value="Submit">
     </form>
