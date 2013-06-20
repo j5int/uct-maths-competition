@@ -1,11 +1,11 @@
-{% extends "account/base.html" %}
+{% extends "plain_base.html" %}
 
 {% load i18n %}
 {% load account %}
 {% load url from future %}
 
 {% block head %}
-  <title>Sign In</title>
+  <title>Log In</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="stylesheet" href="/static/login.css" type="text/css" />
@@ -53,28 +53,10 @@ for a {{site_name}} account and sign in below:{% endblocktrans %}</p>
 
     <form class="form1" method="POST" action="{% url 'account_login' %}">
 
-      <div class="formtitle">Login to your account</div>
+      <div class="formtitle"> Log in to your account</div>
       {% csrf_token %}
       {{ form.as_p }}
       {% if redirect_field_value %}
-
-      <div class="input">
-        <div class="inputtext">Username: </div>
-        <div class="inputcontent">
-          <input type="text" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-        </div>
-      </div>
-
-      <div class="input nobottomborder">
-        <div class="inputtext">Password: </div>
-        <div class="inputcontent">
-
-          <input type="password" />
-          <br/><a href="#">Forgot password?</a>
-
-        </div>
-      </div>
-
       {% endif %}
       <div class="buttons">
 

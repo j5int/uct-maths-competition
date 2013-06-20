@@ -11,7 +11,7 @@ from competition.forms import StudentForm, SchoolForm
 from competition.models import SchoolStudent, School 
 
 
-def allauthtest(request):
+def index(request):
 	return render_to_response('base.html', {})
 
 def content (request):

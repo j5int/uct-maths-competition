@@ -143,8 +143,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'competition',
-    #admin and admin docs
 
+    #admin and admin docs
     'django.contrib.admin',
     'django.contrib.admindocs',
 
