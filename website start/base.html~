@@ -5,10 +5,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
- 	<link rel="stylesheet" href="/static/style.css" type="text/css" />
+ 	<link rel="stylesheet" href="style.css" type="text/css" />
   	<title>UCT Maths Competition Portal</title>
-	{% block extra_head %}
-	{% endblock %}
 </head>
 
 <body>
@@ -18,11 +16,11 @@
 
 		<table align='center'>
 		<tr>
-			<td><img src='/static/uct.gif' width='70'align='left' padding='100'/></td>
+			<td><img src='uct.gif' width='70'align='left' padding='100'/></td>
 			<td><div class='title'>UCT Maths Competition<div/>
 				<div class="byline">Administration Portal</div>
 			</td>
-			<td><img src="/static/maths.gif" width='70'/></td>
+			<td><img src="maths.gif" width='70'/></td>
 		</tr>
 		</table>
 	</div>
