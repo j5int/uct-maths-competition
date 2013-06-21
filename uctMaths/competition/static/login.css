@@ -161,6 +161,7 @@
 	text-shadow: -1px -1px #00548f;
 	float: right;
 	margin-left: 10px;
+	margin-top: 10px;
 	cursor: pointer;
 }
 
@@ -203,4 +204,12 @@ label {
 	display: block; 
 	width: 10em; 
 	float: left; 
+}
+
+.right{
+	float: right;
+}
+
+.left{
+	float: left;
 }

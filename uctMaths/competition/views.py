@@ -105,7 +105,7 @@ def newschools (request):
   else:
         form = SchoolForm() # An unbound form
   
-  c = {}
+  c = {'range':range(2)}
   c.update(csrf(request))
   return render_to_response('newschools.html', c)
 
@@ -142,7 +142,7 @@ def newinvigilators (request):
   else:
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
-  c = {'schools':schoolOptions}
+  c = {'schools':schoolOptions, 'range':range(2)}
   c.update(csrf(request))
   return render_to_response('newinvigilators.html', c)
 
@@ -170,7 +170,7 @@ def newvenues (request):
   else:
         form = VenueForm() # An unbound form
    
-  c = {}
+  c = {'range':range(2)}
   c.update(csrf(request))
   return render_to_response('newvenues.html', c)
 

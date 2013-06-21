@@ -20,6 +20,7 @@
             <th>Contact</th>
             <th>Email</th>
         </tr>
+        {%for i in range%}
         <tr>
             <td><input type="text" name="name"></td>
             <td><select name = "language">
@@ -32,8 +33,9 @@
             <td><input type ="text" name="contact"></td>
             <td><input type ="text" name="email"></td>
         </tr>
+        {%endfor%}
     </table>
-    <input type="submit" value="Submit">
+    <input class="bluebutton left" type="submit" value="Submit">
 
 
         <!-- <p>Name: <input type="text" name="name"></p>
