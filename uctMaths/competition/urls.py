@@ -11,12 +11,17 @@ urlpatterns = patterns('',
 	#original umc home
 	url(r'^main/', views.main, name='main'),
 
-	#new form for student registration (start)
-	url(r'^regStudent/', views.regStudent, name='regStudent'),
-	url(r'^regSchool/', views.regSchool, name='regSchool'),
-	url(r'^regInvigilator/', views.regInvigilator, name='regInvigilator'),
-	url(r'^regVenue/', views.regVenue, name='regVenue'),
+	#table views
+	url(r'^students/', views.students, name='students'),
+	url(r'^schools/', views.schools, name='schools'),
+	url(r'^invigilators/', views.invigilators, name='invigilators'),
+	url(r'^venues/', views.venues, name='venues'),
 
+	#registration views
+	url(r'^register/students/', views.newstudents, name='newstudents'),
+	url(r'^register/schools/', views.newschools, name='newschools'),
+	url(r'^register/invigilators/', views.newinvigilators, name='newinvigilators'),
+	url(r'^register/venues/', views.newvenues, name='newvenues'),
 	#test search bars
 
 	url(r'^search-form/$', views.search_form),

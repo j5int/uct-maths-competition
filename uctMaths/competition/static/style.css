@@ -4,20 +4,18 @@ body {
 	padding: 0;
 	background: #f4f4f4;
 	font-family: "Helvetica Neue" ,Helvetica, Arial,sans-serif;
+	overflow: scroll;
 }
+
 
 .link { text-align: center; clear: both; padding: 20px 0; }
 .link a { color: #333333; }
 
-.wrapper {
-	width: 960px;
-	margin: 50px auto;
-}
 
 
 .header {
 	text-align: center;
-    height:100px;
+    height:7.5em;
     background:#00548f;
 	padding-top: 20px;
 	padding-bottom: 20px; 
@@ -25,8 +23,7 @@ body {
 	text-transform: uppercase;
 }
 	
-	.title
-	{
+.title	{
 		padding-left: 50px;
 		padding-right: 50px;
 		vertical-align: center;
@@ -36,8 +33,7 @@ body {
 		color: white;
 	}
 	
-	.byline
-	{
+.byline	{
 		letter-spacing: 0.15em;
 		text-transform: uppercase;
 		font-weight: 400;
@@ -45,25 +41,36 @@ body {
 		color: #ababab;
 	}
 
-.content {
-    /*width:960px;*/
-    background: #F0F0F0;
-    border: 1px solid #CCC;
-    height: 2000px;
+#content {
+    /*width: 80%;*/
+    /*background: #F0F0F0;*/
+    min-height: 20em;
+    overflow: auto;
+    /*border: 1px solid #CCC;*/
     margin: 20px auto;
    	font: 14px;
 
 }
 
-/*sidebar*/
+/*Sidebar*/
+#hide{
+	float: left;
+	width: 25px;
+	background:#00548f;
+	padding-right: 12px;
+	margin-right: 20px;
+	padding-top: 1em;
+	min-height:49em;
+}
 
 #sidebar
 	{
 		float: left;
-		width: 250px;
-		background:#00548f;
+		width: 120px;
 		margin-left: 20px;
-		padding-left: 20px;
+		padding-left: 1%;
+		height: 50em;
+		background:#00548f;
 		color: white;
 	}
 
@@ -77,10 +84,11 @@ body {
 		margin-bottom: 3em;
 	}
 
-#sidebar a{
-	color: white;
-	text-decoration: none;
-}
+#sidebar a
+	{
+		color: white;
+		text-decoration: none;
+	}
 
 ul.style1
 	{
@@ -100,3 +108,33 @@ ul.style1 li:first-child
 		border-top: 0;
 		padding-top: 0;
 	}
+
+/*Table formatting*/
+#content table
+{
+	table-layout: fixed;
+	border-collapse:collapse;
+}
+#content td, th 
+{
+	font-size:1em;
+	padding:3px 7px 2px 7px;
+}
+#content input{
+  width:8em;
+}
+ th 
+{
+	font-size:1em;
+	text-align:left;
+	padding-top:5px;
+	padding-bottom:4px;
+	background-color:#00548f;
+	color:#ffffff;
+}
+tr.alt td 
+{
+	color:#000000;
+	background-color:#C1D0DB;
+}
+

@@ -1,5 +1,7 @@
-
-/* Form 1 style */
+.wrapper {
+	width: 960px;
+	margin: 50px auto;
+}
 
 .form1 {
 	width: 40%;
@@ -195,4 +197,10 @@
 
 .inputtextbox .inputcontent {
 	height: 114px;
+}
+
+label { 
+	display: block; 
+	width: 10em; 
+	float: left; 
 }

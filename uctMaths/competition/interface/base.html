@@ -1,4 +1,27 @@
 {%extends "plain_base.html"%}
+{%block head%}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
+</script>
+<script>
+var hid=false;
+$(document).ready(function(){
+    $('#hideshow').click(function(event) {    
+        $('#sidebar').toggle('show');
+        if (hid)	{
+        	// alert("showing");
+        	$('#hideshow').attr('src','/static/hidebutton.png'); 
+        	hid=false;
+        }
+        else {
+        	// alert("hiding");
+        	$('#hideshow').attr('src','/static/showbutton.png');
+        	hid=true;
+        }
+    });
+});
+</script>
+
+{%endblock%}
 {%block sidebar%}
 <!-- sidebar -->
 	<div id='sidebar'>
@@ -14,5 +37,25 @@
 
 			</ul>
 		</div>
+
+		<div class="box">
+			<div class="head">
+				<h2>Register</h2>
+			</div>
+			<ul class="style1">
+				<li><a href="/competition/register/schools/">Schools</a></li>
+				<li><a href="/competition/register/students/">Students</a></li>
+				<li><a href="/competition/register/invigilators/">Invigilators</a></li>
+				{% if admin%}
+				<li><a href="/competition/register/venues/">Venues</a></li>
+				{%endif%}
+
+			</ul>
+		</div>
 	</div>
+
+	<div id='hide'>
+		<input type='image' width='30' id='hideshow' src='/static/hidebutton.png' alt="Toggle Sidebar" >
+	</div>
+
 {%endblock%}
