@@ -1,11 +1,13 @@
-<html>
-<head>
-    <title>Adding Student</title>
-</head>
-<body>
-    <h1>Adding Students</h1>
+{%extends "base.html"%}
 
+<<<<<<< HEAD
     <form method="post">
+=======
+{%block title%}Students{%endblock%}
+{%block content%}
+    <h1>Students</h1>
+    <form action="." method="post">
+>>>>>>> 98f08dc9e9fe4e68633c9e00bbdc5df8af29a2fa
         {% csrf_token %}
         {{ form1.as_p }}
 
@@ -27,6 +29,7 @@
 
          <button type="submit" name="submit">Submit</button>
     </form>
+<<<<<<< HEAD
 
     <!--Displaying all the Student info -->
   <!--   <form method="post">
@@ -49,3 +52,6 @@
     </form> -->
 </body>
 </html>
+=======
+{%endblock%}
+>>>>>>> 98f08dc9e9fe4e68633c9e00bbdc5df8af29a2fa

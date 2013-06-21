@@ -13,7 +13,7 @@ from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueFor
 from competition.models import SchoolStudent, School, Invigilator, Venue 
 
 
-def allauthtest(request):
+def index(request):
 	return render_to_response('base.html', {})
 
 def content (request):
@@ -35,16 +35,22 @@ def main (request):
  #   return render_to_response('onlinemaths.html', {})
 
 #******************************************
-#ADDING STUDENT TO DB    
-def regStudent(request):
-  if request.method=='POST':
-        #form = StudentForm(request.POST)
-        # form = [(request.POST) for x in range(0,3)]
-        form=(request.POST)
+def students(request):
+    return render_to_response('profile.html',{})
 
-        #form1 = form 
-        #form1 = form.dict()
-         # A form bound to the POST data
+def schools(request):
+    return render_to_response('profile.html',{})
+
+def venues(request):
+    return render_to_response('profile.html',{})
+
+def invigilators(request):
+    return render_to_response('profile.html',{})
+
+#Register Students    
+def newstudents(request):
+   if request.method == 'POST': # If the form has been submitted...
+        form = (request.POST) # A form bound to the POST data
         #print "FORM ", form
         print "here1", form
        # print "here1", form1
@@ -66,16 +72,16 @@ def regStudent(request):
         return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
   else:
         form = StudentForm() # An unbound form
+
   schoolOptions = School.objects.all()
-   # studentOptions = SchoolStudent.objects.filter(firstname = firstname2)
-  c = {'schools':schoolOptions} #,'formset': formset} #, 'student':studentOptions }
+  c = {'schools':schoolOptions}
   c.update(csrf(request))
-  return render_to_response('regStudent.html', c)
+  return render_to_response('newstudents.html', c)
 
 
 #*****************************************
-#ADDING SCHOOL TO DB
-def regSchool (request):
+#Register Schools
+def newschools (request):
   if request.method == 'POST': # If the form has been submitted...
         form = SchoolForm(request.POST) # A form bound to the POST data
         #print "FORM ", form
@@ -101,11 +107,11 @@ def regSchool (request):
   
   c = {}
   c.update(csrf(request))
-  return render_to_response('regSchool.html', c)
+  return render_to_response('newschools.html', c)
 
 #******************************************
-#ADDING AN INVIGILATOR
-def regInvigilator (request):
+#Register Invigilators
+def newinvigilators (request):
   if request.method == 'POST': # If the form has been submitted...
         form = InvigilatorForm(request.POST) # A form bound to the POST data
         #print "FORM ", form
@@ -138,11 +144,11 @@ def regInvigilator (request):
   schoolOptions = School.objects.all()
   c = {'schools':schoolOptions}
   c.update(csrf(request))
-  return render_to_response('regInvigilator.html', c)
+  return render_to_response('newinvigilators.html', c)
 
 #***************************************
-#ADDING VENUE TO DB
-def regVenue (request):
+#Register Venues
+def newvenues (request):
   if request.method == 'POST': # If the form has been submitted...
         form = VenueForm(request.POST) # A form bound to the POST data
         #print "FORM ", form
@@ -166,7 +172,7 @@ def regVenue (request):
    
   c = {}
   c.update(csrf(request))
-  return render_to_response('regVenue.html', c)
+  return render_to_response('newvenues.html', c)
 
 #******************************************  
 def search_form (request):

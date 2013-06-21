@@ -1,24 +1,38 @@
-{% extends "account/base.html" %}
+{% extends "plain_base.html" %}
 
 {% load url from future %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Signup" %}{% endblock %}
+{% block head %}
+  <title>Sign In</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="/static/login.css" type="text/css" />
+{%endblock%}
+
+{%block title%}
+Sign Up
+{%endblock%}
 
 {% block content %}
-<h1>{% trans "Sign Up" %}</h1>
 
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+<div class="wrapper">
+  <form class="form1" method="post" action="{% url 'account_signup' %}">
+    <div class="formtitle">Sign Up</div>
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if redirect_field_value %}
 
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+    {% endif %}
+	<div class="buttons">
 
+        <input class="bluebutton" type="submit" value="Sign up" />
+
+        <input class="greybutton" type="submit" value="Cancel" />
+
+      </div>
+ 	</form>
+</div>
 
 {% endblock %}
 

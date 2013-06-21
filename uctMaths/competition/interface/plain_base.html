@@ -1,0 +1,43 @@
+{% load url from future %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+ 	<link rel="stylesheet" href="/static/style.css" type="text/css" />
+ 	<title>
+	 	{% block title%}
+		{% endblock %}
+	</title>
+	
+	{% block head%}
+	{% endblock %}
+</head>
+
+<body>
+	<!-- header -->
+	<div class="header">
+
+		<table align='center'>
+		<tr>
+			<td><img src='/static/uct.gif' width='70'align='left' padding='100'/></td>
+			<td><div class='title'>UCT Maths Competition<div/>
+				<div class="byline">Administration Portal</div>
+			</td>
+			<td><img src="/static/maths.gif" width='70'/></td>
+		</tr>
+		</table>
+	</div>
+
+	{%block sidebar%}
+	{%endblock%}
+
+	<!-- content -->
+	<div id='content'>
+	{% block content %}
+    {% endblock %}
+	</div>
+
+</body>
+</html>

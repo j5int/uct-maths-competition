@@ -1,29 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% extends "plain_base.html" %}
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-  <title>Login</title>
+{%block title%}
+	Log In
+{%endblock%}
+{% block head %}
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="stylesheet" href="/static/login.css" type="text/css" />
-  <link rel="stylesheet" href="/static/style.css" type="text/css" />
-
-</head>
-<body>
-	<!-- header -->
-	<div class="header">
-		<table align='center'>
-		<tr>
-			<td><img src='/static/uct.gif' width='70'align='left' padding='100'/></td>
-			<td><div class='title'>UCT Maths Competition<div/>
-				<div class="byline">Administration Portal</div>
-			</td>
-			<td><img src="/static/maths.gif" width='70'/></td>
-		</tr>
-		</table>
-	</div>
+  <link rel="stylesheet" href="/static/savelogin.css" type="text/css" />
+{%endblock%}
+{% block content %}
 	
 	<div class="wrapper">
 
@@ -120,7 +105,4 @@
 		<div class="link">Designed by <a href="http://hostclipse.com">Hostclipse</a> design team.</div>
 
 	</div>	
-
-
-</body>
-</html>
+{%endblock%}
