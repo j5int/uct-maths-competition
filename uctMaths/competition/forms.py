@@ -3,13 +3,14 @@ from django import forms
 from django.forms import ModelForm
 from django.forms import ModelChoiceField
 from competition.models import SchoolStudent, School, Invigilator, Venue
+from django.forms.models import modelformset_factory
 
 #**********************************
 #FORM TO ENTER A NEW SCHOOL STUDENT
 class StudentForm (ModelForm):
     class Meta:
         model=SchoolStudent
-
+        
 class StudentForm (forms.Form):
         fields = ['firstname', 'surname', 'language', 'school','grade','sex','venue']
         firstname = forms.CharField()
@@ -19,6 +20,14 @@ class StudentForm (forms.Form):
         grade = forms.IntegerField()
         sex = forms.CharField ()
 
+# FILTERING STUDENTS FORM        
+# class StudentFilter (forms.Form):
+#         firstname2 = forms.CharField()
+#         surname = forms.CharField()
+#         language = forms.CharField()
+#         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all())
+#         grade = forms.IntegerField()
+#         sex = forms.CharField ()
 #*********************************
 #FORM TO ENTER A NEW SCHOOL
 class SchoolForm (ModelForm):
