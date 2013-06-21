@@ -49,7 +49,7 @@ def invigilators(request):
 
 #Register Students    
 def newstudents(request):
-   if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         #print "FORM ", form
         print "here1", form
@@ -70,13 +70,13 @@ def newstudents(request):
                   school = school, grade = grade , sex = sex)
           query.save()
         return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
-  else:
+    else:
         form = StudentForm() # An unbound form
 
-   schoolOptions = School.objects.all()
-   c = {'schools':schoolOptions, 'range':range(2)}
-   c.update(csrf(request))
-   return render_to_response('newstudents.html', c)
+    schoolOptions = School.objects.all()
+    c = {'schools':schoolOptions, 'range':range(2)}
+    c.update(csrf(request))
+    return render_to_response('newstudents.html', c)
 
 
 #*****************************************
