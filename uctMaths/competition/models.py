@@ -108,7 +108,7 @@ class Invigilator(models.Model):
     ), db_column='Inv/Reg')
     phone_h     = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
     phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
-    fax         = models.CharField(max_length=15L, db_column='Fax', blank=True) 
+    fax_h         = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
     fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
     email       = models.CharField(max_length=40L, db_column='Email', blank=True) 
     responsible = models.CharField(max_length=40L, db_column='Responsible')

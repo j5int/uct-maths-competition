@@ -51,11 +51,6 @@ def invigilators(request):
 def newstudents(request):
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
-        #print "FORM ", form
-        print "here1", form
-       # print "here1", form1
-       # print "here2", form.is_valid()
-        #if form.is_valid(): 
         for i in range (2):
           firstname = form.getlist('firstname',"")[i]
           surname = form.getlist('surname',"")[i]
@@ -83,19 +78,16 @@ def newstudents(request):
 #Register Schools
 def newschools (request):
   if request.method == 'POST': # If the form has been submitted...
-        form = SchoolForm(request.POST) # A form bound to the POST data
-        #print "FORM ", form
-        print "here1", form
-        print "here2", form.is_valid()
-        if form.is_valid(): 
-            name = form.cleaned_data['name']
+        form = (request.POST) # A form bound to the POST data
+        for i in range (2):
+            name = form.getlist('name',"")[i]
             key = "1234" #************FIX!!!!!!!!!!!!!!!!
-            language = form.cleaned_data['language']
-            address = form.cleaned_data['address']
-            phone = form.cleaned_data['phone']
-            fax = form.cleaned_data['fax']
-            contact = form.cleaned_data['contact']
-            email = form.cleaned_data['email']
+            language = form.getlist('language',"")[i]
+            address = form.getlist('address',"")[i]
+            phone = form.getlist('phone',"")[i]
+            fax = form.getlist('fax',"")[i]
+            contact = form.getlist('contact',"")[i]
+            email = form.getlist('email',"")[i]
             
             query = School(name = name ,key = key ,  language = language  ,
                 address = address, phone = phone , fax = fax, contact = contact , email = email)
@@ -105,7 +97,8 @@ def newschools (request):
   else:
         form = SchoolForm() # An unbound form
   
-  c = {'range':range(2)}
+
+  c = { 'range':range(2)} #****** ADD RANGE
   c.update(csrf(request))
   return render_to_response('newschools.html', c)
 
@@ -113,66 +106,60 @@ def newschools (request):
 #Register Invigilators
 def newinvigilators (request):
   if request.method == 'POST': # If the form has been submitted...
-        form = InvigilatorForm(request.POST) # A form bound to the POST data
-        #print "FORM ", form
-        print "here1", form
-        print "here2", form.is_valid()
-        if form.is_valid(): 
-            school = form.cleaned_data['school']
-            firstname = form.cleaned_data['firstname']
-            surname = form.cleaned_data['surname']
-            grade = form.cleaned_data['grade']
-            venue = form.cleaned_data['venue']
-            inv_reg = form.cleaned_data['inv_reg']
-            phone_h = form.cleaned_data['phone_h']
-            phone_w = form.cleaned_data['phone_w']
-            fax = form.cleaned_data['fax']
-            fax_w = form.cleaned_data['fax_w']
-            email = form.cleaned_data['email']
-            responsible = form.cleaned_data['responsible']
-            
-            
+        form = (request.POST) # A form bound to the POST data
+        for i in range (1):
+            school = School.objects.get(pk=int(form.getlist('school',"")[i]))
+            firstname = form.getlist('firstname',"")[i]
+            surname = form.getlist('surname',"")[i]
+            grade = form.getlist('grade',"")[i]
+            venue = Venue.objects.get(pk=int(form.getlist('venue',"")[i]))
+            inv_reg = form.getlist('inv_reg',"")[i]
+            phone_h = form.getlist('phone_h',"")[i]
+            phone_w = form.getlist('phone_w',"")[i]
+            fax_h = form.getlist('fax_h',"")[i]
+            fax_w = form.getlist('fax_w',"")[i]
+            email = form.getlist('email',"")[i]
+            responsible = form.getlist('responsible',"")[i]
+                        
             query = Invigilator(school = school , firstname = firstname,surname = surname, grade = grade ,
                 venue = venue ,inv_reg = inv_reg,
                 phone_h = phone_h , phone_w = phone_w, 
-                fax = fax, fax_w = fax_w , email = email, responsible = responsible)
+                fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible)
             query.save()
 
             return HttpResponseRedirect("ITS BEEN SUBMITTED") # Redirect after POST
   else:
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
-  c = {'schools':schoolOptions, 'range':range(2)}
+
+  c = {'schools':schoolOptions, 'range':range(2)} #******ADD RANGE
   c.update(csrf(request))
   return render_to_response('newinvigilators.html', c)
 
 #***************************************
 #Register Venues
 def newvenues (request):
-  if request.method == 'POST': # If the form has been submitted...
-        form = VenueForm(request.POST) # A form bound to the POST data
-        #print "FORM ", form
-        print "here1", form
-        print "here2", form.is_valid()
-        if form.is_valid(): 
-            code = form.cleaned_data['code']
-            building = form.cleaned_data['building']
-            seats = form.cleaned_data['seats']
-            bums = form.cleaned_data['bums']
-            grade = form.cleaned_data['grade']
-            pairs = form.cleaned_data['pairs']
+    if request.method == 'POST': # If the form has been submitted...
+        form = (request.POST) # A form bound to the POST data
+        for i in range (1):
+            code = form.getlist('code',"")[i]
+            building = form.getlist('building',"")[i]
+            seats = form.getlist('seats',"")[i]
+            bums = form.getlist('bums',"")[i]
+            grade = form.getlist('grade',"")[i]
+            pairs = form.getlist('pairs',"")[i]
                         
             query = Venue(code = code , building = building  ,
                 seats = seats, bums = bums , grade = grade, pairs = pairs)
             query.save()
 
             return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
-  else:
+    else:
         form = VenueForm() # An unbound form
    
-  c = {'range':range(2)}
-  c.update(csrf(request))
-  return render_to_response('newvenues.html', c)
+    c = {'range':range(1)}
+    c.update(csrf(request))
+    return render_to_response('newvenues.html', c)
 
 #******************************************  
 def search_form (request):
