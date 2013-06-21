@@ -139,30 +139,27 @@ def newinvigilators (request):
 #***************************************
 #Register Venues
 def newvenues (request):
-  if request.method == 'POST': # If the form has been submitted...
-        form = VenueForm(request.POST) # A form bound to the POST data
-        #print "FORM ", form
-        print "here1", form
-        print "here2", form.is_valid()
-        if form.is_valid(): 
-            code = form.cleaned_data['code']
-            building = form.cleaned_data['building']
-            seats = form.cleaned_data['seats']
-            bums = form.cleaned_data['bums']
-            grade = form.cleaned_data['grade']
-            pairs = form.cleaned_data['pairs']
+    if request.method == 'POST': # If the form has been submitted...
+        form = (request.POST) # A form bound to the POST data
+        for i in range (1):
+            code = form.getlist('code',"")[i]
+            building = form.getlist('building',"")[i]
+            seats = form.getlist('seats',"")[i]
+            bums = form.getlist('bums',"")[i]
+            grade = form.getlist('grade',"")[i]
+            pairs = form.getlist('pairs',"")[i]
                         
             query = Venue(code = code , building = building  ,
                 seats = seats, bums = bums , grade = grade, pairs = pairs)
             query.save()
 
             return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
-  else:
+    else:
         form = VenueForm() # An unbound form
    
-  c = {'range':range(2)}
-  c.update(csrf(request))
-  return render_to_response('newvenues.html', c)
+    c = {'range':range(1)}
+    c.update(csrf(request))
+    return render_to_response('newvenues.html', c)
 
 #******************************************  
 def search_form (request):
