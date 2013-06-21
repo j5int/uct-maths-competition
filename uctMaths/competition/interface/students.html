@@ -1,0 +1,115 @@
+{%extends "base.html"%}
+<!-- base.html contains the sidebar and header -->
+
+{%block title%}Students{%endblock%}
+{%block content%}
+    <h1 >Students</h1>
+    <form action="." method="post">
+        {% csrf_token %}
+        <!-- {{ form.as_p }} -->
+        <table>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Language</th>
+            <th>School</th>
+            <th>Grade</th>
+            <th>Sex</th>
+        </tr>
+        <tr>
+            <td><input type="text" name="firstname"></td>
+            <td><input type="text" name="surname"></td>
+            <td>
+                <select name = "language">
+                    <option value="a">Afrikaans</option>
+                    <option value="e">English</option>
+                </select>
+            </td>
+            <td>
+                <select name = "school">
+                    {% for entry in schools %}
+                        <option value="{{ entry.id }}">{{ entry.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+          <td><input type ="text" name="grade"></td>
+          <td><input type ="text" name="sex"></td>
+        </tr>
+
+        </table>
+        <!-- <p>Name: <input type="text" name="firstname"></p>
+        <p>Surname: <input type="text" name="surname"></p>
+        <p>Language: <select name = "language">
+            <option value="a">Afrikaans</option>
+            <option value="e">English</option>
+         </select></p></p>
+        <p>School: <select name = "school">
+            {% for entry in schools %}
+                <option value="{{ entry.id }}">{{ entry.name }}</option>
+            {% endfor %}
+        </select></p>
+        <p>Grade: <input type ="text" name="grade"></p>
+        <p>Sex: <input type ="text" name="sex"></p> -->
+
+        
+        <input type="submit" value="Submit">
+    </form>
+
+<!--     <table>
+        <tr>
+          <th>Company</th>
+          <th>Contact</th>
+          <th>Country</th>
+        </tr>
+        <tr>
+            <td>Alfreds Futterkiste</td>
+            <td>Maria Anders</td>
+            <td>Germany</td>
+        </tr>
+        <tr class="alt">
+            <td>Berglunds snabbköp</td>
+            <td>Christina Berglund</td>
+            <td>Sweden</td>
+        </tr>
+        <tr>
+            <td>Centro comercial Moctezuma</td>
+            <td>Francisco Chang</td>
+            <td>Mexico</td>
+        </tr>
+        <tr class="alt">
+            <td>Ernst Handel</td>
+            <td>Roland Mendel</td>
+            <td>Austria</td>
+        </tr>
+        <tr>
+            <td>Island Trading</td>
+            <td>Helen Bennett</td>
+            <td>UK</td>
+        </tr>
+        <tr class="alt">
+            <td>Königlich Essen</td>
+            <td>Philip Cramer</td>
+            <td>Germany</td>
+        </tr>
+        <tr>
+            <td>Laughing Bacchus Winecellars</td>
+            <td>Yoshi Tannamuri</td>
+            <td>Canada</td>
+        </tr>
+        <tr class="alt">
+            <td>Magazzini Alimentari Riuniti</td>
+            <td>Giovanni Rovelli</td>
+            <td>Italy</td>
+        </tr>
+        <tr>
+            <td>North/South</td>
+            <td>Simon Crowther</td>
+        <td>UK</td>
+        </tr>
+        <tr class="alt">
+            <td>Paris spécialités</td>
+            <td>Marie Bertrand</td>
+        <td>France</td>
+        </tr>
+    </table> -->
+{%endblock%}
