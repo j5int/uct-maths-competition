@@ -18,11 +18,14 @@
         {{ form.as_p }}
          
         <p>Tester: <input type="text" name="building"></p>
-        <p>School:
+        <p>Buidlings:
             {% for entry in temp %}
                {{ entry.code }}
+               {{ entry.building }}
             {% endfor %}
        </p>
+
+
 
 
 

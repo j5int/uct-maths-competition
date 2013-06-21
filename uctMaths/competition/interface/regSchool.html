@@ -7,7 +7,7 @@ Register Schools
 
     <form action="." method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <!-- {{ form.as_p }} -->
         <p>Name: <input type="text" name="name"></p>
         <p>Language: <select name = "language">
             <option value="a">Afrikaans</option>

@@ -7,7 +7,9 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django import forms
-from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueForm, testForm
+from django.forms.models import modelformset_factory
+from django.forms.formsets import formset_factory
+from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueForm, testForm #, StudentFilter
 from competition.models import SchoolStudent, School, Invigilator, Venue 
 
 
@@ -33,7 +35,6 @@ def main (request):
  #   return render_to_response('onlinemaths.html', {})
 
 #******************************************
-
 def students(request):
     return render_to_response('profile.html',{})
 
@@ -49,32 +50,34 @@ def invigilators(request):
 #Register Students    
 def newstudents(request):
    if request.method == 'POST': # If the form has been submitted...
-        form = StudentForm(request.POST) # A form bound to the POST data
+        form = (request.POST) # A form bound to the POST data
         #print "FORM ", form
         print "here1", form
-        print "here2", form.is_valid()
-        if form.is_valid(): # All validation rules pass
-            # Process the data in form.cleaned_data
-            # ...
-            firstname = form.cleaned_data['firstname']
-            surname = form.cleaned_data['surname']
-            language = form.cleaned_data['language']
-            reference = 1234
-            school = form.cleaned_data['school']
-            grade = form.cleaned_data['grade']
-            sex = form.cleaned_data['sex']
-            
-            query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                school = school, grade = grade , sex = sex)
-            query.save()
-
-            return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
-   else:
+       # print "here1", form1
+       # print "here2", form.is_valid()
+        #if form.is_valid(): 
+        for i in range (2):
+          firstname = form.getlist('firstname',"")[i]
+          surname = form.getlist('surname',"")[i]
+          language = form.getlist('language',"")[i]
+          reference = 1234
+          school = School.objects.get(pk=int(form.getlist('school',"")[i]))
+          print "here2 ", firstname
+          print "here3 ", school
+          grade = form.getlist('grade',"")[i]
+          sex = form.getlist('sex',"")[i]              
+          query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
+                  school = school, grade = grade , sex = sex)
+          query.save()
+        return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+  else:
         form = StudentForm() # An unbound form
+
    schoolOptions = School.objects.all()
    c = {'schools':schoolOptions, 'range':range(2)}
    c.update(csrf(request))
    return render_to_response('newstudents.html', c)
+
 
 #*****************************************
 #Register Schools
@@ -84,9 +87,7 @@ def newschools (request):
         #print "FORM ", form
         print "here1", form
         print "here2", form.is_valid()
-        if form.is_valid(): # All validation rules pass
-            # Process the data in form.cleaned_data
-            # ...
+        if form.is_valid(): 
             name = form.cleaned_data['name']
             key = "1234" #************FIX!!!!!!!!!!!!!!!!
             language = form.cleaned_data['language']
@@ -103,7 +104,7 @@ def newschools (request):
             return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
   else:
         form = SchoolForm() # An unbound form
-   
+  
   c = {}
   c.update(csrf(request))
   return render_to_response('newschools.html', c)
@@ -153,9 +154,7 @@ def newvenues (request):
         #print "FORM ", form
         print "here1", form
         print "here2", form.is_valid()
-        if form.is_valid(): # All validation rules pass
-            # Process the data in form.cleaned_data
-            # ...
+        if form.is_valid(): 
             code = form.cleaned_data['code']
             building = form.cleaned_data['building']
             seats = form.cleaned_data['seats']
@@ -178,22 +177,23 @@ def newvenues (request):
 #******************************************  
 def search_form (request):
   building = ""
+  #code = ""
   if request.method == 'POST': # If the form has been submitted...
         form = testForm(request.POST) # A form bound to the POST data
         #print "FORM ", form
         print "here1", form
         print "here2", form.is_valid()
-        if form.is_valid(): # All validation rules pass
-            # Process the data in form.cleaned_data
-            # ...
+        if form.is_valid():
             building = form.cleaned_data['building']
+            #code = form.cleaned_data['code']
             
             #return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
   else:
         form = testForm() # An unbound form
   venueOptions = Venue.objects.filter(building=building)
+  #venueOptions1 = Venue.objects.filter(code=code)
   print venueOptions
-  c = {'temp':venueOptions}
+  c = {'temp':venueOptions}#, 'temp1':venueOptions1}
   c.update(csrf(request))
   return render_to_response('search_form.html', c)
     

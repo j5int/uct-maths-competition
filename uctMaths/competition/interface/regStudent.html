@@ -1,11 +1,17 @@
 {%extends "base.html"%}
 
+<<<<<<< HEAD
+    <form method="post">
+=======
 {%block title%}Students{%endblock%}
 {%block content%}
     <h1>Students</h1>
     <form action="." method="post">
+>>>>>>> 98f08dc9e9fe4e68633c9e00bbdc5df8af29a2fa
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form1.as_p }}
+
+      {% for i in "xx" %}      
         <p>Name: <input type="text" name="firstname"></p>
         <p>Surname: <input type="text" name="surname"></p>
         <p>Language: <select name = "language">
@@ -19,13 +25,33 @@
         </select></p>
         <p>Grade: <input type ="text" name="grade"></p>
         <p>Sex: <input type ="text" name="sex"></p>
-        <!-- <p>Sex: <select name = "language">
-            <option value="f">Female</option>
-            <option value="m">Male</option>
-            <option value="n">Not Disclosed</option>
-        </select></p></p></p>-->
+      {% endfor %}
 
-        
-        <input type="submit" value="Submit">
+         <button type="submit" name="submit">Submit</button>
     </form>
+<<<<<<< HEAD
+
+    <!--Displaying all the Student info -->
+  <!--   <form method="post">
+        {% csrf_token %}
+        {{ form2.as_p }}
+    <p>Name: <input type="text" name="firstname2"></p>
+        <p>Student Info:  
+            {% for entry in student %}
+               {{ entry.firstname }}
+               {{ entry.surname }}
+               {{ entry.language }}
+               {{ entry.reference}}
+               {{ entry.score }}
+               {{ entry.rank }}
+               {{ entry.grade }}
+               {{ entry.sex }}
+               {{ entry.venue }}
+            {% endfor %}<p>
+           <button type="submit" name="filter">Filter</button>
+    </form> -->
+</body>
+</html>
+=======
 {%endblock%}
+>>>>>>> 98f08dc9e9fe4e68633c9e00bbdc5df8af29a2fa
