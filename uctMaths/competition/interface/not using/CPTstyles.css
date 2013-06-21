@@ -1,0 +1,791 @@
+	/* normalize defaults */
+	html, head, body, 
+	h1, h2, h3, h4, h5, h6, 
+	div, span, p, blockquote, img, a,
+	table, caption, tr, thead, th, tbody, td,
+	ul, ol, li, label, form, fieldset {
+		margin: 0;
+		padding: 0;
+		line-height: 1em;
+		font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;	
+	}
+
+	td {
+		padding: 5px 5px 0 5px;
+	}
+
+	.skip {
+		position: absolute;
+		top: -999px;
+		left: -999px;
+		clear: both;
+	}
+
+	.clear {
+		height: 0;
+		clear: both;
+	}
+
+	.col {
+		float: left;
+		display: block;
+		margin-top: 5px;
+		margin-right: 5px;
+		text-align: justify;
+	}
+
+	.col li {
+		padding-top: 3px;
+		text-align: left;
+	}
+
+	fieldset,
+	a img {
+		border: 0;
+	}
+
+	a:link,
+	a:visited,
+	a:hover,
+	a:active {
+		color: #0085D9;
+		text-decoration: none;
+		font-weight: inherit;
+	}
+
+	span {
+		font-weight: inherit;
+		font-style: inherit;
+	}
+
+	a:hover,
+	a:active {
+		text-decoration: underline;
+	}
+
+
+	/* general layout */
+	html {
+	background:  #C0BEBC url('') repeat-x top left;
+	}
+
+	#sidenav2 {
+		float: left;
+		margin-top: 34px;
+		width: 18%;
+		margin-left: 5px;
+	}
+
+	#sidenav2 li {
+		color: blue;
+		list-style: none;
+	}
+
+	#sidenav2 li a {
+		color: blue;
+	}
+
+	#sidenav2 li a:visited {
+		color: black;
+	}
+
+	#wrapper {
+		
+		max-width: 1000px;
+		min-width: 300px;
+		width: 900px;
+		padding: 20px 35px;
+		margin: 0 auto;
+	}
+
+	#container {
+		background-color: #fff;
+		padding: 0px 0px 0px 0px;
+		<! overflow cmd here >
+		z-index: 10;
+	}
+
+	body.home #container {
+		padding-bottom: 5px;
+		background: url('images/julia2.jpg') no-repeat top left;
+		background-repeat: repeat-y;
+	}
+
+
+	/* logo and header */
+
+	#header {
+		background-color: #C6DEFF;
+		height: 200px;
+		overflow: hidden;
+	}
+
+	#header img {
+		display: block;
+		width: 1000px;
+		padding-bottom: 1px;
+	}
+
+	#header .logo .text {
+		text-transform: uppercase;
+		color: #333;
+		font-size: 0.65em;
+		letter-spacing: 1px;
+	}
+
+	#header a.logo {
+		text-decoration: none;
+	}
+
+	#name
+	{
+		font-size: 200%;
+		color: #000;
+		position: relative;
+		left:105px;
+		top:-65px;
+		z-index: 0;
+		}
+
+	#name2 
+	{ 
+		font-size: 200%;
+		color: #708090;
+		position:relative;
+		left:104px;
+		top:-103px;
+		z-index: 0;
+		}
+
+	/* topnav */
+	#navwrapper {
+		position: relative;
+		margin-right:15px;
+		margin-left: 60px;
+		top: -17px;
+		padding-bottom: 24px;
+		margin-bottom: 30px;
+	}
+
+	#topnav {
+		height: 19px;
+		/* hidden overflow cmd here */
+		/* overflow: hidden; */
+	}
+
+	#topnav li {
+		list-style-type: none;
+		float: left;
+	}
+	#topnav li ul li {
+		border-left: 1px white solid;
+	}
+
+	#topnav li.first {
+		border-left: 0px;
+	}
+
+	#topnav li a {
+		display: block;
+		width: 98px;
+		height: 40px;
+		padding: 4px 12px;
+		margin-right: 2px;
+		background-color: #708090;
+		font-size: 0.83em;
+		font-weight: bold;
+		line-height: 1em;
+		color: #fff;
+	}
+
+	#topnav li.over ul,
+	#topnav li:hover ul,
+	body.about #topnav li.about ul,
+	body.academics #topnav li.academics ul,
+	body.people #topnav li.people ul,
+	body.research #topnav li.research ul,
+	body.outreach #topnav li.outreach ul,
+	body.emp #topnav li.emp ul {
+		display: block;
+	}
+
+	body.about #topnav li.about ul,
+	body.people #topnav li.people ul,
+	body.academics #topnav li.academics ul,
+	body.research #topnav li.research ul,
+	body.outreach #topnav li.outreach ul,
+	body.emp #topnav li.emp ul {
+		z-index: 1;
+	}
+
+	#topnav li.over ul,
+	#topnav li:hover ul {
+		z-index: 100;
+	}
+
+	#topnav li ul {
+		display: none;
+		clear: both;
+		position: absolute;
+		top: 48px;
+		left: 0px;
+		width: 700px;
+	<!-- hidden overflow cmd here -->
+		overflow: hidden;
+	}
+
+	#topnav li li {
+		float: none;
+		display: block;
+	}
+
+	#topnav li a:hover,
+	#topnav li a:active {
+		text-decoration: none;
+	}
+
+	#topnav li li {
+		display: block;
+		float: left;
+		padding-top: 11px;
+		padding-bottom: 0px;
+	}
+
+	#topnav li li a {
+		margin: 0;
+		padding: 6px;
+		background-color: transparent;
+		height: auto;
+		width: auto;
+		font-weight: normal;
+		line-height: 0.83em;
+	}
+
+	#topnav li li.last a {
+		background-image: none;
+		padding-right: 0px;
+	}
+
+	#topnav li li a:hover,
+	#topnav li li a:active,
+	#topnav li li.sel a {
+		/* This is where you can make it bold when you hover over*/
+	}
+
+
+	/* content */
+	#content {
+		float: left;
+		padding: 0px;
+		margin: auto;
+		width: 600px;
+		color: #333; 
+		background-color:#ffffff;
+		border:1px solid black;
+		/* for IE */
+		filter:alpha(opacity=90);
+		/* CSS3 standard */
+		opacity:0.90;
+	}
+
+	#content p,
+	#content h1,
+	#content h2,
+	#content h3,
+	#content h4,
+	#content h5,
+	#content h6 {
+		padding: 0px 0px 0px 10px;
+	}
+
+	#content ul,
+	#content ol,
+
+	#content li h1,
+	#content li h2,
+	#content li h3,
+	#content li h4,
+	#content li h5,
+	#content li h6,
+	#content li p {
+		padding-left: 0;
+	}
+
+	#content .col hr {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	#content p,
+	#content ul,
+	#content li,
+	{
+		font-size: 120%;
+		line-height: 1.335em;
+		margin-bottom: 1.5em;
+	}
+
+	#indent li {
+		margin-left: 10px;
+		padding-left: 10px;
+		list-style-position: inside;
+	}
+
+	#content hr {
+		height: 0px;
+		border: none;
+		border-top: 1px solid #6C6C6C;
+		margin-left: 10px;
+	}
+
+	#content .boldheader {
+		font-size: 1em;
+		line-height: 1.335em;
+		font-weight: bold;
+	}
+
+	#content .smboldheader {
+		font-size: 0.83em;
+		line-height: 1.25em;
+		font-weight: bold;
+	}
+
+	#content .solidheader {
+		font-size: 0.78em;
+		font-weight: bold;
+		background-color: #cecece;
+		padding: 11px 11px 8px 11px;
+		border-bottom: 2px solid #fff;
+	}
+
+	#content a {
+		font-weight: bold;
+	}
+
+	#content .half {
+		width: 330px;
+		margin-right: 10px;
+	}
+
+	#content .third {
+		width: 223px;
+	}
+
+	#content .line {
+		padding-top: 1em;
+		border-top: 1px solid #585858;
+		font-size: 0.78em;
+	}
+
+	#content .line p,
+	#content .line h2,
+	#content .line h3,
+	#content .line ul,
+	#content .line ol,
+	#content .half p, 
+	#content .half h2 {
+		padding-left: 0px;
+		padding-right: 10px;
+	}
+
+	#content .line h2 {
+		font-size: 1.15em;
+	}
+
+	/* topnav section-specific styles */
+
+	#topnav li.about a:hover,
+	#topnav li.about a:active,
+	#topnav li.about ul,
+	body.about #topnav li.about a:link,
+	body.about #topnav li.about a:visited {
+		background-color: #CC0000;
+	}
+
+	#topnav li.about ul {
+		width: 733px;
+		padding-left: 10px;
+	}
+
+	#topnav li.people a:hover,
+	#topnav li.people a:active,
+	#topnav li.people ul,
+	body.people #topnav li.people a:link,
+	body.people #topnav li.people a:visited {
+		background-color: #1AA3D7;
+	}
+
+	#topnav li.people ul {
+		width: 668px;
+		padding-left: 75px;
+	}
+
+	#topnav li.academics a:hover,
+	#topnav li.academics a:active,
+	#topnav li.academics ul,
+	body.academics #topnav li.academics a:link,
+	body.academics #topnav li.academics a:visited {
+		background-color: #FF7F00;
+	}
+
+	#topnav li.academics ul {
+		width: 674px;
+		padding-left: 70px;
+	}
+
+	#topnav li.research a:hover,
+	#topnav li.research a:active,
+	#topnav li.research ul,
+	body.research #topnav li.research a:link,
+	body.research #topnav li.research a:visited {
+		background-color: #539906;
+	}
+
+	#topnav li.research ul {
+		width: 423px;
+		padding-left: 320px;
+	}
+
+	#topnav li.emp a:hover,
+	#topnav li.emp a:active,
+	#topnav li.emp ul,
+	body.emp #topnav li.emp a:link,
+	body.emp #topnav li.emp a:visited {
+		background-color: #016b9d;
+	}
+
+	#topnav li.emp ul {
+		width: 170px;
+		padding-left: 573px;
+	}
+
+	<! new stuff below >
+
+	<! This is very strange - whenever I remove this outreach code below - which I no longer use, the outreach button (now controlled by new) loses its colour -->
+
+	#topnav li.outreach a:hover,
+	#topnav li.outreach a:active,
+	#topnav li.outreach ul,
+	body.outreach #topnav li.academics a:link,
+	body.outreach #topnav li.academics a:visited {
+		background-color: #61006B;
+	}
+
+	#topnav li.outreach ul {
+		width: 590px;
+		padding-left: 150px;	
+	}
+
+	#topnav li.new a:hover,
+	#topnav li.new a:active,
+	#topnav li.new ul,
+	body.about #topnav li.new a:link,
+	body.about #topnav li.new a:visited {
+		background-color: #61006B;
+	}
+
+	#topnav li.new ul {
+		width: 553px;
+		padding-left: 190px;
+	}
+	<! end new stuff >
+
+	/* home-specific styles */
+
+
+	body.home p,
+	body.home h1,
+	body.home h2,
+	body.home h3,
+	body.home h4,
+	body.home h5,
+	body.home h6 {
+		padding: 0px;
+	}
+
+	body.home #content {
+		clear: both;
+		background-color: #fff;
+		padding: 15px 11px 15px 11px;
+		margin: 100px;
+		margin-top: 30px;
+		margin-bottom: 20px;
+		width: 680px;
+	}
+
+	body.home #content1 {
+		clear: both;
+		background-color: #fff;
+		padding: 15px 11px 15px 11px;
+		margin-left: 30px;
+		margin-top: 18px;
+		margin-bottom: 20px;
+		width: 820px;
+	}
+
+	body.home #content p.spotlight {
+		margin-bottom: 0px;
+	}
+
+	body.home #content .col {
+		width: 263px;
+	}
+
+	body.home #content .wide {
+		width: 65%;
+		padding-top: 0px;
+		padding-right: 20px;
+	}
+
+	body.home .wide h2 {
+		font-size: 1.25em;
+		color: #0148fc;
+		margin-bottom: 0.7em;
+	}
+
+	body.home .col p,
+	body.home .col h4 {
+		padding-left: 11px;
+	}
+
+	body.home .wide p {
+		padding-left: 0px;
+	}
+
+	img.feature {
+		display: block;
+		margin-bottom: 0.5em;
+	}
+
+	a.display {
+		display: block;
+		margin-left: auto;
+		margin-right: auto 
+	}
+
+
+	/* content styles */
+
+	#content a.more {
+		display: block;
+		margin-top: 0.1em;
+		font-weight: bold;
+	}
+
+	body.home #content p {
+		font-size: 1em;
+		line-height: 1.335em;
+		margin-bottom: 1em;
+	}
+
+	#container #content p.callout {
+		max-width: 1000px;
+		min-width: 300px;
+		font-size: 1.05em;
+		line-height: 1.5em;	
+	}
+
+	#container #content p.small,
+	#container #content span.small,
+	#container #content ul.small li,
+	#container #content ol.small li {
+		line-height: 1.25em;
+	}
+
+	#container #content p.top {
+		font-size: 0.83em;
+		line-height: 1.25em;	
+		text-align: right;
+	}
+
+	#content .headerbar {
+		background-color: #e6e6e6;
+		font-weight: bold;
+		font-size: 1.1em;
+		line-height: 1.1em;
+		padding: 2px 6px;
+		color: #333;
+		margin-bottom: 0.5em;
+	}
+
+	#content .headerbold {
+		font-size: 0.78em;
+		line-height: 0.78em;
+		margin-bottom: 0.2em;
+		font-weight: bold;
+		color: #333;
+	}
+
+	#content .titlebar {
+		font-size: 180%; 
+		COLOR: #FF0000; 
+		font-weight:bold; 
+		text-align: center; 
+		text-decoration: underline;
+	}
+
+	#content .pageheader {
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+		font-size: 1.5em;
+		padding-bottom: 0.5em;
+		margin-bottom: 0.5em;
+		color: #333;
+		border-bottom: 1px solid #333;
+	}
+
+	#content p.pageheader label {
+		padding: 0px 10px;
+	}
+
+	div.pname {
+			font-style: bolder;
+			margin-top: 10px;
+			font-size: 150%;
+			color: #FF0000;
+			text-align: center;
+			text-decoration: underline;
+	}
+
+	/* footer */
+
+	#footer {
+		font-size: .9em;
+		z-index: -5;
+	}
+
+	#footer img {
+		padding-right: 3px;
+	}
+
+	#footer .sep {
+		padding: 0px 5px;
+	}
+
+	#footer p.mid {
+		text-transform: uppercase;
+		font-size: 0.65em;
+		color: #000;
+	}
+
+	#footer p.mid strong {
+		font-weight: inherit;
+		color: #333;
+	}
+
+	#footer p.right {
+		font-size: 0.7em;
+		color: #333;
+		float: right;
+	}
+
+	#footer p.right a {
+		color: #000;
+	}
+
+	#nav2 a .pop {
+		display: none;
+		text-decoration: blink;
+	}
+
+	#nav2 a:hover .pop {
+		display: block;
+		text-decoration: none;
+		position: absolute;
+		color: black;
+		background-color: white;
+		width: 30em;
+		padding: 0.5em;
+		border: 3px black solid;
+	}
+
+	#nav3 a .pop {
+		display: none;
+		text-decoration: blink;
+	}
+	#nav3 a:hover .pop {
+		display: block;
+		z-index: 100;
+	}
+
+	#container2 {
+		margin-top:24px;
+		float: left;
+		padding: 8px;
+		margin: 0px 0px 0px 0px;
+		width: 78%;
+		color: #333; 
+		text-align: justify;
+		background-color:#ffffff;
+		border:1px solid black;
+		/* for IE */
+		filter:alpha(opacity=90);
+		/* CSS3 standard */
+		opacity:0.90;
+	}
+
+	#container2 ol {
+		list-style-position: outside;
+		text-indent: 2em;
+		padding-left: 2em;
+		padding-top: .5em;
+		text-align: left;
+	}
+
+	#container2 dd {
+		margin-top: -1.2em;
+		padding-top: .3em;
+		text-align: left;
+	}
+
+	#container2 .pageheader {
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+		font-size: 1.5em;
+		font-weight: bold;
+		padding-bottom: 0.3em;
+		margin-bottom: 0.3em;
+		color: green;
+		border-bottom: 1px solid #333;
+	}
+
+	#container2 .color {
+		color: teal;
+	}
+
+	#container3 {
+		top: 24px;
+		padding: 8px;
+		margin: auto;
+		width: 78%;
+		color: #333; 
+		text-align: justify;
+		background-color:#ffffff;
+		border:1px solid black;
+		/* for IE */
+		filter:alpha(opacity=90);
+		/* CSS3 standard */
+		opacity:0.90;
+}
+#container4 {
+	float: left;
+	padding: 0px;
+	margin: 0px 0px 0px 0px;
+	width: 600px;
+	color: #333; 
+  background-color:#ffffff;
+  border:1px solid black;
+  /* for IE */
+  filter:alpha(opacity=90);
+  /* CSS3 standard */
+  opacity:0.90;
+}
+
+figcaption {
+	display: none;
+}
+figure:hover figcaption {
+	display: block;
+}

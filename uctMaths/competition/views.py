@@ -72,7 +72,7 @@ def newstudents(request):
    else:
         form = StudentForm() # An unbound form
    schoolOptions = School.objects.all()
-   c = {'schools':schoolOptions}
+   c = {'schools':schoolOptions, 'range':range(2)}
    c.update(csrf(request))
    return render_to_response('newstudents.html', c)
 
