@@ -10,11 +10,17 @@ $(document).ready(function(){
         if (hid)	{
         	// alert("showing");
         	$('#hideshow').attr('src','/static/hidebutton.png'); 
+        	$('#hideshow').attr('alt','Hide'); 
+        	$('#hideshow').attr('title','Hide Sidebar'); 
+
+
         	hid=false;
         }
         else {
         	// alert("hiding");
         	$('#hideshow').attr('src','/static/showbutton.png');
+        	$('#hideshow').attr('alt','Show'); 
+        	$('#hideshow').attr('title','Show Sidebar');
         	hid=true;
         }
     });
@@ -55,7 +61,7 @@ $(document).ready(function(){
 	</div>
 
 	<div id='hide'>
-		<input type='image' width='30' id='hideshow' src='/static/hidebutton.png' alt="Toggle Sidebar" >
+		<input type='image' width='30' id='hideshow' src='/static/hidebutton.png' title="Hide Sidebar" alt="Hide">
 	</div>
 
 {%endblock%}
