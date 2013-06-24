@@ -27,7 +27,7 @@
         <h2>Grade: {{grade}}</h2>
         <div>
             <h3>Pairs
-            <select>
+            <select name = "pairs">
                 {%for p in pairs_per_grade%}
                 <option value='{{p}}'>{{p}}</option>
                 {%endfor%}
