@@ -88,5 +88,5 @@ class VenueForm(forms.Form):
 #*****************************************
 #TESTING TO FILTER
 class testForm(forms.Form):
-        building = forms.CharField()
+        user = forms.CharField()
         

@@ -14,8 +14,6 @@ from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueFor
 from competition.models import SchoolStudent, School, Invigilator, Venue 
 from django.contrib.auth.models import User
 
-from django.contrib.auth.models import User, check_password
-
 
 def index(request):
 	return render_to_response('base.html', {})
@@ -41,7 +39,13 @@ def main (request):
 #******************************************
 # View Students
 def students(request):
-    return render_to_response('students.html',{})
+    username = request.user
+    studentOptions = SchoolStudent.objects.filter(registered_by = username)
+    print studentOptions
+    c = {'students':studentOptions}#, 'temp1':venueOptions1}
+    c.update(csrf(request))
+    return render_to_response('students.html', c,context_instance=RequestContext(request))
+
 # View Schools
 def schools(request):
     return render_to_response('schools.html',{})
@@ -63,8 +67,8 @@ def newstudents(request):
           language = form.getlist('language',"")[i]
           reference = 1234
           school = School.objects.get(pk=int(form.getlist('school',"")[i]))
-          # print "here2 ", firstname
-          # print "here3 ", school
+          print "here2 ", firstname
+          print "here3 ", school
           grade = form.getlist('grade',"")[i]
           sex = form.getlist('sex',"")[i]  
           registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))          
@@ -148,6 +152,7 @@ def newinvigilators (request):
 #***************************************
 #Register Venues
 def newvenues (request):
+    print "here1", request.method
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         for i in range (1):
@@ -173,24 +178,25 @@ def newvenues (request):
 
 #******************************************  
 def search_form (request):
-  building = ""
+  building = request.user
   #code = ""
-  if request.method == 'POST': # If the form has been submitted...
-        form = testForm(request.POST) # A form bound to the POST data
-        #print "FORM ", form
-        print "here1", form
-        print "here2", form.is_valid()
-        if form.is_valid():
-            building = form.cleaned_data['building']
-            #code = form.cleaned_data['code']
-            
-            #return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
-  else:
-        form = testForm() # An unbound form
-  venueOptions = Venue.objects.filter(building=building)
+  print "here1", request.method
+  # if request.method == 'POST': # If the form has been submitted...
+  #       print "here2"
+  #       form = (request.POST) # A form bound to the POST data
+  #       print "here4"
+  #       for i in range (1):
+  #           print "here5"
+  #           building = User.objects.get(pk=int(form.getlist('registered_by',"")[i]))          #code = form.cleaned_data['code']
+  #           print "here3"
+  #           #return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+  # else:
+  #       form = testForm() # An unbound form
+  venueOptions = SchoolStudent.objects.filter(registered_by = building)
+  print "here4"
   #venueOptions1 = Venue.objects.filter(code=code)
   print venueOptions
   c = {'temp':venueOptions}#, 'temp1':venueOptions1}
   c.update(csrf(request))
-  return render_to_response('search_form.html', c)
+  return render_to_response('search_form.html', c,context_instance=RequestContext(request))
     

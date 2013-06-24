@@ -16,20 +16,20 @@
     <form action="." method="post">
         {% csrf_token %}
         {{ form.as_p }}
-         
-        <p>Tester: <input type="text" name="building"></p>
+           {% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+{% else %}
+    <p>Welcome, new user. Please log in.</p>
+{% endif %}
+<input type="text" name="building">
+        <input type ="hidden" name="registered_by" value ={{ user.id }} >
         <p>Buidlings:
             {% for entry in temp %}
-               {{ entry.code }}
-               {{ entry.building }}
+               {{ entry}}
+              
             {% endfor %}
        </p>
 
-
-
-
-
-        
         <input type="submit" value="Submit">
     </form>
 </body>
