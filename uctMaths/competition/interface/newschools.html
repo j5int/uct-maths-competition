@@ -32,6 +32,7 @@
             <td><input type ="text" name="fax"></td>
             <td><input type ="text" name="contact"></td>
             <td><input type ="text" name="email"></td>
+            <input type ="hidden" name="registered_by" value ={{ user.id }} >
         </tr>
         {%endfor%}
     </table>

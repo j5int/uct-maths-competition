@@ -4,6 +4,7 @@ from django.forms import ModelForm
 from django.forms import ModelChoiceField
 from competition.models import SchoolStudent, School, Invigilator, Venue
 from django.forms.models import modelformset_factory
+from django.contrib.auth.models import User
 
 #**********************************
 #FORM TO ENTER A NEW SCHOOL STUDENT
@@ -12,13 +13,14 @@ class StudentForm (ModelForm):
         model=SchoolStudent
         
 class StudentForm (forms.Form):
-        fields = ['firstname', 'surname', 'language', 'school','grade','sex','venue']
+        fields = ['firstname', 'surname', 'language', 'school','grade','sex','venue', 'registered_by']
         firstname = forms.CharField()
         surname = forms.CharField()
         language = forms.CharField()
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all())
         grade = forms.IntegerField()
         sex = forms.CharField ()
+        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())
 
 # FILTERING STUDENTS FORM        
 # class StudentFilter (forms.Form):
@@ -42,7 +44,8 @@ class SchoolForm (forms.Form):
         phone = forms.CharField()
         fax = forms.CharField ()   
         contact = forms.CharField()
-        email = forms.CharField ()    
+        email = forms.CharField ()  
+        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  
 
 #********************************  
 #FORM TO ENTER NEW INVIGILATOR
@@ -64,6 +67,7 @@ class InvigilatorForm (forms.Form):
         fax_w= forms.CharField()
         email = forms.CharField ()  
         responsible = forms.CharField()
+        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())
 
 #*****************************************
 #FORM TO ENTER NEW VENUE
@@ -79,6 +83,7 @@ class VenueForm(forms.Form):
         bums = forms.IntegerField()
         grade = forms.IntegerField ()  
         pairs = forms.IntegerField()
+        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())
 
 #*****************************************
 #TESTING TO FILTER

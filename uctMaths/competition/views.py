@@ -6,11 +6,13 @@ from django.template import loader, Context
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
+from django.template import RequestContext
 from django import forms
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
 from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueForm, testForm #, StudentFilter
 from competition.models import SchoolStudent, School, Invigilator, Venue 
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -62,9 +64,10 @@ def newstudents(request):
           print "here2 ", firstname
           print "here3 ", school
           grade = form.getlist('grade',"")[i]
-          sex = form.getlist('sex',"")[i]              
+          sex = form.getlist('sex',"")[i]  
+          registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))          
           query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                  school = school, grade = grade , sex = sex)
+                  school = school, grade = grade , sex = sex, registered_by= registered_by)
           query.save()
         return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
     else:
@@ -73,7 +76,7 @@ def newstudents(request):
     schoolOptions = School.objects.all()
     c = {'schools':schoolOptions, 'range':range(2)}
     c.update(csrf(request))
-    return render_to_response('newstudents.html', c)
+    return render_to_response('newstudents.html', c,context_instance=RequestContext(request))
 
 
 #*****************************************
@@ -90,9 +93,10 @@ def newschools (request):
             fax = form.getlist('fax',"")[i]
             contact = form.getlist('contact',"")[i]
             email = form.getlist('email',"")[i]
+            registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))
             
             query = School(name = name ,key = key ,  language = language  ,
-                address = address, phone = phone , fax = fax, contact = contact , email = email)
+                address = address, phone = phone , fax = fax, contact = contact , email = email, registered_by= registered_by)
             query.save()
 
             return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
@@ -122,11 +126,12 @@ def newinvigilators (request):
             fax_w = form.getlist('fax_w',"")[i]
             email = form.getlist('email',"")[i]
             responsible = form.getlist('responsible',"")[i]
+            registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))
                         
             query = Invigilator(school = school , firstname = firstname,surname = surname, grade = grade ,
                 venue = venue ,inv_reg = inv_reg,
                 phone_h = phone_h , phone_w = phone_w, 
-                fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible)
+                fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible, registered_by= registered_by)
             query.save()
 
             return HttpResponseRedirect("ITS BEEN SUBMITTED") # Redirect after POST
@@ -150,9 +155,10 @@ def newvenues (request):
             bums = form.getlist('bums',"")[i]
             grade = form.getlist('grade',"")[i]
             pairs = form.getlist('pairs',"")[i]
+            registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))
                         
             query = Venue(code = code , building = building  ,
-                seats = seats, bums = bums , grade = grade, pairs = pairs)
+                seats = seats, bums = bums , grade = grade, pairs = pairs,registered_by= registered_by)
             query.save()
 
             return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
