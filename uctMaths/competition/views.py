@@ -79,14 +79,16 @@ def venues(request):
 
 # Register Students    
 def newstudents(request):
-    if request.method=='POST' and 'sub1' in request.POST: # If the form has been submitted...
+    if request.method == 'POST':  # If the form has been submitted...
+        print "here gg"
         form = (request.POST) # A form bound to the POST data
-        for i in range (2):
+        for i in range (25):
+          if form.getlist('firstname',"")[i] == u'': continue
           firstname = form.getlist('firstname',"")[i]
           surname = form.getlist('surname',"")[i]
-          language = form.getlist('language',"")[i]
+          language = form.getlist('language',"")[0]
           reference = 1234
-          school = School.objects.get(pk=int(form.getlist('school',"")[i]))
+          school = School.objects.get(pk=int(form.getlist('school',"")[0]))
           print "here2 ", firstname
           print "here3 ", school
           grade = form.getlist('grade',"")[i]
@@ -102,7 +104,7 @@ def newstudents(request):
         print "hello"
 
     schoolOptions = School.objects.all()
-    c = {'type':'Students', 'schools':schoolOptions, 'range':range(2)}
+    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(6), 'grades':range(8,13)}
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 

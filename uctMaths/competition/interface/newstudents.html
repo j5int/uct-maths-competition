@@ -1,54 +1,76 @@
 {%extends "base.html"%}
 <!-- base.html contains the sidebar and header -->
 
-{%block title%}Students{%endblock%}
+{%block title%}New Students{%endblock%}
 {%block content%}
-    <h1 >Register New Students</h1>
-    <form action = "." method="post">
-        {% csrf_token %}
-        <!-- {{ form.as_p }} -->
-          {% if user.is_authenticated %}
-    <p> Logged in as {{ user.username }}.</p>
-{% else %}
-    <p>Not working.</p>
-{% endif %}
+<h1 >Register Students for a School</h1>
+<form action="." method="post">
+    {% csrf_token %}
+    <!-- {{ form.as_p  }} -->
+    {% if user.is_authenticated %}
+    <!-- <p> Logged in as {{ user.username }}.</p> -->
+    {% else %}
+        <p>Not working.</p>
+    {% endif %}
+    <select name = "school">
+        {% for school in schools %}
+            <option value="{{ school.id }}">{{ school.name }}</option>
+        {% endfor %}
+    </select>
+
+    <select name = "language">
+        <option value="a">Afrikaans</option>
+        <option value="e">English</option>
+    </select>
+    {%for grade in grades%}
+    <div>
+        <h2>Grade: {{grade}}</h2>
+        <div>
+            <h3>Pairs
+            <select>
+                {%for p in pairs_per_grade%}
+                <option value='{{p}}'>{{p}}</option>
+                {%endfor%}
+            </select>
+            </h3>
+        </div> 
+        <h3>Individuals</h3>
+
         <table>
         <tr>
             <th>Name</th>
             <th>Surname</th>
-            <th>Language</th>
-            <th>School</th>
-            <th>Grade</th>
+            <!-- <th>Language</th> -->
+            <!-- <th>School</th> -->
+            <!-- <th>Grade</th> -->
             <th>Sex</th>
         </tr>
-        {%for i in range%}
+        {%for entry in entries_per_grade%}
         <tr>
             <td><input type="text" name="firstname"></td>
             <td><input type="text" name="surname"></td>
             <td>
-                <select name = "language">
-                    <option value="a">Afrikaans</option>
-                    <option value="e">English</option>
+                <select name = "sex">
+                    <option value='f'>Female</option>
+                    <option value='m'>Male</option>
                 </select>
+
+                <!-- <input type ="text" name="sex"> -->
             </td>
-            <td>
-                <select name = "school">
-                    {% for entry in schools %}
-                        <option value="{{ entry.id }}">{{ entry.name }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-          <td><input type ="text" name="grade"></td>
-          <td><input type ="text" name="sex"></td>
+
+          <input type='hidden' name='grade' value='{{grade}}'>
           <input type ="hidden" name="registered_by" value ={{ user.id }} >
         </tr>
         {%endfor%}
 
-        </table>
-       
+        </table> 
 
         
-        <input class="bluebutton left" name="sub2" type="submit" value="Submit1">
+        <br><br>
+    </div>
+        {%endfor%} 
+        <!-- endfor grade -->
+<input class="bluebutton left" type="submit" value="Submit">
     </form>
    
 {%endblock%}

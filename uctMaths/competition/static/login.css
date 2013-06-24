@@ -128,7 +128,7 @@
 	text-shadow: -1px -1px #bababa;
 	/*float: right;*/
 	margin-left: 10px;
-	margin-top: 5px;
+	margin-top: 8px;
 	cursor: pointer;
 }
 
@@ -162,8 +162,9 @@
 	color: #fff;
 	text-shadow: -1px -1px #00548f;
 	/*float: right;*/
-	margin-left: 10px;
-	margin-top: 5px;
+	/*margin-left: 10px;*/
+	margin-bottom: 10px;
+	margin-top: 8px;
 	cursor: pointer;
 }
 
