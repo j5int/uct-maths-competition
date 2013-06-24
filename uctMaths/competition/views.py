@@ -100,7 +100,7 @@ def newstudents(request):
         form = StudentForm() # An unbound form
 
     schoolOptions = School.objects.all()
-    c = {'type':'Students', 'schools':schoolOptions, 'range':range(2)}
+    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(6), 'grades':range(8,13)}
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 
