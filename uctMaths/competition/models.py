@@ -64,7 +64,7 @@ class SchoolStudent(models.Model):
     def __str__(self):
         return "pair "+str(self.reference) if self.surname == "" else self.surname+", "+self.firstname
     class Meta:
-        ordering = ['surname', 'firstname','reference'] #defines the way the records are sorted.
+        ordering = ['grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
 class SchoolUser(models.Model):
     """The administrator for a single school. A User can register/update/remove SchoolStudents and Invigilators."""

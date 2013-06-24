@@ -8,24 +8,30 @@
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
         <table>
-        <tr>
-            <th>First Name</th>
-            <th>Surname</th>
-            <th>Language</th>
-            <th>School</th>
-            <th>Grade</th>
-            <th>Sex</th>
-        </tr>
-        {%for s in students%}
-        <tr>
-            <td>{{s.firstname}}</td>
-            <td>{{s.surname}}</td>
-            <td>{{s.language}}</td>
-            <td>{{s.school}}</td>
-            <td>{{s.grade}}</td>
-            <td>{{s.sex}}</td>
-        </tr>
-        {%endfor%}
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Language</th>
+                <th>School</th>
+                <th>Grade</th>
+                <th>Sex</th>
+            </tr>
+            {%for s in students%}
+            <tr>
+                <td>{{s.firstname}}</td>
+                <td>{{s.surname}}</td>
+                <td>
+                    {%if s.language == 'a'%}Afrikaans{%endif%}
+                    {%if s.language == 'e'%}English{%endif%}
+                </td>
+                <td>{{s.school}}</td>
+                <td>{{s.grade}}</td>
+                <td>
+                    {%if s.sex == 'f'%}Female{%endif%}
+                    {%if s.sex == 'm'%}Male{%endif%}
+                </td>
+            </tr>
+            {%endfor%}
         </table>
     </form>
 {%endblock%}

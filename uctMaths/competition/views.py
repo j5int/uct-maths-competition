@@ -79,9 +79,10 @@ def venues(request):
 
 # Register Students    
 def newstudents(request):
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST':  # If the form has been submitted...
+        print "here gg"
         form = (request.POST) # A form bound to the POST data
-        for i in range (5):
+        for i in range (25):
           # print form.getlist('firstname',"")
           if form.getlist('firstname',"")[i] == u'': continue
           firstname = form.getlist('firstname',"")[i]
@@ -99,9 +100,11 @@ def newstudents(request):
           query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                   school = school, grade = grade , sex = sex, registered_by= registered_by)
           query.save()
-        return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
+        return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+    
     else:
         form = StudentForm() # An unbound form
+        print "hello"
 
     schoolOptions = School.objects.all()
     c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(6), 'grades':range(8,13)}
