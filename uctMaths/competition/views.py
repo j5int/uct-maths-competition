@@ -35,19 +35,21 @@ def main (request):
  #   return render_to_response('onlinemaths.html', {})
 
 #******************************************
+# View Students
 def students(request):
-    return render_to_response('profile.html',{})
-
+    return render_to_response('students.html',{})
+# View Schools
 def schools(request):
-    return render_to_response('profile.html',{})
-
-def venues(request):
-    return render_to_response('profile.html',{})
-
+    return render_to_response('schools.html',{})
+# View Invigilators
 def invigilators(request):
-    return render_to_response('profile.html',{})
+    return render_to_response('invigilators.html',{})
 
-#Register Students    
+# View Venues, Admin only
+def venues(request):
+    return render_to_response('venues.html',{})
+
+# Register Students    
 def newstudents(request):
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
