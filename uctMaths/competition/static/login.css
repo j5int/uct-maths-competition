@@ -105,6 +105,7 @@
 	border-top: 1px solid #ddd;
 	padding: 15px;
 	height: 34px;
+	/*vertical-align: bottom;*/
 }
 
 .greybutton {
@@ -125,8 +126,9 @@
 	padding: 6px 12px;
 	color: #fff;
 	text-shadow: -1px -1px #bababa;
-	float: right;
+	/*float: right;*/
 	margin-left: 10px;
+	margin-top: 5px;
 	cursor: pointer;
 }
 
@@ -159,9 +161,9 @@
 	padding: 6px 12px;
 	color: #fff;
 	text-shadow: -1px -1px #00548f;
-	float: right;
+	/*float: right;*/
 	margin-left: 10px;
-	margin-top: 10px;
+	margin-top: 5px;
 	cursor: pointer;
 }
 

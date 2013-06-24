@@ -32,6 +32,10 @@ def main (request):
    return render_to_response('main.html',{})
 
 
+# submitted things
+def submitted(request, c):
+  return render_to_response('submitted.html', c)
+
 # def regStudent (request, ):
 #    return render_to_response('regStudent.html',{})
 
@@ -71,14 +75,14 @@ def newstudents(request):
           query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                   school = school, grade = grade , sex = sex, registered_by= registered_by)
           query.save()
-        return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+          return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
     else:
         form = StudentForm() # An unbound form
 
     schoolOptions = School.objects.all()
-    c = {'schools':schoolOptions, 'range':range(2)}
+    c = {'type':'Students', 'schools':schoolOptions, 'range':range(2)}
     c.update(csrf(request))
-    return render_to_response('newstudents.html', c,context_instance=RequestContext(request))
+    return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 
 
 #*****************************************
@@ -101,14 +105,14 @@ def newschools (request):
                 address = address, phone = phone , fax = fax, contact = contact , email = email, registered_by= registered_by)
             query.save()
 
-            return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+            return render_to_response('submitted.html', {'type':'School'}) # Redirect after POST
   else:
         form = SchoolForm() # An unbound form
   
 
-  c = { 'range':range(2)} #****** ADD RANGE
+  c = {'type':'Schools', 'range':range(2)} #****** ADD RANGE
   c.update(csrf(request))
-  return render_to_response('newschools.html', c)
+  return render_to_response('newschools.html', c, context_instance=RequestContext(request))
 
 #******************************************
 #Register Invigilators
@@ -136,14 +140,14 @@ def newinvigilators (request):
                 fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible, registered_by= registered_by)
             query.save()
 
-            return HttpResponseRedirect("ITS BEEN SUBMITTED") # Redirect after POST
+            return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
   else:
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
 
   c = {'schools':schoolOptions, 'range':range(2)} #******ADD RANGE
   c.update(csrf(request))
-  return render_to_response('newinvigilators.html', c)
+  return render_to_response('newinvigilators.html', c, context_instance=RequestContext(request))
 
 #***************************************
 #Register Venues
@@ -163,13 +167,13 @@ def newvenues (request):
                 seats = seats, bums = bums , grade = grade, pairs = pairs,registered_by= registered_by)
             query.save()
 
-            return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+            return render_to_response('submitted.html', {'type':'Venue'}) # Redirect after POST
     else:
         form = VenueForm() # An unbound form
    
-    c = {'range':range(1)}
+    c = {'type':'Invigilators','range':range(1)}
     c.update(csrf(request))
-    return render_to_response('newvenues.html', c)
+    return render_to_response('newvenues.html', c, context_instance=RequestContext(request))
 
 #******************************************  
 def search_form (request):

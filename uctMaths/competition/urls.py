@@ -22,6 +22,9 @@ urlpatterns = patterns('',
 	url(r'^register/schools/', views.newschools, name='newschools'),
 	url(r'^register/invigilators/', views.newinvigilators, name='newinvigilators'),
 	url(r'^register/venues/', views.newvenues, name='newvenues'),
+
+	url(r'^register/submitted', views.submitted, name='submitted'),
+
 	#test search bars
 
 	url(r'^search-form/$', views.search_form),
