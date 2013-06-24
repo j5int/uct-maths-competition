@@ -1,12 +1,13 @@
 {%extends "base.html"%}
 <!-- base.html contains the sidebar and header -->
 
-{%block title%}Students{%endblock%}
+{%block title%}Registered Students{%endblock%}
 {%block content%}
     <h1 >View Students</h1>
     <form action="." method="post">
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
+        <p>Username: {{user}}</p>
         <table>
         <tr>
             <th>First Name</th>

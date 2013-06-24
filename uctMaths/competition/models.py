@@ -101,6 +101,7 @@ class Venue(models.Model):
     grade       = models.IntegerField(db_column='Grade')
     pairs       = models.IntegerField(db_column='Pairs')
     registered_by = models.ForeignKey(User, db_column='Registered By')
+
     def __str__(self):
         return self.building+", "+self.code
     class Meta:

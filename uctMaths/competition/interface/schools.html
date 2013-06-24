@@ -3,22 +3,32 @@
 
 {%block title%}Schools{%endblock%}
 {% block content %}
-    <h1>Adding School</h1>
+    <h1>Registered Schools</h1>
 
     <form action="." method="post">
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
-        <p>Name: <input type="text" name="name"></p>
-        <p>Language: <select name = "language">
-            <option value="a">Afrikaans</option>
-            <option value="e">English</option>
-         </select></p></p>
-        <p>Address: <input type ="text" name="address"></p>
-        <p>Phone: <input type ="text" name="phone"></p>
-        <p>Fax: <input type ="text" name="fax"></p>
-        <p>Contact: <input type ="text" name="contact"></p>
-        <p>Email: <input type ="text" name="email"></p>
-        
-        <input type="submit" value="Submit">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Language</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Fax</th>
+            </tr>
+            {%for s in schools%}
+            <tr>
+                <td>{{s.name}}</td>
+                <td>{{s.language}}</td>
+                <td>{{s.address}}</td>
+                <td>{{s.phone}}</td>
+                <td>{{s.email}}</td>
+                <td>{{s.contact}}</td>
+                <td>{{s.fax}}</td>
+            </tr>
+            {%endfor%}
+        </table>
     </form>
 {%endblock%}

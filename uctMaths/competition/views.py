@@ -14,6 +14,8 @@ from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueFor
 from competition.models import SchoolStudent, School, Invigilator, Venue 
 from django.contrib.auth.models import User
 
+from django.contrib.auth.models import User, check_password
+
 
 def index(request):
 	return render_to_response('base.html', {})
@@ -61,8 +63,8 @@ def newstudents(request):
           language = form.getlist('language',"")[i]
           reference = 1234
           school = School.objects.get(pk=int(form.getlist('school',"")[i]))
-          print "here2 ", firstname
-          print "here3 ", school
+          # print "here2 ", firstname
+          # print "here3 ", school
           grade = form.getlist('grade',"")[i]
           sex = form.getlist('sex',"")[i]  
           registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))          

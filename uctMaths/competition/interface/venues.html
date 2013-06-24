@@ -9,13 +9,27 @@
     <form action="." method="post">
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
-        <p>Code: <input type="text" name="code"></p>
-        <p>Building: <input type="text" name="building"></p>
-        <p>Seats: <input type ="text" name="seats"></p>
-        <p>Bums: <input type ="text" name="bums"></p>
-        <p>Grade: <input type ="text" name="grade"></p>
-        <p>Pairs: <input type ="text" name="pairs"></p>
-    
-        <input type="submit" value="Submit">
+        <table>
+            <tr>
+                <th>Building</th>
+                <th>Code</th>
+                <th>Seats</th>
+                <th>Bums</th>
+                <th>Grade</th>
+                <th>Pairs</th>
+            </tr>
+            {%for v in venues%}
+            <tr>
+                <td>{{v.building}}</td>
+                <td>{{v.code}}</td>
+                <td>{{v.seats}}</td>
+                <td>{{v.bums}}</td>
+                <td>{{v.grade}}</td>
+                <td>{{v.pairs}}</td>
+
+            </tr>
+            {%endfor%}
+
+        </table>
     </form>
 {%endblock%}
