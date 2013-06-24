@@ -48,14 +48,30 @@ def students(request):
 
 # View Schools
 def schools(request):
-    return render_to_response('schools.html',{})
+    username = request.user
+    schoolOptions = School.objects.filter(registered_by = username)
+    print schoolOptions
+    c = {'schools':schoolOptions}#, 'temp1':venueOptions1}
+    c.update(csrf(request))
+    return render_to_response('schools.html', c,context_instance=RequestContext(request))
+
 # View Invigilators
 def invigilators(request):
-    return render_to_response('invigilators.html',{})
+    username = request.user
+    invigilators = Invigilator.objects.filter(registered_by = username)
+    print invigilators
+    c = {'invigilators':invigilators}#, 'temp1':venueOptions1}
+    c.update(csrf(request))
+    return render_to_response('invigilators.html', c,context_instance=RequestContext(request))
 
 # View Venues, Admin only
 def venues(request):
-    return render_to_response('venues.html',{})
+    username = request.user
+    venues = Venue.objects.filter(registered_by = username)
+    print venues
+    c = {'venues':venues}#, 'temp1':venueOptions1}
+    c.update(csrf(request))
+    return render_to_response('venues.html', c,context_instance=RequestContext(request))
 
 # Register Students    
 def newstudents(request):
@@ -90,6 +106,7 @@ def newstudents(request):
 def newschools (request):
   if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
+        print form
         for i in range (2):
             name = form.getlist('name',"")[i]
             key = "1234" #************FIX!!!!!!!!!!!!!!!!
@@ -105,14 +122,14 @@ def newschools (request):
                 address = address, phone = phone , fax = fax, contact = contact , email = email, registered_by= registered_by)
             query.save()
 
-            return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+        return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
   else:
         form = SchoolForm() # An unbound form
   
 
   c = { 'range':range(2)} #****** ADD RANGE
   c.update(csrf(request))
-  return render_to_response('newschools.html', c)
+  return render_to_response('newschools.html', c,context_instance=RequestContext(request))
 
 #******************************************
 #Register Invigilators
@@ -147,7 +164,7 @@ def newinvigilators (request):
 
   c = {'schools':schoolOptions, 'range':range(2)} #******ADD RANGE
   c.update(csrf(request))
-  return render_to_response('newinvigilators.html', c)
+  return render_to_response('newinvigilators.html', c,context_instance=RequestContext(request))
 
 #***************************************
 #Register Venues
@@ -174,7 +191,7 @@ def newvenues (request):
    
     c = {'range':range(1)}
     c.update(csrf(request))
-    return render_to_response('newvenues.html', c)
+    return render_to_response('newvenues.html', c,context_instance=RequestContext(request))
 
 #******************************************  
 def search_form (request):
