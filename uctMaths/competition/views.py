@@ -75,7 +75,7 @@ def newstudents(request):
           query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                   school = school, grade = grade , sex = sex, registered_by= registered_by)
           query.save()
-          return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
+        return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
     else:
         form = StudentForm() # An unbound form
 
@@ -105,7 +105,7 @@ def newschools (request):
                 address = address, phone = phone , fax = fax, contact = contact , email = email, registered_by= registered_by)
             query.save()
 
-            return render_to_response('submitted.html', {'type':'School'}) # Redirect after POST
+        return render_to_response('submitted.html', {'type':'School'}) # Redirect after POST
   else:
         form = SchoolForm() # An unbound form
   
@@ -140,7 +140,7 @@ def newinvigilators (request):
                 fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible, registered_by= registered_by)
             query.save()
 
-            return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
+        return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
   else:
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
@@ -167,7 +167,7 @@ def newvenues (request):
                 seats = seats, bums = bums , grade = grade, pairs = pairs,registered_by= registered_by)
             query.save()
 
-            return render_to_response('submitted.html', {'type':'Venue'}) # Redirect after POST
+        return render_to_response('submitted.html', {'type':'Venue'}) # Redirect after POST
     else:
         form = VenueForm() # An unbound form
    
