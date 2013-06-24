@@ -23,6 +23,8 @@ body {
 	margin-bottom: 20px;
 	text-transform: uppercase;
 }
+
+
 	
 .title	{
 		padding-left: 50px;
@@ -82,7 +84,7 @@ body {
 	
 #sidebar .box
 	{
-		margin-bottom: 3em;
+		margin-bottom: 1em;
 	}
 
 #sidebar a
@@ -114,6 +116,7 @@ ul.style1 li:first-child
 #content table
 {
 	table-layout: fixed;
+	background-color: #C1D0DB;
 	border-collapse:collapse;
 }
 #content td, th 
@@ -124,7 +127,8 @@ ul.style1 li:first-child
 #content input{
   width:8em;
 }
- th 
+
+th 
 {
 	font-size:1em;
 	text-align:left;
@@ -132,6 +136,7 @@ ul.style1 li:first-child
 	padding-bottom:4px;
 	background-color:#00548f;
 	color:#ffffff;
+	/*border: none;*/
 }
 tr.alt td 
 {
