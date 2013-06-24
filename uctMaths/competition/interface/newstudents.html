@@ -14,7 +14,7 @@
     {% endif %}
     <select name = "school">
         {% for school in schools %}
-            <option value="{{ entry.id }}">{{ school.name }}</option>
+            <option value="{{ school.id }}">{{ school.name }}</option>
         {% endfor %}
     </select>
 
@@ -24,17 +24,18 @@
     </select>
     {%for grade in grades%}
     <div>
-        <h2>Grade: {{grade}}</h2>
+        <!-- <form action="." method="post"> -->
+        <h2>Grade {{grade}}</h2>
         <div>
-            <h3>Pairs
-            <select>
+            <h3>Pairs:
+            <select name = "pairs">
                 {%for p in pairs_per_grade%}
                 <option value='{{p}}'>{{p}}</option>
                 {%endfor%}
             </select>
             </h3>
         </div> 
-        <h3>Individuals</h3>
+        <h3>Individuals:</h3>
         <table>
         <tr>
             <th>Name</th>
@@ -49,7 +50,7 @@
             <td><input type="text" name="firstname"></td>
             <td><input type="text" name="surname"></td>
             <td>
-                <select>
+                <select name = "sex">
                     <option value='f'>Female</option>
                     <option value='m'>Male</option>
                 </select>
@@ -64,10 +65,12 @@
 
         </table> 
 
-        <input class="bluebutton left" type="submit" value="Submit">
+    <!-- </form> -->
         <br><br>
     </div>
         {%endfor%} 
         <!-- endfor grade -->
+    <input class="bluebutton left" type="submit" name='{{grade}}' value="Submit">
+
     </form>
 {%endblock%}

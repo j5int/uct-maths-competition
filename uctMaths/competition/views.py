@@ -81,14 +81,18 @@ def venues(request):
 def newstudents(request):
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
-        for i in range (2):
+        for i in range (5):
+          # print form.getlist('firstname',"")
+          if form.getlist('firstname',"")[i] == u'': continue
           firstname = form.getlist('firstname',"")[i]
           surname = form.getlist('surname',"")[i]
-          language = form.getlist('language',"")[i]
+          print "school:", form.getlist('school',"1")
+          print "language:",form.getlist('language',"")
+          language = form.getlist('language',"")[0]
           reference = 1234
-          school = School.objects.get(pk=int(form.getlist('school',"")[i]))
-          print "here2 ", firstname
-          print "here3 ", school
+          school = School.objects.get(pk=int(form.getlist('school',"")[0]))
+          # print "here2 ", firstname
+          # print "here3 ", school
           grade = form.getlist('grade',"")[i]
           sex = form.getlist('sex',"")[i]  
           registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))          
