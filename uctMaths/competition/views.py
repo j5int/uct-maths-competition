@@ -80,8 +80,33 @@ def venues(request):
 # Register Students    
 def newstudents(request):
     if request.method == 'POST':  # If the form has been submitted...
-        print "here gg"
+       # print "here gg"
         form = (request.POST) # A form bound to the POST data
+        for grade in range (8,13):
+          print "here1!!!! " , int(form.getlist("pairs","")[grade-8])
+          for p in range(int(form.getlist("pairs","")[grade-8])):
+            firstname = ""
+            surname = ""
+            language = ""
+            reference = 1234
+            school = School.objects.get(pk=int(form.getlist('school',"")[0]))
+            print "here2 ", firstname
+            print "here3 ", school
+            # grade = form.getlist('grade',"")[i]
+            sex = "" 
+            registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[p]))          
+            query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
+                    school = school, grade = grade , sex = sex, registered_by= registered_by)
+            
+
+            query.save()
+            query.reference=query.id
+            query.save()
+            query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = query.id,
+                    school = school, grade = grade , sex = sex, registered_by= registered_by)
+            
+            query1.save()            
+
         for i in range (25):
           # print form.getlist('firstname',"")
           if form.getlist('firstname',"")[i] == u'': continue
@@ -100,11 +125,12 @@ def newstudents(request):
           query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                   school = school, grade = grade , sex = sex, registered_by= registered_by)
           query.save()
-        return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
+
+        return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
     
     else:
         form = StudentForm() # An unbound form
-        print "hello"
+        
 
     schoolOptions = School.objects.all()
     c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(6), 'grades':range(8,13)}
