@@ -24,6 +24,7 @@
             {%for s in students%}
             <tr class='show' id="show{{s.id}}">
                 <td>{{s.firstname}}</td>
+                
                 <td>{{s.surname}}</td>
                 <td>
                     {%if s.language == 'a'%}Afrikaans{%endif%}

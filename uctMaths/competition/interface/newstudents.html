@@ -43,9 +43,11 @@
         </tr>
         {%for entry in entries_per_grade%}
         <tr>
+             <td><input type="text" name="firstname"></td>
             <td><input type="text" name="surname"></td>
             <td>
                 <select name = "sex">
+                    <option value=''>---</option>
                     <option value='f'>Female</option>
                     <option value='m'>Male</option>
                 </select>

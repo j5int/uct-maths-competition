@@ -31,7 +31,7 @@ def students(request):
     username = request.user
     userType = request.user.is_superuser
     studentOptions = SchoolStudent.objects.filter(registered_by = username)
-    print studentOptions
+    # print studentOptions
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         for i in range (studentOptions.count()): #RANGE!!!!!!!!
@@ -39,10 +39,12 @@ def students(request):
           studentUpdate = SchoolStudent.objects.get(id= studentID)
           studentUpdate.firstname = form.getlist('firstname',"")[i]
           studentUpdate.surname = form.getlist('surname',"")[i]
-          studentUpdate.language = form.getlist('language',"")[i]
-          studentUpdate.sex = form.getlist('sex',"")[i]
+          if userType : #ADMIN PERMISSION
+            studentUpdate.language = form.getlist('language',"")[i]
+            studentUpdate.sex = form.getlist('sex',"")[i]
+
           studentUpdate.save()
-          print "here!! ", studentUpdate
+          # print "here!! ", studentUpdate
     c = {'students':studentOptions, 'userType':userType}#, 'temp1':venueOptions1}
     c.update(csrf(request))
     return render_to_response('students.html', c,context_instance=RequestContext(request))
@@ -52,7 +54,7 @@ def schools(request):
     username = request.user
     userType = request.user.is_superuser
     schoolOptions = School.objects.filter(registered_by = username)
-    print schoolOptions
+    # print schoolOptions
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         for i in range (schoolOptions.count()): #RANGE!!!!!!!!
@@ -66,7 +68,7 @@ def schools(request):
           schoolUpdate.contact = form.getlist('contact',"")[i]
           schoolUpdate.fax = form.getlist('fax',"")[i]
           schoolUpdate.save()
-          print "here!! ", schoolUpdate
+          # print "here!! ", schoolUpdate
     c = {'schools':schoolOptions, 'userType':userType}#, 'temp1':venueOptions1}
     c.update(csrf(request))
     return render_to_response('schools.html', c,context_instance=RequestContext(request))
@@ -76,7 +78,7 @@ def invigilators(request):
     username = request.user
     userType = request.user.is_superuser
     invigilators = Invigilator.objects.filter(registered_by = username)
-    print invigilators
+    # print invigilators
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         for i in range (invigilators.count()): #RANGE!!!!!!!!
@@ -95,7 +97,7 @@ def invigilators(request):
           invigilatorUpdate.email = form.getlist('email',"")[i]
           invigilatorUpdate.responsible = form.getlist('responsible',"")[i]
           invigilatorUpdate.save()
-          print "here!! ", invigilatorUpdate
+          # print "here!! ", invigilatorUpdate
     c = {'invigilators':invigilators, 'userType':userType}#, 'temp1':venueOptions1}
     c.update(csrf(request))
     return render_to_response('invigilators.html', c,context_instance=RequestContext(request))
@@ -105,20 +107,21 @@ def venues(request):
     username = request.user
     userType = request.user.is_superuser
     venues = Venue.objects.filter(registered_by = username)
-    print venues
-    if request.method == 'POST': # If the form has been submitted...
-        form = (request.POST) # A form bound to the POST data
-        for i in range (venues.count()): #RANGE!!!!!!!!
-          venueID = form.getlist('venueID',"")[i]
-          venueUpdate = SchoolStudent.objects.get(id= venueID)
-          venueUpdate.building = form.getlist('building',"")[i]
-          venueUpdate.code = form.getlist('code',"")[i]
-          venueUpdate.seats = form.getlist('seats',"")[i]
-          venueUpdate.bums = form.getlist('bums',"")[i]
-          venueUpdate.grade = form.getlist('grade',"")[i]
-          venueUpdate.pairs = form.getlist('pairs',"")[i]
-          venueUpdate.save()
-          print "here!! ", venueUpdate
+    # print venues
+    if userType:
+      if request.method == 'POST': # If the form has been submitted...
+          form = (request.POST) # A form bound to the POST data
+          for i in range (venues.count()): #RANGE!!!!!!!!
+            venueID = form.getlist('venueID',"")[i]
+            venueUpdate = SchoolStudent.objects.get(id= venueID)
+            venueUpdate.building = form.getlist('building',"")[i]
+            venueUpdate.code = form.getlist('code',"")[i]
+            venueUpdate.seats = form.getlist('seats',"")[i]
+            venueUpdate.bums = form.getlist('bums',"")[i]
+            venueUpdate.grade = form.getlist('grade',"")[i]
+            venueUpdate.pairs = form.getlist('pairs',"")[i]
+            venueUpdate.save()
+          # print "here!! ", venueUpdate
     c = {'venues':venues, 'userType':userType}
     c.update(csrf(request))
     return render_to_response('venues.html', c,context_instance=RequestContext(request))
@@ -129,36 +132,33 @@ def newstudents(request):
        # print "here gg"
         form = (request.POST) # A form bound to the POST data
         for grade in range (8,13):
-          print "here1!!!! " , int(form.getlist("pairs","")[grade-8])
+          # print "here1!!!! " , int(form.getlist("pairs","")[grade-8])
           for p in range(int(form.getlist("pairs","")[grade-8])):
             firstname = ""
             surname = ""
             language = ""
             reference = 1234
             school = School.objects.get(pk=int(form.getlist('school',"")[0]))
-            print "here2 ", firstname
-            print "here3 ", school
+            # print "here2 ", firstname
+            # print "here3 ", school
             # grade = form.getlist('grade',"")[i]
             sex = "" 
             registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[p]))          
             query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                     school = school, grade = grade , sex = sex, registered_by= registered_by)
-            
-
             query.save()
             query.reference=query.id
             query.save()
             query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = query.id,
                     school = school, grade = grade , sex = sex, registered_by= registered_by)
-            
             query1.save()            
 
         for i in range (25):
           if form.getlist('firstname',"")[i] == u'': continue
           firstname = form.getlist('firstname',"")[i]
           surname = form.getlist('surname',"")[i]
-          print "school:", form.getlist('school',"1")
-          print "language:",form.getlist('language',"")
+          # print "school:", form.getlist('school',"1")
+          # print "language:",form.getlist('language',"")
           language = form.getlist('language',"")[0]
           reference = 1234
           school = School.objects.get(pk=int(form.getlist('school',"")[0]))
@@ -188,7 +188,7 @@ def newstudents(request):
 def newschools (request):
   if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
-        print form
+        # print form
         for i in range (2):
             if form.getlist('name',"")[i] == u'': continue
             name = form.getlist('name',"")[i]
@@ -257,28 +257,33 @@ def newinvigilators (request):
 #***************************************
 #Register Venues
 def newvenues (request):
-    print "here1", request.method
+    # print "here1", request.method
+    error = " "
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
-        for i in range (1):
-            if form.getlist('building',"")[i] == u'': continue
-            code = form.getlist('code',"")[i]
-            building = form.getlist('building',"")[i]
-            seats = form.getlist('seats',"")[i]
-            bums = form.getlist('bums',"")[i]
-            grade = form.getlist('grade',"")[i]
-            pairs = form.getlist('pairs',"")[i]
-            registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))
-                        
-            query = Venue(code = code , building = building  ,
-                seats = seats, bums = bums , grade = grade, pairs = pairs,registered_by= registered_by)
-            query.save()
+        try: 
+          for i in range (1):
+              if form.getlist('building',"")[i] == u'': continue
+              code = form.getlist('code',"")[i]
+              building = form.getlist('building',"")[i]
+              seats = form.getlist('seats',"")[i]
+              bums = form.getlist('bums',"")[i]
+              grade = form.getlist('grade',"")[i]
+              pairs = form.getlist('pairs',"")[i]
+              registered_by =  User.objects.get(pk=int(form.getlist('registered_by',"")[i]))
+                          
+              query = Venue(code = code , building = building  ,
+                  seats = seats, bums = bums , grade = grade, pairs = pairs,registered_by= registered_by)
+              query.save()
 
-        return render_to_response('submitted.html', {'type':'Venue'}) # Redirect after POST
+          return render_to_response('submitted.html', {'type':'Venue'}) # Redirect after POST
+        except Exception as e:
+              error = "Error in input"
+              
     else:
         form = VenueForm() # An unbound form
    
-    c = {'type':'Invigilators','range':range(1)}
+    c = {'type':'Invigilators','range':range(1), 'error':error}
     c.update(csrf(request))
     return render_to_response('newvenues.html', c, context_instance=RequestContext(request))
 
