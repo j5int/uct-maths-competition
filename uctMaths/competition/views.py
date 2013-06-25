@@ -31,6 +31,16 @@ def students(request):
     username = request.user
     studentOptions = SchoolStudent.objects.filter(registered_by = username)
     print studentOptions
+    if request.method == 'POST': # If the form has been submitted...
+        form = (request.POST) # A form bound to the POST data
+        for i in range (2):
+          studentID = form.getlist('studentID',"")[i]
+          studentUpdate = SchoolStudent.objects.get(id= studentID)
+          studentUpdate.firstname = form.getlist('firstname',"")[i]
+          studentUpdate.surname = form.getlist('surname',"")[i]
+          studentUpdate.language = form.getlist('language',"")[i]
+          studentUpdate.sex = form.getlist('sex',"")[i]
+          studentUpdate.save()
     c = {'students':studentOptions}#, 'temp1':venueOptions1}
     c.update(csrf(request))
     return render_to_response('students.html', c,context_instance=RequestContext(request))
