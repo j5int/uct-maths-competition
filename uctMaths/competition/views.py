@@ -34,13 +34,6 @@ def main (request):
 def submitted(request, c):
   return render_to_response('submitted.html', c)
 
-# def regStudent (request, ):
-#    return render_to_response('regStudent.html',{})
-
-#def index(request):
- #   return render_to_response('onlinemaths.html', {})
-
-#******************************************
 # View Students
 def students(request):
     username = request.user
@@ -73,7 +66,7 @@ def venues(request):
     username = request.user
     venues = Venue.objects.filter(registered_by = username)
     print venues
-    c = {'venues':venues}#, 'temp1':venueOptions1}
+    c = {'venues':venues}
     c.update(csrf(request))
     return render_to_response('venues.html', c,context_instance=RequestContext(request))
 
@@ -108,7 +101,6 @@ def newstudents(request):
             query1.save()            
 
         for i in range (25):
-          # print form.getlist('firstname',"")
           if form.getlist('firstname',"")[i] == u'': continue
           firstname = form.getlist('firstname',"")[i]
           surname = form.getlist('surname',"")[i]
@@ -145,6 +137,7 @@ def newschools (request):
         form = (request.POST) # A form bound to the POST data
         print form
         for i in range (2):
+            if form.getlist('name',"")[i] == u'': continue
             name = form.getlist('name',"")[i]
             key = "1234" #************FIX!!!!!!!!!!!!!!!!
             language = form.getlist('language',"")[i]
@@ -177,6 +170,7 @@ def newinvigilators (request):
   if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         for i in range (1):
+            if form.getlist('firstname',"")[i] == u'': continue
             school = School.objects.get(pk=int(form.getlist('school',"")[i]))
             firstname = form.getlist('firstname',"")[i]
             surname = form.getlist('surname',"")[i]
@@ -214,6 +208,7 @@ def newvenues (request):
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         for i in range (1):
+            if form.getlist('building',"")[i] == u'': continue
             code = form.getlist('code',"")[i]
             building = form.getlist('building',"")[i]
             seats = form.getlist('seats',"")[i]
@@ -237,25 +232,24 @@ def newvenues (request):
 
 #******************************************  
 def search_form (request):
-  building = request.user
-  #code = ""
-  print "here1", request.method
-  # if request.method == 'POST': # If the form has been submitted...
-  #       print "here2"
-  #       form = (request.POST) # A form bound to the POST data
-  #       print "here4"
-  #       for i in range (1):
-  #           print "here5"
-  #           building = User.objects.get(pk=int(form.getlist('registered_by',"")[i]))          #code = form.cleaned_data['code']
-  #           print "here3"
-  #           #return HttpResponseRedirect("IT'S BEEN SUBMITTED") # Redirect after POST
-  # else:
-  #       form = testForm() # An unbound form
-  venueOptions = SchoolStudent.objects.filter(registered_by = building)
-  print "here4"
-  #venueOptions1 = Venue.objects.filter(code=code)
-  print venueOptions
-  c = {'temp':venueOptions}#, 'temp1':venueOptions1}
-  c.update(csrf(request))
-  return render_to_response('search_form.html', c,context_instance=RequestContext(request))
+    username = request.user
+    studentOptions = SchoolStudent.objects.filter(registered_by = username)
+    print studentOptions
+    if request.method == 'POST': # If the form has been submitted...
+        form = (request.POST) # A form bound to the POST data
+        for i in range (2):
+          studentID = form.getlist('studentID',"")[i]
+          studentUpdate = SchoolStudent.objects.get(id= studentID)
+          studentUpdate.firstname = form.getlist('firstname',"")[i]
+          studentUpdate.surname = form.getlist('surname',"")[i]
+          studentUpdate.language = form.getlist('language',"")[i]
+          studentUpdate.sex = form.getlist('sex',"")[i]
+          studentUpdate.save()
+    # studentTemp.surname = "ww"
+
+    # # studentTemp.delete()
+    # print "student! ", studentTemp
+    c = {'students':studentOptions}#, 'temp1':venueOptions1}
+    c.update(csrf(request))
+    return render_to_response('search_form.html', c,context_instance=RequestContext(request))
     
