@@ -3,6 +3,7 @@
 {%block title%}New Students{%endblock%}
 {%block content%}
 <h1 >Register Students for a School</h1>
+<p> {{ error }} </p>
 <form action="." method="post">
     {% csrf_token %}
     <!-- {{ form.as_p  }} -->
