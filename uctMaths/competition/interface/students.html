@@ -1,6 +1,10 @@
 {%extends "base.html"%}
 <!-- base.html contains the sidebar and header -->
-
+{%block head%}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src='/static/sidebar.js'></script>
+<script type="text/javascript" src='/static/tables.js'></script>
+{%endblock%}
 {%block title%}Registered Students{%endblock%}
 {%block content%}
     <h1>Registered Students</h1>
@@ -15,9 +19,10 @@
                 <th>School</th>
                 <th>Grade</th>
                 <th>Sex</th>
+                <th></th>
             </tr>
             {%for s in students%}
-            <tr>
+            <tr class='show' id="show{{s.id}}">
                 <td>{{s.firstname}}</td>
                 <td>{{s.surname}}</td>
                 <td>
@@ -30,6 +35,30 @@
                     {%if s.sex == 'f'%}Female{%endif%}
                     {%if s.sex == 'm'%}Male{%endif%}
                 </td>
+                <td><input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick="toggle_input(this.id, 'ask')" value='edit'></td>
+
+            </tr>
+            <tr id="ask{{s.id}}" style='display:none'>
+                <td><input type="text" name="firstname" value='{{s.firstname}}'></td>
+                <td><input type="text" name="surname"  value='{{s.surname}}'></td>
+                <td><select name = "language" selected='{{s.language}}'>
+                    <option value="a">Afrikaans</option>
+                    <option value="e">English</option>
+                </select>
+                </td>
+                <td>{{s.school}}</td>
+                <td>{{s.grade}}</td>
+                <td>
+                <select name = "sex" selected='{{s.sex}}'>
+                    <option value='f'>Female</option>
+                    <option value='m'>Male</option>
+                </select>
+
+                <!-- <input type ="text" name="sex"> -->
+                </td>
+                <td><input id = "{{s.id}}" class='bluebutton narrow right editbutton' onClick="toggle_input(this.id, 'show')" value='undo'>
+                </td>
+                <input type='hidden' name='studentID' value='{{s.id}}'>
             </tr>
             {%endfor%}
         </table>

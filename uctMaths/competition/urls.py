@@ -5,12 +5,6 @@ from competition import views
 
 urlpatterns = patterns('',
 
-	#url(r'^$', views.index, name='mths.uct.ac.za'),
-	#original umc sidebar
-	url(r'^content/', views.content, name='content'),
-	#original umc home
-	url(r'^main/', views.main, name='main'),
-
 	#table views
 	url(r'^students/', views.students, name='students'),
 	url(r'^schools/', views.schools, name='schools'),

@@ -1,6 +1,5 @@
 {%extends "base.html"%}
 <!-- base.html contains the sidebar and header -->
-
 {%block title%}New Students{%endblock%}
 {%block content%}
 <h1 >Register Students for a School</h1>
@@ -8,7 +7,6 @@
     {% csrf_token %}
     <!-- {{ form.as_p  }} -->
     {% if user.is_authenticated %}
-    <!-- <p> Logged in as {{ user.username }}.</p> -->
     {% else %}
         <p>Not working.</p>
     {% endif %}
@@ -41,14 +39,10 @@
         <tr>
             <th>Name</th>
             <th>Surname</th>
-            <!-- <th>Language</th> -->
-            <!-- <th>School</th> -->
-            <!-- <th>Grade</th> -->
             <th>Sex</th>
         </tr>
         {%for entry in entries_per_grade%}
         <tr>
-            <td><input type="text" name="firstname"></td>
             <td><input type="text" name="surname"></td>
             <td>
                 <select name = "sex">
@@ -68,8 +62,7 @@
 
         <br><br>
     </div>
-        {%endfor%} 
-        <!-- endfor grade -->
+        {%endfor%} <!-- endfor grade -->
     <input class="bluebutton left" type="submit" name='{{grade}}' value="Submit">
 
     </form>

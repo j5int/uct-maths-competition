@@ -16,18 +16,10 @@ from django.contrib.auth.models import User
 
 
 def index(request):
-	return render_to_response('base.html', {})
-
-def content (request):
-   #t = loader.get_template('base.html')
-   return render_to_response('contents.html',{})
-   #return HttpResponse(t.render(base.html))
+	return render_to_response('index.html', {})
 
 def profile(request):
     return render_to_response('profile.html',{})
-
-def main (request):
-   return render_to_response('main.html',{})
 
 
 # submitted things

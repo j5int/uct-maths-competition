@@ -13,6 +13,9 @@ body {
 .link a { color: #333333; }
 
 
+#content .narrow{
+	width: 2em;
+}
 
 .header {
 	text-align: center;
@@ -147,4 +150,6 @@ tr.alt td
 .leftpad{
 	padding-left: 5em;
 }
+
+
 
