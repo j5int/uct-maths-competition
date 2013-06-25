@@ -29,11 +29,12 @@ def submitted(request, c):
 # View Students
 def students(request):
     username = request.user
+    userType = request.user.is_superuser
     studentOptions = SchoolStudent.objects.filter(registered_by = username)
     print studentOptions
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
-        for i in range (2):
+        for i in range (studentOptions.count()): #RANGE!!!!!!!!
           studentID = form.getlist('studentID',"")[i]
           studentUpdate = SchoolStudent.objects.get(id= studentID)
           studentUpdate.firstname = form.getlist('firstname',"")[i]
@@ -41,34 +42,84 @@ def students(request):
           studentUpdate.language = form.getlist('language',"")[i]
           studentUpdate.sex = form.getlist('sex',"")[i]
           studentUpdate.save()
-    c = {'students':studentOptions}#, 'temp1':venueOptions1}
+          print "here!! ", studentUpdate
+    c = {'students':studentOptions, 'userType':userType}#, 'temp1':venueOptions1}
     c.update(csrf(request))
     return render_to_response('students.html', c,context_instance=RequestContext(request))
 
 # View Schools
 def schools(request):
     username = request.user
+    userType = request.user.is_superuser
     schoolOptions = School.objects.filter(registered_by = username)
     print schoolOptions
-    c = {'schools':schoolOptions}#, 'temp1':venueOptions1}
+    if request.method == 'POST': # If the form has been submitted...
+        form = (request.POST) # A form bound to the POST data
+        for i in range (schoolOptions.count()): #RANGE!!!!!!!!
+          schoolID = form.getlist('schoolID',"")[i]
+          schoolUpdate = SchoolStudent.objects.get(id= schoolID)
+          schoolUpdate.name = form.getlist('name',"")[i]
+          schoolUpdate.address = form.getlist('address',"")[i]
+          schoolUpdate.language = form.getlist('language',"")[i]
+          schoolUpdate.phone = form.getlist('phone',"")[i]
+          schoolUpdate.email = form.getlist('email',"")[i]
+          schoolUpdate.contact = form.getlist('contact',"")[i]
+          schoolUpdate.fax = form.getlist('fax',"")[i]
+          schoolUpdate.save()
+          print "here!! ", schoolUpdate
+    c = {'schools':schoolOptions, 'userType':userType}#, 'temp1':venueOptions1}
     c.update(csrf(request))
     return render_to_response('schools.html', c,context_instance=RequestContext(request))
 
 # View Invigilators
 def invigilators(request):
     username = request.user
+    userType = request.user.is_superuser
     invigilators = Invigilator.objects.filter(registered_by = username)
     print invigilators
-    c = {'invigilators':invigilators}#, 'temp1':venueOptions1}
+    if request.method == 'POST': # If the form has been submitted...
+        form = (request.POST) # A form bound to the POST data
+        for i in range (invigilators.count()): #RANGE!!!!!!!!
+          invigilatorID = form.getlist('invigilatorID',"")[i]
+          invigilatorUpdate = SchoolStudent.objects.get(id= invigilatorID)
+          invigilatorUpdate.firstname = form.getlist('firstname',"")[i]
+          invigilatorUpdate.surname = form.getlist('surname',"")[i]
+          invigilatorUpdate.school = form.getlist('school',"")[i]
+          invigilatorUpdate.grade = form.getlist('grade',"")[i]
+          invigilatorUpdate.venue = form.getlist('venue',"")[i]
+          invigilatorUpdate.inv_reg = form.getlist('inv_reg',"")[i]
+          invigilatorUpdate.phone_h = form.getlist('phone_h',"")[i]
+          invigilatorUpdate.phone_w = form.getlist('phone_w',"")[i]
+          invigilatorUpdate.fax_h = form.getlist('fax_h',"")[i]
+          invigilatorUpdate.fax_w = form.getlist('fax_w',"")[i]
+          invigilatorUpdate.email = form.getlist('email',"")[i]
+          invigilatorUpdate.responsible = form.getlist('responsible',"")[i]
+          invigilatorUpdate.save()
+          print "here!! ", invigilatorUpdate
+    c = {'invigilators':invigilators, 'userType':userType}#, 'temp1':venueOptions1}
     c.update(csrf(request))
     return render_to_response('invigilators.html', c,context_instance=RequestContext(request))
 
 # View Venues, Admin only
 def venues(request):
     username = request.user
+    userType = request.user.is_superuser
     venues = Venue.objects.filter(registered_by = username)
     print venues
-    c = {'venues':venues}
+    if request.method == 'POST': # If the form has been submitted...
+        form = (request.POST) # A form bound to the POST data
+        for i in range (venues.count()): #RANGE!!!!!!!!
+          venueID = form.getlist('venueID',"")[i]
+          venueUpdate = SchoolStudent.objects.get(id= venueID)
+          venueUpdate.building = form.getlist('building',"")[i]
+          venueUpdate.code = form.getlist('code',"")[i]
+          venueUpdate.seats = form.getlist('seats',"")[i]
+          venueUpdate.bums = form.getlist('bums',"")[i]
+          venueUpdate.grade = form.getlist('grade',"")[i]
+          venueUpdate.pairs = form.getlist('pairs',"")[i]
+          venueUpdate.save()
+          print "here!! ", venueUpdate
+    c = {'venues':venues, 'userType':userType}
     c.update(csrf(request))
     return render_to_response('venues.html', c,context_instance=RequestContext(request))
 
@@ -235,6 +286,7 @@ def newvenues (request):
 #******************************************  
 def search_form (request):
     username = request.user
+    print "user: ", request.user.is_superuser # DETERMINES TYPE OF STAFF
     studentOptions = SchoolStudent.objects.filter(registered_by = username)
     print studentOptions
     if request.method == 'POST': # If the form has been submitted...
@@ -244,8 +296,6 @@ def search_form (request):
           studentUpdate = SchoolStudent.objects.get(id= studentID)
           studentUpdate.firstname = form.getlist('firstname',"")[i]
           studentUpdate.surname = form.getlist('surname',"")[i]
-          studentUpdate.language = form.getlist('language',"")[i]
-          studentUpdate.sex = form.getlist('sex',"")[i]
           studentUpdate.save()
     # studentTemp.surname = "ww"
 

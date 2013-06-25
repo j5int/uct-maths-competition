@@ -41,10 +41,17 @@
             <tr id="ask{{s.id}}" style='display:none'>
                 <td><input type="text" name="firstname" value='{{s.firstname}}'></td>
                 <td><input type="text" name="surname"  value='{{s.surname}}'></td>
+                {% if userType %}
                 <td><select name = "language" selected='{{s.language}}'>
                     <option value="a">Afrikaans</option>
                     <option value="e">English</option>
                 </select>
+                {% elif not userType %}
+                <td>
+                    {%if s.language == 'a'%}Afrikaans{%endif%}
+                    {%if s.language == 'e'%}English{%endif%}
+                </td>
+                {% endif %}
                 </td>
                 <td>{{s.school}}</td>
                 <td>{{s.grade}}</td>
