@@ -1,29 +1,7 @@
 {%extends "plain_base.html"%}
 {%block head%}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
-</script>
-<script>
-var hid=false;
-$(document).ready(function(){
-    $('#hideshow').click(function(event) {    
-        $('#sidebar').toggle('show');
-        if (hid)	{
-        	// alert("showing");
-        	$('#hideshow').attr('src','/static/hidebutton.png'); 
-        	$('#hideshow').attr('alt','Hide'); 
-        	$('#hideshow').attr('title','Hide Sidebar'); 
-        	hid=false;
-        }
-        else {
-        	// alert("hiding");
-        	$('#hideshow').attr('src','/static/showbutton.png');
-        	$('#hideshow').attr('alt','Show'); 
-        	$('#hideshow').attr('title','Show Sidebar');
-        	hid=true;
-        }
-    });
-});
-</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src='/static/sidebar.js'></script>
 {%endblock%} <!-- end head -->
 
 {%block sidebar%}
