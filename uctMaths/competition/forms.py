@@ -77,7 +77,7 @@ class VenueForm(ModelForm):
 
 class VenueForm(forms.Form):
         fields = ['code','building','seats','bums','grade','pairs']
-        code = forms.IntegerField()
+        code = forms.CharField()
         building = forms.CharField()
         seats = forms.IntegerField ()   
         bums = forms.IntegerField()

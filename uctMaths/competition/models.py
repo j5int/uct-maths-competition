@@ -94,7 +94,7 @@ class SchoolUser(models.Model):
 
 class Venue(models.Model):
     """Venues are locations for the event. Many SchoolStudents to one Venue."""
-    code        = models.IntegerField(db_column='Code')
+    code        = models.CharField(max_length=40L, db_column='Code')
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
     bums        = models.IntegerField(db_column='Bums')
