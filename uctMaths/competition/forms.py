@@ -51,7 +51,7 @@ class InvigilatorForm (forms.Form):
         firstname = forms.CharField()
         surname = forms.CharField()
         grade = forms.IntegerField()
-        venue = forms.ModelChoiceField(queryset = Venue.objects.all())
+        # venue = forms.ModelChoiceField(queryset = Venue.objects.all())
         inv_reg = forms.CharField()
         phone_h = forms.CharField()
         phone_w = forms.CharField ()   

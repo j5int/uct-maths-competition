@@ -15,7 +15,7 @@
         <!-- {{ form.as_p }} -->
         <table>
             <tr>
-                <th>Name</th>
+                <th class='wide'>Name</th>
                 <th>Language</th>
                 <th>Address</th>
                 <th>Phone</th>
@@ -26,7 +26,7 @@
             </tr>
             {%for s in schools%}
             <tr id='show{{s.id}}'>
-                <td>{{s.name}}</td>
+                <td class='wide'>{{s.name}}</td>
                 <td>{{s.language}}</td>
                 <td>{{s.address}}</td>
                 <td>{{s.phone}}</td>

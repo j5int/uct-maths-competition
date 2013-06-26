@@ -14,20 +14,31 @@ from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueFor
 from competition.models import SchoolStudent, School, Invigilator, Venue 
 from django.contrib.auth.models import User
 from django.db import connection
+from django.contrib.auth.decorators import login_required
 
+
+# def auth(request):
+#   if not request.user.is_authenticated():
+#     print "not logged in"
+#     return HttpResponseRedirect('/accounts/login')
 
 def index(request):
 	return render_to_response('index.html', {})
 
+
+@login_required
 def profile(request):
-    return render_to_response('profile.html',{})
+  # auth(request)
+  return render_to_response('profile.html',{})
 
 
 # submitted thingszz
+@login_required
 def submitted(request, c):
   return render_to_response('submitted.html', c)
 
 # View Students
+@login_required
 def students(request):
     username = request.user
     studentOptions = SchoolStudent.objects.filter(registered_by = username)
@@ -52,6 +63,7 @@ def students(request):
     return render_to_response('students.html', c,context_instance=RequestContext(request))
 
 # View Schools
+@login_required
 def schools(request):
     username = request.user
     schoolOptions = School.objects.filter(registered_by = username)
@@ -95,6 +107,7 @@ def schools(request):
     return render_to_response('schools.html', c, context_instance=RequestContext(request))
 
 # View Invigilators
+@login_required
 def invigilators(request):
     username = request.user
     invigilators = Invigilator.objects.filter(registered_by = username)
@@ -152,6 +165,7 @@ def invigilators(request):
 #     return render_to_response('venues.html', c,context_instance=RequestContext(request))
 
 # Register Students    
+@login_required
 def newstudents(request):
     error = " "
     if request.method == 'POST':  # If the form has been submitted...
@@ -206,6 +220,7 @@ def newstudents(request):
 
 #*****************************************
 #Register Schools
+@login_required
 def newschools (request):
   error = " "
   if request.method == 'POST': # If the form has been submitted...
@@ -245,6 +260,7 @@ def newschools (request):
 
 #******************************************
 #Register Invigilators
+@login_required
 def newinvigilators (request):
   error = " "
   if request.method == 'POST': # If the form has been submitted...
@@ -256,7 +272,7 @@ def newinvigilators (request):
               firstname = form.getlist('firstname','')[i]
               surname = form.getlist('surname','')[i]
               grade = form.getlist('grade','')[i]
-              venue = Venue.objects.get(pk=int(form.getlist('venue','')[i]))
+              # venue = Venue.objects.get(pk=int(form.getlist('venue','')[i]))
               inv_reg = form.getlist('inv_reg','')[i]
               phone_h = form.getlist('phone_h','')[i]
               phone_w = form.getlist('phone_w','')[i]
@@ -267,13 +283,13 @@ def newinvigilators (request):
               registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
                           
               query = Invigilator(school = school , firstname = firstname,surname = surname, grade = grade ,
-                  venue = venue ,inv_reg = inv_reg,
-                  phone_h = phone_h , phone_w = phone_w, 
+                  inv_reg = inv_reg, phone_h = phone_h , phone_w = phone_w, 
                   fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible, registered_by= registered_by)
               query.save()
 
           return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
         except Exception as e:
+              print e
               error = "Incorrect information inserted into fields. Please insert correct information"
   else:
         form = InvigilatorForm() # An unbound form

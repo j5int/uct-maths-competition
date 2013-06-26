@@ -16,10 +16,10 @@
                 <th>First Name</th>
                 <th>Surname</th>
                 <th>Language</th>
-                <th>School</th>
+                <th class='wide'>School</th>
                 <th>Grade</th>
                 <th>Sex</th>
-                <th class='narrow'>button</th>
+                <th class='narrow'></th>
             </tr>
             {%for s in students%}
             <tr id='show{{s.id}}'>
@@ -32,7 +32,7 @@
                     {%else%}---{%endif%}
 
                 </td>
-                <td>{{s.school}}</td>
+                <td class='wide'>{{s.school}}</td>
                 <td>{{s.grade}}</td>
                 <td>
                     {%if s.sex == 'f'%}Female
@@ -58,7 +58,7 @@
                 </td>
                
                 </td>
-                <td>{{s.school}}</td>
+                <td class='wide'>{{s.school}}</td>
                 <td>{{s.grade}}</td>
                 <td>
                 <select class='value{{s.id}}' name = 'sex' selected='{{s.sex}}'>

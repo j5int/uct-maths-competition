@@ -17,11 +17,9 @@ body {
 	width: 2em;
 }
 
-#content td .narrow{
-	width: 2em;
-}
-#content th .narrow{
-	width: 2em;
+
+#content .wide{
+	min-width: 12em;
 }
 
 .header {
@@ -134,6 +132,9 @@ ul.style1 li:first-child
 	width:8em;
 	font-size:1em;
 	padding:3px 7px 2px 7px;
+}
+#content tr{
+	border: solid #A0A9B0 1px;
 }
 #content input{
   width:8em;

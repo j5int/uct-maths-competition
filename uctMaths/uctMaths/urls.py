@@ -10,7 +10,8 @@ urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
 	
 	#Aurelia is not quite sure what this does. It make the login work.
-	url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
+	# url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
+	url(r'^accounts/profile/$', views.profile, name='profile'),
 
 	#loads competitions/urls.py
     url(r'^competition/', include('competition.urls')),
