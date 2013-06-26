@@ -45,12 +45,8 @@
             <tr id="input{{s.id}}" style='display:none'>
                 <td><input class="value{{s.id}}" type="text" name="firstname" value='{{s.firstname}}'></td>
                 <td><input class="value{{s.id}}" type="text" name="surname"  value='{{s.surname}}'></td>
-                {% if userType %}
-                <td><select class="value{{s.id}}" name = "language" selected='{{s.language}}'>
-
-                    <option value="a">Afrikaans</option>
-                    <option value="e">English</option>
-                </select>
+           
+                
                
                 <td>
                     {%if s.language == 'a'%}Afrikaans{%endif%}
