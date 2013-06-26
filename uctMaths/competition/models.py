@@ -135,3 +135,9 @@ class Invigilator(models.Model):
         ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
         
 
+class SchoolStudentArchive(SchoolStudent):
+    archived    = models.DateField(null=True, blank=True, db_column='Date Archived')
+
+
+class InvigilatorArchive(Invigilator):
+    archived    = models.DateField(null=True, blank=True, db_column='Date Archived')

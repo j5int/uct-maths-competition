@@ -46,7 +46,13 @@ class InvigilatorAdmin(admin.ModelAdmin):
 # admin.site.add_action(archive_table)
 
 admin.site.register(SchoolUser, SchoolUserAdmin)
-admin.site.register(School, SchoolAdmin)
-admin.site.register(SchoolStudent, SchoolStudentAdmin)
+
 admin.site.register(Venue, VenueAdmin)
+
+admin.site.register(School, SchoolAdmin)
+
+admin.site.register(SchoolStudent, SchoolStudentAdmin)
+admin.site.register(SchoolStudentArchive)
+
 admin.site.register(Invigilator, InvigilatorAdmin)
+admin.site.register(InvigilatorArchive)
