@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 <!-- base.html contains the sidebar and header -->
 
-{%block title%}New Schools{%endblock%}
+{%block title%}New School{%endblock%}
 {% block content %}
-    <h1>Register New Schools</h1>
+    <h1>Register New School</h1>
     <p> {{ error }} </p>
     <form action="." method="post">
         {% csrf_token %}

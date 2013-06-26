@@ -13,6 +13,7 @@ from django.forms.formsets import formset_factory
 from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueForm, testForm #, StudentFilter
 from competition.models import SchoolStudent, School, Invigilator, Venue 
 from django.contrib.auth.models import User
+from django.db import connection
 
 
 def index(request):
@@ -54,20 +55,32 @@ def students(request):
 def schools(request):
     username = request.user
     schoolOptions = School.objects.filter(registered_by = username)
-    
+    print 'schools ',schoolOptions
     if request.method=='POST' and 'delete' in request.POST:
         form = (request.POST) # A form bound to the POST data
         for i in range (schoolOptions.count()): #RANGE!!!!!!!!
-          # print 'iteration:',i,School.objects.get(id=i+1), type(form.getlist('schoolID','')[0])
-          schoolID = form.getlist('schoolID','')[i]
-          schoolUpdate = School.objects.get(id = schoolID)
-          schoolUpdate.delete()
+          schoolID = form.getlist ('schoolID',"")[i]
+          
+          cursor = connection.cursor()
+          cursor.execute("DELETE FROM competition_school WHERE id=%s", [schoolID])
+          row = cursor.fetchone()
+
+          #Code below didnt work, for some unknown reason, therefore we used the above SQL to DELETE
+          # print "id ", schoolID
+          # temp = School.objects.get(id = schoolID)
+          # print temp
+          # temp.delete()
+          # School.objects.get(id = schoolID).delete()
+        #   # print 'iteration:',i,School.objects.get(id=i+1), type(form.getlist('schoolID','')[0])
+        #   schoolID = form.getlist('schoolID','')[i]
+        #   schoolUpdate = School.objects.get(id = schoolID)
+        #   schoolUpdate.delete()
 
     elif request.method=='POST' and 'submit' in request.POST:
         form = (request.POST) # A form bound to the POST data
         for i in range (schoolOptions.count()): #RANGE!!!!!!!!
           schoolID = form.getlist('schoolID','')[i]
-          schoolUpdate = SchoolStudent.objects.get(id= schoolID)
+          schoolUpdate = School.objects.get(id= schoolID)
           schoolUpdate.name = form.getlist('name','')[i]
           schoolUpdate.address = form.getlist('address','')[i]
           schoolUpdate.language = form.getlist('language','')[i]
@@ -96,7 +109,7 @@ def invigilators(request):
         form = (request.POST) # A form bound to the POST data
         for i in range (invigilators.count()): #RANGE!!!!!!!!
           invigilatorID = form.getlist('invigilatorID','')[i]
-          invigilatorUpdate = SchoolStudent.objects.get(id= invigilatorID)
+          invigilatorUpdate = Invigilator.objects.get(id= invigilatorID)
           invigilatorUpdate.firstname = form.getlist('firstname','')[i]
           invigilatorUpdate.surname = form.getlist('surname','')[i]
           invigilatorUpdate.school = form.getlist('school','')[i]
@@ -153,9 +166,6 @@ def newstudents(request):
             language = form.getlist('language','')[0]
             reference = 1234
             school = School.objects.get(pk=int(form.getlist('school','')[0]))
-            # print "here2 ", firstname
-            # print "here3 ", school
-            # grade = form.getlist('grade','')[i]
             sex = '' 
             registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))          
             query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
@@ -180,7 +190,8 @@ def newstudents(request):
             query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                     school = school, grade = grade , sex = sex, registered_by= registered_by)
             query.save()
-
+            query.reference=query.id
+            query.save()
           return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
               error = "Incorrect information inserted into fields. Please insert correct information"
@@ -202,10 +213,10 @@ def newschools (request):
         form = (request.POST) # A form bound to the POST data
         # print form
         try:
-          for i in range (2):
+          for i in range (1):
               if form.getlist('name','')[i] == u'': continue
               name = form.getlist('name','')[i]
-              key = "1234" #************FIX!!!!!!!!!!!!!!!!
+              key = 123 
               language = form.getlist('language','')[i]
               address = form.getlist('address','')[i]
               phone = form.getlist('phone','')[i]
@@ -217,6 +228,8 @@ def newschools (request):
               query = School(name = name ,key = key ,  language = language  ,
                   address = address, phone = phone , fax = fax, contact = contact , email = email, registered_by= registered_by)
               query.save()
+              query.key=query.id
+              query.save()
 
           return render_to_response('submitted.html', {'type':'School'}) # Redirect after POST
         except Exception as e:
@@ -225,7 +238,7 @@ def newschools (request):
         form = SchoolForm() # An unbound form
   
 
-  c = {'type':'Schools', 'range':range(2), 'error':error} #****** ADD RANGE
+  c = {'type':'Schools', 'range':range(1), 'error':error} #****** ADD RANGE
   c.update(csrf(request))
 
   return render_to_response('newschools.html', c,context_instance=RequestContext(request))
@@ -238,7 +251,7 @@ def newinvigilators (request):
   if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         try:
-          for i in range (1):
+          for i in range (4):
               if form.getlist('firstname','')[i] == u'': continue
               school = School.objects.get(pk=int(form.getlist('school','')[i]))
               firstname = form.getlist('firstname','')[i]
@@ -267,7 +280,7 @@ def newinvigilators (request):
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
 
-  c = {'schools':schoolOptions, 'range':range(2), 'grades':range(8,13), 'error':error} #******ADD RANGE
+  c = {'schools':schoolOptions, 'range':range(4), 'grades':range(8,13), 'error':error} #******ADD RANGE
 
   c.update(csrf(request))
   return render_to_response('newinvigilators.html', c,context_instance=RequestContext(request))

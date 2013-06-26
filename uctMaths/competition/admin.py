@@ -4,12 +4,14 @@ from django.contrib import admin
 #registers the models with admin
 # admin.site.register(SiteUser)
 
+
+	
 class archive_table(admin.ModelAdmin):
-	print
-	#archive table. 
-	#copy to new table with date in the name. 
-	#drop original table to be recreated with syncdb.
-	# db.rename_table("venues", "hello")
+    print
+
+    class Meta:
+    	print
+        # db.rename_table("venues", "hello")
 
 class SchoolUserAdmin(admin.ModelAdmin):
 	list_display = ('user', 'school', 'email')
