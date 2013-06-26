@@ -22,7 +22,7 @@ def profile(request):
     return render_to_response('profile.html',{})
 
 
-# submitted things
+# submitted thingszz
 def submitted(request, c):
   return render_to_response('submitted.html', c)
 
@@ -35,14 +35,9 @@ def students(request):
     if request.method == 'POST': # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
         for i in range (studentOptions.count()): #RANGE!!!!!!!!
-          studentID = form.getlist('studentID',"")[i]
-          studentUpdate = SchoolStudent.objects.get(id= studentID)
-          studentUpdate.firstname = form.getlist('firstname',"")[i]
-          studentUpdate.surname = form.getlist('surname',"")[i]
-          studentUpdate.language = form.getlist('language',"")[i]
-          studentUpdate.sex = form.getlist('sex',"")[i]
-          studentUpdate.save()
-          print "here!! ", studentUpdate
+          studentUpdate = SchoolStudent.objects.get(id= form.getlist('studentID',"")[i])
+          studentUpdate.delete()
+          # print "here!! ", studentUpdate
     c = {'students':studentOptions, 'userType':userType}#, 'temp1':venueOptions1}
     c.update(csrf(request))
     return render_to_response('students.html', c,context_instance=RequestContext(request))
@@ -249,7 +244,7 @@ def newinvigilators (request):
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
 
-  c = {'schools':schoolOptions, 'range':range(2)} #******ADD RANGE
+  c = {'schools':schoolOptions, 'range':range(2), 'grades':range(8,13)} #******ADD RANGE
   c.update(csrf(request))
   return render_to_response('newinvigilators.html', c,context_instance=RequestContext(request))
 
@@ -278,7 +273,7 @@ def newvenues (request):
     else:
         form = VenueForm() # An unbound form
    
-    c = {'type':'Invigilators','range':range(1)}
+    c = {'type':'Invigilators','range':range(1), 'grades':range(8,13)}
     c.update(csrf(request))
     return render_to_response('newvenues.html', c, context_instance=RequestContext(request))
 

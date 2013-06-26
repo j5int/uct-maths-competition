@@ -36,7 +36,13 @@
                 </td>
                 <td><input type="text" name="firstname"></td>
                 <td><input type="text" name="surname"></td>
-                <td><input style='width:2em;' type ="text" name="grade"></td>
+                <td>
+                    <select name='grade'>
+                        {%for g in grades%}
+                        <option value={{g}}>{{g}}</option>
+                        {%endfor%}
+                    </select>
+                </td>                
                 <td>
                     <select name = "venue">
                         <option value="70">TBD</option>

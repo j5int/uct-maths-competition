@@ -29,7 +29,13 @@
                 <td><input type="text" name="code"></td>
                 <td><input type ="text" name="seats"></td>
                 <td><input type ="text" name="bums"></td>
-                <td><input type ="text" name="grade"></td>
+                <td>
+                    <select name='grade'>
+                        {%for g in grades%}
+                        <option value={{g}}>{{g}}</option>
+                        {%endfor%}
+                    </select>
+                </td>
                 <td><input type ="text" name="pairs"></td>
                 <input type ="hidden" name="registered_by" value ={{ user.id }} >
 

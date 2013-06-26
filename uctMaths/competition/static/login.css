@@ -132,7 +132,8 @@
 	cursor: pointer;
 }
 
-.greybutton:hover{
+
+.greybutton:enabled:hover{
 	background: #bababa; /* Old browsers */
 	background: -moz-linear-gradient(top, #bababa 0%, #e1e1e1 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bababa), color-stop(100%,#e1e1e1)); /* Chrome,Safari4+ */
@@ -168,7 +169,7 @@
 	cursor: pointer;
 }
 
-.bluebutton:hover{
+.bluebutton:enabled:hover{
 	background: #00548f; /* Old browsers */
 	background: -moz-linear-gradient(top, #00548f 0%, #00548f 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00548f), color-stop(100%,#00548f)); /* Chrome,Safari4+ */

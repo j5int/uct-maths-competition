@@ -27,7 +27,7 @@ class School(models.Model):
         ('e', 'English'), 
         ('a', 'Afrikaans')
     ), db_column = 'Language')
-    address     = models.CharField(max_length=30L, db_column='Address', blank=True) 
+    address     = models.CharField(max_length=50L, db_column='Address', blank=True) 
     phone       = models.CharField(max_length=15L, db_column='Phone', blank=True) 
     fax         = models.CharField(max_length=15L, db_column='Fax', blank=True) 
     contact     = models.CharField(max_length=30L, db_column='Contact', blank=True) 
@@ -124,7 +124,7 @@ class Invigilator(models.Model):
     ), db_column='Inv/Reg')
     phone_h     = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
     phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
-    fax_h         = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
+    fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
     fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
     email       = models.CharField(max_length=40L, db_column='Email', blank=True) 
     responsible = models.CharField(max_length=40L, db_column='Responsible')

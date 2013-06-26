@@ -32,17 +32,20 @@
                 <td>{{s.school}}</td>
                 <td>{{s.grade}}</td>
                 <td>
-                    {%if s.sex == 'f'%}Female{%endif%}
-                    {%if s.sex == 'm'%}Male{%endif%}
+                    {%if s.sex == 'f'%}Female
+                    {%elif s.sex == 'm'%}Male
+                    {%else%} ---
+                    {%endif%}
+                    
                 </td>
-                <td><input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick="toggle_input(this.id, 'ask')" value='edit'></td>
+                <td><input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick="toggle_input(this.id, 'to_input')" value='edit'></td>
 
             </tr>
-            <tr id="ask{{s.id}}" style='display:none'>
-                <td><input type="text" name="firstname" value='{{s.firstname}}'></td>
-                <td><input type="text" name="surname"  value='{{s.surname}}'></td>
+            <tr id="input{{s.id}}" style='display:none'>
+                <td><input class="value{{s.id}}" type="text" name="firstname" value='{{s.firstname}}'></td>
+                <td><input class="value{{s.id}}" type="text" name="surname"  value='{{s.surname}}'></td>
                 {% if userType %}
-                <td><select name = "language" selected='{{s.language}}'>
+                <td><select class="value{{s.id}}" name = "language" selected='{{s.language}}'>
                     <option value="a">Afrikaans</option>
                     <option value="e">English</option>
                 </select>
@@ -56,19 +59,23 @@
                 <td>{{s.school}}</td>
                 <td>{{s.grade}}</td>
                 <td>
-                <select name = "sex" selected='{{s.sex}}'>
+                <select class="value{{s.id}}" name = "sex" selected='{{s.sex}}'>
+                    <option value=''>---</option>
                     <option value='f'>Female</option>
                     <option value='m'>Male</option>
                 </select>
 
                 <!-- <input type ="text" name="sex"> -->
                 </td>
-                <td><input id = "{{s.id}}" class='bluebutton narrow right editbutton' onClick="toggle_input(this.id, 'show')" value='undo'>
+                <td><input id = "{{s.id}}" class='greybutton narrow right editbutton' value='edit' disabled>
                 </td>
                 <input type='hidden' name='studentID' value='{{s.id}}'>
             </tr>
             {%endfor%}
         </table>
-        <input class="bluebutton left" type="submit" value="Submit">
+
+        <input name ='delete' class="bluebutton left" type="submit" value="Delete All">
+        <input name ='submit' class="bluebutton left" type="submit" value="Submit">
+
     </form>
 {%endblock%}
