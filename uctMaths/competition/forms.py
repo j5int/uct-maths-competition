@@ -22,15 +22,7 @@ class StudentForm (forms.Form):
         sex = forms.CharField ()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())
 
-# FILTERING STUDENTS FORM        
-# class StudentFilter (forms.Form):
-#         firstname2 = forms.CharField()
-#         surname = forms.CharField()
-#         language = forms.CharField()
-#         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all())
-#         grade = forms.IntegerField()
-#         sex = forms.CharField ()
-#*********************************
+#**************************************
 #FORM TO ENTER A NEW SCHOOL
 class SchoolForm (ModelForm):
     class Meta:

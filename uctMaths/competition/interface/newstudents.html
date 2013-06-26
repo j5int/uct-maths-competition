@@ -3,6 +3,7 @@
 {%block title%}New Students{%endblock%}
 {%block content%}
 <h1 >Register Students for a School</h1>
+<p> {{ error }} </p>
 <form action="." method="post">
     {% csrf_token %}
     <!-- {{ form.as_p  }} -->
@@ -44,6 +45,7 @@
         {%for entry in entries_per_grade%}
         <tr>
             <td><input type="text" name="firstname"></td>
+
             <td><input type="text" name="surname"></td>
             <td>
                 <select name = "sex">

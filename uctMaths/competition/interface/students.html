@@ -24,6 +24,7 @@
             {%for s in students%}
             <tr class='show' id="show{{s.id}}">
                 <td>{{s.firstname}}</td>
+
                 <td>{{s.surname}}</td>
                 <td>
                     {%if s.language == 'a'%}Afrikaans{%endif%}
@@ -46,15 +47,16 @@
                 <td><input class="value{{s.id}}" type="text" name="surname"  value='{{s.surname}}'></td>
                 {% if userType %}
                 <td><select class="value{{s.id}}" name = "language" selected='{{s.language}}'>
+
                     <option value="a">Afrikaans</option>
                     <option value="e">English</option>
                 </select>
-                {% elif not userType %}
+               
                 <td>
                     {%if s.language == 'a'%}Afrikaans{%endif%}
                     {%if s.language == 'e'%}English{%endif%}
                 </td>
-                {% endif %}
+               
                 </td>
                 <td>{{s.school}}</td>
                 <td>{{s.grade}}</td>
