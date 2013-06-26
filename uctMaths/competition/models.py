@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 
 # class SiteUser(models.Model):
-#     """All users of the site. This may become irrelevent (depending on the use of allauth User table. Should be associated with a username in User table"""
+#     '''All users of the site. This may become irrelevent (depending on the use of allauth User table. Should be associated with a username in User table'''
 #     username    = models.CharField(max_length=16L, db_column='Name')
 #     password    = models.CharField(max_length=16L, db_column='Password')
 #     language    = models.CharField(max_length=1L, db_column='Language', choices=(
@@ -20,7 +20,7 @@ from django.contrib.auth.models import User
 #         ordering = ['username'] #defines the way the records are sorted.
 
 class School(models.Model):
-    """Contains school information. Duplicates should not be allowed."""
+    '''Contains school information. Duplicates should not be allowed.'''
     name        = models.CharField(max_length=40L, db_column='Name') 
     key         = models.CharField(max_length=3L, db_column='Key') 
     language    = models.CharField(max_length=1L, choices=(
@@ -42,7 +42,7 @@ class School(models.Model):
         ordering = ['name']     #defines the way the records are sorted.
 
 class SchoolStudent(models.Model):
-    """A single student. Not a User. Score and Rank will added/updated by the admin."""
+    '''A single student. Not a User. Score and Rank will added/updated by the admin.'''
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
     surname     = models.CharField(max_length=32L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
@@ -62,12 +62,12 @@ class SchoolStudent(models.Model):
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
-        return "pair "+str(self.reference) if self.surname == "" else self.surname+", "+self.firstname
+        return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname
     class Meta:
         ordering = ['grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
 class SchoolUser(models.Model):
-    """The administrator for a single school. A User can register/update/remove SchoolStudents and Invigilators."""
+    '''The administrator for a single school. A User can register/update/remove SchoolStudents and Invigilators.'''
     school      = models.ForeignKey('School', db_column='School') 
     count       = models.IntegerField()
     address     = models.CharField(max_length=40L, db_column='Address') 
@@ -93,7 +93,7 @@ class SchoolUser(models.Model):
         ordering = ['school', 'user'] #defines the way the records are sorted.
 
 class Venue(models.Model):
-    """Venues are locations for the event. Many SchoolStudents to one Venue."""
+    '''Venues are locations for the event. Many SchoolStudents to one Venue.'''
     code        = models.CharField(max_length=40L, db_column='Code')
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
@@ -103,12 +103,12 @@ class Venue(models.Model):
     registered_by = models.ForeignKey(User, db_column='Registered By')
 
     def __str__(self):
-        return self.building+", "+self.code
+        return self.building+', '+self.code
     class Meta:
         ordering = ['building', 'code'] #defines the way the records are sorted.
 
 class Invigilator(models.Model):
-    """Invigilators registered by SchoolUsers. Many Invigilator to one School. Many Invigilators to one Venue."""
+    '''Invigilators registered by SchoolUsers. Many Invigilator to one School. Many Invigilators to one Venue.'''
     school      = models.ForeignKey('School', db_column='School') 
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
     surname     = models.CharField(max_length=32L, db_column='Surname')
@@ -130,14 +130,61 @@ class Invigilator(models.Model):
     responsible = models.CharField(max_length=40L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
-        return self.surname+", "+self.firstname
+        return self.surname+', '+self.firstname+' ('+self.archived+')'
     class Meta:
         ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
         
 
-class SchoolStudentArchive(SchoolStudent):
+class SchoolStudentArchive(models.Model):
     archived    = models.DateField(null=True, blank=True, db_column='Date Archived')
+    firstname   = models.CharField(max_length=32L, db_column='First_name') 
+    surname     = models.CharField(max_length=32L, db_column='Surname')
+    language    = models.CharField(max_length=1L, choices=(
+        ('e', 'English'), 
+        ('a', 'Afrikaans')
+    ), db_column = 'Language')
+    reference   = models.CharField(max_length=7L, db_column='Reference') 
+    school      = models.ForeignKey('School', db_column='School') 
+    score       = models.IntegerField(null=True, db_column='Score', blank=True) 
+    rank        = models.IntegerField(null=True, db_column='Rank', blank=True) 
+    grade       = models.IntegerField(db_column='Grade', 
+        validators = [
+            MaxValueValidator(12),
+            MinValueValidator(0)
+        ])    
+    sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
+    venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
+    registered_by = models.ForeignKey(User, db_column='Registered By')
+    def __str__(self):
+        return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname
+    class Meta:
+        ordering = ['archived','grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
 
-class InvigilatorArchive(Invigilator):
+
+class InvigilatorArchive(models.Model):
     archived    = models.DateField(null=True, blank=True, db_column='Date Archived')
+    school      = models.ForeignKey('School', db_column='School') 
+    firstname   = models.CharField(max_length=32L, db_column='First_name') 
+    surname     = models.CharField(max_length=32L, db_column='Surname')
+    grade       = models.IntegerField(db_column='Grade', null=True,
+        validators = [
+            MaxValueValidator(12),
+            MinValueValidator(0)
+        ])
+    venue       = models.ForeignKey('Venue', db_column='Venue', blank=True) 
+    inv_reg     = models.CharField(max_length=1L, choices=(
+        ('i', 'Invigilator'), 
+        ('r', 'Registrator')
+    ), db_column='Inv/Reg')
+    phone_h     = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
+    phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
+    fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
+    fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
+    email       = models.CharField(max_length=40L, db_column='Email', blank=True) 
+    responsible = models.CharField(max_length=40L, db_column='Responsible')
+    registered_by = models.ForeignKey(User, db_column='Registered By')
+    def __str__(self):
+        return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
+    class Meta:
+        ordering = ['archived', 'school', 'surname', 'firstname'] #defines the way the records are sorted.
