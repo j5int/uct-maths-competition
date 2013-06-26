@@ -121,7 +121,7 @@ class Invigilator(models.Model):
     inv_reg     = models.CharField(max_length=1L, choices=(
         ('i', 'Invigilator'), 
         ('r', 'Registrator')
-    ), db_column='Inv/Reg')
+    ), db_column='Inv_Reg')
     phone_h     = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
     phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
     fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
@@ -163,7 +163,7 @@ class SchoolStudentArchive(models.Model):
 
 
 class InvigilatorArchive(models.Model):
-    archived    = models.DateField(null=True, blank=True, db_column='Date Archived')
+    archived    = models.DateField(null=True, blank=True, db_column='Date_Archived')
     school      = models.ForeignKey('School', db_column='School') 
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
     surname     = models.CharField(max_length=32L, db_column='Surname')
@@ -176,14 +176,14 @@ class InvigilatorArchive(models.Model):
     inv_reg     = models.CharField(max_length=1L, choices=(
         ('i', 'Invigilator'), 
         ('r', 'Registrator')
-    ), db_column='Inv/Reg')
+    ), db_column='Inv_Reg')
     phone_h     = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
     phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
     fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
     fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
     email       = models.CharField(max_length=40L, db_column='Email', blank=True) 
     responsible = models.CharField(max_length=40L, db_column='Responsible')
-    registered_by = models.ForeignKey(User, db_column='Registered By')
+    registered_by = models.ForeignKey(User, db_column='Registered_By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
     class Meta:
