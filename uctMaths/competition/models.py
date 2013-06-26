@@ -183,7 +183,7 @@ class InvigilatorArchive(models.Model):
     fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
     email       = models.CharField(max_length=40L, db_column='Email', blank=True) 
     responsible = models.CharField(max_length=40L, db_column='Responsible')
-    registered_by = models.ForeignKey(User, db_column='Registered_By')
+    registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
     class Meta:
