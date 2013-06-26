@@ -130,7 +130,7 @@ class Invigilator(models.Model):
     responsible = models.CharField(max_length=40L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
-        return self.surname+', '+self.firstname+' ('+self.archived+')'
+        return self.surname+', '+self.firstname
     class Meta:
         ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
         
@@ -156,7 +156,7 @@ class SchoolStudentArchive(models.Model):
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
-        return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname
+        return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname+' ('+self.archived+')'
     class Meta:
         ordering = ['archived','grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
