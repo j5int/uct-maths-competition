@@ -22,7 +22,7 @@
                 <th>Email</th>
                 <th>Contact</th>
                 <th>Fax</th>
-                <th>button</th>
+                <th class='narrow'></th>
             </tr>
             {%for s in schools%}
             <tr id='show{{s.id}}'>
@@ -33,7 +33,7 @@
                 <td>{{s.email}}</td>
                 <td>{{s.contact}}</td>
                 <td>{{s.fax}}</td>
-                <td>
+                <td class='narrow'>
                     <input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick='show_input(this.id)' value='edit'>
                 </td>
             </tr>
@@ -52,7 +52,7 @@
                 <td><input type ='text' name='email' value='{{s.email}}'></td>
                 <td><input type ='text' name='contact' value='{{s.contact}}'></td>
                 <td><input type ='text' name='fax' value='{{s.fax}}'></td>
-                <td>
+                <td class='narrow'>
                     <input id = '{{s.id}}' class='greybutton narrow right editbutton' value='edit' disabled>
                 </td>
                 <input type='hidden' name='schoolID' value='{{s.id}}'>

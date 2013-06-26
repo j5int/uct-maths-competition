@@ -17,6 +17,13 @@ body {
 	width: 2em;
 }
 
+#content td .narrow{
+	width: 2em;
+}
+#content th .narrow{
+	width: 2em;
+}
+
 .header {
 	text-align: center;
     height:7.5em;

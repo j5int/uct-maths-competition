@@ -67,7 +67,7 @@ def schools(request):
         form = (request.POST) # A form bound to the POST data
         for i in range (schoolOptions.count()): #RANGE!!!!!!!!
           schoolID = form.getlist('schoolID','')[i]
-          schoolUpdate = SchoolStudent.objects.get(id= schoolID)
+          schoolUpdate = School.objects.get(id = schoolID)
           schoolUpdate.name = form.getlist('name','')[i]
           schoolUpdate.address = form.getlist('address','')[i]
           schoolUpdate.language = form.getlist('language','')[i]
@@ -89,18 +89,18 @@ def invigilators(request):
     if request.method=='POST' and 'delete' in request.POST:
         form = (request.POST) # A form bound to the POST data
         for i in range (invigilators.count()): #RANGE!!!!!!!!
-          invigilatorUpdate = Invigilator.objects.get(id= form.getlist('invigilatorID','')[i])
+          invigilatorUpdate = Invigilator.objects.get(id = form.getlist('invigilatorID','')[i])
           invigilatorUpdate.delete()
 
     elif request.method=='POST' and 'submit' in request.POST:
         form = (request.POST) # A form bound to the POST data
         for i in range (invigilators.count()): #RANGE!!!!!!!!
           invigilatorID = form.getlist('invigilatorID','')[i]
-          invigilatorUpdate = SchoolStudent.objects.get(id= invigilatorID)
+          invigilatorUpdate = Invigilator.objects.get(id = invigilatorID)
           invigilatorUpdate.firstname = form.getlist('firstname','')[i]
           invigilatorUpdate.surname = form.getlist('surname','')[i]
           invigilatorUpdate.grade = int(form.getlist('grade','')[i])
-          invigilatorUpdate.venue = form.getlist('venue','')[i]
+          # invigilatorUpdate.venue = form.getlist('venue','')[i]
           invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
           invigilatorUpdate.phone_h = form.getlist('phone_h','')[i]
           invigilatorUpdate.phone_w = form.getlist('phone_w','')[i]
@@ -110,7 +110,7 @@ def invigilators(request):
           invigilatorUpdate.responsible = form.getlist('responsible','')[i]
           invigilatorUpdate.save()
        
-    c = {'invigilators':invigilators}
+    c = {'invigilators':invigilators, 'grades':range(8,13)}
     c.update(csrf(request))
     return render_to_response('invigilators.html', c,context_instance=RequestContext(request))
 
