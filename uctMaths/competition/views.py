@@ -89,7 +89,7 @@ def invigilators(request):
     if request.method=='POST' and 'delete' in request.POST:
         form = (request.POST) # A form bound to the POST data
         for i in range (invigilators.count()): #RANGE!!!!!!!!
-          invigilatorUpdate = Invigilator.objects.get(id= form.getlist('schoolID','')[i])
+          invigilatorUpdate = Invigilator.objects.get(id= form.getlist('invigilatorID','')[i])
           invigilatorUpdate.delete()
 
     elif request.method=='POST' and 'submit' in request.POST:
@@ -99,8 +99,7 @@ def invigilators(request):
           invigilatorUpdate = SchoolStudent.objects.get(id= invigilatorID)
           invigilatorUpdate.firstname = form.getlist('firstname','')[i]
           invigilatorUpdate.surname = form.getlist('surname','')[i]
-          invigilatorUpdate.school = form.getlist('school','')[i]
-          invigilatorUpdate.grade = form.getlist('grade','')[i]
+          invigilatorUpdate.grade = int(form.getlist('grade','')[i])
           invigilatorUpdate.venue = form.getlist('venue','')[i]
           invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
           invigilatorUpdate.phone_h = form.getlist('phone_h','')[i]

@@ -1,14 +1,14 @@
-{%extends "base.html"%}
+{%extends 'base.html'%}
 <!-- base.html contains the sidebar and header -->
 {%block head%}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-<script type="text/javascript" src='/static/sidebar.js'></script>
-<script type="text/javascript" src='/static/tables.js'></script>
+<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+<script type='text/javascript' src='/static/sidebar.js'></script>
+<script type='text/javascript' src='/static/tables.js'></script>
 {%endblock%}
 {%block title%}Registered Students{%endblock%}
 {%block content%}
     <h1>Registered Students</h1>
-    <form action="." method="post">
+    <form action='.' method='post'>
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
         <table>
@@ -22,7 +22,7 @@
                 <th>button</th>
             </tr>
             {%for s in students%}
-            <tr class='show' id="show{{s.id}}">
+            <tr id='show{{s.id}}'>
                 <td>{{s.firstname}}</td>
 
                 <td>{{s.surname}}</td>
@@ -40,12 +40,14 @@
                     {%else%}---{%endif%}
                     
                 </td>
-                <td><input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick="show_input(this.id, 'to_input')" value='edit'></td>
+                <td>
+                    <input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick='show_input(this.id)' value='edit'>
+                </td>
 
             </tr>
-            <tr id="input{{s.id}}" style='display:none'>
-                <td><input class="value{{s.id}}" type="text" name="firstname" value='{{s.firstname}}'></td>
-                <td><input class="value{{s.id}}" type="text" name="surname"  value='{{s.surname}}'></td>
+            <tr id='input{{s.id}}' style='display:none'>
+                <td><input class='value{{s.id}}' type='text' name='firstname' value='{{s.firstname}}'></td>
+                <td><input class='value{{s.id}}' type='text' name='surname'  value='{{s.surname}}'></td>
 
                
                 <td>
@@ -59,24 +61,24 @@
                 <td>{{s.school}}</td>
                 <td>{{s.grade}}</td>
                 <td>
-                <select class="value{{s.id}}" name = "sex" selected='{{s.sex}}'>
+                <select class='value{{s.id}}' name = 'sex' selected='{{s.sex}}'>
                     <option value=''>---</option>
                     <option value='f'>Female</option>
                     <option value='m'>Male</option>
                 </select>
 
-                <!-- <input type ="text" name="sex"> -->
+                <!-- <input type ='text' name='sex'> -->
                 </td>
                 <td>
-                    <input id = "{{s.id}}" class='greybutton narrow right editbutton' value='edit' disabled>
+                    <input id = '{{s.id}}' class='greybutton narrow right editbutton' value='edit' disabled>
                 </td>
                 <input type='hidden' name='studentID' value='{{s.id}}'>
             </tr>
             {%endfor%}
         </table>
 
-        <input name ='delete' class="bluebutton left" type="submit" value="Delete All">
-        <input name ='submit' class="bluebutton left" type="submit" value="Submit">
+        <input name ='delete' class='bluebutton left' type='submit' value='Delete All'>
+        <input name ='submit' class='bluebutton left' type='submit' value='Submit'>
 
     </form>
 {%endblock%}

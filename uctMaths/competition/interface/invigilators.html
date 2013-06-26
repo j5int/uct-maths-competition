@@ -1,12 +1,16 @@
-{%extends "base.html"%}
+{%extends 'base.html'%}
 <!-- base.html contains the sidebar and header -->
-
+{%block head%}
+<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+<script type='text/javascript' src='/static/sidebar.js'></script>
+<script type='text/javascript' src='/static/tables.js'></script>
+{%endblock%}
 {%block title%}Registered Invigilators{%endblock%}
 
 {%block content%}
     <h1>Registered Invigilators</h1>
 
-    <form action="." method="post">
+    <form action='.' method='post'>
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
         <table>
@@ -23,9 +27,10 @@
                 <th>Fax (w)</th>
                 <th>Email</th>
                 <th>Responsible</th>
+                <th>button</th>
             </tr>
             {%for i in invigilators%}
-            <tr>
+            <tr id='show{{s.id}}'>
                 <td>{{i.school}}</td>
                 <td>{{i.firstname}}</td>
                 <td>{{i.surname}}</td>
@@ -38,10 +43,47 @@
                 <td>{{i.fax_w}}</td>
                 <td>{{i.email}}</td>
                 <td>{{i.responsible}}</td>
+                <td>
+                    <input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick='show_input(this.id)' value='edit'>
+                </td>
+
             </tr>
+
+            <tr id='input{{s.id}}' style='display:none'>
+                <td>{{i.school}}</td>
+                <td><input type='text' name='firstname' value='{{i.firstname}}'></td>
+                <td><input type='text' name='surname' value='{{i.surname}}'></td>
+                <td>
+                    <select name='grade' value='{{i.grade}}'>
+                        {%for g in grades%}
+                        <option value='{{g}}'>{{g}}</option>
+                        {%endfor%}
+                    </select>
+                </td>                
+                <td>{{i.venue}}</td>
+                <td>
+                    <select name = 'inv_reg' value='{{i.inv_reg}}'>
+                        <option value='i'>Invigilator</option>
+                        <option value='r'>Registrator</option>
+                    </select>
+                </td>
+                <td><input type ='text' name='phone_h' value='{{i.phone_h}}'></td>                
+                <td><input type ='text' name='phone_w' value='{{i.phone_w}}'></td>
+                <td><input type ='text' name='fax_h' value='{{i.fax_h}}'></td>
+                <td><input type ='text' name='fax_w' value='{{i.fax_w}}'></td>
+                <td><input type ='text' name='email' value='{{i.email}}'></td>
+                <td><input type ='text' name='responsible' value='{{i.responsible}}'></td>
+                <input type='hidden' name='invigilatorID' value='{{i.id}}'>
+                <td>
+                    <input id = '{{s.id}}' class='greybutton narrow right editbutton' value='edit' disabled>
+                </td>
+
+            </tr>
+
             {%endfor%}
 
         </table>
-
+        <input name ='delete' class='bluebutton left' type='submit' value='Delete All'>
+        <input name ='submit' class='bluebutton left' type='submit' value='Submit'>
     </form>
 {%endblock%}>
