@@ -1,17 +1,19 @@
 from competition.models import *
 from django.contrib import admin
+from django.db import connection, transaction
+
 
 #registers the models with admin
 # admin.site.register(SiteUser)
 
 
-	
-class archive_table(admin.ModelAdmin):
-    print
 
-    class Meta:
-    	print
-        # db.rename_table("venues", "hello")
+def archive_table(modeladmin):
+    cursor = connection.cursor()
+    # Data modifying operation - commit required
+    cursor.execute('CREATE TABLE student'+strftime("%Y-%m-%d %H:%M:%S", gmtime())+' AS SELECT * FROM competition_student')
+    transaction.commit_unless_managed()
+
 
 class SchoolUserAdmin(admin.ModelAdmin):
 	list_display = ('user', 'school', 'email')
@@ -32,6 +34,7 @@ class SchoolAdmin(admin.ModelAdmin):
 
 class SchoolStudentAdmin(admin.ModelAdmin):
 	list_display = ('firstname', 'surname', 'grade', 'school', 'registered_by')
+	
 
 class VenueAdmin(admin.ModelAdmin):
 	list_display = ('building', 'code', 'seats', 'bums')
@@ -40,7 +43,7 @@ class InvigilatorAdmin(admin.ModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
 
 	
-admin.site.add_action(archive_table)
+# admin.site.add_action(archive_table)
 
 admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(School, SchoolAdmin)
