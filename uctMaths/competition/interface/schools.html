@@ -55,6 +55,7 @@
                 <td>
                     <input id = '{{s.id}}' class='greybutton narrow right editbutton' value='edit' disabled>
                 </td>
+                <input type='hidden' name='schoolID' value='{{s.id}}'>
             </tr>
 
             {%endfor%}
@@ -62,4 +63,5 @@
         <input name ='delete' class="bluebutton left" type="submit" value="Delete All">
         <input name ='submit' class="bluebutton left" type="submit" value="Submit">
 
-    </form>{%endblock%}
+    </form>
+    {%endblock%}
