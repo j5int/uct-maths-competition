@@ -27,6 +27,6 @@ class SocialTokenAdmin(admin.ModelAdmin):
         return ret
     truncated_token.short_description = 'Token'
 
-admin.site.register(SocialApp, SocialAppAdmin)
-admin.site.register(SocialToken, SocialTokenAdmin)
-admin.site.register(SocialAccount, SocialAccountAdmin)
+# admin.site.register(SocialApp, SocialAppAdmin)
+# admin.site.register(SocialToken, SocialTokenAdmin)
+# admin.site.register(SocialAccount, SocialAccountAdmin)

@@ -117,7 +117,7 @@ class Invigilator(models.Model):
             MaxValueValidator(12),
             MinValueValidator(0)
         ])
-    venue       = models.ForeignKey('Venue', db_column='Venue', blank=True) 
+    venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
     inv_reg     = models.CharField(max_length=1L, choices=(
         ('i', 'Invigilator'), 
         ('r', 'Registrator')
@@ -172,7 +172,7 @@ class InvigilatorArchive(models.Model):
             MaxValueValidator(12),
             MinValueValidator(0)
         ])
-    venue       = models.ForeignKey('Venue', db_column='Venue', blank=True) 
+    venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
     inv_reg     = models.CharField(max_length=1L, choices=(
         ('i', 'Invigilator'), 
         ('r', 'Registrator')

@@ -15,7 +15,7 @@
         <!-- {{ form.as_p }} -->
         <table>
          <tr>
-                <th>School</th>
+                <th class='wide'>School</th>
                 <th>First Name</th>
                 <th>Surname</th>
                 <th>Grade</th>
@@ -30,8 +30,8 @@
                 <th class='narrow'></th>
             </tr>
             {%for i in invigilators%}
-            <tr id='show{{s.id}}'>
-                <td>{{i.school}}</td>
+            <tr id='show{{s.id}}' >
+                <td class='wide'>{{i.school}}</td>
                 <td>{{i.firstname}}</td>
                 <td>{{i.surname}}</td>
                 <td>{{i.grade}}</td>
@@ -50,7 +50,7 @@
             </tr>
 
             <tr id='input{{s.id}}' style='display:none'>
-                <td>{{i.school}}</td>
+                <td class='wide'>{{i.school}}</td>
                 <td><input type='text' name='firstname' value='{{i.firstname}}'></td>
                 <td><input type='text' name='surname' value='{{i.surname}}'></td>
                 <td>
