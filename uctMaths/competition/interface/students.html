@@ -19,7 +19,7 @@
                 <th>School</th>
                 <th>Grade</th>
                 <th>Sex</th>
-                <th></th>
+                <th>button</th>
             </tr>
             {%for s in students%}
             <tr class='show' id="show{{s.id}}">
@@ -27,34 +27,31 @@
 
                 <td>{{s.surname}}</td>
                 <td>
-                    {%if s.language == 'a'%}Afrikaans{%endif%}
-                    {%if s.language == 'e'%}English{%endif%}
+                    {%if s.language == 'a'%}Afrikaans
+                    {%elif s.language == 'e'%}English
+                    {%else%}---{%endif%}
+
                 </td>
                 <td>{{s.school}}</td>
                 <td>{{s.grade}}</td>
                 <td>
                     {%if s.sex == 'f'%}Female
                     {%elif s.sex == 'm'%}Male
-                    {%else%} ---
-                    {%endif%}
+                    {%else%}---{%endif%}
                     
                 </td>
-                <td><input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick="toggle_input(this.id, 'to_input')" value='edit'></td>
+                <td><input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick="show_input(this.id, 'to_input')" value='edit'></td>
 
             </tr>
             <tr id="input{{s.id}}" style='display:none'>
                 <td><input class="value{{s.id}}" type="text" name="firstname" value='{{s.firstname}}'></td>
                 <td><input class="value{{s.id}}" type="text" name="surname"  value='{{s.surname}}'></td>
-                {% if userType %}
-                <td><select class="value{{s.id}}" name = "language" selected='{{s.language}}'>
-
-                    <option value="a">Afrikaans</option>
-                    <option value="e">English</option>
-                </select>
                
                 <td>
                     {%if s.language == 'a'%}Afrikaans{%endif%}
                     {%if s.language == 'e'%}English{%endif%}
+                    {%if s.language == ''%}---{%endif%}
+
                 </td>
                
                 </td>
@@ -69,7 +66,8 @@
 
                 <!-- <input type ="text" name="sex"> -->
                 </td>
-                <td><input id = "{{s.id}}" class='greybutton narrow right editbutton' value='edit' disabled>
+                <td>
+                    <input id = "{{s.id}}" class='greybutton narrow right editbutton' value='edit' disabled>
                 </td>
                 <input type='hidden' name='studentID' value='{{s.id}}'>
             </tr>

@@ -1,4 +1,4 @@
-function toggle_input(id, type)
+function show_input(id)
 {
 	$('#input'+id).show()	
 	$('#show'+id).hide()

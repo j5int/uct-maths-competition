@@ -14,7 +14,7 @@ body {
 
 
 #content .narrow{
-	width: 2.5em;
+	width: 2em;
 }
 
 .header {
@@ -124,6 +124,7 @@ ul.style1 li:first-child
 }
 #content td, th 
 {
+	width:8em;
 	font-size:1em;
 	padding:3px 7px 2px 7px;
 }
