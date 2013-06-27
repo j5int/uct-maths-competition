@@ -42,7 +42,7 @@ class SchoolAdmin(admin.ModelAdmin):
 		print
 
 class SchoolStudentAdmin(admin.ModelAdmin):
-	list_display = ('firstname', 'surname', 'grade', 'school', 'registered_by')
+	list_display = ('school', 'firstname', 'surname', 'grade', 'registered_by')
 
 	actions = ['archive_student']
 
