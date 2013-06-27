@@ -31,8 +31,8 @@ from . import app_settings
 
 from .adapter import get_adapter
 
-def allauthtest(request):
-    return render_to_response('base.html', {})
+# def allauthtest(request):
+#     return render_to_response('base.html', {})
 
 User = get_user_model()
 class RedirectAuthenticatedUserMixin(object):
@@ -59,17 +59,19 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
 
     def form_valid(self, form):
         success_url = self.get_success_url()
-        print "success_url", success_url
+        print 'form_valid: success_url', success_url
         return form.login(self.request, redirect_url=success_url)
 
     def get_success_url(self):
         # Explicitly passed ?next= URL takes precedence
+        print 'get_success_url'
         ret = (get_next_redirect_url(self.request, 
                                      self.redirect_field_name)
                or self.success_url)
         return ret
 
     def get_context_data(self, **kwargs):
+        print 'get_context_data'
         ret = super(LoginView, self).get_context_data(**kwargs)
         ret.update({
                 "signup_url": passthrough_next_redirect_url(self.request,

@@ -10,7 +10,7 @@
 {%block content%}
     <h1>Registered Invigilators</h1>
 
-    <form action='.' method='post'>
+    <form action='.' method='post' onsubmit='return drop("invigilator");'>
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
         <table>
@@ -83,7 +83,7 @@
             {%endfor%}
 
         </table>
-        <input name ='delete' class='bluebutton left' type='submit' value='Delete All'>
-        <input name ='submit' class='bluebutton left' type='submit' value='Submit'>
+        <input name ='delete' class='bluebutton left' type='submit' value='Delete All' onclick='del=true;'>
+        <input name ='submit' class='bluebutton left' type='submit' value='Submit' onclick='del=false;'>
     </form>
 {%endblock%}>

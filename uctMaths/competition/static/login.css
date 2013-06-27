@@ -114,6 +114,11 @@
 	/*vertical-align: bottom;*/
 }
 
+#content .buttons input{
+	max-width:90px;
+	width: 90px
+}
+
 .greybutton {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;

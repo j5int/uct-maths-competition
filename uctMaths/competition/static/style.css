@@ -63,7 +63,7 @@ body {
 	}
 
 #content {
-    /*width: 80%;*/
+    width: 80%;
     /*background: #F0F0F0;*/
     min-height: 20em;
     overflow: auto;
