@@ -1,3 +1,7 @@
+// tables.js
+// used in view and registration pages.
+// does the edit button and delete confirmation.
+
 //edit button: switch to iput mode
 function show_input(id)
 {
