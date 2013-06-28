@@ -1,0 +1,18 @@
+<SCRIPT type="text/VBScript">
+
+Dim oConn 
+Dim strPath
+Dim recordSet
+
+strPath = Replace( document.location, "create_db.html", "", 9, 1, 1 )
+strPath = Replace( strPath, "%20", " " )
+
+Set oConn = CreateObject("ADODB.Connection")
+oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  
+
+recordSet = oConn.Execute( "CREATE TABLE Params ( Type text, Data text )" )
+recordSet = oConn.Execute( "CREATE TABLE Schools ( Name text, ""Key"" text, Language text, Address text, Phone text, Fax text, Contact text, Entered yesno, Score int, Email text )" )
+recordSet = oConn.Execute( "CREATE TABLE Venues ( Code text, Building text, Seats int, Bums int, Grade int, Pairs yesno )" )
+recordSet = oConn.Execute( "CREATE TABLE Students ( First_name text, Surname text, Reference text, School text, Score int, Rank int, Grade int, Sex text, Language text, Venue text )" )
+
+</SCRIPT>
