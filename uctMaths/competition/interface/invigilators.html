@@ -1,5 +1,9 @@
 {%extends 'base.html'%}
-<!-- base.html contains the sidebar and header -->
+<!-- 
+here you view the invigilators that you (the logged in user) has registered. 
+they can also be edited from here.
+they can all be deleted from here.  
+-->
 {%block head%}
 <script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
 <script type='text/javascript' src='/static/sidebar.js'></script>
@@ -14,6 +18,7 @@
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
         <table>
+<!-- displays records -->
          <tr>
                 <th class='wide'>School</th>
                 <th>First Name</th>
@@ -48,7 +53,7 @@
                 </td>
 
             </tr>
-
+<!-- input fields for each row -->
             <tr id='input{{i.id}}' style='display:none'>
                 <td class='wide'>{{i.school}}</td>
                 <td><input type='text' name='firstname' value='{{i.firstname}}'></td>

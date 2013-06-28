@@ -1,3 +1,6 @@
+// sidbar.js
+// used for hiding the sidebar
+
 var hid=false;
 $(document).ready(function(){
     $('#hideshow').click(function(event) {    

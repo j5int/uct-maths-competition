@@ -1,5 +1,9 @@
 {% extends "plain_base.html" %}
-
+<!-- 
+log in page. 
+redirects to index view if cancelled.
+redirects to profile view if successful.
+-->
 {% load i18n %}
 {% load account %}
 {% load url from future %}
@@ -11,6 +15,9 @@
 {%endblock%}
 
 {% block content %}
+
+
+<!-- below comment is for social account login (have not looked at it. needs more setup to work.) -->
 
 <!-- {% if socialaccount.providers  %}
 <p>{% blocktrans with site.name as site_name %}Please sign in with one

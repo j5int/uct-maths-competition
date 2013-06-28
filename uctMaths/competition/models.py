@@ -1,26 +1,13 @@
+# models.py
+# defines django models (correspond to db tables)
+
 from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 
-# class SiteUser(models.Model):
-#     '''All users of the site. This may become irrelevent (depending on the use of allauth User table. Should be associated with a username in User table'''
-#     username    = models.CharField(max_length=16L, db_column='Name')
-#     password    = models.CharField(max_length=16L, db_column='Password')
-#     language    = models.CharField(max_length=1L, db_column='Language', choices=(
-#         ('e', 'English'), 
-#         ('a', 'Afrikaans')
-#     )) 
-#     counter     = models.IntegerField(db_column='Count')
-#     last_login  = models.DateField(null=True, blank=True, db_column='Last Login')
-#     non_uct     = models.IntegerField(db_column='Non UCT') 
-#     def __str__(self):
-#         return self.username
-#     class Meta:
-#         ordering = ['username'] #defines the way the records are sorted.
-
 class School(models.Model):
-    '''Contains school information. Duplicates should not be allowed.'''
+    # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
     name        = models.CharField(max_length=40L, db_column='Name') 
     key         = models.CharField(max_length=3L, db_column='Key') 
     language    = models.CharField(max_length=1L, choices=(
@@ -42,7 +29,7 @@ class School(models.Model):
         ordering = ['name']     #defines the way the records are sorted.
 
 class SchoolStudent(models.Model):
-    '''A single student. Not a User. Score and Rank will added/updated by the admin.'''
+    # A single student. Not a User. Score and Rank will added/updated by the admin so they can be null.
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
     surname     = models.CharField(max_length=32L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
@@ -67,7 +54,9 @@ class SchoolStudent(models.Model):
         ordering = ['grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
 class SchoolUser(models.Model):
-    '''The administrator for a single school. A User can register/update/remove SchoolStudents and Invigilators.'''
+    # The administrator for a single school. 
+    # A User can register/update/remove SchoolStudents and Invigilators.
+
     school      = models.ForeignKey('School', db_column='School') 
     count       = models.IntegerField()
     address     = models.CharField(max_length=40L, db_column='Address') 
@@ -108,7 +97,9 @@ class Venue(models.Model):
         ordering = ['building', 'code'] #defines the way the records are sorted.
 
 class Invigilator(models.Model):
-    '''Invigilators registered by SchoolUsers. Many Invigilator to one School. Many Invigilators to one Venue.'''
+    # Invigilators registered by SchoolUsers. Many Invigilator to one School. 
+    # Many Invigilators to one Venue.
+
     school      = models.ForeignKey('School', db_column='School') 
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
     surname     = models.CharField(max_length=32L, db_column='Surname')
@@ -136,6 +127,9 @@ class Invigilator(models.Model):
         
 
 class SchoolStudentArchive(models.Model):
+    # Duplicate of the SchoolStudent model with extra date field - 'archived'. Used for saving old data. 
+    # Generated from the admin page 
+    
     archived    = models.DateField(null=True, blank=True, db_column='Date Archived')
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
     surname     = models.CharField(max_length=32L, db_column='Surname')
@@ -163,6 +157,9 @@ class SchoolStudentArchive(models.Model):
 
 
 class InvigilatorArchive(models.Model):
+    # duplicate of the Invigilator model with extra date field - 'archived'. Used for saving old data. 
+    # Generated from the admin page     
+
     archived    = models.DateField(null=True, blank=True, db_column='Date_Archived')
     school      = models.ForeignKey('School', db_column='School') 
     firstname   = models.CharField(max_length=32L, db_column='First_name') 
