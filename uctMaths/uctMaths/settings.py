@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'uct_maths_competition',   
+        'NAME': 'uct_maths_competition',    #new UCT database
         'USER': 'root',
         'PASSWORD': 'pass',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
@@ -120,6 +120,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    # Can add additional paths
     '/home/aureliad/Desktop/uct-maths/uctMaths/competition/interface',
     '/home/amber/Desktop/uct-maths/uctMaths/competition/interface',
 
