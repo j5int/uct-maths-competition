@@ -17,10 +17,10 @@ class StudentForm (forms.Form):
         firstname = forms.CharField()
         surname = forms.CharField()
         language = forms.CharField()
-        school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all())
+        school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #give all the school options
         grade = forms.IntegerField()
         sex = forms.CharField ()
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())
+        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
 #**************************************
 #FORM TO ENTER A NEW SCHOOL
@@ -37,7 +37,7 @@ class SchoolForm (forms.Form):
         fax = forms.CharField ()   
         contact = forms.CharField()
         email = forms.CharField ()  
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  
+        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  #for foreign key
 
 #********************************  
 #FORM TO ENTER NEW INVIGILATOR
@@ -47,11 +47,10 @@ class InvigilatorForm (ModelForm):
 
 class InvigilatorForm (forms.Form):
         fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email','responsible']
-        school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all())
+        school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
         grade = forms.IntegerField()
-        # venue = forms.ModelChoiceField(queryset = Venue.objects.all())
         inv_reg = forms.CharField()
         phone_h = forms.CharField()
         phone_w = forms.CharField ()   
@@ -59,26 +58,8 @@ class InvigilatorForm (forms.Form):
         fax_w= forms.CharField()
         email = forms.CharField ()  
         responsible = forms.CharField()
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())
+        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
 #*****************************************
-#FORM TO ENTER NEW VENUE
-class VenueForm(ModelForm):
-    class Meta:
-        model=Venue
 
-class VenueForm(forms.Form):
-        fields = ['code','building','seats','bums','grade','pairs']
-        code = forms.CharField()
-        building = forms.CharField()
-        seats = forms.IntegerField ()   
-        bums = forms.IntegerField()
-        grade = forms.IntegerField ()  
-        pairs = forms.IntegerField()
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())
 
-#*****************************************
-#TESTING TO FILTER
-class testForm(forms.Form):
-        user = forms.CharField()
-        
