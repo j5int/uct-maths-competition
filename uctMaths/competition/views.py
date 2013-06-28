@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django import forms
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
-from competition.forms import StudentForm, SchoolForm, InvigilatorForm, VenueForm, testForm #, StudentFilter
+from competition.forms import StudentForm, SchoolForm, InvigilatorForm
 from competition.models import SchoolStudent, School, Invigilator, Venue 
 from django.contrib.auth.models import User
 from django.db import connection
