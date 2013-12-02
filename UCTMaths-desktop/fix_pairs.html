@@ -1,0 +1,61 @@
+<HTML>     
+<HEAD>         
+<TITLE>UCT Mathematics Competition Database</TITLE>   
+</HEAD>      
+
+<BODY BGCOLOR="White" topmargin="10" leftmargin="10"><font face="Verdana, Arial, Helvetica">
+
+<p id="showData"></p>
+
+<SCRIPT type="text/VBScript">
+
+Dim oConn 
+Dim strPath
+Dim ConnectionString
+Dim Recordset
+Dim SQL
+
+'declare the SQL statement that will query the database
+SQL = "SELECT * FROM TABLE_NAME"'
+'create an instance of the ADO connection and recordset objects'
+Set oConn = CreateObject("ADODB.Connection")
+Set Recordset =  CreateObject("ADODB.Recordset")
+
+'define the connection string, specify database driver'
+ConnString = "Driver={MySQL ODBC 5.1 Driver}; Server=172.18.11.80; DataBase=uct_maths_competition; " &_
+"User=root;Password=pass; OPTION=3"
+
+'Open the connection to the database'
+oConn.Open ConnString
+
+strPath = Replace( document.location, "fix_pairs.html", "", 9, 1, 1 )
+strPath = Replace( strPath, "%20", " " )
+
+'Set oConn = CreateObject("ADODB.Connection")
+oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  '
+
+' Get the list of Ref Nums
+set students = oConn.Execute( "SELECT Reference, Count(1) as cnt FROM Students WHERE (0 + Right(Reference,2)) > 5 GROUP BY Reference HAVING Count(1) = 1" )
+schools = ""
+
+' For each Reference 
+Do While Not students.eof
+  ' Fetch individual student
+  student = oConn.Execute( "SELECT * FROM Students WHERE Reference = '" & students(0) & "'" )
+
+  ' Output the school effected
+  schools = schools & "<br/>" & student("School")
+
+  ' clone the row
+'document.all.item( "showData" ).innerHTML = "INSERT INTO Students VALUES ('"&student(0)&"','"&student(1)&"','"&student(2)&"','"&student(3)&"','"&student(4)&"','"&student(5)&"','"&student(6)&"','"&student(7)&"','"&student(8)&"','"&student(9)&"')"
+  oConn.Execute( "INSERT INTO Students VALUES ('"&student(0)&"','"&student(1)&"','"&student(2)&"','"&student(3)&"','"&student(4)&"','"&student(5)&"','"&student(6)&"','"&student(7)&"','"&student(8)&"','"&student(9)&"')" )
+
+  students.MoveNext
+Loop
+
+document.all.item( "showData" ).innerHTML = schools
+
+</SCRIPT>
+
+</BODY>
+</HTML>

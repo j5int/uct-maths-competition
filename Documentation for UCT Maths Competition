@@ -1,0 +1,31 @@
+Documentation for UCT Maths Competition
+
+Installations:
+The following needs to be installed for Web development
+- Django version 1.5.1 - https://docs.djangoproject.com/en/1.5/topics/install/
+- PHP My Admin
+- Download and install allauth:
+https://github.com/pennersr/django-allauth
+
+- MySQL - VERSION NEEDS TO BE 5.5.31!! for the database to run
+link that was used for PHP and MySQL:
+http://www.howtoforge.com/installing-apache2-with-php5-and-mysql-support-on-ubuntu-12.04-lts-lamp
+
+
+Linking with new Database with existing desktop app:
+- Driver = MySQL ODBC 5.1 Driver :
+http://dev.mysql.com/downloads/connector/odbc/#downloads - MSI Installer
+
+
+Retrieving data from MySQL database:
+Setting up database in Windows with MySQL workBench
+-Make database/schema 'uct_maths_competition'
+-Run uct_maths_competition.sql script insdie of new db
+
+Desktop App
+In each of these files change the ConnString to the correct ODBC driver you are using as well as the IP where the MySQL server is running. 
+Files changed:
+labels.html
+reports.html
+mcq.html
+

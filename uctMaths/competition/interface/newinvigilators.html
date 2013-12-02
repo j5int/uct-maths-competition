@@ -1,0 +1,95 @@
+{%extends "base.html"%}
+<!-- register invigilators from here -->
+{%block title%}New Invigilators{%endblock%}
+
+{%block content%}
+    <h1>Register New Invigilators</h1>
+    <p> {{ error }} </p>
+    <form action="." method="post">
+        {% csrf_token %}
+        <!-- {{ form.as_p }} -->
+
+        <table>
+            <tr>
+                <th>School</th>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Grade</th>
+                <!-- <th>Venue</th> -->
+                <th>Invig/Reg</th>
+                <th>Phone (h)</th>
+                <th>Phone (w)</th>
+                <th>Fax (h)</th>
+                <th>Fax (w)</th>
+                <th>Email</th>
+                <th>Responsible</th>
+            </tr>
+            {%for i in range%}
+            <tr>
+                <td>
+                <select name = "school">
+                    {% for entry in schools %}
+                    <option value="{{ entry.id }}">{{ entry.name }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+                <td><input type="text" name="firstname"></td>
+                <td><input type="text" name="surname"></td>
+                <td>
+                    <select name='grade'>
+                        {%for g in grades%}
+                        <option value={{g}}>{{g}}</option>
+                        {%endfor%}
+                    </select>
+                </td>                
+                <!-- <td>
+                    <select name = "venue">
+                        <option value="70">TBD</option>
+                    </select>
+                </td> -->
+                <td>
+                    <select name = "inv_reg">
+                        <option value="i">Invigilator</option>
+                        <option value="r">Registrator</option>
+                    </select>
+                </td>
+                <td><input type ="text" name="phone_h"></td>                
+                <td><input type ="text" name="phone_w"></td>
+                <td><input type ="text" name="fax_h"></td>
+                <td><input type ="text" name="fax_w"></td>
+                <td><input type ="text" name="email"></td>
+                <td><input type ="text" name="responsible"></td>
+                <input type ="hidden" name="registered_by" value ={{ user.id }} >
+            </tr>
+            {%endfor%}
+
+        </table>
+
+       <!-- <p>School: <select name = "school">
+            {% for entry in schools %}
+                <option value="{{ entry.id }}">{{ entry.name }}</option>
+            {% endfor %}
+        </select></p>
+        <p>First Name: <input type="text" name="firstname"></p>
+        <p>Surname: <input type="text" name="surname"></p>
+        <p>Grade: <input type ="text" name="grade"></p>
+        <p>Venue: <select name = "venue">
+            <option value="70">TBD</option>
+        </select></p></p>
+        <p>Invig_reg: <select name = "inv_reg">
+            <option value="i">Invigilator</option>
+            <option value="r">Registrator</option>
+         </select></p></p>
+        <p>Phone (h): <input type ="text" name="phone_h"></p>
+        <p>Phone (w): <input type ="text" name="phone_w"></p>
+        <p>Fax (h): <input type ="text" name="fax"></p>
+        <p>Fax (w): <input type ="text" name="fax_w"></p>
+        <p>Email: <input type ="text" name="email"></p>
+        <p>Responsible: <input type ="text" name="responsible"></p> -->
+
+
+
+        
+        <input class="bluebutton left" type="submit" value="Submit">
+    </form>
+{%endblock%}>

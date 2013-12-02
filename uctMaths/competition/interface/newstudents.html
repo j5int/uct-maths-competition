@@ -1,0 +1,74 @@
+{%extends "base.html"%}
+
+{%block title%}New Students{%endblock%}
+{%block content%}
+<h1 >Register Students for a School</h1>
+<p> {{ error }} </p>
+<form action="." method="post">
+    {% csrf_token %}
+    <!-- {{ form.as_p  }} -->
+    {% if user.is_authenticated %}
+    {% else %}
+        <p>Not working.</p>
+    {% endif %}
+    <select name = "school">
+        {% for school in schools %}
+            <option value="{{ school.id }}">{{ school.name }}</option>
+        {% endfor %}
+    </select>
+
+    <select name = "language">
+        <option value="e">English</option>
+        <option value="a">Afrikaans</option>
+    </select>
+    {%for grade in grades%}
+    <div>
+        <!-- <form action="." method="post"> -->
+        <h2>Grade {{grade}}</h2>
+        <div>
+            <h3>Pairs:
+            <select name = "pairs">
+                {%for p in pairs_per_grade%}
+                <option value='{{p}}'>{{p}}</option>
+                {%endfor%}
+            </select>
+            </h3>
+        </div> 
+
+        <h3>Individuals:</h3>
+        <table>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Sex</th>
+        </tr>
+        {%for entry in entries_per_grade%}
+        <tr>
+            <td><input type="text" name="firstname"></td>
+
+            <td><input type="text" name="surname"></td>
+            <td>
+                <select name = "sex">
+                    <option value=''>---</option>
+                    <option value='f'>Female</option>
+                    <option value='m'>Male</option>
+                </select>
+
+                <!-- <input type ="text" name="sex"> -->
+            </td>
+
+          <input type='hidden' name='grade' value='{{grade}}'>
+          <input type ="hidden" name="registered_by" value ={{ user.id }} >
+        </tr>
+        {%endfor%}
+
+        </table> 
+
+        <br><br>
+    </div>
+    {%endfor%} <!-- endfor grade -->
+    <input class="bluebutton left" type="submit" name='{{grade}}' value="Submit">
+
+    </form>
+   
+{%endblock%}

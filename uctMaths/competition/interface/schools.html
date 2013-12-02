@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+<!-- viewing the registered (by logged in user) schools -->
+{%block title%}Registered Schools{%endblock%}
+{%block head%}
+<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+<script type='text/javascript' src='/static/sidebar.js'></script>
+<script type='text/javascript' src='/static/tables.js'></script>
+{%endblock%}
+{% block content %}
+    <h1>Registered Schools</h1>
+
+    <form action='.' method='post' onsubmit='return drop("school");'>
+        {% csrf_token %}
+        <!-- {{ form.as_p }} -->
+        <table>
+            <tr>
+                <th class='wide'>Name</th>
+                <th>Language</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Fax</th>
+                <th class='narrow'></th>
+            </tr>
+            {%for s in schools%}
+            <tr id='show{{s.id}}'>
+                <td class='wide'>{{s.name}}</td>
+                <td>{{s.language}}</td>
+                <td>{{s.address}}</td>
+                <td>{{s.phone}}</td>
+                <td>{{s.email}}</td>
+                <td>{{s.contact}}</td>
+                <td>{{s.fax}}</td>
+                <td class='narrow'>
+                    <input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick='show_input(this.id)' value='edit'>
+                </td>
+            </tr>
+
+            <tr id='input{{s.id}}' style='display:none'>
+                <td><input type='text' name='name' value='{{s.name}}'></td>
+                <td>
+                    <select name = 'language' value='{{s.language}}'>
+                        <option value='e'>English</option>
+                        <option value='a'>Afrikaans</option>
+
+                    </select>
+                </td>
+                <td><input type ='text' name='address' value='{{s.address}}'></td>
+                <td><input type ='text' name='phone' value='{{s.phone}}'></td>
+                <td><input type ='text' name='email' value='{{s.email}}'></td>
+                <td><input type ='text' name='contact' value='{{s.contact}}'></td>
+                <td><input type ='text' name='fax' value='{{s.fax}}'></td>
+                <td class='narrow'>
+                    <input id = '{{s.id}}' class='greybutton narrow right editbutton' value='edit' disabled>
+                </td>
+                <input type='hidden' name='schoolID' value='{{s.id}}'>
+            </tr>
+
+            {%endfor%}
+        </table>
+        <input name ='delete' class='bluebutton left' type='submit' value='Delete All' onclick='del=true;'>
+        <input name ='submit' class='bluebutton left' type='submit' value='Submit'>
+
+    </form>
+    {%endblock%}
