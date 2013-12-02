@@ -1,0 +1,33 @@
+{% extends "plain_base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{%block title%}Sign up{%endblock%}
+
+{% block head %}
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="/static/login.css" type="text/css" />
+{%endblock%}
+
+{% block content %}
+
+<div class="wrapper">
+  <form class="form1" method="post" action="{% url 'account_signup' %}">
+    <div class="formtitle">Sign Up</div>
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if redirect_field_value %}
+
+    {% endif %}
+    <div class="buttons">
+      <input class="bluebutton right" type="submit" value="Sign up" />
+      <a href='../..'><input class="greybutton left" value="Cancel" /></a>
+    </div>
+ 	</form>
+</div>
+
+{% endblock %}
+
+

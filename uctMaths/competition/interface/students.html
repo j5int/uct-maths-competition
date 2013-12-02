@@ -1,0 +1,79 @@
+{%extends 'base.html'%}
+<!-- view the registered (by logged in user) students -->
+
+
+{%block head%}
+<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+<script type='text/javascript' src='/static/sidebar.js'></script>
+<script type='text/javascript' src='/static/tables.js'></script>
+{%endblock%}
+{%block title%}Registered Students{%endblock%}
+{%block content%}
+    <h1>Registered Students</h1>
+    <form action='.' method='post' onsubmit='return drop("student");'>
+        {% csrf_token %}
+        <!-- {{ form.as_p }} -->
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Language</th>
+                <th class='wide'>School</th>
+                <th>Grade</th>
+                <th>Sex</th>
+            </tr>
+            {%for s in students%}
+            <tr id='show{{s.id}}'>
+                <td>{{s.firstname}}</td>
+
+                <td>{{s.surname}}</td>
+                <td>
+                    {%if s.language == 'a'%}Afrikaans
+                    {%elif s.language == 'e'%}English
+                    {%else%}---{%endif%}
+
+                </td>
+                <td class='wide'>{{s.school}}</td>
+                <td>{{s.grade}}</td>
+                <td>
+                    {%if s.sex == 'f'%}Female
+                    {%elif s.sex == 'm'%}Male
+                    {%else%}---{%endif%}
+                    
+                </td>
+
+            </tr>
+            <tr id='input{{s.id}}' style='display:none'>
+                <td><input class='value{{s.id}}' type='text' name='firstname' value='{{s.firstname}}'></td>
+                <td><input class='value{{s.id}}' type='text' name='surname'  value='{{s.surname}}'></td>
+
+               
+                <td>
+                    {%if s.language == 'a'%}Afrikaans{%endif%}
+                    {%if s.language == 'e'%}English{%endif%}
+                    {%if s.language == ''%}---{%endif%}
+
+                </td>
+               
+                </td>
+                <td class='wide'>{{s.school}}</td>
+                <td>{{s.grade}}</td>
+                <td>
+                <select class='value{{s.id}}' name = 'sex' selected='{{s.sex}}'>
+                    <option value=''>---</option>
+                    <option value='f'>Female</option>
+                    <option value='m'>Male</option>
+                </select>
+
+                <!-- <input type ='text' name='sex'> -->
+                </td>
+                <input type='hidden' name='studentID' value='{{s.id}}'>
+            </tr>
+            {%endfor%}
+        </table>
+
+        <input name ='delete' class='bluebutton left' type='submit' value='Delete All' onclick='del=true;'>
+        <input name ='submit' class='bluebutton left' type='submit' value='Submit' onclick='del=false;'>
+
+    </form>
+{%endblock%}
