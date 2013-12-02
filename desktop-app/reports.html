@@ -3,9 +3,24 @@
 <TITLE>UCT Mathematics Competition Database</TITLE>   
 
 <SCRIPT type="text/VBScript">
-Dim oConn 
 Dim strPath
-Dim recordSet
+Dim oConn
+Dim ConnectionString
+Dim Recordset
+Dim SQL
+
+'declare the SQL statement that will query the database
+SQL = "SELECT * FROM TABLE_NAME"'
+'create an instance of the ADO connection and recordset objects'
+Set oConn = CreateObject("ADODB.Connection")
+Set Recordset =  CreateObject("ADODB.Recordset")
+
+'define the connection string, specify database driver'
+ConnString = "Driver={MySQL ODBC 5.1 Driver}; Server=172.18.11.80; DataBase=uct_maths_competition; " &_
+"User=root;Password=pass; OPTION=3"
+
+'Open the connection to the database'
+oConn.Open ConnString
 
 strPath = Replace( document.location, "reports.html", "", 9, 1, 1 )
 strPath = Replace( strPath, "%20", " " )
@@ -13,8 +28,6 @@ If InStr( strPath, "?" ) > 1 Then
 	strPath = Mid( strPath, 1, InStr( strPath, "?" ) - 1 )
 End If
 
-Set oConn = CreateObject("ADODB.Connection")
-oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  
 
 Function getName
 	Dim name1
@@ -167,7 +180,7 @@ End Function
 			<SELECT name="startSchoolKey">
 <SCRIPT type="text/VBScript">
 
-Set recordSet = oConn.Execute( "SELECT DISTINCT Name FROM Schools ORDER BY Name" )
+Set recordSet = oConn.Execute( "SELECT DISTINCT Name FROM competition_school ORDER BY Name" )
 
 Do While Not recordSet.eof
 	document.write "<OPTION>" & recordSet(0) & "</OPTION>"
@@ -181,7 +194,7 @@ Loop
 <SCRIPT type="text/VBScript">
 Dim iTotal
 iTotal = 0
-Set recordSet = oConn.Execute( "SELECT DISTINCT Name FROM Schools ORDER BY Name" )
+Set recordSet = oConn.Execute( "SELECT DISTINCT Name FROM competition_school ORDER BY Name" )
 
 Do While Not recordSet.eof
 	document.write "<OPTION>" & recordSet(0) & "</OPTION>"
@@ -203,7 +216,7 @@ Sub showKeys_OnClick
 	strStart = ""
 	strEnd   = ""
 
-	Set recordSet = oConn.Execute( "SELECT Name FROM Schools ORDER BY Name" )
+	Set recordSet = oConn.Execute( "SELECT Name FROM competition_school ORDER BY Name" )
 	For index = 0 to document.schoolKeys.endSchoolKey.selectedIndex - 1
 		If Not recordSet.eof Then
 			If index = document.schoolKeys.startSchoolKey.selectedIndex Then
@@ -218,7 +231,10 @@ Sub showKeys_OnClick
 	End If
 
 	strHTML   = "<table style=""font-family: verdana; font-size: 10pt"">"
-	Set recordSet = oConn.Execute( "SELECT Name, Key FROM Schools WHERE Name >= '" & strStart & "' AND Name <= '" & strEnd & "' ORDER BY Name" )
+	Start1 =  Replace (strStart,"'","''")
+	End1 =  Replace (strEnd,"'","''")
+	
+	Set recordSet = oConn.Execute( "SELECT `Name`, `Key` FROM competition_school WHERE Name >= '" & Start1 &"' AND Name <= '" & End1 &"' ORDER BY Name" )
 	If recordSet.eof Then
 		strHTML = strHTML & "<tr><td align=center>There are no schools entered yet.</td></tr>"
 	End If
@@ -291,12 +307,12 @@ Sub assignVenues( iStart, iEnd, iType )
 	Dim strVenue
 	Dim iBumsLeft
 
-'	Set recordSet = oConn.Execute( "DROP TABLE temp" )
-	Set recordSet = oConn.Execute( "CREATE TABLE temp( School text, PairCount int, IndCount int )" )
+	Set recordSet = oConn.Execute( "DROP TABLE temp" )
+	Set recordSet = oConn.Execute( "CREATE TABLE temp( School text, PairCount int, IndCount int )" )'
 
 	For iGrades = iStart to iEnd
 		' First get the pair and individual counts
-		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Grade=" & iGrades & " AND Venue='' ORDER BY School, Reference" )
+		Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Grade=" & iGrades & " AND Venue='' ORDER BY School, Reference" )
 		Do While Not recordSet.eof
 			strSchool    = recordSet(3)
 			iPairs       = 0
@@ -321,14 +337,14 @@ Sub assignVenues( iStart, iEnd, iType )
 
 		If iType <> 2 Then
 			' Get the individual venues 
-			Set recordSet2 = oConn.Execute( "SELECT * FROM Venues WHERE Grade=" & iGrades & " AND Pairs=0 ORDER BY Bums DESC" )
+			Set recordSet2 = oConn.Execute( "SELECT * FROM competition_venue WHERE Grade=" & iGrades & " AND Pairs=0 ORDER BY Bums DESC" )
 
 			iBumsLeft = 0
 			Do While Not recordSet2.eof And iBumsLeft <= 0 
 				' Set up the first venue's info
 				strVenue = recordSet2(1) & " " & recordSet2(0)
 				iBumsLeft = recordSet2(3)
-				Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+				Set studentBums = oConn.Execute( "SELECT `Reference` FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 				Do While Not studentBums.eof
 					iBumsLeft = iBumsLeft - 1
 					studentBums.MoveNext
@@ -356,10 +372,10 @@ Sub assignVenues( iStart, iEnd, iType )
 						strSchool = recordSet(0)
 
 						' Assign the venue...
-						Set students = oConn.Execute( "SELECT * FROM Students WHERE School='" & strSchool & "' AND Grade=" & iGrades & " ORDER BY Reference" )
+						Set students = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE School='" & strSchool & "' AND Grade=" & iGrades & " ORDER BY Reference" )
 						Do While Not students.eof
 							If 0 + Right( students(2), 2 ) < 6 Then
-								oConn.Execute( "UPDATE Students SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
+								oConn.Execute( "UPDATE competition_schoolstudent SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
 								iBumsLeft = iBumsLeft - 1
 							Else
 								students.MoveNext
@@ -383,7 +399,7 @@ Sub assignVenues( iStart, iEnd, iType )
 								' Set up the venue's info
 								strVenue = recordSet2(1) & " " & recordSet2(0)
 								iBumsLeft = recordSet2(3)
-								Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+								Set studentBums = oConn.Execute( "SELECT `Reference` FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 								Do While Not studentBums.eof
 									iBumsLeft = iBumsLeft - 1
 								Loop
@@ -405,7 +421,7 @@ Sub assignVenues( iStart, iEnd, iType )
 							' Set up the venue's info
 							strVenue = recordSet2(1) & " " & recordSet2(0)
 							iBumsLeft = recordSet2(3)
-							Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+							Set studentBums = oConn.Execute( "SELECT `Reference` FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 							Do While Not studentBums.eof
 								iBumsLeft = iBumsLeft - 1
 								studentBums.MoveNext
@@ -425,14 +441,14 @@ Sub assignVenues( iStart, iEnd, iType )
 
 		If iType <> 1 Then
 			' Get the Pair venues 
-			Set recordSet2 = oConn.Execute( "SELECT * FROM Venues WHERE Grade=" & iGrades & " AND Pairs<>0 ORDER BY Bums DESC" )
+			Set recordSet2 = oConn.Execute( "SELECT * FROM competition_venue WHERE Grade=" & iGrades & " AND Pairs<>0 ORDER BY Bums DESC" )
 
 			iBumsLeft = 0
 			Do While Not recordSet2.eof And iBumsLeft <= 0 
 				' Set up the first venue's info
 				strVenue = recordSet2(1) & " " & recordSet2(0)
 				iBumsLeft = recordSet2(3)
-				Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+				Set studentBums = oConn.Execute( "SELECT `Reference` FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 				Do While Not studentBums.eof
 					iBumsLeft = iBumsLeft - 1
 					studentBums.MoveNext
@@ -461,10 +477,10 @@ Sub assignVenues( iStart, iEnd, iType )
 						strSchool = recordSet(0)
 
 						' Assign the venue...
-						Set students = oConn.Execute( "SELECT * FROM Students WHERE School='" & strSchool & "' AND Grade=" & iGrades & " ORDER BY Reference" )
+						Set students = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE School='" & strSchool & "' AND Grade=" & iGrades & " ORDER BY Reference" )
 						Do While Not students.eof
 							If 0 + Right( students(2), 2 ) > 5 Then
-								oConn.Execute( "UPDATE Students SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
+								oConn.Execute( "UPDATE competition_schoolstudent SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
 								iBumsLeft = iBumsLeft - 1
 							End If
 
@@ -484,7 +500,7 @@ Sub assignVenues( iStart, iEnd, iType )
 								' Set up the venue's info
 								strVenue = recordSet2(1) & " " & recordSet2(0)
 								iBumsLeft = recordSet2(3)
-								Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+								Set studentBums = oConn.Execute( "SELECT `Reference` FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 								Do While Not studentBums.eof
 									iBumsLeft = iBumsLeft = 1
 								Loop
@@ -505,7 +521,7 @@ Sub assignVenues( iStart, iEnd, iType )
 							' Set up the venue's info
 							strVenue = recordSet2(1) & " " & recordSet2(0)
 							iBumsLeft = recordSet2(3)
-							Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+							Set studentBums = oConn.Execute( "SELECT `Reference` FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 							Do While Not studentBums.eof
 								iBumsLeft = iBumsLeft = 1
 							Loop
@@ -545,7 +561,7 @@ Sub showRegister( iStart, iEnd, iType )
 		If iType <> 2 Then
 			strHTML = strHTML & "<tr><td><big><b>Grade " & iGrade & " Individuals<b><big></td></tr>"
 
-			Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Grade=" & iGrade & " ORDER BY School, Reference" )
+			Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Grade=" & iGrade & " ORDER BY School, Reference" )
 
 			Do while Not recordSet.eof
 				If 0 + Right( recordSet(2), 2 ) < 6 Then
@@ -562,7 +578,7 @@ Sub showRegister( iStart, iEnd, iType )
 		If iType <> 1 Then
 			strHTML = strHTML & "<tr><td><big><b>Grade " & iGrade & " Pairs<b><big></td></tr>"
 
-			Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Grade=" & iGrade & " ORDER BY School, Reference" )
+			Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Grade=" & iGrade & " ORDER BY School, Reference" )
 
 			Do while Not recordSet.eof
 				If 0 + Right( recordSet(2), 2 ) > 5 Then
@@ -596,15 +612,15 @@ Sub showRegister_OnClick
 
 	iRerun = 0
 
-	Set recordSet = oConn.Execute( "SELECT DISTINCT Venue FROM Students WHERE Venue=''" )
+	Set recordSet = oConn.Execute( "SELECT DISTINCT `Venue` FROM competition_schoolstudent WHERE Venue=''" )
 	If Not recordSet.eof Then
 		' We have some empty entries
 
-		Set recordSet = oConn.Execute( "SELECT DISTINCT Venue FROM Students Where Venue<>''" )
+		Set recordSet = oConn.Execute( "SELECT DISTINCT `Venue` FROM competition_schoolstudent Where Venue<>''" )
 		If Not recordSet.eof Then
 			iMsgRet = MsgBox( "Would you like to only assign those entries that haven't been assigned yet? Note: This may mean that members of the same school could be split.", vbYesNo )
 			If iMsgRet = vbNo Then
-				Set recordSet = oConn.Execute( "UPDATE Students SET Venue='' WHERE Grade>=" & iStart & " AND Grade<=" & iEnd )
+				Set recordSet = oConn.Execute( "UPDATE competition_schoolstudent SET Venue='' WHERE Grade>=" & iStart & " AND Grade<=" & iEnd )
 			End If
 		End If
 		assignVenues iStart, iEnd, document.registerForm.register_type.selectedIndex 
@@ -666,7 +682,7 @@ Sub showPrizeWinners_OnClick
 		strHTML = strHTML & "<tr><td><b>Gold Prizes:</b></td></tr>"
 		strHTML = strHTML & "<tr><td><i>Student</i></td><td><i>School</i></td><td align=center><i>Rank</i></td></tr>"
 		
-		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Rank > 0 AND Rank <= 10 AND Grade=" & iGrade & " ORDER BY Rank, Reference" )
+		Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Rank > 0 AND Rank <= 10 AND Grade=" & iGrade & " ORDER BY Rank, Reference" )
 		Do While Not recordSet.eof
 			If ( 0 + Right( recordSet(2), 2 ) ) < 6 Then
 				strHTML = strHTML & "<tr><td>" & getName() & "</td><td>" & recordSet(3) & "</td><td align=center>" & recordSet(5) & "</td></tr>"
@@ -679,7 +695,7 @@ Sub showPrizeWinners_OnClick
 		Loop
 
 		strHTML = strHTML & "<tr><td><BR></td></tr><tr><td><b>Merit Prizes:</b></td></tr>"
-		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Rank > 10 AND Rank <= 200 AND Grade=" & iGrade & " ORDER BY Rank, Reference" )
+		Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Rank > 10 AND Rank <= 200 AND Grade=" & iGrade & " ORDER BY Rank, Reference" )
 		Do While Not recordSet.eof
 			If ( 0 + Right( recordSet(2), 2 ) ) < 6 Then
 				strHTML = strHTML & "<tr><td>" & getName() & "</td><td>" & recordSet(3) & "</td><td align=center>" & recordSet(5) & "</td></tr>"
@@ -698,7 +714,7 @@ Sub showPrizeWinners_OnClick
 		strHTML = strHTML & "<tr><td><b>Gold Prizes:</b></td></tr>"
 		strHTML = strHTML & "<tr><td><i>Student</i></td><td><i>School</i></td><td><i>Rank</i></td></tr>"
 		
-		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Rank > 0 AND Rank <= 3 AND Grade=" & iGrade & " ORDER BY Rank, Reference" )
+		Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Rank > 0 AND Rank <= 3 AND Grade=" & iGrade & " ORDER BY Rank, Reference" )
 		Do While Not recordSet.eof
 			If ( 0 + Right( recordSet(2), 2 ) ) > 5 Then
 				strHTML = strHTML & "<tr><td>" & getName() & "</td><td>" & recordSet(3) & "</td><td align=center>" & recordSet(5) & "</td></tr>"
@@ -708,7 +724,7 @@ Sub showPrizeWinners_OnClick
 		Loop
 
 		strHTML = strHTML & "<tr><td><BR></td></tr><tr><td><b>Merit Prizes:</b></td></tr>"
-		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Rank > 3 AND Rank <= 100 AND Grade=" & iGrade & " ORDER BY Rank, Reference" )
+		Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Rank > 3 AND Rank <= 100 AND Grade=" & iGrade & " ORDER BY Rank, Reference" )
 		Do While Not recordSet.eof
 			If ( 0 + Right( recordSet(2), 2 ) ) > 5 Then
 				strHTML = strHTML & "<tr><td>" & getName() & "</td><td>" & recordSet(3) & "</td><td align=center>" & recordSet(5) & "</td></tr>"
@@ -749,12 +765,13 @@ Sub showSchoolPrize_OnClick
 
 	strHTML = "<table width=70% style=""font-family: verdana; font-size: 10pt""><tr><td><big><b>School Prize Winners</b></big></td></tr><tr><td><i>School</i></td><td><i>Grade</i></td><td><i>Student</i></td><td><i>Rank</i></td></tr>"
 
-	Set recordSet2 = oConn.Execute( "SELECT DISTINCT Name FROM Schools WHERE Entered<>0 ORDER BY Name" )
+	Set recordSet2 = oConn.Execute( "SELECT DISTINCT `Name` FROM competition_school WHERE Entered<>0 ORDER BY Name" )
 	Do While Not recordSet2.eof
 		strLine   = ""
 		strSchool = recordSet2(0)
-
-		Set recordSet = oConn.Execute( "SELECT Rank, Reference FROM Students WHERE School='" & strSchool & "' AND Rank<=10 AND Rank>0" )
+        Start2 =  Replace (strSchool,"'","''")
+	
+		Set recordSet = oConn.Execute( "SELECT `Rank`, `Reference` FROM competition_schoolstudent WHERE School='" & Start2 & "' AND Rank<=10 AND Rank>0" )
 
 		bGold = false
 		If Not recordSet.eof Then
@@ -778,7 +795,7 @@ Sub showSchoolPrize_OnClick
 			Dim iEntries
 
 			iEntries = 0
-			Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE School='" & strSchool & "' AND Rank>0 ORDER BY Rank" )
+			Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE School='" & Start2 & "' AND Rank>0 ORDER BY Rank" )
 			Do While iEntries < 10 And Not recordSet.eof
 				If ( 0 + Right( recordSet(2), 2 ) ) < 6 Then
 					If iEntries = 0 Then
@@ -836,7 +853,7 @@ Sub showSchoolRanks_OnClick
 		strHTML = "<table width=40% style=""font-family: verdana; font-size: 10pt""><tr><td colspan=3><b><big>School Ranking</b></big><tr><td><BR></td></tr>"
 		strHTML = strHTML & "<tr><td><i>Rank</i></td><td><i>School</i></td><td><i>Score</i></td></tr>"
 
-		Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Entered<>0 ORDER BY Score DESC" )
+		Set recordSet = oConn.Execute( "SELECT * FROM competition_school WHERE Entered<>0 ORDER BY Score DESC" )
 	
 		iRank = 0
 		iPosition = 0
@@ -881,7 +898,7 @@ End Sub
 			<SELECT name="startSchoolResults">
 <SCRIPT type="text/VBScript">
 
-Set recordSet = oConn.Execute( "SELECT DISTINCT Name FROM Schools WHERE Entered<>0 ORDER BY Name" )
+Set recordSet = oConn.Execute( "SELECT DISTINCT `Name` FROM competition_school WHERE Entered<>0 ORDER BY Name" )
 
 Do While Not recordSet.eof
 	document.write "<OPTION>" & recordSet(0) & "</OPTION>"
@@ -895,7 +912,7 @@ Loop
 <SCRIPT type="text/VBScript">
 Dim iTotal
 iTotal = 0
-Set recordSet = oConn.Execute( "SELECT DISTINCT Name FROM Schools WHERE Entered<>0 ORDER BY Name" )
+Set recordSet = oConn.Execute( "SELECT DISTINCT `Name` FROM competition_school WHERE Entered<>0 ORDER BY Name" )
 
 Do While Not recordSet.eof
 	document.write "<OPTION>" & recordSet(0) & "</OPTION>"
@@ -920,8 +937,8 @@ Function showSchool( strSchool, strSchoolPrizeRef )
 	iCount = 50
 	For iGrade = 8 to 12 
 		strRet = strRet & "<tr><td></td><td colspan=5>Grade / Graad " & iGrade & "</td></tr>"
-
-		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE School='" & strSchool & "' AND Grade=" & iGrade & " ORDER BY Reference" )
+		Start4 =  Replace (strSchool,"'","''")
+		Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE School='" & Start4 & "' AND Grade=" & iGrade & " ORDER BY Reference" )
 		If recordSet.eof Then
 			strRet = strRet & "<tr><td colspan=3 align=center><i>No Entries</i></td></tr>"
 			iCount = iCount - 1
@@ -1013,7 +1030,7 @@ Sub showSchoolResults_OnClick
 	strStart = ""
 	strEnd   = ""
 
-	Set recordSet2 = oConn.Execute( "SELECT Name FROM Schools WHERE Entered<>0 ORDER BY Name" )
+	Set recordSet2 = oConn.Execute( "SELECT `Name` FROM competition_school WHERE Entered<>0 ORDER BY Name" )
 	For index = 0 to document.schoolResults.endSchoolResults.selectedIndex - 1
 		If Not recordSet2.eof Then
 			If index = document.schoolResults.startSchoolResults.selectedIndex Then
@@ -1031,8 +1048,10 @@ Sub showSchoolResults_OnClick
 	End If
 
 	strHTML = "<table>"
+	Start3 =  Replace (strStart,"'","''")
+	End2 =  Replace (strEnd,"'","''")
 
-	Set recordSet2 = oConn.Execute( "SELECT Name FROM Schools WHERE Entered<>0 AND Name >= '" & strStart & "' AND Name <= '" & strEnd & "' ORDER BY Name" )
+	Set recordSet2 = oConn.Execute( "SELECT `Name` FROM competition_school WHERE Entered<>0 AND Name >= '" & Start3 & "' AND Name <= '" & End2 & "' ORDER BY Name" )
 	If recordSet2.eof Then
 		strHTML = strHTML & "<tr><td align=center>There are no schools to report on in the selection.</td></tr>"
 	End If
@@ -1044,8 +1063,8 @@ Sub showSchoolResults_OnClick
 	Do While Not recordSet2.eof
 		' Find the School Prize winner and hang on to it...
 		strSchoolPrizeRef = ""
-
-		Set schoolSet = oConn.Execute( "SELECT Rank, Reference FROM Students WHERE School='" & recordSet2(0) & "' AND Rank<=10 AND Rank>0" )
+		Start4 =  Replace (recordSet2(0),"'","''")
+		Set schoolSet = oConn.Execute( "SELECT `Rank`, `Reference` FROM competition_schoolstudent WHERE School='" & Start4 & "' AND Rank<=10 AND Rank>0" )
 
 		bGold = false
 		If Not schoolSet.eof Then
@@ -1067,9 +1086,9 @@ Sub showSchoolResults_OnClick
 		If Not bGold Then
 			' Okay, no gold prizes.  Check the number of individual entries > 10.
 			Dim iEntries
-
+			Start5 =  Replace (recordSet2(0),"'","''")
 			iEntries = 0
-			Set schoolSet = oConn.Execute( "SELECT * FROM Students WHERE School='" & recordSet2(0) & "' AND Rank>=0 ORDER BY Rank" )
+			Set schoolSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE School='" & Start5 & "' AND Rank>=0 ORDER BY Rank" )
 			Do While iEntries < 10 And Not schoolSet.eof
 				If ( 0 + Right( schoolSet(2), 2 ) ) < 6 Then
 					If iEntries = 0 Then
@@ -1137,13 +1156,13 @@ Sub showCertificateCount_OnClick
 	strHTML = "<table style=""font-family: verdana; font-size: 10pt""><tr><td colspan=4><b><big>Certificate Count</b></big></td></tr>"
 	strHTML = strHTML & "<tr><td><i>School</i></td><td align=center><i>Gold</i></td><td align=center><i>Merit</i></td><td align=center><i>Participated</i></td><td align=center><i>Total</i></td></tr>"
 
-	Set recordSet = oConn.Execute( "SELECT Name FROM Schools WHERE Entered<>0 ORDER BY Name" )
+	Set recordSet = oConn.Execute( "SELECT `Name` FROM competition_school WHERE Entered<>0 ORDER BY Name" )
 	Do While Not recordSet.eof
 		iPart  = 0
 		iGold  = 0
 		iMerit = 0
-
-		Set recordSet2 = oConn.Execute( "SELECT DISTINCT Reference, Rank FROM Students WHERE School='" & recordSet(0) & "' AND Rank>=0" )
+		Start5 =  Replace (recordSet(0),"'","''")
+		Set recordSet2 = oConn.Execute( "SELECT DISTINCT `Reference`, `Rank` FROM competition_schoolstudent WHERE School='" & Start5 & "' AND Rank>=0" )
 		Do While Not recordSet2.eof
 
 			If 0 + Right( recordSet2(0), 2 ) < 6 Then
@@ -1212,7 +1231,7 @@ Sub showVenues_OnClick
 	strHTML = strHTML & "<tr><td><i>Code</i></td><td><i>Building</i></td><td align=center><i>Seats</i></td><td align=center>Bums</td><td align=center>Grade</td><td>Type</td></tr>"
 	strHTML = strHTML & "<tr><td><BR></td></tr>"
 
-	Set recordSet = oConn.Execute( "SELECT * FROM Venues ORDER BY Building, Code" )
+	Set recordSet = oConn.Execute( "SELECT * FROM competition_venue ORDER BY Building, Code" )
 
 	Do While Not recordSet.eof
 		If recordSet( 5 ) = -1 Then
@@ -1288,12 +1307,12 @@ Sub showAssignedVenues_OnClick
 		If document.showAssignedVenuesForm.assignedType.selectedIndex <> 2 Then
 			strHTML = strHTML & "<tr><td colspan=4><b><big>Grade " & iGrade & " Individuals</td></tr>"
 
-			Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Grade=" & iGrade & " AND Pairs=0 ORDER BY Building, Code" )
+			Set recordSet = oConn.Execute( "SELECT * FROM competition_venue WHERE Grade=" & iGrade & " AND Pairs=0 ORDER BY Building, Code" )
 
 			Do While Not recordSet.eof
 				strVenue = recordSet( 1 ) & " " & recordSet( 0 )
 
-				Set recordSet2 = oConn.Execute( "SELECT * FROM Students WHERE Venue='" & strVenue & "'" )
+				Set recordSet2 = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 				iPupils = 0
 
 				Do While Not recordSet2.eof
@@ -1310,12 +1329,12 @@ Sub showAssignedVenues_OnClick
 		If document.showAssignedVenuesForm.assignedType.selectedIndex <> 1 Then
 			strHTML = strHTML & "<tr><td colspan=4><b><big>Grade " & iGrade & " Pairs</td></tr>"
 
-			Set recordSet = oConn.Execute( "SELECT * FROM Venues WHERE Grade=" & iGrade & " AND Pairs=-1 ORDER BY Building, Code" )
+			Set recordSet = oConn.Execute( "SELECT * FROM competition_venue WHERE Grade=" & iGrade & " AND Pairs=-1 ORDER BY Building, Code" )
 
 			Do While Not recordSet.eof
 				strVenue = recordSet( 1 ) & " " & recordSet( 0 )
 
-				Set recordSet2 = oConn.Execute( "SELECT * FROM Students WHERE Venue='" & strVenue & "'" )
+				Set recordSet2 = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 				iPupils = 0
 
 				Do While Not recordSet2.eof

@@ -15,6 +15,7 @@ from competition.models import SchoolStudent, School, Invigilator, Venue
 from django.contrib.auth.models import User
 from django.db import connection
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 
 # def auth(request):
@@ -163,59 +164,89 @@ def invigilators(request):
 def newstudents(request):
     error = " "
     if request.method == 'POST':  # If the form has been submitted...
-       
+
         form = (request.POST) # A form bound to the POST data
 
         #Registering per grade
         for grade in range (8,13):
           
-          #Registering the different pairs
-          #Information is set to null, only school name is given and reference
-          #Reference if the ID of the first person in the pair
-          for p in range(int(form.getlist("pairs",'')[grade-8])):
-            firstname = ''
-            surname = ''
-            language = form.getlist('language','')[0]
-            reference = 1234
-            school = School.objects.get(pk=int(form.getlist('school','')[0]))
-            sex = '' 
-            registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))          
-            query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                    school = school, grade = grade , sex = sex, registered_by= registered_by)
-            query.save()
-            query.reference=query.id
-            query.save()
-            query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = query.id,
-                    school = school, grade = grade , sex = sex, registered_by= registered_by)
-            query1.save()   
+              #Registering the different pairs
+              #Information is set to null, only school name is given and reference
+              #Reference if the ID of the first person in the pair
+              for p in range(int(form.getlist("pairs",'')[grade-8])):
+                    firstname = ''
+                    surname = ''
+                    language = form.getlist('language','')[0]
+                    reference = 1234
+                    school = School.objects.get(pk=int(form.getlist('school','')[0]))
+                    sex = ''
+                    registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
+                    query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
+                            school = school, grade = grade , sex = sex, registered_by= registered_by)
+                    query.save()
+                    query.reference=query.id
+                    query.save()
+                    query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = query.id,
+                            school = school, grade = grade , sex = sex, registered_by= registered_by)
+                    query1.save()
 
         #Registering students, maximum number of students 25
         #Returns an error if information entered incorrectly         
         try:
-          for i in range (25):
-            if form.getlist('firstname','')[i] == u'': continue
-            firstname = form.getlist('firstname','')[i]
-            surname = form.getlist('surname','')[i]
-            language = form.getlist('language','')[0]
-            reference = 1234
-            school = School.objects.get(pk=int(form.getlist('school','')[0]))
-            grade = form.getlist('grade','')[i]
-            sex = form.getlist('sex','')[i]  
-            registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))          
-            query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                    school = school, grade = grade , sex = sex, registered_by= registered_by)
-            query.save()
-            query.reference=query.id
-            query.save()
-          return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
+            for i in range (25):
+                if form.getlist('firstname','')[i] == u'': continue
+                firstname = form.getlist('firstname','')[i]
+                surname = form.getlist('surname','')[i]
+                language = form.getlist('language','')[0]
+                reference = 1234
+                school = School.objects.get(pk=int(form.getlist('school','')[0]))
+                grade = form.getlist('grade','')[i]
+                sex = form.getlist('sex','')[i]
+                registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
+                query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
+                        school = school, grade = grade , sex = sex, registered_by= registered_by)
+                query.save()
+                query.reference=query.id
+                query.save()
+
+            for j in range(10):
+                if form.getlist('inv_firstname','')[j] == u'':
+                    ierror = "Invigilator information incomplete"
+                else:
+                    school = School.objects.get(pk=int(form.getlist('school','')[j]))
+                    ifirstname = form.getlist('inv_firstname','')[j]
+                    isurname = form.getlist('inv_surname','')[j]
+                    igrade = form.getlist('inv_grade','')[j]
+                    iinv_reg = form.getlist('inv_reg','')[j]
+                    iphone_h = form.getlist('inv_phone_h','')[j]
+                    iphone_w = form.getlist('inv_phone_w','')[j]
+                    ifax_h = form.getlist('inv_fax_h','')[j]
+                    ifax_w = form.getlist('inv_fax_w','')[j]
+                    iemail = form.getlist('inv_email','')[j]
+                    iresponsible = form.getlist('inv_responsible','')[j]
+                    iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
+
+                    query = Invigilator(school = school , firstname = ifirstname,surname = isurname, grade = igrade ,
+                                        inv_reg = iinv_reg, phone_h = iphone_h , phone_w = iphone_w,
+                                        fax_h = ifax_h, fax_w = ifax_w , email = iemail, responsible = iresponsible, registered_by= iregistered_by)
+                    query.save()
+
+            send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
+
+            return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
-              error = "Incorrect information inserted into fields. Please insert correct information"
+              error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
     else:
         form = StudentForm() # An unbound form
-        
+
+
+
+
+
+
 
     schoolOptions = School.objects.all()
-    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(6), 'grades':range(8,13), 'error':error}
+    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(1,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error}
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 
@@ -251,7 +282,7 @@ def newschools (request):
 
           return render_to_response('submitted.html', {'type':'School'}) # Redirect after POST
         except Exception as e:
-              error = "Incorrect information inserted into fields. Please insert correct information"
+              error = "%s Incorrect information inserted into fields. Please insert correct information" % e
   else:
         form = SchoolForm() # An unbound form
   
@@ -296,12 +327,12 @@ def newinvigilators (request):
           return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
         except Exception as e:
               print e
-              error = "Incorrect information inserted into fields. Please insert correct information"
+              error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
   else:
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
 
-  c = {'schools':schoolOptions, 'range':range(4), 'grades':range(8,13), 'error':error} #******ADD RANGE
+  c = {'schools':schoolOptions, 'range':range(10), 'grades':range(8,13), 'error':error} #******ADD RANGE
 
   c.update(csrf(request))
   return render_to_response('newinvigilators.html', c,context_instance=RequestContext(request))

@@ -21,7 +21,6 @@
                 <th class='wide'>School</th>
                 <th>Grade</th>
                 <th>Sex</th>
-                <th class='narrow'></th>
             </tr>
             {%for s in students%}
             <tr id='show{{s.id}}'>
@@ -41,9 +40,6 @@
                     {%elif s.sex == 'm'%}Male
                     {%else%}---{%endif%}
                     
-                </td>
-                <td class='narrow'>
-                    <input id='{{s.id}}' class='bluebutton narrow right editbutton' onClick='show_input(this.id)' value='edit'>
                 </td>
 
             </tr>
@@ -70,9 +66,6 @@
                 </select>
 
                 <!-- <input type ='text' name='sex'> -->
-                </td>
-                <td class='narrow'>
-                    <input id = '{{s.id}}' class='greybutton narrow right editbutton' value='edit' disabled>
                 </td>
                 <input type='hidden' name='studentID' value='{{s.id}}'>
             </tr>

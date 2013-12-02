@@ -8,19 +8,19 @@ from django.contrib.auth.models import User
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
-    name        = models.CharField(max_length=40L, db_column='Name') 
+    name        = models.CharField(max_length=255L, db_column='Name')
     key         = models.CharField(max_length=3L, db_column='Key') 
     language    = models.CharField(max_length=1L, choices=(
         ('e', 'English'), 
         ('a', 'Afrikaans')
     ), db_column = 'Language')
-    address     = models.CharField(max_length=50L, db_column='Address', blank=True) 
+    address     = models.CharField(max_length=255L, db_column='Address', blank=True)
     phone       = models.CharField(max_length=15L, db_column='Phone', blank=True) 
     fax         = models.CharField(max_length=15L, db_column='Fax', blank=True) 
-    contact     = models.CharField(max_length=30L, db_column='Contact', blank=True) 
+    contact     = models.CharField(max_length=255L, db_column='Contact', blank=True)
     entered     = models.IntegerField(null=True, db_column='Entered', blank=True) 
     score       = models.IntegerField(null=True, db_column='Score', blank=True) 
-    email       = models.CharField(max_length=30L, db_column='Email', blank=True)
+    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
     registered_by = models.ForeignKey(User, db_column='Registered By')
  
     def __str__(self):
@@ -30,8 +30,8 @@ class School(models.Model):
 
 class SchoolStudent(models.Model):
     # A single student. Not a User. Score and Rank will added/updated by the admin so they can be null.
-    firstname   = models.CharField(max_length=32L, db_column='First_name') 
-    surname     = models.CharField(max_length=32L, db_column='Surname')
+    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    surname     = models.CharField(max_length=255L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
         ('e', 'English'), 
         ('a', 'Afrikaans')
@@ -51,7 +51,7 @@ class SchoolStudent(models.Model):
     def __str__(self):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname
     class Meta:
-        ordering = ['grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
+        ordering = ['school', 'grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
 class SchoolUser(models.Model):
     # The administrator for a single school. 
@@ -59,12 +59,12 @@ class SchoolUser(models.Model):
 
     school      = models.ForeignKey('School', db_column='School') 
     count       = models.IntegerField()
-    address     = models.CharField(max_length=40L, db_column='Address') 
-    town        = models.CharField(max_length=20L, db_column='Town') 
+    address     = models.CharField(max_length=255L, db_column='Address')
+    town        = models.CharField(max_length=50L, db_column='Town')
     postal_code = models.CharField(max_length=4L, db_column='Postal_Code') 
     phone       = models.CharField(max_length=15L, db_column='Telephone') 
     fax         = models.CharField(max_length=15L, db_column='Fax', blank=True) 
-    email       = models.CharField(max_length=40L, db_column='Email', blank=True) 
+    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
     correction  = models.IntegerField(db_column='Correction') 
     entered     = models.IntegerField(db_column='Entered')  
     language    = models.CharField(max_length=1L, db_column='Language', choices=(
@@ -101,8 +101,8 @@ class Invigilator(models.Model):
     # Many Invigilators to one Venue.
 
     school      = models.ForeignKey('School', db_column='School') 
-    firstname   = models.CharField(max_length=32L, db_column='First_name') 
-    surname     = models.CharField(max_length=32L, db_column='Surname')
+    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    surname     = models.CharField(max_length=255L, db_column='Surname')
     grade       = models.IntegerField(db_column='Grade', null=True,
         validators = [
             MaxValueValidator(12),
@@ -117,8 +117,8 @@ class Invigilator(models.Model):
     phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
     fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
     fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
-    email       = models.CharField(max_length=40L, db_column='Email', blank=True) 
-    responsible = models.CharField(max_length=40L, db_column='Responsible')
+    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
+    responsible = models.CharField(max_length=255L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname
@@ -131,8 +131,8 @@ class SchoolStudentArchive(models.Model):
     # Generated from the admin page 
     
     archived    = models.DateField(null=True, blank=True, db_column='Date Archived')
-    firstname   = models.CharField(max_length=32L, db_column='First_name') 
-    surname     = models.CharField(max_length=32L, db_column='Surname')
+    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    surname     = models.CharField(max_length=255L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
         ('e', 'English'), 
         ('a', 'Afrikaans')
@@ -162,8 +162,8 @@ class InvigilatorArchive(models.Model):
 
     archived    = models.DateField(null=True, blank=True, db_column='Date_Archived')
     school      = models.ForeignKey('School', db_column='School') 
-    firstname   = models.CharField(max_length=32L, db_column='First_name') 
-    surname     = models.CharField(max_length=32L, db_column='Surname')
+    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    surname     = models.CharField(max_length=255L, db_column='Surname')
     grade       = models.IntegerField(db_column='Grade', null=True,
         validators = [
             MaxValueValidator(12),
@@ -178,8 +178,8 @@ class InvigilatorArchive(models.Model):
     phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
     fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
     fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
-    email       = models.CharField(max_length=40L, db_column='Email', blank=True) 
-    responsible = models.CharField(max_length=40L, db_column='Responsible')
+    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
+    responsible = models.CharField(max_length=255L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'

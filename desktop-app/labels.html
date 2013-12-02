@@ -2,9 +2,24 @@
 <HEAD>         
 <TITLE>UCT Mathematics Competition Database</TITLE>     
 <SCRIPT type="text/VBScript">
-Dim oConn 
-Dim strPath
-Dim recordSet
+'declare the variables '
+Dim oConn
+Dim ConnectionString
+Dim Recordset
+Dim SQL
+
+'declare the SQL statement that will query the database
+SQL = "SELECT * FROM TABLE_NAME"'
+'create an instance of the ADO connection and recordset objects'
+Set oConn = CreateObject("ADODB.Connection")
+Set Recordset =  CreateObject("ADODB.Recordset")
+
+'define the connection string, specify database driver'
+ConnString = "Driver={MySQL ODBC 5.1 Driver}; Server=172.18.11.80; DataBase=uct_maths_competition; " &_
+"User=root;Password=pass; OPTION=3"
+
+'Open the connection to the database'
+oConn.Open ConnString
 
 strPath = Replace( document.location, "labels.html", "", 9, 1, 1 )
 strPath = Replace( strPath, "%20", " " )
@@ -12,8 +27,7 @@ If InStr( strPath, "?" ) > 1 Then
 	strPath = Mid( strPath, 1, InStr( strPath, "?" ) - 1 )
 End If
 
-Set oConn = CreateObject("ADODB.Connection")
-oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  
+
 
 </SCRIPT>
 
@@ -114,7 +128,7 @@ Sub showSchoolLabels_OnClicK
 	schoolFile.Write "Contact,School_Name,Address"
 	schoolFile.Write Chr(13) & Chr(10)
 
-	Set recordSet = oConn.Execute( "SELECT * FROM Schools ORDER BY Name" )
+	Set recordSet = oConn.Execute( "SELECT * FROM competition_school ORDER BY Name" )
 	Do While Not recordSet.eof
 		' Contact Name
 		strField = recordSet(6)
@@ -186,7 +200,7 @@ Sub showEnteredLabels_OnClicK
 	schoolFile.Write "Contact,School_Name,Address"
 	schoolFile.Write Chr(13) & Chr(10)
 
-	Set recordSet = oConn.Execute( "SELECT * FROM Schools WHERE Entered=1 ORDER BY Name" )
+	Set recordSet = oConn.Execute( "SELECT * FROM competition_school WHERE Entered=1 ORDER BY Name" )
 	Do While Not recordSet.eof
 		' Contact Name
 		strField = recordSet(6)
@@ -261,7 +275,7 @@ Sub assignVenues( iStart, iEnd )
 
 	For iGrade = iStart to iEnd
 		' First get the pair and individual counts
-		Set recordSet = oConn.Execute( "SELECT * FROM Students WHERE Grade=" & iGrade & " AND Venue='' ORDER BY School, Reference" )
+		Set recordSet = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE Grade=" & iGrade & " AND Venue='' ORDER BY School, Reference" )
 		Do While Not recordSet.eof
 			strSchool    = recordSet(3)
 			iPairs       = 0
@@ -285,14 +299,14 @@ Sub assignVenues( iStart, iEnd )
 		Loop
 
 		' Get the individual venues 
-		Set recordSet2 = oConn.Execute( "SELECT * FROM Venues WHERE Grade=" & iGrade & " AND Pairs=0 ORDER BY Bums DESC" )
+		Set recordSet2 = oConn.Execute( "SELECT * FROM competition_venue WHERE Grade=" & iGrade & " AND Pairs=0 ORDER BY Bums DESC" )
 
 		iBumsLeft = 0
 		Do While Not recordSet2.eof And iBumsLeft <= 0 
 			' Set up the first venue's info
 			strVenue = recordSet2(1) & " " & recordSet2(0)
 			iBumsLeft = recordSet2(3)
-			Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+			Set studentBums = oConn.Execute( "SELECT Reference FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 			Do While Not studentBums.eof
 				iBumsLeft = iBumsLeft - 1
 				studentBums.MoveNext
@@ -321,10 +335,10 @@ Sub assignVenues( iStart, iEnd )
 					strSchool = recordSet(0)
 
 					' Assign the venue...
-					Set students = oConn.Execute( "SELECT * FROM Students WHERE School='" & strSchool & "' AND Grade=" & iGrade & " ORDER BY Reference" )
+					Set students = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE School='" & strSchool & "' AND Grade=" & iGrade & " ORDER BY Reference" )
 					Do While Not students.eof
 						If 0 + Right( students(2), 2 ) < 6 Then
-							oConn.Execute( "UPDATE Students SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
+							oConn.Execute( "UPDATE competition_schoolstudent SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
 							iBumsLeft = iBumsLeft - 1
 						Else
 							students.MoveNext
@@ -348,7 +362,7 @@ Sub assignVenues( iStart, iEnd )
 							' Set up the venue's info
 							strVenue = recordSet2(1) & " " & recordSet2(0)
 							iBumsLeft = recordSet2(3)
-							Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+							Set studentBums = oConn.Execute( "SELECT Reference FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 							Do While Not studentBums.eof
 								iBumsLeft = iBumsLeft = 1
 							Loop
@@ -370,7 +384,7 @@ Sub assignVenues( iStart, iEnd )
 						' Set up the venue's info
 						strVenue = recordSet2(1) & " " & recordSet2(0)
 						iBumsLeft = recordSet2(3)
-						Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+						Set studentBums = oConn.Execute( "SELECT Reference FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 						Do While Not studentBums.eof
 							iBumsLeft = iBumsLeft - 1
 							studentBums.MoveNext
@@ -389,14 +403,14 @@ Sub assignVenues( iStart, iEnd )
 		End If
 
 		' Get the Pair venues 
-		Set recordSet2 = oConn.Execute( "SELECT * FROM Venues WHERE Grade=" & iGrade & " AND Pairs<>0 ORDER BY Bums DESC" )
+		Set recordSet2 = oConn.Execute( "SELECT * FROM competition_venue WHERE Grade=" & iGrade & " AND Pairs<>0 ORDER BY Bums DESC" )
 
 		iBumsLeft = 0
 		Do While Not recordSet2.eof And iBumsLeft <= 0 
 			' Set up the first venue's info
 			strVenue = recordSet2(1) & " " & recordSet2(0)
 			iBumsLeft = recordSet2(3)
-			Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+			Set studentBums = oConn.Execute( "SELECT Reference FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 			Do While Not studentBums.eof
 				iBumsLeft = iBumsLeft - 1
 				studentBums.MoveNext
@@ -425,10 +439,10 @@ Sub assignVenues( iStart, iEnd )
 					strSchool = recordSet(0)
 
 					' Assign the venue...
-					Set students = oConn.Execute( "SELECT * FROM Students WHERE School='" & strSchool & "' AND Grade=" & iGrade & " ORDER BY Reference" )
+					Set students = oConn.Execute( "SELECT * FROM competition_schoolstudent WHERE School='" & strSchool & "' AND Grade=" & iGrade & " ORDER BY Reference" )
 					Do While Not students.eof
 						If 0 + Right( students(2), 2 ) > 5 Then
-							oConn.Execute( "UPDATE Students SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
+							oConn.Execute( "UPDATE competition_schoolstudent SET Venue='" & strVenue & "' WHERE Reference='" & students(2) & "'" )
 							iBumsLeft = iBumsLeft - 1
 						End If
 
@@ -448,7 +462,7 @@ Sub assignVenues( iStart, iEnd )
 							' Set up the venue's info
 							strVenue = recordSet2(1) & " " & recordSet2(0)
 							iBumsLeft = recordSet2(3)
-							Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+							Set studentBums = oConn.Execute( "SELECT Reference FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 							Do While Not studentBums.eof
 								iBumsLeft = iBumsLeft = 1
 							Loop
@@ -469,7 +483,7 @@ Sub assignVenues( iStart, iEnd )
 						' Set up the venue's info
 						strVenue = recordSet2(1) & " " & recordSet2(0)
 						iBumsLeft = recordSet2(3)
-						Set studentBums = oConn.Execute( "SELECT Reference FROM Students WHERE Venue='" & strVenue & "'" )
+						Set studentBums = oConn.Execute( "SELECT Reference FROM competition_schoolstudent WHERE Venue='" & strVenue & "'" )
 						Do While Not studentBums.eof
 							iBumsLeft = iBumsLeft = 1
 						Loop
@@ -564,11 +578,11 @@ Sub showStudentLabels_OnClicK
 	Dim studentFilePair
 	Dim iGrade
 
-	Set recordSet = oConn.Execute( "SELECT DISTINCT Venue FROM Students WHERE Venue=''" )
+	Set recordSet = oConn.Execute( "SELECT DISTINCT Venue FROM competition_schoolstudent WHERE Venue=''" )
 	If Not recordSet.eof Then
 		' We have some empty entries
 
-		Set recordSet = oConn.Execute( "SELECT DISTINCT Venue FROM Students Where Venue<>''" )
+		Set recordSet = oConn.Execute( "SELECT DISTINCT Venue FROM competition_schoolstudent Where Venue<>''" )
 		If Not recordSet.eof Then
 			iMsgRet = MsgBox( "Would you like to only assign those entries that haven't been assigned yet? Note: This may mean that members of the same school could be split.", vbYesNo )
 			If iMsgRet = vbNo Then

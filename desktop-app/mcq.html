@@ -3,9 +3,25 @@
 <TITLE>UCT Mathematics Competition Database</TITLE>  
    
 <SCRIPT type="text/VBScript">
-Dim oConn 
 Dim strPath
 Dim recordSet
+Dim oConn
+Dim ConnectionString
+Dim Recordset
+Dim SQL
+
+'declare the SQL statement that will query the database
+SQL = "SELECT * FROM TABLE_NAME"'
+'create an instance of the ADO connection and recordset objects'
+Set oConn = CreateObject("ADODB.Connection")
+Set Recordset =  CreateObject("ADODB.Recordset")
+
+'define the connection string, specify database driver'
+ConnString = "Driver={MySQL ODBC 5.1 Driver}; Server=172.18.11.80; DataBase=uct_maths_competition; " &_
+"User=root;Password=pass; OPTION=3"
+
+'Open the connection to the database'
+oConn.Open ConnString
 
 strPath = Replace( document.location, "mcq.html", "", 9, 1, 1 )
 strPath = Replace( strPath, "%20", " " )
@@ -13,8 +29,8 @@ If InStr( strPath, "?" ) > 1 Then
 	strPath = Mid( strPath, 1, InStr( strPath, "?" ) - 1 )
 End If
 
-Set oConn = CreateObject("ADODB.Connection")
-oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  
+'Set oConn = CreateObject("ADODB.Connection")
+oConn.Open "DBQ="& strPath &"db1.mdb;Driver={Microsoft Access Driver (*.mdb)};DriverId=25;FIL=MS Access;"  '
 
 Function markdownString( strIn )
 	Dim strRet
