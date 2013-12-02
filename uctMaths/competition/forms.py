@@ -1,6 +1,6 @@
 # forms.py
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea
 from django.forms import ModelChoiceField
 from competition.models import SchoolStudent, School, Invigilator, Venue
 from django.forms.models import modelformset_factory
@@ -19,7 +19,7 @@ class StudentForm (forms.Form):
         language = forms.CharField()
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #give all the school options
         grade = forms.IntegerField()
-        sex = forms.CharField ()
+        sex = forms.CharField()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
 #**************************************
@@ -32,11 +32,11 @@ class SchoolForm (forms.Form):
         fields = ['name', 'language', 'address','phone','fax','contact','email']
         name = forms.CharField()
         language = forms.CharField()
-        address = forms.CharField()
+        address = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 100}))
         phone = forms.CharField()
-        fax = forms.CharField ()   
+        fax = forms.CharField()
         contact = forms.CharField()
-        email = forms.CharField ()  
+        email = forms.CharField()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  #for foreign key
 
 #********************************  
@@ -53,10 +53,10 @@ class InvigilatorForm (forms.Form):
         grade = forms.IntegerField()
         inv_reg = forms.CharField()
         phone_h = forms.CharField()
-        phone_w = forms.CharField ()   
+        phone_w = forms.CharField()
         fax = forms.CharField()
         fax_w= forms.CharField()
-        email = forms.CharField ()  
+        email = forms.CharField()
         responsible = forms.CharField()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
