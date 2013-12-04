@@ -36,7 +36,7 @@ def send_confirmation(request):
 		### Send mail ###
 		send_mail('Confirmation Email', output_string, 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)	
 	
-	except IndexError: #If the user entered an empty form
+	except IndexError: #If the user submitted an empty form
 		pass #handle error?
 				
 
@@ -44,7 +44,6 @@ def print_grade(single_list, pair_list,width=40):
 	""" Prints and formats the data for each grade """
 
 	return_string = ''
-	pair_set = ['A','B','C','D','E']
 	
 	for grade in range(8, 13):	
 		grade_string = '\n%s\nGrade %d students (%d registered):\n%s\n'%('-'*width, grade, len(single_list[grade]) + pair_list[grade], '-'*width)
