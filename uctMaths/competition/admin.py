@@ -6,7 +6,14 @@
 from competition.models import *
 from django.contrib import admin
 from django.db import connection, transaction
+from django import forms
 import time, datetime
+
+#Displays the address field as a text box
+class SchoolModelForm( forms.ModelForm ):
+	address = forms.CharField( widget=forms.Textarea )
+	class Meta:
+		model = School 
 
 #Displays different fields for SchoolUsers
 class SchoolUserAdmin(admin.ModelAdmin):
@@ -14,6 +21,7 @@ class SchoolUserAdmin(admin.ModelAdmin):
 
 #Displays different fields for School
 class SchoolAdmin(admin.ModelAdmin):
+	form = SchoolModelForm
 	list_display = ('name', 'registered_by')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
@@ -37,7 +45,7 @@ class InvigilatorAdmin(admin.ModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
 	actions = ['archive_invigilator']
 
-	#Adds all invigilators in the Invigilarors table, to the Archived table, and adds the current date
+	#Adds all invigilators in the Invigilators table, to the Archived table, and adds the current date
 	def archive_invigilator(modeladmin, request, queryset):
 	    cursor = connection.cursor()
 	    cursor.execute ("INSERT INTO `competition_invigilatorarchive`( `School`, `First_name`, `Surname`, `Grade`, `Venue`, `Inv_Reg`, `Phone (H)`, `Phone (W)`, `Fax (H)`, `Fax (W)`, `Email`, `Responsible`, `Registered By`) select `School`, `First_name`, `Surname`, `Grade`, `Venue`, `Inv_Reg`, `Phone (H)`, `Phone (W)`, `Fax (H)`, `Fax (W)`, `Email`, `Responsible`, `Registered By` FROM competition_invigilator ")
