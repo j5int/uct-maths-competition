@@ -48,7 +48,6 @@ def students(request):
     username = request.user #Current user
     studentOptions = SchoolStudent.objects.filter(registered_by = username) #Gets all the students who were registered by current user
     
-
     #If the user decides to delete the list. Delete only students registered by the current user
     if request.method=='POST' and 'delete' in request.POST:
         form = (request.POST) # A form bound to the POST data
@@ -228,7 +227,7 @@ def newstudents(request):
                     iemail = form.getlist('inv_email','')[j]
                     iresponsible = form.getlist('inv_responsible','')[j]
                     iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
-			
+
                     query = Invigilator(school = school , firstname = ifirstname,surname = isurname, grade = igrade ,
                                         inv_reg = iinv_reg, phone_h = iphone_h , phone_w = iphone_w,
                                         fax_h = ifax_h, fax_w = ifax_w , email = iemail, responsible = iresponsible, registered_by= iregistered_by)

@@ -125,8 +125,8 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     # Can add additional paths
-    #'/home/aureliad/Desktop/uct-maths/uctMaths/competition/interface',
-    #'/home/amber/Desktop/uct-maths/uctMaths/competition/interface',
+    '/home/aureliad/Desktop/uct-maths/uctMaths/competition/interface',
+    '/home/amber/Desktop/uct-maths/uctMaths/competition/interface',
     '/home/frank/sjsoft-internship/uct-maths/uctMaths/competition/interface'
 
 
