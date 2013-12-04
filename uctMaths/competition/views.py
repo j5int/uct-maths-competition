@@ -17,6 +17,7 @@ from django.db import connection
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
+import confirmation
 
 # def auth(request):
 #   if not request.user.is_authenticated():
@@ -47,6 +48,7 @@ def students(request):
     username = request.user #Current user
     studentOptions = SchoolStudent.objects.filter(registered_by = username) #Gets all the students who were registered by current user
     
+
     #If the user decides to delete the list. Delete only students registered by the current user
     if request.method=='POST' and 'delete' in request.POST:
         form = (request.POST) # A form bound to the POST data
@@ -203,6 +205,7 @@ def newstudents(request):
                 grade = form.getlist('grade','')[i]
                 sex = form.getlist('sex','')[i]
                 registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
+
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                         school = school, grade = grade , sex = sex, registered_by= registered_by)
                 query.save()
@@ -225,14 +228,16 @@ def newstudents(request):
                     iemail = form.getlist('inv_email','')[j]
                     iresponsible = form.getlist('inv_responsible','')[j]
                     iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
-
+			
                     query = Invigilator(school = school , firstname = ifirstname,surname = isurname, grade = igrade ,
                                         inv_reg = iinv_reg, phone_h = iphone_h , phone_w = iphone_w,
                                         fax_h = ifax_h, fax_w = ifax_w , email = iemail, responsible = iresponsible, registered_by= iregistered_by)
                     query.save()
 
-            send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-
+            #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
+			#send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
+            confirmation.send_confirmation(request)			
+		
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
               error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
@@ -240,13 +245,8 @@ def newstudents(request):
         form = StudentForm() # An unbound form
 
 
-
-
-
-
-
     schoolOptions = School.objects.all()
-    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(1,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error}
+    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(0,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error} # Modified ticked#11005
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 

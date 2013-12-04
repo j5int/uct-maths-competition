@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from competition.models import SchoolStudent, School, Invigilator, Venue 
+from django.core.mail import send_mail
 import datetime
 
 @login_required
-def typeset_details(request):
+def send_confirmation(request):
 	""" Formats student information for the particular user """
 
 	username = request.user #Current user
@@ -24,15 +25,20 @@ def typeset_details(request):
 
 		output_string = UMC_header()
 		output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(studentOptions[0].school, username, UMC_datetime())
-   			
-		temp_output = open('confirmation.txt', 'w')	
-		temp_output.write('' + output_string + print_grade(individual_list, pair_list))
-		temp_output.close()	
+   		
+		output_string = output_string + print_grade(individual_list, pair_list)	
+		
+		### Debugging - output to file ###
+		#temp_output = open('confirmation.txt', 'w')	
+		#temp_output.write(temp_output)
+		#temp_output.close()	
+		
+		### Send mail ###
+		send_mail('Confirmation Email', output_string, 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)	
 	
 	except IndexError: #If the user entered an empty form
 		pass #handle error?
-
-						
+				
 
 def print_grade(single_list, pair_list,width=40):
 	""" Prints and formats the data for each grade """
@@ -57,16 +63,13 @@ def print_grade(single_list, pair_list,width=40):
 	return return_string #Stored as one long formatted string. 
 
 def UMC_header(width=40):
+	""" Title for email """
 	to_return = '%s\n%20s\n\n'%('_'*width,'UCT Mathematics Competition')
 	return to_return
 
+
 def UMC_datetime():
+	""" Get/format current time/date of when the submission was passed """ 
 	now = datetime.datetime.now()
 	to_return = 'Generated %s:%s %s/%s/%s'%(now.hour, now.minute, now.day, now.month, now.year)
 	return to_return
-
-
-
-
-
-
