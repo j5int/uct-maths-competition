@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from competition.models import SchoolStudent, School, Invigilator, Venue 
-
+import datetime
 
 @login_required
 def typeset_details(request):
@@ -12,32 +12,37 @@ def typeset_details(request):
 
 	pair_list = { 8 : 0, 9 : 0, 10 : 0, 11 : 0, 12 : 0}
  	individual_list = { 8 : [], 9 : [], 10 : [], 11 : [], 12 : []}
- 
-	for student in studentOptions:
+ 	
+	try:	
+		for student in studentOptions:
 		
-		if student.firstname == '': # Better pair condition logic for this!
-			pair_list[student.grade] += 1
+			if student.firstname == '': # Better pair condition logic for this!
+				pair_list[student.grade] += 1
 		
-		else: #Store individual in grade bin
-			individual_list[student.grade].append((student.firstname, student.surname))
+			else: #Store individual in grade bin
+				individual_list[student.grade].append((student.firstname, student.surname))
 
-	
-	output_string = 'Confirmation letter for %s requested by %s\n'%(studentOptions[0].school, username)
+		output_string = UMC_header()
+		output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(studentOptions[0].school, username, UMC_datetime())
    			
-	temp_output = open('confirmation.txt', 'w')	
-	temp_output.write('' + output_string + print_grade(individual_list, pair_list))
-	temp_output.close()	
-					
+		temp_output = open('confirmation.txt', 'w')	
+		temp_output.write('' + output_string + print_grade(individual_list, pair_list))
+		temp_output.close()	
+	
+	except IndexError: #If the user entered an empty form
+		pass #handle error?
 
-def print_grade(single_list, pair_list):
+						
+
+def print_grade(single_list, pair_list,width=40):
 	""" Prints and formats the data for each grade """
 
 	return_string = ''
 	pair_set = ['A','B','C','D','E']
 	
 	for grade in range(8, 13):	
-		grade_string = '\n%s\nGrade %d students (%d registered):\n%s\n'%('-'*40, grade, len(single_list[grade]) + pair_list[grade], '-'*40)
-		grade_string+= '\n%-15s %-15s \n%s\n'%('First Name', 'Surname', '- '*20)
+		grade_string = '\n%s\nGrade %d students (%d registered):\n%s\n'%('-'*width, grade, len(single_list[grade]) + pair_list[grade], '-'*width)
+		grade_string += '\n%-15s %-15s \n%s\n'%('First Name', 'Surname', '- '*int(width/2))
 		
 		for single in single_list[grade]:
 			grade_string+= '%-15s %-15s\n'%(single[0], single[1])
@@ -51,6 +56,17 @@ def print_grade(single_list, pair_list):
 
 	return return_string #Stored as one long formatted string. 
 
-def UMC_header():
-	to_return = '%s\n%s^40\n%s'%('- '*20, 'UCT Maths Competition', '- '*20)
+def UMC_header(width=40):
+	to_return = '%s\n%20s\n\n'%('_'*width,'UCT Mathematics Competition')
+	return to_return
+
+def UMC_datetime():
+	now = datetime.datetime.now()
+	to_return = 'Generated %s:%s %s/%s/%s'%(now.hour, now.minute, now.day, now.month, now.year)
+	return to_return
+
+
+
+
+
 
