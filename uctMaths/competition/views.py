@@ -144,14 +144,17 @@ def invigilators(request):
           invigilatorUpdate = Invigilator.objects.get(id = invigilatorID)
           invigilatorUpdate.firstname = form.getlist('firstname','')[i]
           invigilatorUpdate.surname = form.getlist('surname','')[i]
-          invigilatorUpdate.grade = int(form.getlist('grade','')[i])
+          #invigilatorUpdate.grade = int(form.getlist('grade','')[i])
           invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
-          invigilatorUpdate.phone_h = form.getlist('phone_h','')[i]
-          invigilatorUpdate.phone_w = form.getlist('phone_w','')[i]
-          invigilatorUpdate.fax_h = form.getlist('fax_h','')[i]
-          invigilatorUpdate.fax_w = form.getlist('fax_w','')[i]
-          invigilatorUpdate.email = form.getlist('email','')[i]
-          invigilatorUpdate.responsible = form.getlist('responsible','')[i]
+          invigilatorUpdate.phone_primary = form.getlist('phone_primary','')[i]
+          invigilatorUpdate.phone_alt = form.getlist('phone_alt','')[i]
+
+          #invigilatorUpdate.phone_h = form.getlist('phone_h','')[i]
+          #invigilatorUpdate.phone_w = form.getlist('phone_w','')[i]
+          #invigilatorUpdate.fax_h = form.getlist('fax_h','')[i]
+          #invigilatorUpdate.fax_w = form.getlist('fax_w','')[i]
+          #invigilatorUpdate.email = form.getlist('email','')[i]
+          #invigilatorUpdate.responsible = form.getlist('responsible','')[i]
           invigilatorUpdate.save()
        
     c = {'invigilators':invigilators, 'grades':range(8,13)} #Sends back list of invigilators and grade options
@@ -218,19 +221,24 @@ def newstudents(request):
                     school = School.objects.get(pk=int(form.getlist('school','')[j]))
                     ifirstname = form.getlist('inv_firstname','')[j]
                     isurname = form.getlist('inv_surname','')[j]
-                    igrade = form.getlist('inv_grade','')[j]
+                    #igrade = form.getlist('inv_grade','')[j]
                     iinv_reg = form.getlist('inv_reg','')[j]
-                    iphone_h = form.getlist('inv_phone_h','')[j]
-                    iphone_w = form.getlist('inv_phone_w','')[j]
-                    ifax_h = form.getlist('inv_fax_h','')[j]
-                    ifax_w = form.getlist('inv_fax_w','')[j]
-                    iemail = form.getlist('inv_email','')[j]
-                    iresponsible = form.getlist('inv_responsible','')[j]
+                    iphone_primary = form.getlist('inv_phone_primary','')[j]
+                    iphone_alt = form.getlist('inv_phone_alt','')[j]
+                    #iphone_h = form.getlist('inv_phone_h','')[j]
+                    #iphone_w = form.getlist('inv_phone_w','')[j]
+                    #ifax_h = form.getlist('inv_fax_h','')[j]
+                    #ifax_w = form.getlist('inv_fax_w','')[j]
+                    #iemail = form.getlist('inv_email','')[j]
+                    #iresponsible = form.getlist('inv_responsible','')[j]
                     iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
-
-                    query = Invigilator(school = school , firstname = ifirstname,surname = isurname, grade = igrade ,
-                                        inv_reg = iinv_reg, phone_h = iphone_h , phone_w = iphone_w,
-                                        fax_h = ifax_h, fax_w = ifax_w , email = iemail, responsible = iresponsible, registered_by= iregistered_by)
+                    
+                    query = Invigilator(school = school , firstname = ifirstname,surname = isurname,
+                                       phone_primary = iphone_primary , phone_alt = iphone_alt, registered_by= iregistered_by)
+                    
+                    #query = Invigilator(school = school , firstname = ifirstname,surname = isurname, grade = igrade ,
+                    #                   inv_reg = iinv_reg, phone_h = iphone_h , phone_w = iphone_w,
+                    #                  fax_h = ifax_h, fax_w = ifax_w , email = iemail, responsible = iresponsible, registered_by= iregistered_by)
                     query.save()
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
@@ -305,22 +313,27 @@ def newinvigilators (request):
         try:
           for i in range (4):
               if form.getlist('firstname','')[i] == u'': continue
-              school = School.objects.get(pk=int(form.getlist('school','')[i]))
+              #school = School.objects.get(pk=int(form.getlist('school','')[i]))
               firstname = form.getlist('firstname','')[i]
               surname = form.getlist('surname','')[i]
-              grade = form.getlist('grade','')[i]
+              #grade = form.getlist('grade','')[i]
               inv_reg = form.getlist('inv_reg','')[i]
-              phone_h = form.getlist('phone_h','')[i]
-              phone_w = form.getlist('phone_w','')[i]
-              fax_h = form.getlist('fax_h','')[i]
-              fax_w = form.getlist('fax_w','')[i]
-              email = form.getlist('email','')[i]
-              responsible = form.getlist('responsible','')[i]
+              phone_primary = form.getlist('phone_primary','')[i]
+              phone_alt = form.getlist('phone_alt','')[i]
+              #phone_h = form.getlist('phone_h','')[i]
+              #phone_w = form.getlist('phone_w','')[i]
+              #fax_h = form.getlist('fax_h','')[i]
+              #fax_w = form.getlist('fax_w','')[i]
+              #email = form.getlist('email','')[i]
+              #responsible = form.getlist('responsible','')[i]
               registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
                           
-              query = Invigilator(school = school , firstname = firstname,surname = surname, grade = grade ,
-                  inv_reg = inv_reg, phone_h = phone_h , phone_w = phone_w, 
-                  fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible, registered_by= registered_by)
+              #query = Invigilator(school = school , firstname = firstname,surname = surname, grade = grade ,
+              #    inv_reg = inv_reg, phone_h = phone_h , phone_w = phone_w, 
+              #    fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible, registered_by= registered_by)
+              query = Invigilator(school = school , firstname = ifirstname,surname = isurname,
+                                       phone_primary = iphone_primary , phone_alt = iphone_alt, registered_by= iregistered_by)
+                    
               query.save()
 
           return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST

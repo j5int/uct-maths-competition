@@ -46,18 +46,21 @@ class InvigilatorForm (ModelForm):
         model=Invigilator
 
 class InvigilatorForm (forms.Form):
-        fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email','responsible']
+        #fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email','responsible']
+        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt']
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
-        grade = forms.IntegerField()
-        inv_reg = forms.CharField()
-        phone_h = forms.CharField()
-        phone_w = forms.CharField()
-        fax = forms.CharField()
-        fax_w= forms.CharField()
-        email = forms.CharField()
-        responsible = forms.CharField()
+        #grade = forms.IntegerField()
+        inv_reg = forms.CharField()        
+        phone_primary = forms.CharField()
+        phone_alt = forms.CharField()        
+        #phone_h = forms.CharField()
+        #phone_w = forms.CharField()
+        #fax = forms.CharField()
+        #fax_w= forms.CharField()
+        #email = forms.CharField()
+        #responsible = forms.CharField()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
 #*****************************************
