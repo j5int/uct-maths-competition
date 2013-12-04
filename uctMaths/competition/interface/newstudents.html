@@ -34,15 +34,11 @@
                 <!-- <th>School</th> -->
                 <th>First Name</th>
                 <th>Surname</th>
-                <!-- <th>Grade</th> -->
                 <!-- <th>Venue</th> -->
                 <th>Invig/Reg</th>
-                <th>Phone no.</th>
-                <th>Phone no.(Alternative)</th>
-                <!-- <th>Fax (h)</th>
-                <th>Fax (w)</th>
-                <th>Email</th> -->
-                <!-- <th>Responsible</th> -->
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
             </tr>
             {%for i in range%}
                 <tr>
@@ -56,13 +52,6 @@
                     <td><input type="text" name="inv_firstname"></td>
                     <td><input type="text" name="inv_surname"></td>
                     <!-- <td>
-                        <select name='inv_grade'>
-                            {%for g in igrades%}
-                                <option value={{g}}>{{g}}</option>
-                            {%endfor%}
-                        </select>
-                    </td> -->
-                    <!-- <td>
                         <select name = "venue">
                             <option value="70">TBD</option>
                         </select>
@@ -75,11 +64,7 @@
                     </td>
                     <td><input type ="text" name="inv_phone_primary"></td>                    
                     <td><input type ="text" name="inv_phone_alt"></td>
-                    <!--<td><input type ="text" name="inv_phone_w"></td>
-                    <td><input type ="text" name="inv_fax_h"></td>
-                    <td><input type ="text" name="inv_fax_w"></td>
-                    <td><input type ="text" name="inv_email"></td> -->
-                    <!-- <td><input type ="text" name="inv_responsible"></td> -->
+                    <td><input type ="text" name="inv_email"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
             {%endfor%}

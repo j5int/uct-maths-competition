@@ -166,23 +166,14 @@ class InvigilatorArchive(models.Model):
     school      = models.ForeignKey('School', db_column='School') 
     firstname   = models.CharField(max_length=255L, db_column='First_name')
     surname     = models.CharField(max_length=255L, db_column='Surname')
-    #grade       = models.IntegerField(db_column='Grade', null=True,
-    #    validators = [
-    #        MaxValueValidator(12),
-    #        MinValueValidator(0)
-    #    ])
     venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
-    #inv_reg     = models.CharField(max_length=1L, choices=(
-    #    ('i', 'Invigilator'), 
-    #    ('r', 'Registrator')
-    #), db_column='Inv_Reg')
+    inv_reg     = models.CharField(max_length=1L, choices=(
+        ('i', 'Invigilator'), 
+        ('r', 'Registrator')
+    ), db_column='Inv_Reg')
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
-    phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
-    #phone_h     = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
-    #phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
-    #fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
-    #fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
-    #email       = models.CharField(max_length=50L, db_column='Email', blank=True)
+    phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
+    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
     #responsible = models.CharField(max_length=255L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):

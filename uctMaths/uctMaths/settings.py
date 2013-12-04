@@ -5,7 +5,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ### Debuging ###
 #Use this for local testing run: python -m smtpd -n -c DebuggingServer localhost:1025 and watch the terminal
-#EMAIL_PORT = 1025
+#PORT_EMAIL = 1025
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -13,11 +13,11 @@ ADMINS = (
 
 MANAGERS = ADMINS
 DATABASES = {
-    'default': {
+    'default': { ### Change this for your DB credentials/name ###
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
         'NAME': 'uct_maths_competition',    #new UCT database
-        'USER': 'frank',
-        'PASSWORD': 'test',
+        'USER': 'admin',
+        'PASSWORD': 'pass',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432', 	                     # Set to empty string for default.
     }
