@@ -144,7 +144,7 @@ def invigilators(request):
           invigilatorUpdate = Invigilator.objects.get(id = invigilatorID)
           invigilatorUpdate.firstname = form.getlist('firstname','')[i]
           invigilatorUpdate.surname = form.getlist('surname','')[i]
-          invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
+          #invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
           invigilatorUpdate.phone_primary = form.getlist('phone_primary','')[i]
           invigilatorUpdate.phone_alt = form.getlist('phone_alt','')[i]
 
@@ -203,6 +203,7 @@ def newstudents(request):
 
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                         school = school, grade = grade , sex = sex, registered_by= registered_by)
+
                 query.save()
                 query.reference=query.id
                 query.save()
@@ -211,24 +212,24 @@ def newstudents(request):
                 if form.getlist('inv_firstname','')[j] == u'':
                     ierror = "Invigilator information incomplete"
                 else:
-                    school = School.objects.get(pk=int(form.getlist('school','')[j]))
+                    school = School.objects.get(pk=int(form.getlist('school','')[0]))
                     ifirstname = form.getlist('inv_firstname','')[j]
                     isurname = form.getlist('inv_surname','')[j]
                     #igrade = form.getlist('inv_grade','')[j]
-                    iinv_reg = form.getlist('inv_reg','')[j]
+                    #iinv_reg = form.getlist('inv_reg','')[j]
                     iphone_primary = form.getlist('inv_phone_primary','')[j]
                     iphone_alt = form.getlist('inv_phone_alt','')[j]
                     iemail = form.getlist('inv_email','')[j]
                     iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
                     
-                    query = Invigilator(school = school , firstname = ifirstname,surname = isurname,
+                    query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
                                        phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail, registered_by= iregistered_by)
                     query.save()
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
 			#send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-            confirmation.send_confirmation(request)			
-		
+            confirmation.send_confirmation(request)
+
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
               error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
@@ -276,7 +277,6 @@ def newschools (request):
               error = "%s Incorrect information inserted into fields. Please insert correct information" % e
   else:
         form = SchoolForm() # An unbound form
-  
 
   c = {'type':'Schools', 'range':range(1), 'error':error}
   c.update(csrf(request))
@@ -301,7 +301,7 @@ def newinvigilators (request):
               firstname = form.getlist('firstname','')[i]
               surname = form.getlist('surname','')[i]
               #grade = form.getlist('grade','')[i]
-              inv_reg = form.getlist('inv_reg','')[i]
+              #inv_reg = form.getlist('inv_reg','')[i]
               phone_primary = form.getlist('phone_primary','')[i]
               phone_alt = form.getlist('phone_alt','')[i]
               email = form.getlist('email','')[i]
@@ -310,7 +310,7 @@ def newinvigilators (request):
               query = Invigilator(school = school , firstname = ifirstname,surname = isurname,
                                        phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail,
                                  registered_by= iregistered_by)
-                    
+
               query.save()
 
           return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
