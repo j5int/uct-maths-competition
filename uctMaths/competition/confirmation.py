@@ -21,22 +21,27 @@ def send_confirmation(request):
 				pair_list[student.grade] += 1
 		
 			else: #Store individual in grade bin
-				individual_list[student.grade].append((student.firstname, student.surname))
-
+				individual_list[student.grade].append((student.firstname, student.surname, student.sex))
+		
+		### Prepare output string ###
 		output_string = UMC_header()
 		output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(studentOptions[0].school, username, UMC_datetime())
-   		
-		output_string = output_string + print_grade(individual_list, pair_list)	
+		output_string += print_grade(individual_list, pair_list)	
 		
 		### Debugging - output to file ###
 		#temp_output = open('confirmation.txt', 'w')	
 		#temp_output.write(temp_output)
 		#temp_output.close()	
-		
+
+		#print output_string
+
 		### Send mail ###
-		send_mail('Confirmation Email', output_string, 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)	
+		send_mail('Confirmation Email', output_string, 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
+		#send_mail('Confirmation Email', output_string, 'localhost',['localhost:1025'], fail_silently=False)	
 	
+
 	except IndexError: #If the user submitted an empty form
+		print 'Index Error (Confirmation email)'		
 		pass #handle error?
 				
 
@@ -47,10 +52,10 @@ def print_grade(single_list, pair_list,width=40):
 	
 	for grade in range(8, 13):	
 		grade_string = '\n%s\nGrade %d students (%d registered):\n%s\n'%('-'*width, grade, len(single_list[grade]) + pair_list[grade], '-'*width)
-		grade_string += '\n%-15s %-15s \n%s\n'%('First Name', 'Surname', '- '*int(width/2))
+		grade_string += '\n%-15s %-15s %-2s\n%s\n'%('First Name', 'Surname', 'Sex', '- '*int(width/2))
 		
 		for single in single_list[grade]:
-			grade_string+= '%-15s %-15s\n'%(single[0], single[1])
+			grade_string+= '%-15s %-15s %1s\n'%(single[0], single[1], str(single[2].upper()))
 		
 		grade_string += '\n%d pairs registered\n'%(pair_list[grade]/2) 
 		

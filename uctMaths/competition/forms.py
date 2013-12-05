@@ -51,7 +51,7 @@ class InvigilatorForm (forms.Form):
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
-        inv_reg = forms.CharField()        
+        inv_reg = forms.CharField(required=False)        
         phone_primary = forms.CharField()
         phone_alt = forms.CharField()        
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key

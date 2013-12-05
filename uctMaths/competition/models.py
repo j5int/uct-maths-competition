@@ -109,10 +109,10 @@ class Invigilator(models.Model):
     #        MinValueValidator(0)
     #    ])
     venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
-    inv_reg     = models.CharField(max_length=1L, choices=(
-        ('i', 'Invigilator'), 
-        ('r', 'Registrator')
-    ), db_column='Inv_Reg')
+    #inv_reg     = models.CharField(max_length=1L, choices=(
+    #    ('i', 'Invigilator'), 
+    #    ('r', 'Registrator')
+    #), db_column='Inv_Reg')
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     #phone_h     = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
@@ -167,10 +167,10 @@ class InvigilatorArchive(models.Model):
     firstname   = models.CharField(max_length=255L, db_column='First_name')
     surname     = models.CharField(max_length=255L, db_column='Surname')
     venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
-    inv_reg     = models.CharField(max_length=1L, choices=(
-        ('i', 'Invigilator'), 
-        ('r', 'Registrator')
-    ), db_column='Inv_Reg')
+    #inv_reg     = models.CharField(null=True, blank=True, max_length=1L, choices=(
+    #    ('i', 'Invigilator'), 
+    #    ('r', 'Registrator')
+    #), db_column='Inv_Reg')
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=True)
