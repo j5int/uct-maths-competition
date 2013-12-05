@@ -2,7 +2,7 @@
 from django import forms
 from django.forms import ModelForm, Textarea
 from django.forms import ModelChoiceField
-from competition.models import SchoolStudent, School, Invigilator, Venue
+from competition.models import SchoolStudent, School, Invigilator, ResponsibleTeacher, Venue
 from django.forms.models import modelformset_factory
 from django.contrib.auth.models import User
 
@@ -51,9 +51,28 @@ class InvigilatorForm (forms.Form):
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
-        inv_reg = forms.CharField(required=False)        
+        inv_reg = forms.CharField(required=False)
         phone_primary = forms.CharField()
-        phone_alt = forms.CharField()        
+        phone_alt = forms.CharField()
+        email = forms.CharField()
+        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
+
+#*****************************************
+
+#*****************************************
+#FORM TO ENTER NEW RESPONSIBLE TEACHER
+class ResponsibleTeacherForm (ModelForm):
+    class Meta:
+        model=ResponsibleTeacher
+
+class ResponsibleTeacherForm(forms.Form):
+        fields = ['school', 'firstname','surname', 'phone_primary','phone_alt', 'email']
+        school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
+        firstname = forms.CharField()
+        surname = forms.CharField()
+        phone_primary = forms.CharField()
+        phone_alt = forms.CharField()
+        email = forms.CharField()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
 #*****************************************

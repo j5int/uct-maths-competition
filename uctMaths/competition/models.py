@@ -103,35 +103,37 @@ class Invigilator(models.Model):
     school      = models.ForeignKey('School', db_column='School') 
     firstname   = models.CharField(max_length=255L, db_column='First_name')
     surname     = models.CharField(max_length=255L, db_column='Surname')
-    #grade       = models.IntegerField(db_column='Grade', null=True,
-    #    validators = [
-    #       MaxValueValidator(12),
-    #        MinValueValidator(0)
-    #    ])
-    venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
-    #inv_reg     = models.CharField(max_length=1L, choices=(
-    #    ('i', 'Invigilator'), 
-    #    ('r', 'Registrator')
-    #), db_column='Inv_Reg')
+    venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) #Admin feature, implement later
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
-    #phone_h     = models.CharField(max_length=15L, db_column='Phone (H)', blank=True) 
-    #phone_w     = models.CharField(max_length=15L, db_column='Phone (W)', blank=True) 
-    #fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
-    #fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=True)
-    #responsible = models.CharField(max_length=255L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname
     class Meta:
         ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
-        
+
+
+class ResponsibleTeacher(models.Model):
+    # ResponsibleTeacher registered by SchoolUser
+    # One ResponsibleTeacher to one school
+
+    school      = models.ForeignKey('School', db_column='School') 
+    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    surname     = models.CharField(max_length=255L, db_column='Surname')
+    phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
+    phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
+    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
+    registered_by = models.ForeignKey(User, db_column='Registered By')
+    def __str__(self):
+        return self.surname+', '+self.firstname
+    class Meta:
+        ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
+
 
 class SchoolStudentArchive(models.Model):
     # Duplicate of the SchoolStudent model with extra date field - 'archived'. Used for saving old data. 
     # Generated from the admin page 
-    
     archived    = models.DateField(null=True, blank=True, db_column='Date Archived')
     firstname   = models.CharField(max_length=255L, db_column='First_name')
     surname     = models.CharField(max_length=255L, db_column='Surname')
@@ -167,14 +169,9 @@ class InvigilatorArchive(models.Model):
     firstname   = models.CharField(max_length=255L, db_column='First_name')
     surname     = models.CharField(max_length=255L, db_column='Surname')
     venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
-    #inv_reg     = models.CharField(null=True, blank=True, max_length=1L, choices=(
-    #    ('i', 'Invigilator'), 
-    #    ('r', 'Registrator')
-    #), db_column='Inv_Reg')
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
-    phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
+    phone_alt   = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=True)
-    #responsible = models.CharField(max_length=255L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'

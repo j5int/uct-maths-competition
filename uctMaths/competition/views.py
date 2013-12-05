@@ -257,7 +257,7 @@ def newschools (request):
           for i in range (1):
               if form.getlist('name','')[i] == u'': continue
               name = form.getlist('name','')[i]
-              key = 123 
+              key = 123
               language = form.getlist('language','')[i]
               address = form.getlist('address','')[i]
               phone = form.getlist('phone','')[i]
@@ -297,11 +297,8 @@ def newinvigilators (request):
         try:
           for i in range (4):
               if form.getlist('firstname','')[i] == u'': continue
-              #school = School.objects.get(pk=int(form.getlist('school','')[i]))
               firstname = form.getlist('firstname','')[i]
               surname = form.getlist('surname','')[i]
-              #grade = form.getlist('grade','')[i]
-              #inv_reg = form.getlist('inv_reg','')[i]
               phone_primary = form.getlist('phone_primary','')[i]
               phone_alt = form.getlist('phone_alt','')[i]
               email = form.getlist('email','')[i]
