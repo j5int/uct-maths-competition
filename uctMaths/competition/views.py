@@ -150,6 +150,7 @@ def invigilators(request):
           invigilatorUpdate.fax_h = form.getlist('fax_h','')[i]
           invigilatorUpdate.fax_w = form.getlist('fax_w','')[i]
           invigilatorUpdate.email = form.getlist('email','')[i]
+          invigilatorUpdate.responsible = form.getlist('responsible','')[i]
           invigilatorUpdate.save()
        
     c = {'invigilators':invigilators, 'grades':range(8,13)} #Sends back list of invigilators and grade options
@@ -222,11 +223,12 @@ def newstudents(request):
                     ifax_h = form.getlist('inv_fax_h','')[j]
                     ifax_w = form.getlist('inv_fax_w','')[j]
                     iemail = form.getlist('inv_email','')[j]
+                    iresponsible = form.getlist('inv_responsible','')[j]
                     iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
 
                     query = Invigilator(school = school , firstname = ifirstname,surname = isurname, grade = igrade ,
                                         inv_reg = iinv_reg, phone_h = iphone_h , phone_w = iphone_w,
-                                        fax_h = ifax_h, fax_w = ifax_w , email = iemail, registered_by= iregistered_by)
+                                        fax_h = ifax_h, fax_w = ifax_w , email = iemail, responsible = iresponsible, registered_by= iregistered_by)
                     query.save()
 
             send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
@@ -314,11 +316,12 @@ def newinvigilators (request):
               fax_h = form.getlist('fax_h','')[i]
               fax_w = form.getlist('fax_w','')[i]
               email = form.getlist('email','')[i]
+              responsible = form.getlist('responsible','')[i]
               registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
                           
               query = Invigilator(school = school , firstname = firstname,surname = surname, grade = grade ,
                   inv_reg = inv_reg, phone_h = phone_h , phone_w = phone_w, 
-                  fax_h = fax_h, fax_w = fax_w , email = email, registered_by= registered_by)
+                  fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible, registered_by= registered_by)
               query.save()
 
           return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
