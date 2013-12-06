@@ -46,7 +46,7 @@ class InvigilatorForm (ModelForm):
         model=Invigilator
 
 class InvigilatorForm (forms.Form):
-        fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email','responsible']
+        fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email']
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
@@ -57,7 +57,6 @@ class InvigilatorForm (forms.Form):
         fax = forms.CharField()
         fax_w= forms.CharField()
         email = forms.CharField()
-        responsible = forms.CharField()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
 #*****************************************
