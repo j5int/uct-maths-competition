@@ -28,6 +28,7 @@ they can all be deleted from here.
                 <th>Phone </th>
                 <th>Phone (Alt)</th>                
                 <th>Email</th>
+				<th>Responsible</th>
                 <th class='narrow'></th>
             </tr>
             {%for i in invigilators%}
@@ -60,6 +61,7 @@ they can all be deleted from here.
                 <td><input type ='text' name='phone_primary' value='{{i.phone_primary}}'></td>                
                 <td><input type ='text' name='phone_alt' value='{{i.phone_alt}}'></td>
                 <td><input type ='text' name='email' value='{{i.email}}'></td>
+				<td><input type ='text' name='responsible' value='{{i.responsible}}'></td>
                 <input type='hidden' name='invigilatorID' value='{{i.id}}'>
                 <td class='narrow'>
                     <input id = '{{i.id}}' class='greybutton narrow right editbutton' value='edit' disabled>
