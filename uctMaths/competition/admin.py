@@ -16,6 +16,9 @@ class SchoolUserAdmin(admin.ModelAdmin):
 class SchoolAdmin(admin.ModelAdmin):
 	list_display = ('name', 'registered_by')
 
+class ResponsibleTeacherAdmin(admin.ModelAdmin):
+	list_display = ('firstname', 'surname', 'phone_primary', 'email', 'registered_by')
+
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(admin.ModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'registered_by')
@@ -43,12 +46,13 @@ class InvigilatorAdmin(admin.ModelAdmin):
         cursor = connection.cursor()
         
         cursor.execute ("INSERT INTO `competition_invigilatorarchive`( `School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`,  'Email', `Registered By`) select `School`, `First_name`, `Surname`, , `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By` FROM competition_invigilator ")
-	    
+
         cursor.execute("UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
         transaction.commit_unless_managed()
 
 admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)
+admin.site.register(ResponsibleTeacher, ResponsibleTeacherAdmin)
 admin.site.register(School, SchoolAdmin)
 admin.site.register(SchoolStudent, SchoolStudentAdmin)
 admin.site.register(Invigilator, InvigilatorAdmin)

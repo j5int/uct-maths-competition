@@ -10,8 +10,8 @@ from django.template import RequestContext
 from django import forms
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
-from competition.forms import StudentForm, SchoolForm, InvigilatorForm
-from competition.models import SchoolStudent, School, Invigilator, Venue 
+from competition.forms import StudentForm, SchoolForm, InvigilatorForm, ResponsibleTeacherForm
+from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
 from django.contrib.auth.models import User
 from django.db import connection
 from django.contrib.auth.decorators import login_required
@@ -164,9 +164,23 @@ def newstudents(request):
 
         form = (request.POST) # A form bound to the POST data
 
+        #Register a single responsible teacher (assigned to that school)
+        rtschool = School.objects.get(pk=int(form.getlist('school','')[0]))
+        rtfirstname = form.getlist('rt_firstname','')[0]
+        rtsurname = form.getlist('rt_surname','')[0]
+        rtphone_primary = form.getlist('rt_phone_primary','')[0]
+        rtphone_alt = form.getlist('rt_phone_alt','')[0]
+        rtemail = form.getlist('rt_email','')[0]
+        rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
+        query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname,
+                                  school = rtschool, registered_by= rtregistered_by)
+        query.save()
+        query.reference=query.id
+        query.save()
+
         #Registering per grade
         for grade in range (8,13):
-          
+              print 
               #Registering the different pairs
               #Information is set to null, only school name is given and reference
               #Reference if the ID of the first person in the pair
@@ -227,8 +241,8 @@ def newstudents(request):
                     query.save()
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
-			#send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-            confirmation.send_confirmation(request)
+            #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
+            confirmation.send_confirmation(request, School.objects.get(pk=int(form.getlist('school','')[0])))
 
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
@@ -303,9 +317,9 @@ def newinvigilators (request):
               phone_alt = form.getlist('phone_alt','')[i]
               email = form.getlist('email','')[i]
               registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
-                          
+
               query = Invigilator(school = school , firstname = ifirstname,surname = isurname,
-                                       phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail,
+                                  phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail,
                                  registered_by= iregistered_by)
 
               query.save()
