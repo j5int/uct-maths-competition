@@ -192,13 +192,14 @@ def newstudents(request):
                     school = School.objects.get(pk=int(form.getlist('school','')[0]))
                     sex = ''
                     registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
+                    paired = True 
                     query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                            school = school, grade = grade , sex = sex, registered_by= registered_by)
+                            school = school, grade = grade , sex = sex, registered_by= registered_by, paired = paired)
                     query.save()
                     query.reference=query.id
                     query.save()
                     query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = query.id,
-                            school = school, grade = grade , sex = sex, registered_by= registered_by)
+                            school = school, grade = grade , sex = sex, registered_by= registered_by, paired = paired)
                     query1.save()
 
         #Registering students, maximum number of students 25
@@ -214,9 +215,9 @@ def newstudents(request):
                 grade = form.getlist('grade','')[i]
                 sex = form.getlist('sex','')[i]
                 registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
-
+                paired = False 
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                        school = school, grade = grade , sex = sex, registered_by= registered_by)
+                        school = school, grade = grade , sex = sex, registered_by= registered_by, paired = paired)
 
                 query.save()
                 query.reference=query.id
@@ -229,8 +230,6 @@ def newstudents(request):
                     school = School.objects.get(pk=int(form.getlist('school','')[0]))
                     ifirstname = form.getlist('inv_firstname','')[j]
                     isurname = form.getlist('inv_surname','')[j]
-                    #igrade = form.getlist('inv_grade','')[j]
-                    #iinv_reg = form.getlist('inv_reg','')[j]
                     iphone_primary = form.getlist('inv_phone_primary','')[j]
                     iphone_alt = form.getlist('inv_phone_alt','')[j]
                     iemail = form.getlist('inv_email','')[j]

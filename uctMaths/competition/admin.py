@@ -29,27 +29,27 @@ class ResponsibleTeacherAdmin(admin.ModelAdmin):
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(admin.ModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'registered_by')
+	list_display = ('school', 'firstname', 'surname', 'grade', 'registered_by', 'paired')
 	actions = ['archive_student']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
 	    cursor = connection.cursor()
-	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Sex`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Sex`,  `Venue`, `Registered By` FROM `competition_schoolstudent`")
+	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Sex`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Sex`,  `Venue`, `Registered By`, `Paired` FROM `competition_schoolstudent`")
 	    cursor.execute("UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
 	    transaction.commit_unless_managed()
-	
+
 #Displays different fields for Venue
 class VenueAdmin(admin.ModelAdmin):
 	list_display = ('building', 'code', 'seats', 'bums')
 
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(admin.ModelAdmin):
-	#list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
+    #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
     list_display = ('school', 'firstname', 'surname', 'venue', 'registered_by')
     actions = ['archive_invigilator']
 
-	#Adds all invigilators in the Invigilarors table, to the Archived table, and adds the current date
+    #Adds all invigilators in the Invigilarors table, to the Archived table, and adds the current date
     def archive_invigilator(modeladmin, request, queryset):
         cursor = connection.cursor()
         
