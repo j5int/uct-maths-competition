@@ -10,13 +10,14 @@ from django.template import RequestContext
 from django import forms
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
-from competition.forms import StudentForm, SchoolForm, InvigilatorForm
-from competition.models import SchoolStudent, School, Invigilator, Venue 
+from competition.forms import StudentForm, SchoolForm, InvigilatorForm, ResponsibleTeacherForm
+from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
 from django.contrib.auth.models import User
 from django.db import connection
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
+import confirmation
 
 # def auth(request):
 #   if not request.user.is_authenticated():
@@ -143,14 +144,10 @@ def invigilators(request):
           invigilatorUpdate = Invigilator.objects.get(id = invigilatorID)
           invigilatorUpdate.firstname = form.getlist('firstname','')[i]
           invigilatorUpdate.surname = form.getlist('surname','')[i]
-          invigilatorUpdate.grade = int(form.getlist('grade','')[i])
-          invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
-          invigilatorUpdate.phone_h = form.getlist('phone_h','')[i]
-          invigilatorUpdate.phone_w = form.getlist('phone_w','')[i]
-          invigilatorUpdate.fax_h = form.getlist('fax_h','')[i]
-          invigilatorUpdate.fax_w = form.getlist('fax_w','')[i]
-          invigilatorUpdate.email = form.getlist('email','')[i]
-          invigilatorUpdate.responsible = form.getlist('responsible','')[i]
+          #invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
+          invigilatorUpdate.phone_primary = form.getlist('phone_primary','')[i]
+          invigilatorUpdate.phone_alt = form.getlist('phone_alt','')[i]
+
           invigilatorUpdate.save()
        
     c = {'invigilators':invigilators, 'grades':range(8,13)} #Sends back list of invigilators and grade options
@@ -167,9 +164,23 @@ def newstudents(request):
 
         form = (request.POST) # A form bound to the POST data
 
+        #Register a single responsible teacher (assigned to that school)
+        rtschool = School.objects.get(pk=int(form.getlist('school','')[0]))
+        rtfirstname = form.getlist('rt_firstname','')[0]
+        rtsurname = form.getlist('rt_surname','')[0]
+        rtphone_primary = form.getlist('rt_phone_primary','')[0]
+        rtphone_alt = form.getlist('rt_phone_alt','')[0]
+        rtemail = form.getlist('rt_email','')[0]
+        rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
+        query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname,
+                                  school = rtschool, registered_by= rtregistered_by)
+        query.save()
+        query.reference=query.id
+        query.save()
+
         #Registering per grade
         for grade in range (8,13):
-          
+              print 
               #Registering the different pairs
               #Information is set to null, only school name is given and reference
               #Reference if the ID of the first person in the pair
@@ -203,8 +214,10 @@ def newstudents(request):
                 grade = form.getlist('grade','')[i]
                 sex = form.getlist('sex','')[i]
                 registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
+
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                         school = school, grade = grade , sex = sex, registered_by= registered_by)
+
                 query.save()
                 query.reference=query.id
                 query.save()
@@ -213,25 +226,23 @@ def newstudents(request):
                 if form.getlist('inv_firstname','')[j] == u'':
                     ierror = "Invigilator information incomplete"
                 else:
-                    school = School.objects.get(pk=int(form.getlist('school','')[j]))
+                    school = School.objects.get(pk=int(form.getlist('school','')[0]))
                     ifirstname = form.getlist('inv_firstname','')[j]
                     isurname = form.getlist('inv_surname','')[j]
-                    igrade = form.getlist('inv_grade','')[j]
-                    iinv_reg = form.getlist('inv_reg','')[j]
-                    iphone_h = form.getlist('inv_phone_h','')[j]
-                    iphone_w = form.getlist('inv_phone_w','')[j]
-                    ifax_h = form.getlist('inv_fax_h','')[j]
-                    ifax_w = form.getlist('inv_fax_w','')[j]
+                    #igrade = form.getlist('inv_grade','')[j]
+                    #iinv_reg = form.getlist('inv_reg','')[j]
+                    iphone_primary = form.getlist('inv_phone_primary','')[j]
+                    iphone_alt = form.getlist('inv_phone_alt','')[j]
                     iemail = form.getlist('inv_email','')[j]
-                    iresponsible = form.getlist('inv_responsible','')[j]
                     iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
-
-                    query = Invigilator(school = school , firstname = ifirstname,surname = isurname, grade = igrade ,
-                                        inv_reg = iinv_reg, phone_h = iphone_h , phone_w = iphone_w,
-                                        fax_h = ifax_h, fax_w = ifax_w , email = iemail, responsible = iresponsible, registered_by= iregistered_by)
+                    
+                    query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
+                                       phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail, registered_by= iregistered_by)
                     query.save()
 
-            send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
+            #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
+            #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
+            confirmation.send_confirmation(request, School.objects.get(pk=int(form.getlist('school','')[0])))
 
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
@@ -240,13 +251,8 @@ def newstudents(request):
         form = StudentForm() # An unbound form
 
 
-
-
-
-
-
     schoolOptions = School.objects.all()
-    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(1,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error}
+    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(0,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error} # Modified ticked#11005
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 
@@ -265,7 +271,7 @@ def newschools (request):
           for i in range (1):
               if form.getlist('name','')[i] == u'': continue
               name = form.getlist('name','')[i]
-              key = 123 
+              key = 123
               language = form.getlist('language','')[i]
               address = form.getlist('address','')[i]
               phone = form.getlist('phone','')[i]
@@ -285,7 +291,6 @@ def newschools (request):
               error = "%s Incorrect information inserted into fields. Please insert correct information" % e
   else:
         form = SchoolForm() # An unbound form
-  
 
   c = {'type':'Schools', 'range':range(1), 'error':error}
   c.update(csrf(request))
@@ -306,22 +311,17 @@ def newinvigilators (request):
         try:
           for i in range (4):
               if form.getlist('firstname','')[i] == u'': continue
-              school = School.objects.get(pk=int(form.getlist('school','')[i]))
               firstname = form.getlist('firstname','')[i]
               surname = form.getlist('surname','')[i]
-              grade = form.getlist('grade','')[i]
-              inv_reg = form.getlist('inv_reg','')[i]
-              phone_h = form.getlist('phone_h','')[i]
-              phone_w = form.getlist('phone_w','')[i]
-              fax_h = form.getlist('fax_h','')[i]
-              fax_w = form.getlist('fax_w','')[i]
+              phone_primary = form.getlist('phone_primary','')[i]
+              phone_alt = form.getlist('phone_alt','')[i]
               email = form.getlist('email','')[i]
-              responsible = form.getlist('responsible','')[i]
               registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
-                          
-              query = Invigilator(school = school , firstname = firstname,surname = surname, grade = grade ,
-                  inv_reg = inv_reg, phone_h = phone_h , phone_w = phone_w, 
-                  fax_h = fax_h, fax_w = fax_w , email = email, responsible = responsible, registered_by= registered_by)
+
+              query = Invigilator(school = school , firstname = ifirstname,surname = isurname,
+                                  phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail,
+                                 registered_by= iregistered_by)
+
               query.save()
 
           return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
