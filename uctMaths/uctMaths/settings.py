@@ -3,23 +3,19 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-### Debuging ###
-#Use this for local testing run: python -m smtpd -n -c DebuggingServer localhost:1025 and watch the terminal
-#PORT_EMAIL = 1025
-
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
 DATABASES = {
-    'default': { ### Change this for your DB credentials/name ###
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
         'NAME': 'uct_maths_competition',    #new UCT database
-        'USER': 'admin',
-        'PASSWORD': 'pass',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '5432', 	                     # Set to empty string for default.
+        'USER': 'postgres',
+        'PASSWORD': 'test',
+        'HOST': '127.0.0.1',             # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '5432',                  # Set to empty string for default.
     }
 }
 
@@ -127,7 +123,7 @@ TEMPLATE_DIRS = (
     # Can add additional paths
     '/home/aureliad/Desktop/uct-maths/uctMaths/competition/interface',
     '/home/amber/Desktop/uct-maths/uctMaths/competition/interface',
-    '/home/frank/sjsoft-internship/uct-maths/uctMaths/competition/interface'
+	'C:/Users/FUJITSU/Documents/GitHub/uct-maths-competition/uctMaths/competition/interface',
 
 
  )
