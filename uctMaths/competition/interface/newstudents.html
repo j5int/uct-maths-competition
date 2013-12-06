@@ -22,6 +22,35 @@
         <option value="a">Afrikaans</option>
     </select>
 
+    <!-- register responsible teacher from here --->
+    <div>
+        <h1>Register Responsible Teacher</h1>
+        <p>blurb about the role of... Compulsory 1 per school.</p>
+        <p> {{ ierror }} </p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
+            </tr>
+            <tr>
+                <td><input type="text" name="rt_firstname"></td>
+                <td><input type="text" name="rt_surname"></td>
+                <td><input type ="text" name="rt_phone_primary"></td>                    
+                <td><input type ="text" name="rt_phone_alt"></td>
+                <td><input type ="text" name="rt_email"></td>
+                <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
+            </tr>
+
+        </table>
+    </div>
+
+
+
     <!-- register invigilators from here -->
     <div>
         <h1>Register New Invigilators</h1>
