@@ -118,7 +118,6 @@ class Invigilator(models.Model):
     fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
     fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=True)
-    responsible = models.CharField(max_length=255L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname
@@ -179,7 +178,6 @@ class InvigilatorArchive(models.Model):
     fax_h       = models.CharField(max_length=15L, db_column='Fax (H)', blank=True) 
     fax_w       = models.CharField(max_length=15L, db_column='Fax (W)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=True)
-    responsible = models.CharField(max_length=255L, db_column='Responsible')
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'

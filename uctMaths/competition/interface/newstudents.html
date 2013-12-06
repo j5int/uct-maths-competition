@@ -42,7 +42,6 @@
                 <th>Fax (h)</th>
                 <th>Fax (w)</th>
                 <th>Email</th>
-                <th>Responsible</th>
             </tr>
             {%for i in range%}
                 <tr>
@@ -78,7 +77,6 @@
                     <td><input type ="text" name="inv_fax_h"></td>
                     <td><input type ="text" name="inv_fax_w"></td>
                     <td><input type ="text" name="inv_email"></td>
-                    <td><input type ="text" name="inv_responsible"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
             {%endfor%}

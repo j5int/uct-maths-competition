@@ -31,7 +31,6 @@ they can all be deleted from here.
                 <th>Fax (h)</th>
                 <th>Fax (w)</th>
                 <th>Email</th>
-                <th>Responsible</th>
                 <th class='narrow'></th>
             </tr>
             {%for i in invigilators%}
@@ -47,7 +46,6 @@ they can all be deleted from here.
                 <td>{{i.fax_h}}</td>
                 <td>{{i.fax_w}}</td>
                 <td>{{i.email}}</td>
-                <td>{{i.responsible}}</td>
                 <td class='narrow'>
                     <input id='{{i.id}}' class='bluebutton narrow right editbutton' onClick='show_input(this.id)' value='edit'>
                 </td>
@@ -77,7 +75,6 @@ they can all be deleted from here.
                 <td><input type ='text' name='fax_h' value='{{i.fax_h}}'></td>
                 <td><input type ='text' name='fax_w' value='{{i.fax_w}}'></td>
                 <td><input type ='text' name='email' value='{{i.email}}'></td>
-                <td><input type ='text' name='responsible' value='{{i.responsible}}'></td>
                 <input type='hidden' name='invigilatorID' value='{{i.id}}'>
                 <td class='narrow'>
                     <input id = '{{i.id}}' class='greybutton narrow right editbutton' value='edit' disabled>
