@@ -6,7 +6,14 @@
 from competition.models import *
 from django.contrib import admin
 from django.db import connection, transaction
+from django import forms
 import time, datetime
+
+#Displays the address field as a text box
+class SchoolModelForm( forms.ModelForm ):
+	address = forms.CharField( widget=forms.Textarea )
+	class Meta:
+		model = School 
 
 #Displays different fields for SchoolUsers
 class SchoolUserAdmin(admin.ModelAdmin):
@@ -14,6 +21,7 @@ class SchoolUserAdmin(admin.ModelAdmin):
 
 #Displays different fields for School
 class SchoolAdmin(admin.ModelAdmin):
+	form = SchoolModelForm
 	list_display = ('name', 'registered_by')
 
 class ResponsibleTeacherAdmin(admin.ModelAdmin):
