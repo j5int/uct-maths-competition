@@ -18,7 +18,6 @@ def send_confirmation(request, in_school='UNDEFINED'):#Not happy with having 'sc
 
     #Header
     output_string = UMC_header()
-    print 'OUTPUT STRING:\n', output_string
     output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(in_school, username, UMC_datetime())
 
     #output_string += print_responsibleTeacher(rteacher) #In progress
@@ -44,7 +43,7 @@ def print_students(student_list,width=40):
     try:
         #Binning method
         for student in student_list:
-            if student.firstname == '': # Better pair condition logic for this!
+            if student.paired: # Better pair condition logic for this!
                 pair_list[student.grade] += 1
             else: 
                 single_list[student.grade].append((student.firstname, student.surname, student.sex))
@@ -89,7 +88,6 @@ def print_invigilators(invigilator_list, width=40):
 
     return invig_string
 
-
 def print_responsibleTeacher(rteacher, width=40):
     """Print responsible teacher section"""
 
@@ -109,7 +107,7 @@ def print_responsibleTeacher(rteacher, width=40):
 
 def UMC_header(width=40):
     """ Text header for email """
-    to_return = '%s\n%20s\n\n'%('_'*width,'UCT Mathematics Competition')
+    to_return = '\n%s\n%20s\n\n'%('_'*width,'UCT Mathematics Competition')
     return to_return
 
 

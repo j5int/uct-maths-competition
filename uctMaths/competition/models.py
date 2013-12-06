@@ -48,6 +48,8 @@ class SchoolStudent(models.Model):
     sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     registered_by = models.ForeignKey(User, db_column='Registered By')
+    paired = models.BooleanField(db_column='Paired')
+
     def __str__(self):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname
     class Meta:
@@ -153,6 +155,8 @@ class SchoolStudentArchive(models.Model):
     sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     registered_by = models.ForeignKey(User, db_column='Registered By')
+    paired = models.BooleanField(db_column='Paired')
+
     def __str__(self):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname+' ('+self.archived+')'
     class Meta:

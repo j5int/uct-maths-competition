@@ -17,10 +17,11 @@ class StudentForm (forms.Form):
         firstname = forms.CharField()
         surname = forms.CharField()
         language = forms.CharField()
-        school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #give all the school options
+        school = forms.ModelChoiceField(required=True, widget = forms.Select(), queryset = School.objects.all()) #give all the school options
         grade = forms.IntegerField()
         sex = forms.CharField()
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
+        pair = forms.BooleanField()
+        registered_by = forms.ModelChoiceField(required=True, queryset = User.objects.all()) #for foreign key
 
 #**************************************
 #FORM TO ENTER A NEW SCHOOL
