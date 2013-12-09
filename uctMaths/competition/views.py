@@ -255,7 +255,6 @@ def newstudents(request):
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 
-
 #*****************************************
 #Register Schools
 #Registers one school at a time
@@ -277,8 +276,8 @@ def newschools (request):
               fax = form.getlist('fax','')[i]
               contact = form.getlist('contact','')[i]
               email = form.getlist('email','')[i]
-              registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
-              
+              #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
+
               query = School(name = name ,key = key ,  language = language  ,
                   address = address, phone = phone , fax = fax, contact = contact , email = email, registered_by= registered_by)
               query.save()

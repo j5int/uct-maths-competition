@@ -22,7 +22,7 @@ class SchoolUserAdmin(admin.ModelAdmin):
 #Displays different fields for School
 class SchoolAdmin(admin.ModelAdmin):
 	form = SchoolModelForm
-	list_display = ('name', 'registered_by')
+	list_display = ('name','phone','email','assigned_to') ##Which columns should be kept here? 
 
 class ResponsibleTeacherAdmin(admin.ModelAdmin):
 	list_display = ('firstname', 'surname', 'phone_primary', 'email', 'registered_by')
