@@ -5,7 +5,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ### Debuging ###
 #Use this for local testing run: python -m smtpd -n -c DebuggingServer localhost:1025 and watch the terminal
-#PORT_EMAIL = 1025
+EMAIL_PORT = 1025
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),

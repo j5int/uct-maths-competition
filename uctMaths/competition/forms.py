@@ -13,13 +13,13 @@ class StudentForm (ModelForm):
         model=SchoolStudent
         
 class StudentForm (forms.Form):
-        fields = ['firstname', 'surname', 'language', 'school','grade','sex','venue', 'registered_by']
+        fields = ['firstname', 'surname', 'language', 'school','grade','venue', 'registered_by']
         firstname = forms.CharField()
         surname = forms.CharField()
         language = forms.CharField()
         school = forms.ModelChoiceField(required=True, widget = forms.Select(), queryset = School.objects.all()) #give all the school options
         grade = forms.IntegerField()
-        sex = forms.CharField()
+     #   sex = forms.CharField()
         pair = forms.BooleanField()
         registered_by = forms.ModelChoiceField(required=True, queryset = User.objects.all()) #for foreign key
 

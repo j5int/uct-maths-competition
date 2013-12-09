@@ -35,7 +35,7 @@ class SchoolStudentAdmin(admin.ModelAdmin):
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
 	    cursor = connection.cursor()
-	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Sex`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Sex`,  `Venue`, `Registered By`, `Paired` FROM `competition_schoolstudent`")
+	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`,  `Venue`, `Registered By`, `Paired` FROM `competition_schoolstudent`")
 	    cursor.execute("UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
 	    transaction.commit_unless_managed()
 
