@@ -53,7 +53,7 @@
 
     <!-- register invigilators from here -->
     <div>
-        <h1>Register New Invigilators</h1>
+        <h1>Register Invigilators</h1>
         <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Compulsory 1 per school, 2 if 75 entries.</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
@@ -143,23 +143,23 @@
         <tr>
             <th>Name</th>
             <th>Surname</th>
-            <th>Sex</th>
+      <!--      <th>Sex</th> -->
         </tr>
         {%for entry in entries_per_grade%}
         <tr>
             <td><input type="text" name="firstname"></td>
 
             <td><input type="text" name="surname"></td>
-            <td>
+         <!--   <td>
                 <select name = "sex">
-                    <!-- <option value=''>---</option> -->
+                     <option value=''>---</option> 
                     <option value='f'>Female</option>
                     <option value='m'>Male</option>
                 </select>
 
-                <!-- <input type ="text" name="sex"> -->
+                 <input type ="text" name="sex">
             </td>
-
+		-->
           <input type='hidden' name='grade' value='{{grade}}'>
           <input type ="hidden" name="registered_by" value ={{ user.id }} >
         </tr>

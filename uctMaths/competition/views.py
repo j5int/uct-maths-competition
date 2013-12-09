@@ -63,7 +63,7 @@ def students(request):
           studentUpdate = SchoolStudent.objects.get(id = studentID)
           studentUpdate.firstname = form.getlist('firstname','')[i]
           studentUpdate.surname = form.getlist('surname','')[i]
-          studentUpdate.sex = form.getlist('sex','')[i]
+   #       studentUpdate.sex = form.getlist('sex','')[i]
           studentUpdate.save()
          
     c = {'students':studentOptions} #Passes the list of students for the current user
@@ -190,16 +190,16 @@ def newstudents(request):
                     language = form.getlist('language','')[0]
                     reference = 1234
                     school = School.objects.get(pk=int(form.getlist('school','')[0]))
-                    sex = ''
+          #          sex = ''
                     registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
                     paired = True 
                     query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                            school = school, grade = grade , sex = sex, registered_by= registered_by, paired = paired)
+                            school = school, grade = grade , registered_by= registered_by, paired = paired)
                     query.save()
                     query.reference=query.id
                     query.save()
                     query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = query.id,
-                            school = school, grade = grade , sex = sex, registered_by= registered_by, paired = paired)
+                            school = school, grade = grade , registered_by= registered_by, paired = paired)
                     query1.save()
 
         #Registering students, maximum number of students 25
@@ -213,11 +213,11 @@ def newstudents(request):
                 reference = 1234
                 school = School.objects.get(pk=int(form.getlist('school','')[0]))
                 grade = form.getlist('grade','')[i]
-                sex = form.getlist('sex','')[i]
+             #   sex = form.getlist('sex','')[i]
                 registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
                 paired = False 
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                        school = school, grade = grade , sex = sex, registered_by= registered_by, paired = paired)
+                        school = school, grade = grade , registered_by= registered_by, paired = paired)
 
                 query.save()
                 query.reference=query.id
@@ -241,7 +241,7 @@ def newstudents(request):
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
             #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-            confirmation.send_confirmation(request, School.objects.get(pk=int(form.getlist('school','')[0])))
+  #          confirmation.send_confirmation(request, School.objects.get(pk=int(form.getlist('school','')[0])))
 
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:

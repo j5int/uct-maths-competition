@@ -45,7 +45,7 @@ class SchoolStudent(models.Model):
             MaxValueValidator(12),
             MinValueValidator(0)
         ])    
-    sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
+ #   sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     registered_by = models.ForeignKey(User, db_column='Registered By')
     paired = models.BooleanField(db_column='Paired')
@@ -152,7 +152,7 @@ class SchoolStudentArchive(models.Model):
             MaxValueValidator(12),
             MinValueValidator(0)
         ])    
-    sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
+   # sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     registered_by = models.ForeignKey(User, db_column='Registered By')
     paired = models.BooleanField(db_column='Paired')
