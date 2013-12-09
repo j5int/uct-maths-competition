@@ -16,8 +16,8 @@ DATABASES = {
     'default': { ### Change this for your DB credentials/name ###
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
         'NAME': 'uct_maths_competition',    #new UCT database
-        'USER': 'admin',
-        'PASSWORD': 'pass',
+        'USER': 'postgres',
+        'PASSWORD': 'test',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432', 	                     # Set to empty string for default.
     }
@@ -127,7 +127,8 @@ TEMPLATE_DIRS = (
     # Can add additional paths
     '/home/aureliad/Desktop/uct-maths/uctMaths/competition/interface',
     '/home/amber/Desktop/uct-maths/uctMaths/competition/interface',
-    '/home/frank/sjsoft-internship/uct-maths/uctMaths/competition/interface'
+    '/home/frank/sjsoft-internship/uct-maths/uctMaths/competition/interface',
+	'C:/Users/FUJITSU/Documents/GitHub/uct-maths-competition/uctMaths/competition/interface'
 
 
  )
