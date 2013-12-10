@@ -251,7 +251,7 @@ def newstudents(request):
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
             #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-            confirmation.send_confirmation(request, School.objects.get(pk=int(form.getlist('school','')[0])))
+            confirmation.send_confirmation(request, assigned_school)
 
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
@@ -281,9 +281,12 @@ def school_select(request):
         school_selected = School.objects.get(pk=int(form.getlist('school','')[0]))
         school_assignment = School.objects.get(name=school_selected).assigned_to
         
-        if school_assignment == '': #An unassigned school is assigned to user.
+        if school_assignment == None: #An unassigned school is assigned to user.
             #TODO: Add a "Please be sure" message just telling them what they're doing.
-            School.objects.set(name=school_seleted).assign_to(request.user)
+            #schoolAssmtUpdate = School.objects.get(id = school_assignment)
+            school_selected.assigned_to = request.user
+            school_selected.save()
+            #School.objects.set(name=school_selected).assign_to(request.user)
             return HttpResponseRedirect('../students/newstudents.html')
 
         elif school_assignment == request.user: #This should not happen
