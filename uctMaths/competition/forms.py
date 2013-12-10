@@ -30,7 +30,7 @@ class SchoolForm (ModelForm):
         model=School
 
 class SchoolForm (forms.Form):
-        fields = ['name', 'language', 'address','phone','fax','contact','email','assigned_user)']
+        fields = ['name', 'language', 'address','phone','fax','contact','email','assigned_user']
         name = forms.CharField()
         language = forms.CharField()
         address = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 100}))
@@ -40,6 +40,16 @@ class SchoolForm (forms.Form):
         email = forms.CharField()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  #for foreign key
         assigned_user = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #user_name forreign key
+
+#**************************************
+#SCHOOL SELECTION FORM
+class SchoolSelectForm (ModelForm):
+    class Meta:
+        model=School
+
+class SchoolSelectForm (forms.Form):
+        fields = ['school_name']
+        assign_to = forms.ModelChoiceField(required=True, queryset = User.objects.all())
 
 #********************************  
 #FORM TO ENTER NEW INVIGILATOR
