@@ -14,6 +14,7 @@ from competition.forms import StudentForm, SchoolForm, InvigilatorForm, Responsi
 from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
 from django.contrib.auth.models import User
 from django.db import connection
+from django.core import exceptions 
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
@@ -63,7 +64,7 @@ def students(request):
           studentUpdate = SchoolStudent.objects.get(id = studentID)
           studentUpdate.firstname = form.getlist('firstname','')[i]
           studentUpdate.surname = form.getlist('surname','')[i]
-          studentUpdate.sex = form.getlist('sex','')[i]
+   #       studentUpdate.sex = form.getlist('sex','')[i]
           studentUpdate.save()
          
     c = {'students':studentOptions} #Passes the list of students for the current user
@@ -160,12 +161,21 @@ def invigilators(request):
 @login_required
 def newstudents(request):
     error = " "
+    try:
+        #Attempt to find user's chosen school
+        assigned_school = School.objects.get(assigned_to=request.user)
+    except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Redirect to the select_schools page
+        return HttpResponseRedirect('../school_select/school_select.html')
+
+    #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
+
     if request.method == 'POST':  # If the form has been submitted...
 
         form = (request.POST) # A form bound to the POST data
 
         #Register a single responsible teacher (assigned to that school)
-        rtschool = School.objects.get(pk=int(form.getlist('school','')[0]))
+        rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
         rtfirstname = form.getlist('rt_firstname','')[0]
         rtsurname = form.getlist('rt_surname','')[0]
         rtphone_primary = form.getlist('rt_phone_primary','')[0]
@@ -189,16 +199,17 @@ def newstudents(request):
                     surname = ''
                     language = form.getlist('language','')[0]
                     reference = 1234
-                    school = School.objects.get(pk=int(form.getlist('school','')[0]))
-                    sex = ''
+                    school = assigned_school
+                  # sex = ''
                     registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
+                    paired = True 
                     query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                            school = school, grade = grade , sex = sex, registered_by= registered_by)
+                            school = school, grade = grade , registered_by= registered_by, paired = paired)
                     query.save()
                     query.reference=query.id
                     query.save()
                     query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = query.id,
-                            school = school, grade = grade , sex = sex, registered_by= registered_by)
+                            school = school, grade = grade , registered_by= registered_by, paired = paired)
                     query1.save()
 
         #Registering students, maximum number of students 25
@@ -210,13 +221,13 @@ def newstudents(request):
                 surname = form.getlist('surname','')[i]
                 language = form.getlist('language','')[0]
                 reference = 1234
-                school = School.objects.get(pk=int(form.getlist('school','')[0]))
+                school = assigned_school
                 grade = form.getlist('grade','')[i]
-                sex = form.getlist('sex','')[i]
+             #   sex = form.getlist('sex','')[i]
                 registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
-
+                paired = False 
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                        school = school, grade = grade , sex = sex, registered_by= registered_by)
+                        school = school, grade = grade , registered_by= registered_by, paired = paired)
 
                 query.save()
                 query.reference=query.id
@@ -226,11 +237,9 @@ def newstudents(request):
                 if form.getlist('inv_firstname','')[j] == u'':
                     ierror = "Invigilator information incomplete"
                 else:
-                    school = School.objects.get(pk=int(form.getlist('school','')[0]))
+                    school = assigned_school
                     ifirstname = form.getlist('inv_firstname','')[j]
                     isurname = form.getlist('inv_surname','')[j]
-                    #igrade = form.getlist('inv_grade','')[j]
-                    #iinv_reg = form.getlist('inv_reg','')[j]
                     iphone_primary = form.getlist('inv_phone_primary','')[j]
                     iphone_alt = form.getlist('inv_phone_alt','')[j]
                     iemail = form.getlist('inv_email','')[j]
@@ -242,7 +251,9 @@ def newstudents(request):
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
             #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-            confirmation.send_confirmation(request, School.objects.get(pk=int(form.getlist('school','')[0])))
+
+            confirmation.send_confirmation(request, assigned_school)
+
 
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
@@ -252,10 +263,43 @@ def newstudents(request):
 
 
     schoolOptions = School.objects.all()
-    c = {'type':'Students', 'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(0,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error} # Modified ticked#11005
+    c = {'type':'Students', 'schooln':assigned_school,'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(0,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error} # Modified ticked#11005
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 
+
+
+#*****************************************
+# School select.
+# Should be redirected here (from newstudents) if there is no school associated with the particular user name
+@login_required
+def school_select(request):
+    error = " "
+    already_assigned = False
+    school_assignment = ''
+    if request.method == 'POST':  # If the form has been submitted...
+
+        form = (request.POST) # A form bound to the POST data
+        school_selected = School.objects.get(pk=int(form.getlist('school','')[0]))
+        school_assignment = School.objects.get(name=school_selected).assigned_to
+        
+        if school_assignment == None: #An unassigned school is assigned to user.
+            #TODO: Add a "Please be sure" message just telling them what they're doing.
+            #schoolAssmtUpdate = School.objects.get(id = school_assignment)
+            school_selected.assigned_to = request.user
+            school_selected.save()
+            #School.objects.set(name=school_selected).assign_to(request.user)
+            return HttpResponseRedirect('../students/newstudents.html')
+
+        elif school_assignment == request.user: #This should not happen
+            return HttpResponseRedirect('../students/newstudents.html')
+        else:
+            already_assigned = True 
+
+    schoolOptions = School.objects.all()
+    c = {'schools':schoolOptions, 'already_assigned' : already_assigned, 'assigned_to':school_assignment,'user':request.user,'error':error,'ierror':error} 
+      #c.update(csrf(request))
+    return render_to_response('school_select.html', c, context_instance=RequestContext(request))
 
 #*****************************************
 #Register Schools
@@ -278,8 +322,8 @@ def newschools (request):
               fax = form.getlist('fax','')[i]
               contact = form.getlist('contact','')[i]
               email = form.getlist('email','')[i]
-              registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
-              
+              #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
+
               query = School(name = name ,key = key ,  language = language  ,
                   address = address, phone = phone , fax = fax, contact = contact , email = email, registered_by= registered_by)
               query.save()

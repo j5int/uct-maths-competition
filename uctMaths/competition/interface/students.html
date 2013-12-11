@@ -20,7 +20,7 @@
                 <th>Language</th>
                 <th class='wide'>School</th>
                 <th>Grade</th>
-                <th>Sex</th>
+           <!--     <th>Sex</th> -->
             </tr>
             {%for s in students%}
             <tr id='show{{s.id}}'>
@@ -35,13 +35,13 @@
                 </td>
                 <td class='wide'>{{s.school}}</td>
                 <td>{{s.grade}}</td>
-                <td>
+          <!--      <td>
                     {%if s.sex == 'f'%}Female
                     {%elif s.sex == 'm'%}Male
                     {%else%}---{%endif%}
                     
                 </td>
-
+			-->
             </tr>
             <tr id='input{{s.id}}' style='display:none'>
                 <td><input class='value{{s.id}}' type='text' name='firstname' value='{{s.firstname}}'></td>
@@ -58,13 +58,13 @@
                 </td>
                 <td class='wide'>{{s.school}}</td>
                 <td>{{s.grade}}</td>
-                <td>
+          <!--      <td>
                 <select class='value{{s.id}}' name = 'sex' selected='{{s.sex}}'>
                     <option value=''>---</option>
                     <option value='f'>Female</option>
                     <option value='m'>Male</option>
                 </select>
-
+		-->
                 <!-- <input type ='text' name='sex'> -->
                 </td>
                 <input type='hidden' name='studentID' value='{{s.id}}'>

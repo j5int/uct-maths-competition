@@ -20,9 +20,10 @@ class School(models.Model):
     contact     = models.CharField(max_length=255L, db_column='Contact', blank=True)
     entered     = models.IntegerField(null=True, db_column='Entered', blank=True) 
     score       = models.IntegerField(null=True, db_column='Score', blank=True) 
-    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
-    registered_by = models.ForeignKey(User, db_column='Registered By')
- 
+    email       = models.CharField(max_length=50L, db_column='Email', blank=True) 
+    assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForreignKey (gets assigned a single user)
+    registered_by = models.CharField(max_length=255L, db_column='Registered By') #Changed to CharField
+
     def __str__(self):
         return self.name
     class Meta:
@@ -45,9 +46,11 @@ class SchoolStudent(models.Model):
             MaxValueValidator(12),
             MinValueValidator(0)
         ])    
-    sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
+ #   sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     registered_by = models.ForeignKey(User, db_column='Registered By')
+    paired = models.BooleanField(db_column='Paired')
+
     def __str__(self):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname
     class Meta:
@@ -150,9 +153,11 @@ class SchoolStudentArchive(models.Model):
             MaxValueValidator(12),
             MinValueValidator(0)
         ])    
-    sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
+   # sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     registered_by = models.ForeignKey(User, db_column='Registered By')
+    paired = models.BooleanField(db_column='Paired')
+
     def __str__(self):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname+' ('+self.archived+')'
     class Meta:

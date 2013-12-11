@@ -13,14 +13,15 @@ class StudentForm (ModelForm):
         model=SchoolStudent
         
 class StudentForm (forms.Form):
-        fields = ['firstname', 'surname', 'language', 'school','grade','sex','venue', 'registered_by']
+        fields = ['firstname', 'surname', 'language', 'school','grade','venue', 'registered_by']
         firstname = forms.CharField()
         surname = forms.CharField()
         language = forms.CharField()
-        school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #give all the school options
+        school = forms.ModelChoiceField(required=True, widget = forms.Select(), queryset = School.objects.all()) #give all the school options
         grade = forms.IntegerField()
-        sex = forms.CharField()
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
+     #   sex = forms.CharField()
+        pair = forms.BooleanField()
+        registered_by = forms.ModelChoiceField(required=True, queryset = User.objects.all()) #for foreign key
 
 #**************************************
 #FORM TO ENTER A NEW SCHOOL
@@ -29,7 +30,7 @@ class SchoolForm (ModelForm):
         model=School
 
 class SchoolForm (forms.Form):
-        fields = ['name', 'language', 'address','phone','fax','contact','email']
+        fields = ['name', 'language', 'address','phone','fax','contact','email','assigned_user']
         name = forms.CharField()
         language = forms.CharField()
         address = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 100}))
@@ -38,6 +39,17 @@ class SchoolForm (forms.Form):
         contact = forms.CharField()
         email = forms.CharField()
         registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  #for foreign key
+        assigned_user = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #user_name forreign key
+
+#**************************************
+#SCHOOL SELECTION FORM
+class SchoolSelectForm (ModelForm):
+    class Meta:
+        model=School
+
+class SchoolSelectForm (forms.Form):
+        fields = ['school_name']
+        assign_to = forms.ModelChoiceField(required=True, queryset = User.objects.all())
 
 #********************************  
 #FORM TO ENTER NEW INVIGILATOR
