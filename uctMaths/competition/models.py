@@ -20,9 +20,10 @@ class School(models.Model):
     contact     = models.CharField(max_length=255L, db_column='Contact', blank=True)
     entered     = models.IntegerField(null=True, db_column='Entered', blank=True) 
     score       = models.IntegerField(null=True, db_column='Score', blank=True) 
-    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
-    registered_by = models.ForeignKey(User, db_column='Registered By')
- 
+    email       = models.CharField(max_length=50L, db_column='Email', blank=True) 
+    assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForreignKey (gets assigned a single user)
+    registered_by = models.CharField(max_length=255L, db_column='Registered By') #Changed to CharField
+
     def __str__(self):
         return self.name
     class Meta:
