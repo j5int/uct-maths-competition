@@ -65,13 +65,9 @@
                 <th>First Name</th>
                 <th>Surname</th>
                 <!-- <th>Venue</th> -->
-                <th>Invig/Reg</th>
-                <th>Phone (h)</th>
-                <th>Phone (w)</th>
-                <th>Fax (h)</th>
-                <th>Fax (w)</th>
-                <th>Email</th>
-				<th>Responsible</th>
+				<th>Phone </th>
+				<th>Phone (Alternative)</th>
+				<th>Email </th>
             </tr>
             {%for i in range%}
                 <tr>
@@ -98,7 +94,6 @@
                     <td><input type ="text" name="inv_phone_primary"></td>                    
                     <td><input type ="text" name="inv_phone_alt"></td>
                     <td><input type ="text" name="inv_email"></td>
-					<td><input type ="text" name="inv_responsible"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
             {%endfor%}
