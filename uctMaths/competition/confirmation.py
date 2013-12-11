@@ -55,10 +55,10 @@ def print_students(student_list,width=40):
     # Print out formatted lists for pairs and single participants
     for grade in range(8, 13):	
         grade_string = '\n%s\nGrade %d students (%d registered):\n%s\n'%('-'*width, grade, len(single_list[grade]) + pair_list[grade], '-'*width)
-        grade_string += '\n%-15s %-15s %-2s\n%s\n'%('First Name', 'Surname', '- '*int(width/2))
+        grade_string += '\n%-15s %-15s \n%s\n'%('First Name', 'Surname', '- '*int(width/2))
 
         for single in single_list[grade]:
-            grade_string+= '%-15s %-15s %1s\n'%(single[0], single[1], 'X')#str(single[2].upper()))
+            grade_string+= '%-15s %-15s\n'%(single[0], single[1])#str(single[2].upper()))
 
         grade_string += '\n%d pairs registered\n'%(pair_list[grade]/2) 
 
