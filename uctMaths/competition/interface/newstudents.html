@@ -2,7 +2,7 @@
 
 {%block title%}New Students{%endblock%}
 {%block content%}
-<h1 >Register Students for a School</h1>
+<h1 >Student registration form for {{schooln}}</h1>
 <p> {{ error }} </p>
 <form action="." method="post">
     {% csrf_token %}
@@ -11,12 +11,13 @@
     {% else %}
         <p>Not working.</p>
     {% endif %}
-    <select name = "school">
+    <!-- <select name = "school">
         {% for school in schools %}
             <option value="{{ school.id }}">{{ school.name }}</option>
         {% endfor %}
-    </select>
-
+    </select> -->
+    <!-- For "Confirm your school's language? -->
+    <p> Please confirm your school's preferred language. </p>
     <select name = "language">
         <option value="e">English</option>
         <option value="a">Afrikaans</option>
@@ -25,7 +26,7 @@
     <!-- register responsible teacher from here --->
     <div>
         <h1>Register Responsible Teacher</h1>
-        <p>blurb about the role of... Compulsory 1 per school.</p>
+        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -53,8 +54,8 @@
 
     <!-- register invigilators from here -->
     <div>
-        <h1>Register New Invigilators</h1>
-        <p>blurb about invigilators. Compulsory 1 per school, 2 if 75 entries.</p>
+        <h1>Register Invigilators</h1>
+        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Compulsory 1 per school, 2 if 75 entries.</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -64,13 +65,9 @@
                 <th>First Name</th>
                 <th>Surname</th>
                 <!-- <th>Venue</th> -->
-                <th>Invig/Reg</th>
-                <th>Phone (h)</th>
-                <th>Phone (w)</th>
-                <th>Fax (h)</th>
-                <th>Fax (w)</th>
-                <th>Email</th>
-				<th>Responsible</th>
+				<th>Phone </th>
+				<th>Phone (Alternative)</th>
+				<th>Email </th>
             </tr>
             {%for i in range%}
                 <tr>
@@ -97,7 +94,6 @@
                     <td><input type ="text" name="inv_phone_primary"></td>                    
                     <td><input type ="text" name="inv_phone_alt"></td>
                     <td><input type ="text" name="inv_email"></td>
-					<td><input type ="text" name="inv_responsible"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
             {%endfor%}
@@ -147,23 +143,23 @@
         <tr>
             <th>Name</th>
             <th>Surname</th>
-            <th>Sex</th>
+      <!--      <th>Sex</th> -->
         </tr>
         {%for entry in entries_per_grade%}
         <tr>
             <td><input type="text" name="firstname"></td>
 
             <td><input type="text" name="surname"></td>
-            <td>
+         <!--   <td>
                 <select name = "sex">
-                    <!-- <option value=''>---</option> -->
+                     <option value=''>---</option> 
                     <option value='f'>Female</option>
                     <option value='m'>Male</option>
                 </select>
 
-                <!-- <input type ="text" name="sex"> -->
+                 <input type ="text" name="sex">
             </td>
-
+		-->
           <input type='hidden' name='grade' value='{{grade}}'>
           <input type ="hidden" name="registered_by" value ={{ user.id }} >
         </tr>
@@ -174,6 +170,9 @@
         <br><br>
     </div>
     {%endfor%} <!-- endfor grade -->
+	<div id='alert'>
+		<input type="checkbox" name="confirm" align="left"> Have you confirmed that all the information entered is correct? <br> </br>
+	</div>
     <input class="bluebutton left" type="submit" name='{{grade}}' value="Submit">
 
     </form>

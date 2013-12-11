@@ -23,7 +23,7 @@ class SchoolUserAdmin(admin.ModelAdmin):
 #Displays different fields for School
 class SchoolAdmin(admin.ModelAdmin):
 	form = SchoolModelForm
-	list_display = ('name', 'registered_by')
+	list_display = ('name','phone','email','assigned_to') ##Which columns should be kept here? 
 	search_fields = ['name']
 
 class ResponsibleTeacherAdmin(admin.ModelAdmin):
@@ -31,17 +31,17 @@ class ResponsibleTeacherAdmin(admin.ModelAdmin):
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(admin.ModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'registered_by')
+	list_display = ('school', 'firstname', 'surname', 'grade', 'registered_by', 'paired')
 	actions = ['archive_student']
 	search_fields = ['name']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
 	    cursor = connection.cursor()
-	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Sex`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Sex`,  `Venue`, `Registered By` FROM `competition_schoolstudent`")
+	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`,  `Venue`, `Registered By`, `Paired` FROM `competition_schoolstudent`")
 	    cursor.execute("UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
 	    transaction.commit_unless_managed()
-	
+
 #Displays different fields for Venue
 class VenueAdmin(admin.ModelAdmin):
 	list_display = ('building', 'code', 'seats', 'bums')
@@ -49,11 +49,11 @@ class VenueAdmin(admin.ModelAdmin):
 
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(admin.ModelAdmin):
-	#list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
+    #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
     list_display = ('school', 'firstname', 'surname', 'venue', 'registered_by')
     actions = ['archive_invigilator']
 
-	#Adds all invigilators in the Invigilarors table, to the Archived table, and adds the current date
+    #Adds all invigilators in the Invigilarors table, to the Archived table, and adds the current date
     def archive_invigilator(modeladmin, request, queryset):
         cursor = connection.cursor()
         
