@@ -13,7 +13,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 DATABASES = {
-    'default': { ### Change this for your DB credentials/name ###
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
         'NAME': 'uct_maths_competition',    #new UCT database
         'USER': 'postgres',

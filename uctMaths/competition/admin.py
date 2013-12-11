@@ -13,16 +13,18 @@ import time, datetime
 class SchoolModelForm( forms.ModelForm ):
 	address = forms.CharField( widget=forms.Textarea )
 	class Meta:
-		model = School 
+		model=School
 
 #Displays different fields for SchoolUsers
 class SchoolUserAdmin(admin.ModelAdmin):
 	list_display = ('user', 'school', 'email')
+	search_fields = ['name']
 
 #Displays different fields for School
 class SchoolAdmin(admin.ModelAdmin):
 	form = SchoolModelForm
 	list_display = ('name','phone','email','assigned_to') ##Which columns should be kept here? 
+	search_fields = ['name']
 
 class ResponsibleTeacherAdmin(admin.ModelAdmin):
 	list_display = ('firstname', 'surname', 'phone_primary', 'email', 'registered_by')
@@ -31,6 +33,7 @@ class ResponsibleTeacherAdmin(admin.ModelAdmin):
 class SchoolStudentAdmin(admin.ModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'registered_by', 'paired')
 	actions = ['archive_student']
+	search_fields = ['name']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
@@ -42,6 +45,7 @@ class SchoolStudentAdmin(admin.ModelAdmin):
 #Displays different fields for Venue
 class VenueAdmin(admin.ModelAdmin):
 	list_display = ('building', 'code', 'seats', 'bums')
+	search_fields = ['name']
 
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(admin.ModelAdmin):
