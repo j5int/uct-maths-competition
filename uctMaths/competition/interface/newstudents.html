@@ -2,7 +2,7 @@
 
 {%block title%}New Students{%endblock%}
 {%block content%}
-<h1 >Register Students for a School</h1>
+<h1 >Student registration form for {{schooln}}</h1>
 <p> {{ error }} </p>
 <form action="." method="post">
     {% csrf_token %}
@@ -11,12 +11,13 @@
     {% else %}
         <p>Not working.</p>
     {% endif %}
-    <select name = "school">
+    <!-- <select name = "school">
         {% for school in schools %}
             <option value="{{ school.id }}">{{ school.name }}</option>
         {% endfor %}
-    </select>
-
+    </select> -->
+    <!-- For "Confirm your school's language? -->
+    <p> Please confirm your school's preferred language. </p>
     <select name = "language">
         <option value="e">English</option>
         <option value="a">Afrikaans</option>
