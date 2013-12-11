@@ -252,7 +252,7 @@ def newstudents(request):
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
             #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
 
-#            confirmation.send_confirmation(request, assigned_school)
+            confirmation.send_confirmation(request, assigned_school)
 
 
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
