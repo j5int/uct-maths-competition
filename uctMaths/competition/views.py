@@ -170,6 +170,17 @@ def newstudents(request):
 
     #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
 
+    #Required that school form is pre-fetched to populate form
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
+    invigilator_list = Invigilator.objects.filter(school = assigned_school)
+    invigilator_range = range(10-len(invigilator_list))
+
+    entries_per_grade = {} #Dictionary with grade:range(...)
+    for grade in range(8,13):
+        entries_per_grade[grade] = range(5-len(individual_list[grade]))
+
+
     if request.method == 'POST':  # If the form has been submitted...
 
         form = (request.POST) # A form bound to the POST data
@@ -190,7 +201,6 @@ def newstudents(request):
 
         #Registering per grade
         for grade in range (8,13):
-              print 
               #Registering the different pairs
               #Information is set to null, only school name is given and reference
               #Reference if the ID of the first person in the pair
@@ -215,7 +225,7 @@ def newstudents(request):
         #Registering students, maximum number of students 25
         #Returns an error if information entered incorrectly         
         try:
-            for i in range (25):
+            for i in range (25-len(student_list)):
                 if form.getlist('firstname','')[i] == u'': continue
                 firstname = form.getlist('firstname','')[i]
                 surname = form.getlist('surname','')[i]
@@ -233,7 +243,7 @@ def newstudents(request):
                 query.reference=query.id
                 query.save()
 
-            for j in range(10):
+            for j in range(10-len(invigilator_list)):
                 if form.getlist('inv_firstname','')[j] == u'':
                     ierror = "Invigilator information incomplete"
                 else:
@@ -251,9 +261,7 @@ def newstudents(request):
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
             #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-
             confirmation.send_confirmation(request, assigned_school)
-
 
             return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
@@ -261,13 +269,39 @@ def newstudents(request):
     else:
         form = StudentForm() # An unbound form
 
+    c = {'type':'Students',
+        'schooln':assigned_school,
+        #'schools':schoolOptions,
+        'student_list':individual_list,
+        'entries_per_grade':entries_per_grade,
+        'invigilator_list': invigilator_list,
+        'pairs_per_grade':range(0,6), 
+        'grades':range(8,13), 
+        'error':error,
+        'invigilator_range':invigilator_range, 
+        'igrades':range(8,13),
+        'ierror':error} # Modified ticked#11005
 
-    schoolOptions = School.objects.all()
-    c = {'type':'Students', 'schooln':assigned_school,'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(0,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error} # Modified ticked#11005
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 
 
+def processGrade(student_list): #FIXME: Should this be in view.py?
+    """ Helper function for sorting students into grades """
+    pair_list = { 8 : 0, 9 : 0, 10 : 0, 11 : 0, 12 : 0} ###Not used yet
+    individual_list = { 8 : [] , 9 :  [] , 10 :  [] , 11 : [] , 12 : [] }
+
+    try:
+        for student in student_list:
+            if student.paired: # Better pair condition logic for this!
+                pair_list[student.grade]+=1
+                pass
+            else: 
+                individual_list[student.grade].append(student)
+    except IndexError:
+        print 'Index Error'
+
+    return individual_list, pair_list
 
 #*****************************************
 # School select.
@@ -298,7 +332,7 @@ def school_select(request):
 
     schoolOptions = School.objects.all()
     c = {'schools':schoolOptions, 'already_assigned' : already_assigned, 'assigned_to':school_assignment,'user':request.user,'error':error,'ierror':error} 
-      #c.update(csrf(request))
+    c.update(csrf(request))
     return render_to_response('school_select.html', c, context_instance=RequestContext(request))
 
 #*****************************************
