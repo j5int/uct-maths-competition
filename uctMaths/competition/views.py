@@ -129,29 +129,19 @@ def schools(request):
 def invigilators(request):
     username = request.user #current user
     invigilators = Invigilator.objects.filter(registered_by = username)
-    
     #If the user decides to delete the list. Only deletes invigilators registered by the current user
-    if request.method=='POST' and 'delete' in request.POST:
+    if request.method=='POST':# 
         form = (request.POST) # A form bound to the POST data
-        for i in range (invigilators.count()):
-          invigilatorUpdate = Invigilator.objects.get(id = form.getlist('invigilatorID','')[i])
-          invigilatorUpdate.delete()
 
-    #If the user decides to edit the invigilators' information
-    elif request.method=='POST' and 'submit' in request.POST:
-        form = (request.POST) # A form bound to the POST data
-        for i in range (invigilators.count()): #RANGE!!!!!!!!
-          invigilatorID = form.getlist('invigilatorID','')[i]
-          invigilatorUpdate = Invigilator.objects.get(id = invigilatorID)
-          invigilatorUpdate.firstname = form.getlist('firstname','')[i]
-          invigilatorUpdate.surname = form.getlist('surname','')[i]
-          #invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
-          invigilatorUpdate.phone_primary = form.getlist('phone_primary','')[i]
-          invigilatorUpdate.phone_alt = form.getlist('phone_alt','')[i]
+        for i in invigilators: # Find the button that was pressed - (tied to invigilator ID)
+            str_check = 'del_invig'+str(i.id)
 
-          invigilatorUpdate.save()
-       
-    c = {'invigilators':invigilators, 'grades':range(8,13)} #Sends back list of invigilators and grade options
+            if str_check in request.POST:
+                i.delete() #The invigilator is deleted from records
+
+        return HttpResponseRedirect('invigilators.html') ##Once the response has been completed, refresh the page
+
+    c = {'invigilators':invigilators} #Sends back list of invigilators and grade options
     c.update(csrf(request))
     return render_to_response('invigilators.html', c,context_instance=RequestContext(request))
 
