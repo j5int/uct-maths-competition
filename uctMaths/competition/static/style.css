@@ -176,9 +176,12 @@ tr.alt td
 	padding-left: 5em;
 }
 
+#alert{
+	padding-top:20px;
+}
+
 #alert:hover {
 	background-color:#E0E0E1;
-	vertical-align:bottom;
 }
 
 
