@@ -46,28 +46,21 @@ def submitted(request, c):
 #User can also delete the entire list or can edit individual students
 @login_required
 def students(request):
-    username = request.user #Current user
-    studentOptions = SchoolStudent.objects.filter(registered_by = username) #Gets all the students who were registered by current user
-    
-    #If the user decides to delete the list. Delete only students registered by the current user
-    if request.method=='POST' and 'delete' in request.POST:
+    username = request.user #current user
+    students = SchoolStudent.objects.filter(registered_by = username)
+    #If the user decides to delete the list. Only deletes invigilators registered by the current user
+    if request.method=='POST':# 
         form = (request.POST) # A form bound to the POST data
-        for i in range (studentOptions.count()): 
-          studentUpdate = SchoolStudent.objects.get(id = form.getlist('studentID','')[i])
-          studentUpdate.delete()
-    
-    #If the user edits teh students. Edits can only be made to certain fields     
-    elif request.method=='POST' and 'submit' in request.POST:
-        form = (request.POST) # A form bound to the POST data
-        for i in range (studentOptions.count()):
-          studentID = form.getlist('studentID','')[i]
-          studentUpdate = SchoolStudent.objects.get(id = studentID)
-          studentUpdate.firstname = form.getlist('firstname','')[i]
-          studentUpdate.surname = form.getlist('surname','')[i]
-   #       studentUpdate.sex = form.getlist('sex','')[i]
-          studentUpdate.save()
-         
-    c = {'students':studentOptions} #Passes the list of students for the current user
+
+        for s in students: # Find the button that was pressed - (tied to invigilator ID)
+            str_check = 'del_student'+str(s.id)
+
+            if str_check in request.POST:
+                s.delete() #The invigilator is deleted from records
+
+        return HttpResponseRedirect('students.html') ##Once the response has been completed, refresh the page
+
+    c = {'students':students} #Sends back list of invigilators and grade options
     c.update(csrf(request))
     return render_to_response('students.html', c,context_instance=RequestContext(request))
 
@@ -251,9 +244,15 @@ def newstudents(request):
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
             #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-            confirmation.send_confirmation(request, assigned_school)
+            
+            if 'save_form' in request.POST: #Just save the form and commit to database, refresh page with changes
+                return HttpResponseRedirect('newstudents.html')
+            elif 'submit_form' in request.POST: #Send confirmation email and continue
+                confirmation.send_confirmation(request, assigned_school)
+                return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
+            else:
+                print 'This should not happen'
 
-            return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
               error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
     else:
@@ -395,7 +394,7 @@ def newinvigilators (request):
           return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
         except Exception as e:
               print e
-              error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
+              error = "%s: Incorrect information inserted into fields. Please insert correct information" 
   else:
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
