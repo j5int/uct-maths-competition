@@ -11,11 +11,7 @@
     {% else %}
         <p>Not working.</p>
     {% endif %}
-    <!-- <select name = "school">
-        {% for school in schools %}
-            <option value="{{ school.id }}">{{ school.name }}</option>
-        {% endfor %}
-    </select> -->
+
     <!-- For "Confirm your school's language? -->
     <p> Please confirm your school's preferred language. </p>
     <select name = "language">
@@ -61,36 +57,27 @@
 
         <table>
             <tr>
-                <!-- <th>School</th> -->
                 <th>First Name</th>
                 <th>Surname</th>
-                <!-- <th>Venue</th> -->
-				<th>Phone </th>
-				<th>Phone (Alternative)</th>
-				<th>Email </th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
             </tr>
-            {%for i in range%}
+            <!-- Populates the list with previously registered invigilators -->
+            {%for invigilator in invigilator_list%}
                 <tr>
-                    <!-- <td>
-                        <select name = "school">
-                            {% for entry in schools %}
-                                <option value="{{ entry.id }}">{{ entry.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </td> -->
+                    <td>{{invigilator.firstname}}</td>
+                    <td>{{invigilator.surname}}</td>
+                    <td>{{invigilator.phone_primary}}</td>
+                    <td>{{invigilator.phone_alt}}</td>
+                    <td>{{invigilator.email}}</td>
+                </tr>
+            {%endfor%}
+            <!-- Fills out remaining fields -->
+            {%for invigilator in invigilator_range%}
+                <tr>
                     <td><input type="text" name="inv_firstname"></td>
                     <td><input type="text" name="inv_surname"></td>
-                    <!-- <td>
-                        <select name = "venue">
-                            <option value="70">TBD</option>
-                        </select>
-                    </td> -->
-                    <!-- <td>
-                        <select name = "inv_reg">
-                            <option value="i">Invigilator</option>
-                            <option value="r">Registrator</option>
-                        </select>
-                    </td> -->
                     <td><input type ="text" name="inv_phone_primary"></td>                    
                     <td><input type ="text" name="inv_phone_alt"></td>
                     <td><input type ="text" name="inv_email"></td>
@@ -100,27 +87,6 @@
 
         </table>
 
-        <!-- <p>School: <select name = "school">
-            {% for entry in schools %}
-                <option value="{{ entry.id }}">{{ entry.name }}</option>
-            {% endfor %}
-        </select></p>
-        <p>First Name: <input type="text" name="firstname"></p>
-        <p>Surname: <input type="text" name="surname"></p>
-        <p>Grade: <input type ="text" name="grade"></p>
-        <p>Venue: <select name = "venue">
-            <option value="70">TBD</option>
-        </select></p></p>
-        <p>Invig_reg: <select name = "inv_reg">
-            <option value="i">Invigilator</option>
-            <option value="r">Registrator</option>
-         </select></p></p>
-        <p>Phone (h): <input type ="text" name="phone_h"></p>
-        <p>Phone (w): <input type ="text" name="phone_w"></p>
-        <p>Fax (h): <input type ="text" name="fax"></p>
-        <p>Fax (w): <input type ="text" name="fax_w"></p>
-        <p>Email: <input type ="text" name="email"></p>
-        <p>Responsible: <input type ="text" name="responsible"></p> -->
 
     </div>
 
@@ -143,38 +109,41 @@
         <tr>
             <th>Name</th>
             <th>Surname</th>
-      <!--      <th>Sex</th> -->
         </tr>
-        {%for entry in entries_per_grade%}
-        <tr>
-            <td><input type="text" name="firstname"></td>
-
-            <td><input type="text" name="surname"></td>
-         <!--   <td>
-                <select name = "sex">
-                     <option value=''>---</option> 
-                    <option value='f'>Female</option>
-                    <option value='m'>Male</option>
-                </select>
-
-                 <input type ="text" name="sex">
-            </td>
-		-->
-          <input type='hidden' name='grade' value='{{grade}}'>
-          <input type ="hidden" name="registered_by" value ={{ user.id }} >
-        </tr>
+        <!-- Populates the list with previously registered students -->
+        {%for key, student_l in student_list.items%}
+            {% if grade == key %} <!-- only for the current grade -->
+                {%for student in student_l%}
+                <tr>
+                    <td>{{student.firstname}}</td>
+                    <td>{{student.surname}}</td>
+                </tr>
+                {%endfor%}
+            {%endif%}
         {%endfor%}
 
-        </table> 
+        {%for key, entry_range in entries_per_grade.items%}
+            {% if grade == key %}
+                {% for entry in entry_range %}
+                <tr>
+                  <td><input type="text" name="firstname"></td>
+                  <td><input type="text" name="surname"></td>
+                  <input type='hidden' name='grade' value='{{grade}}'>
+                  <input type ="hidden" name="registered_by" value ={{ user.id }} >
+                </tr>
+                {%endfor%}
+            {%endif%}
+        {%endfor%}
 
+        </table>
         <br><br>
     </div>
     {%endfor%} <!-- endfor grade -->
-	<div id='alert'>
-		<input type="checkbox" name="confirm" align="left"> Have you confirmed that all the information entered is correct? <br> </br>
-	</div>
-    <input class="bluebutton left" type="submit" name='{{grade}}' value="Submit">
+    <div id='alert'>
+        <input type="checkbox" name="confirm" align="left"> Have you confirmed that all the information entered is correct? <br> </br>
+    </div>
+    <input class="bluebutton left" type="submit" name='save_form' value="Save">
+    <input class="bluebutton left" type="submit" name='submit_form' value="Submit">
 
     </form>
-   
 {%endblock%}

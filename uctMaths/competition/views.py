@@ -46,28 +46,39 @@ def submitted(request, c):
 #User can also delete the entire list or can edit individual students
 @login_required
 def students(request):
-    username = request.user #Current user
-    studentOptions = SchoolStudent.objects.filter(registered_by = username) #Gets all the students who were registered by current user
-    
-    #If the user decides to delete the list. Delete only students registered by the current user
-    if request.method=='POST' and 'delete' in request.POST:
+    username = request.user #current user
+
+    # CASE: When the admin reassigns a school, the new controller should
+    #       be able to remove those students. ie. therefore filter by 
+    #       school instead of registered_by
+    try:
+        #Attempt to find user's chosen school
+        assigned_school = School.objects.get(assigned_to=request.user)
+    except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Redirect to the select_schools page
+        return HttpResponseRedirect('../register/school_select/school_select.html')
+
+    students = SchoolStudent.objects.filter(school = assigned_school)
+    #If the user decides to delete the list. Only deletes invigilators registered by the current user
+    if request.method=='POST':# 
         form = (request.POST) # A form bound to the POST data
-        for i in range (studentOptions.count()): 
-          studentUpdate = SchoolStudent.objects.get(id = form.getlist('studentID','')[i])
-          studentUpdate.delete()
-    
-    #If the user edits teh students. Edits can only be made to certain fields     
-    elif request.method=='POST' and 'submit' in request.POST:
-        form = (request.POST) # A form bound to the POST data
-        for i in range (studentOptions.count()):
-          studentID = form.getlist('studentID','')[i]
-          studentUpdate = SchoolStudent.objects.get(id = studentID)
-          studentUpdate.firstname = form.getlist('firstname','')[i]
-          studentUpdate.surname = form.getlist('surname','')[i]
-   #       studentUpdate.sex = form.getlist('sex','')[i]
-          studentUpdate.save()
-         
-    c = {'students':studentOptions} #Passes the list of students for the current user
+
+        for s in students: # Find the button that was pressed - (tied to invigilator ID)
+            str_check = 'del_student'+str(s.id)
+
+            if str_check in request.POST:
+                if s.paired: #pair logic. Remove both entries
+                    s_grade = s.grade
+                    s.delete()
+                    for student in students:
+                        if student.paired and student.id != None and student.grade == s_grade:
+                            student.delete()
+                            break
+                break
+
+        return HttpResponseRedirect('students.html') ##Once the response has been completed, refresh the page
+
+    c = {'students':students} #Sends back list of invigilators and grade options
     c.update(csrf(request))
     return render_to_response('students.html', c,context_instance=RequestContext(request))
 
@@ -128,30 +139,32 @@ def schools(request):
 @login_required
 def invigilators(request):
     username = request.user #current user
-    invigilators = Invigilator.objects.filter(registered_by = username)
-    
+
+    # CASE: When the admin reassigns a school, the new controller should
+    #       be able to remove those students. ie. therefore filter by 
+    #       school instead of registered_by
+    try:
+        #Attempt to find user's chosen school
+        assigned_school = School.objects.get(assigned_to=request.user)
+    except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Redirect to the select_schools page
+        return HttpResponseRedirect('../register/school_select/school_select.html')
+
+    invigilators = Invigilator.objects.filter(school = assigned_school)
+
     #If the user decides to delete the list. Only deletes invigilators registered by the current user
-    if request.method=='POST' and 'delete' in request.POST:
+    if request.method=='POST':# 
         form = (request.POST) # A form bound to the POST data
-        for i in range (invigilators.count()):
-          invigilatorUpdate = Invigilator.objects.get(id = form.getlist('invigilatorID','')[i])
-          invigilatorUpdate.delete()
 
-    #If the user decides to edit the invigilators' information
-    elif request.method=='POST' and 'submit' in request.POST:
-        form = (request.POST) # A form bound to the POST data
-        for i in range (invigilators.count()): #RANGE!!!!!!!!
-          invigilatorID = form.getlist('invigilatorID','')[i]
-          invigilatorUpdate = Invigilator.objects.get(id = invigilatorID)
-          invigilatorUpdate.firstname = form.getlist('firstname','')[i]
-          invigilatorUpdate.surname = form.getlist('surname','')[i]
-          #invigilatorUpdate.inv_reg = form.getlist('inv_reg','')[i]
-          invigilatorUpdate.phone_primary = form.getlist('phone_primary','')[i]
-          invigilatorUpdate.phone_alt = form.getlist('phone_alt','')[i]
+        for i in invigilators: # Find the button that was pressed - (tied to invigilator ID)
+            str_check = 'del_invig'+str(i.id)
 
-          invigilatorUpdate.save()
-       
-    c = {'invigilators':invigilators, 'grades':range(8,13)} #Sends back list of invigilators and grade options
+            if str_check in request.POST:
+                i.delete() #The invigilator is deleted from records
+
+        return HttpResponseRedirect('invigilators.html') ##Once the response has been completed, refresh the page
+
+    c = {'invigilators':invigilators} #Sends back list of invigilators and grade options
     c.update(csrf(request))
     return render_to_response('invigilators.html', c,context_instance=RequestContext(request))
 
@@ -169,6 +182,17 @@ def newstudents(request):
         return HttpResponseRedirect('../school_select/school_select.html')
 
     #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
+
+    #Required that school form is pre-fetched to populate form
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
+    invigilator_list = Invigilator.objects.filter(school = assigned_school)
+    invigilator_range = range(10-len(invigilator_list))
+
+    entries_per_grade = {} #Dictionary with grade:range(...)
+    for grade in range(8,13):
+        entries_per_grade[grade] = range(5-len(individual_list[grade]))
+
 
     if request.method == 'POST':  # If the form has been submitted...
 
@@ -190,7 +214,6 @@ def newstudents(request):
 
         #Registering per grade
         for grade in range (8,13):
-              print 
               #Registering the different pairs
               #Information is set to null, only school name is given and reference
               #Reference if the ID of the first person in the pair
@@ -215,7 +238,7 @@ def newstudents(request):
         #Registering students, maximum number of students 25
         #Returns an error if information entered incorrectly         
         try:
-            for i in range (25):
+            for i in range (25-len(student_list)):
                 if form.getlist('firstname','')[i] == u'': continue
                 firstname = form.getlist('firstname','')[i]
                 surname = form.getlist('surname','')[i]
@@ -233,7 +256,7 @@ def newstudents(request):
                 query.reference=query.id
                 query.save()
 
-            for j in range(10):
+            for j in range(10-len(invigilator_list)):
                 if form.getlist('inv_firstname','')[j] == u'':
                     ierror = "Invigilator information incomplete"
                 else:
@@ -251,23 +274,53 @@ def newstudents(request):
 
             #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
             #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
+            
+            if 'save_form' in request.POST: #Just save the form and commit to database, refresh page with changes
+                return HttpResponseRedirect('newstudents.html')
+            elif 'submit_form' in request.POST: #Send confirmation email and continue
+                confirmation.send_confirmation(request, assigned_school)
+                return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
+            else:
+                print 'This should not happen'
 
-            confirmation.send_confirmation(request, assigned_school)
-
-
-            return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
         except Exception as e:
               error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
     else:
         form = StudentForm() # An unbound form
 
+    c = {'type':'Students',
+        'schooln':assigned_school,
+        #'schools':schoolOptions,
+        'student_list':individual_list,
+        'entries_per_grade':entries_per_grade,
+        'invigilator_list': invigilator_list,
+        'pairs_per_grade':range(0,6), 
+        'grades':range(8,13), 
+        'error':error,
+        'invigilator_range':invigilator_range, 
+        'igrades':range(8,13),
+        'ierror':error} # Modified ticked#11005
 
-    schoolOptions = School.objects.all()
-    c = {'type':'Students', 'schooln':assigned_school,'schools':schoolOptions, 'entries_per_grade':range(5), 'pairs_per_grade':range(0,6), 'grades':range(8,13), 'error':error,'range':range(10), 'igrades':range(8,13),'ierror':error} # Modified ticked#11005
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
 
 
+def processGrade(student_list): #FIXME: Should this be in view.py?
+    """ Helper function for sorting students into grades """
+    pair_list = { 8 : 0, 9 : 0, 10 : 0, 11 : 0, 12 : 0} ###Not used yet
+    individual_list = { 8 : [] , 9 :  [] , 10 :  [] , 11 : [] , 12 : [] }
+
+    try:
+        for student in student_list:
+            if student.paired: # Better pair condition logic for this!
+                pair_list[student.grade]+=1
+                pass
+            else: 
+                individual_list[student.grade].append(student)
+    except IndexError:
+        print 'Index Error'
+
+    return individual_list, pair_list
 
 #*****************************************
 # School select.
@@ -298,7 +351,7 @@ def school_select(request):
 
     schoolOptions = School.objects.all()
     c = {'schools':schoolOptions, 'already_assigned' : already_assigned, 'assigned_to':school_assignment,'user':request.user,'error':error,'ierror':error} 
-      #c.update(csrf(request))
+    c.update(csrf(request))
     return render_to_response('school_select.html', c, context_instance=RequestContext(request))
 
 #*****************************************
@@ -371,7 +424,7 @@ def newinvigilators (request):
           return render_to_response('submitted.html', {'type':'Invigilator'}) # Redirect after POST
         except Exception as e:
               print e
-              error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
+              error = "%s: Incorrect information inserted into fields. Please insert correct information" 
   else:
         form = InvigilatorForm() # An unbound form
   schoolOptions = School.objects.all()
