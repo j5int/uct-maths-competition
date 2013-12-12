@@ -47,7 +47,18 @@ def submitted(request, c):
 @login_required
 def students(request):
     username = request.user #current user
-    students = SchoolStudent.objects.filter(registered_by = username)
+
+    # CASE: When the admin reassigns a school, the new controller should
+    #       be able to remove those students. ie. therefore filter by 
+    #       school instead of registered_by
+    try:
+        #Attempt to find user's chosen school
+        assigned_school = School.objects.get(assigned_to=request.user)
+    except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Redirect to the select_schools page
+        return HttpResponseRedirect('../register/school_select/school_select.html')
+
+    students = SchoolStudent.objects.filter(school = assigned_school)
     #If the user decides to delete the list. Only deletes invigilators registered by the current user
     if request.method=='POST':# 
         form = (request.POST) # A form bound to the POST data
@@ -56,7 +67,14 @@ def students(request):
             str_check = 'del_student'+str(s.id)
 
             if str_check in request.POST:
-                s.delete() #The invigilator is deleted from records
+                if s.paired: #pair logic. Remove both entries
+                    s_grade = s.grade
+                    s.delete()
+                    for student in students:
+                        if student.paired and student.id != None and student.grade == s_grade:
+                            student.delete()
+                            break
+                break
 
         return HttpResponseRedirect('students.html') ##Once the response has been completed, refresh the page
 
@@ -121,7 +139,19 @@ def schools(request):
 @login_required
 def invigilators(request):
     username = request.user #current user
-    invigilators = Invigilator.objects.filter(registered_by = username)
+
+    # CASE: When the admin reassigns a school, the new controller should
+    #       be able to remove those students. ie. therefore filter by 
+    #       school instead of registered_by
+    try:
+        #Attempt to find user's chosen school
+        assigned_school = School.objects.get(assigned_to=request.user)
+    except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Redirect to the select_schools page
+        return HttpResponseRedirect('../register/school_select/school_select.html')
+
+    invigilators = Invigilator.objects.filter(school = assigned_school)
+
     #If the user decides to delete the list. Only deletes invigilators registered by the current user
     if request.method=='POST':# 
         form = (request.POST) # A form bound to the POST data
