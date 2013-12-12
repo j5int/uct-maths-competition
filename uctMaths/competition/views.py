@@ -26,13 +26,23 @@ import confirmation
 #     return HttpResponseRedirect('/accounts/login')
 
 def index(request):
-	return render_to_response('index.html', {})
+    return render_to_response('index.html', {})
 
 
 @login_required
 def profile(request):
-  # auth(request)
-  return render_to_response('profile.html',{})
+    # auth(request)
+    school_blurb = 'This profile is currently '
+    try:
+        #Attempt to find user's chosen school
+        assigned_school = School.objects.get(assigned_to=request.user)
+        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms.'
+    except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Redirect to the select_schools page
+        school_blurb += 'not associated with any school. Click on \'Register Students\' to continue. (TODO: Should be clearer. Headings will change)'
+        pass
+        #return HttpResponseRedirect('../register/school_select/school_select.html')
+    return render_to_response('profile.html',{'school_blurb':school_blurb})
 
 
 # submitted thingszz
@@ -74,6 +84,8 @@ def students(request):
                         if student.paired and student.id != None and student.grade == s_grade:
                             student.delete()
                             break
+                else:
+                    s.delete() #Single user logic
                 break
 
         return HttpResponseRedirect('students.html') ##Once the response has been completed, refresh the page
