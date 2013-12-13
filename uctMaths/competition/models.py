@@ -109,7 +109,7 @@ class Invigilator(models.Model):
     venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) #Admin feature, implement later
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
-    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
+    email       = models.CharField(max_length=50L, db_column='Email', blank=False)
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname
@@ -126,7 +126,7 @@ class ResponsibleTeacher(models.Model):
     surname     = models.CharField(max_length=255L, db_column='Surname')
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
-    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
+    email       = models.CharField(max_length=50L, db_column='Email', blank=False)
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname
@@ -176,7 +176,7 @@ class InvigilatorArchive(models.Model):
     venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt   = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
-    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
+    email       = models.CharField(max_length=50L, db_column='Email', blank=False)
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'

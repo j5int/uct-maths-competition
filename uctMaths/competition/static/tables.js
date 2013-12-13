@@ -17,3 +17,36 @@ function drop(type)
 	}
 	else {return true}
 }
+
+//function checked()
+//{
+//	if ()
+//	{
+		//button = enabled
+//	}
+//	else
+//	{
+		//button = disabled
+//	}
+//}
+
+
+//checks for empty responsible teacher form
+function validate(){ 
+//var mail = document.getElementById('rt_email'); 
+//var sub = document.getElementById('submit');
+//var m = document.getElementById('rmail');
+return false;
+/*
+if(mail.value.length == 0){ 
+//sub.disabled = true;
+//sub.setAttribute("disabled", "disabled");
+//m.setattribute("re")
+return false; 
+} 
+else{ 
+return true; 
+} */
+//document.getElementById("submits").disabled = true;
+//$('#submits').prop('disabled', true);
+}

@@ -20,7 +20,7 @@ urlpatterns = patterns('',
 	# url(r'^register/venues/', views.newvenues, name='newvenues'),
 
 	url(r'^register/submitted', views.submitted, name='submitted'),
-
+#	url(r'^confirm/', views.checked, name='checked'),
 		
 	url(r'^accounts/profile/$',views.profile),
 

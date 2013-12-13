@@ -383,3 +383,6 @@ def newinvigilators (request):
 
 
 #******************************************  
+#disables submit box
+#@login_required
+#def checked(request)
