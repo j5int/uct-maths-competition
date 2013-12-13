@@ -292,7 +292,7 @@ def newstudents(request):
                     iphone_alt = form.getlist('inv_phone_alt','')[j]
                     iemail = form.getlist('inv_email','')[j]
                     iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
-                    
+
                     query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
                                        phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail, registered_by= iregistered_by)
                     query.save()
@@ -347,35 +347,45 @@ def processGrade(student_list): #FIXME: Should this be in view.py?
         print 'Index Error'
     return individual_list, pair_list
 
+
 #*****************************************
 # School select.
 # Should be redirected here (from newstudents) if there is no school associated with the particular user name
 @login_required
 def school_select(request):
     error = " "
-    already_assigned = False
+    invalid_request = False
+    inv_req_message = ''
     school_assignment = ''
     if request.method == 'POST':  # If the form has been submitted...
 
-        form = (request.POST) # A form bound to the POST data
-        school_selected = School.objects.get(pk=int(form.getlist('school','')[0]))
-        school_assignment = School.objects.get(name=school_selected).assigned_to
-        
-        if school_assignment == None: #An unassigned school is assigned to user.
-            #TODO: Add a "Please be sure" message just telling them what they're doing.
-            #schoolAssmtUpdate = School.objects.get(id = school_assignment)
-            school_selected.assigned_to = request.user
-            school_selected.save()
-            #School.objects.set(name=school_selected).assign_to(request.user)
-            return HttpResponseRedirect('../students/newstudents.html')
+        try:
+        #Attempt to find user's chosen school
+            assigned_school = School.objects.get(assigned_to=request.user)
+            inv_req_message = 'This profile is already bound to ' + assigned_school.name + '. Please proceed with student registration for the UCT Mathematics Competition by selecting "Registration Form." If you have selected the incorrect school, please contact admin@competition.something'
+            invalid_request=True
+        except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Continue
+            form = (request.POST) # A form bound to the POST data
+            school_selected = School.objects.get(pk=int(form.getlist('school','')[0]))
+            school_assignment = School.objects.get(name=school_selected).assigned_to
+            
+            if school_assignment == None: #An unassigned school is assigned to user.
+                #TODO: Add a "Please be sure" message just telling them what they're doing.
+                #schoolAssmtUpdate = School.objects.get(id = school_assignment)
+                school_selected.assigned_to = request.user
+                school_selected.save()
+                #School.objects.set(name=school_selected).assign_to(request.user)
+                return HttpResponseRedirect('../students/newstudents.html')
 
-        elif school_assignment == request.user: #This should not happen
-            return HttpResponseRedirect('../students/newstudents.html')
-        else:
-            already_assigned = True 
+            elif school_assignment == request.user: #This should not happen
+                return HttpResponseRedirect('../students/newstudents.html')
+            else:
+                invalid_request = True 
+                inv_req_message = 'This school has already been assigned to another user. If you believe this to be an error, please contact admin@stjames.com.'
 
     schoolOptions = School.objects.all()
-    c = {'schools':schoolOptions, 'already_assigned' : already_assigned, 'assigned_to':school_assignment,'user':request.user,'error':error,'ierror':error} 
+    c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error} 
     c.update(csrf(request))
     return render_to_response('school_select.html', c, context_instance=RequestContext(request))
 
