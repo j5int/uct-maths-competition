@@ -129,7 +129,7 @@ class ResponsibleTeacher(models.Model):
     email       = models.CharField(max_length=50L, db_column='Email', blank=True)
     registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
-        return self.surname+', '+self.firstname
+        return self.surname+', '+self.firstname+', '+self.phone_primary
     class Meta:
         ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
 

@@ -199,16 +199,28 @@ def newstudents(request):
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
-    invigilator_range = range(10-len(invigilator_list))
+    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
 
     entries_per_grade = {} #Dictionary with grade:range(...)
+    pairs_per_grade = {}
     for grade in range(8,13):
         entries_per_grade[grade] = range(5-len(individual_list[grade]))
-
+        #Place the "Previously Selected" number of pairs at the top of the list (So it appears as a default)
+        pairs_per_grade[grade] = [pair_list[grade]/2]
+        pairs_per_grade[grade].extend([i for i in range(0,6) if i != pair_list[grade]/2])
 
     if request.method == 'POST':  # If the form has been submitted...
 
         form = (request.POST) # A form bound to the POST data
+
+        #Delete all previously stored information
+        for rt in responsible_teacher:
+            rt.delete()
+        for student in student_list:
+            student.delete()
+        for invigilator in invigilator_list:
+            invigilator.delete()
+
 
         #Register a single responsible teacher (assigned to that school)
         rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
@@ -218,8 +230,9 @@ def newstudents(request):
         rtphone_alt = form.getlist('rt_phone_alt','')[0]
         rtemail = form.getlist('rt_email','')[0]
         rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
-        query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname,
-                                  school = rtschool, registered_by= rtregistered_by)
+        query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary, 
+                                  phone_alt = rtphone_alt, school = rtschool, registered_by= rtregistered_by,
+                                  email = rtemail)
         query.save()
         query.reference=query.id
         query.save()
@@ -250,7 +263,7 @@ def newstudents(request):
         #Registering students, maximum number of students 25
         #Returns an error if information entered incorrectly         
         try:
-            for i in range (25-len(student_list)):
+            for i in range (25):
                 if form.getlist('firstname','')[i] == u'': continue
                 firstname = form.getlist('firstname','')[i]
                 surname = form.getlist('surname','')[i]
@@ -268,7 +281,7 @@ def newstudents(request):
                 query.reference=query.id
                 query.save()
 
-            for j in range(10-len(invigilator_list)):
+            for j in range(10):
                 if form.getlist('inv_firstname','')[j] == u'':
                     ierror = "Invigilator information incomplete"
                 else:
@@ -303,13 +316,15 @@ def newstudents(request):
     c = {'type':'Students',
         'schooln':assigned_school,
         #'schools':schoolOptions,
+        'responsible_teacher':responsible_teacher[0],
         'student_list':individual_list,
+        'pairs_per_grade':pairs_per_grade,
         'entries_per_grade':entries_per_grade,
         'invigilator_list': invigilator_list,
-        'pairs_per_grade':range(0,6), 
+        'pairs_per_grade2':range(0,6), 
         'grades':range(8,13), 
         'error':error,
-        'invigilator_range':invigilator_range, 
+        'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
         'ierror':error} # Modified ticked#11005
 
@@ -319,19 +334,17 @@ def newstudents(request):
 
 def processGrade(student_list): #FIXME: Should this be in view.py?
     """ Helper function for sorting students into grades """
-    pair_list = { 8 : 0, 9 : 0, 10 : 0, 11 : 0, 12 : 0} ###Not used yet
+    pair_list = { 8 : 0, 9 : 0, 10 : 0, 11 : 0, 12 : 0}
     individual_list = { 8 : [] , 9 :  [] , 10 :  [] , 11 : [] , 12 : [] }
 
     try:
         for student in student_list:
             if student.paired: # Better pair condition logic for this!
                 pair_list[student.grade]+=1
-                pass
             else: 
                 individual_list[student.grade].append(student)
     except IndexError:
         print 'Index Error'
-
     return individual_list, pair_list
 
 #*****************************************
