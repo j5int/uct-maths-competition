@@ -4,7 +4,7 @@
 {%block content%}
 <h1 >Student registration form for {{schooln}}</h1>
 <p> {{ error }} </p>
-<form action="." method="post">
+<form action='.' method='post' onsubmit='return validate();'>
     {% csrf_token %}
     <!-- {{ form.as_p  }} -->
     {% if user.is_authenticated %}
@@ -39,11 +39,11 @@
                 <th>Email </th>
             </tr>
             <tr>
-                <td><input type="text" name="rt_firstname"></td>
+                <td><input type="text" name="rt_firstname" required></td>
                 <td><input type="text" name="rt_surname"></td>
-                <td><input type ="text" name="rt_phone_primary"></td>                    
+                <td><input type ="text" name="rt_phone_primary" required></td>                    
                 <td><input type ="text" name="rt_phone_alt"></td>
-                <td><input type ="text" name="rt_email"></td>
+                <td><input id="rmail" type ="text" name="rt_email" required></td>
                 <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
             </tr>
 
@@ -171,9 +171,9 @@
     </div>
     {%endfor%} <!-- endfor grade -->
 	<div id='alert'>
-		<input type="checkbox" name="confirm" align="left"> Have you confirmed that all the information entered is correct? <br> </br>
+		<input type="checkbox" name="confirm" align="left" onclick="val()"> Have you confirmed that all the information entered is correct? <br> </br>
 	</div>
-    <input class="bluebutton left" type="submit" name='{{grade}}' value="Submit">
+    <input class="bluebutton left" id='submits' type="submit" name='{{grade}}' value="Submit">
 
     </form>
    
