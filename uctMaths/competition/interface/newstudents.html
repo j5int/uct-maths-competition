@@ -40,11 +40,11 @@
                 <th>Email* </th>
             </tr>
             <tr>	<!-- the required attribute does not work with IE9 and lower -->
-                <td><input type="text" name="rt_firstname" required></td>
-                <td><input type="text" name="rt_surname"></td>
-                <td><input type ="text" name="rt_phone_primary" required></td>                    
-                <td><input type ="text" name="rt_phone_alt"></td>
-                <td><input id="rmail" type ="text" name="rt_email" required></td>
+                <td><input type="text" name="rt_firstname" required value={{responsible_teacher.firstname}}></td>
+                <td><input type="text" name="rt_surname" value={{responsible_teacher.surname}}></td>
+                <td><input type ="text" name="rt_phone_primary" required value={{responsible_teacher.phone_primary}}></td>                    
+                <td><input type ="text" name="rt_phone_alt" value={{responsible_teacher.phone_alt}}></td>
+                <td><input id="rmail" type ="text" name="rt_email" required value={{responsible_teacher.email}}></td>
                 <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
             </tr>
         </table>
@@ -178,19 +178,10 @@
         <br><br>
     </div>
     {%endfor%} <!-- endfor grade -->
-<<<<<<< HEAD
 	<div id='alert'>
 		<input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? <br> </br>
-	</div>
-	<input class="bluebutton left" type="submit" name='save_form' value="Save">
-    <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
-=======
-    <div id='alert'>
-        <input type="checkbox" name="confirm" align="left"> Have you confirmed that all the information entered is correct? <br> </br>
     </div>
-    <!-- <input class="bluebutton left" type="submit" name='save_form' value="Save"> -->
-    <input class="bluebutton left" type="submit" name='submit_form' value="Submit">
->>>>>>> origin/201312-W12
+    <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
 
     </form>
 {%endblock%}
