@@ -222,6 +222,9 @@ def entry_review(request):
 
     if request.method == 'POST' and 'edit_entry' in request.POST:  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
+    if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
+        confirmation.send_confirmation(request, assigned_school, recipient=request.user) #Needs to only be bound to this user's email address
+        return render_to_response('submitted.html')
 
     c.update(csrf(request))
     return render_to_response('entry_review.html', c, context_instance=RequestContext(request))

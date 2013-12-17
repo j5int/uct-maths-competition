@@ -28,7 +28,7 @@
     <!-- register responsible teacher from here --->
     <div>
         <h1>Register Responsible Teacher</h1>
-        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.<br><i> All fields marked with an <b>asterisk (*) must be filled.</b></i></p>
+        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.<br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -145,7 +145,7 @@
         <h3>Individuals:</h3>
         <table>
         <tr>
-            <th>Name*</th>
+            <th>Name</th>
             <th>Surname</th>
         </tr>
         <!-- Populates the list with previously registered students -->
