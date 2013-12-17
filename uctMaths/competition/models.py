@@ -10,9 +10,10 @@ class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
     name        = models.CharField(max_length=255L, db_column='Name')
     key         = models.CharField(max_length=3L, db_column='Key') 
-    language    = models.CharField(max_length=1L, choices=(
-        ('e', 'English'), 
-        ('a', 'Afrikaans')
+    language    = models.CharField(max_length=1L, choices=( 
+    ('e', 'English'), 
+    ('a', 'Afrikaans'), 
+    ('b', 'Bilingual')
     ), db_column = 'Language')
     address     = models.CharField(max_length=255L, db_column='Address', blank=True)
     phone       = models.CharField(max_length=15L, db_column='Phone', blank=True) 
@@ -35,7 +36,8 @@ class SchoolStudent(models.Model):
     surname     = models.CharField(max_length=255L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
         ('e', 'English'), 
-        ('a', 'Afrikaans')
+        ('a', 'Afrikaans'),
+		('b', 'Bilingual')
     ), db_column = 'Language')
     reference   = models.CharField(max_length=7L, db_column='Reference') 
     school      = models.ForeignKey('School', db_column='School') 
@@ -72,7 +74,8 @@ class SchoolUser(models.Model):
     entered     = models.IntegerField(db_column='Entered')  
     language    = models.CharField(max_length=1L, db_column='Language', choices=(
         ('e', 'English'), 
-        ('a', 'Afrikaans')
+        ('a', 'Afrikaans'),
+		('b', 'Bilingual')
     )) 
     counter     = models.IntegerField(db_column='Count')
     last_login  = models.DateField(null=True, blank=True, db_column='Last Login')
@@ -142,7 +145,8 @@ class SchoolStudentArchive(models.Model):
     surname     = models.CharField(max_length=255L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
         ('e', 'English'), 
-        ('a', 'Afrikaans')
+        ('a', 'Afrikaans'),
+		('b', 'Bilingual')
     ), db_column = 'Language')
     reference   = models.CharField(max_length=7L, db_column='Reference') 
     school      = models.ForeignKey('School', db_column='School') 

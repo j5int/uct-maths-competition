@@ -9,7 +9,7 @@
 {%block content%}
 <h1 >Student registration form for {{schooln}}</h1>
 <p> {{ error }} </p>
-<form action='.' method='post' > <!-- onsubmit='return validate();'> -->
+<form name='registration' action='.' method='post' onsubmit='return validateForm()'> <!-- onsubmit='return validate();'> -->
     {% csrf_token %}
     <!-- {{ form.as_p  }} -->
     {% if user.is_authenticated %}
@@ -22,6 +22,7 @@
     <select name = "language">
         <option value="e">English</option>
         <option value="a">Afrikaans</option>
+		<option value="b">Bilingual</option>
     </select>
 
     <!-- register responsible teacher from here --->
