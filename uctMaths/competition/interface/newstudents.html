@@ -41,14 +41,13 @@
                 <th>Email* </th>
             </tr>
             <tr>	<!-- the required attribute does not work with IE9 and lower -->
-                <td><input type="text" name="rt_firstname" required></td>
-                <td><input type="text" name="rt_surname"></td>
-                <td><input type ="text" name="rt_phone_primary" required></td>                    
-                <td><input type ="text" name="rt_phone_alt"></td>
-                <td><input id="rmail" type ="text" name="rt_email" required></td>
+                <td><input type="text" name="rt_firstname" required value={{responsible_teacher.firstname}}></td>
+                <td><input type="text" name="rt_surname" value={{responsible_teacher.surname}}></td>
+                <td><input type ="text" name="rt_phone_primary" required value={{responsible_teacher.phone_primary}}></td>                    
+                <td><input type ="text" name="rt_phone_alt" value={{responsible_teacher.phone_alt}}></td>
+                <td><input id="rmail" type ="text" name="rt_email" required value={{responsible_teacher.email}}></td>
                 <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
             </tr>
-
         </table>
     </div>
 
@@ -72,17 +71,42 @@
 				<th>Email* </th>
             </tr>
             <!-- Populates the list with previously registered invigilators -->
+
+            <!-- then the first invigilator is always required -->
             {%for invigilator in invigilator_list%}
+                {% if forloop.first %} <!-- if this is the first iteration of the loop -->
                 <tr>
-                    <td>{{invigilator.firstname}}</td>
-                    <td>{{invigilator.surname}}</td>
-                    <td>{{invigilator.phone_primary}}</td>
-                    <td>{{invigilator.phone_alt}}</td>
-                    <td>{{invigilator.email}}</td>
+                    <td><input type="text" name="inv_firstname" required value={{invigilator.firstname}}></td>
+                    <td><input type="text" name="inv_surname" required value={{invigilator.surname}}></td>
+                    <td><input type ="text" name="inv_phone_primary" required value={{invigilator.phone_primary}}></td>                    
+                    <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
+                    <td><input type ="text" name="inv_email" required value={{invigilator.email}}></td>
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
+                {% else %}
+                <tr>
+                    <td><input type="text" name="inv_firstname" value={{invigilator.firstname}}></td>
+                    <td><input type="text" name="inv_surname" value={{invigilator.surname}}></td>
+                    <td><input type ="text" name="inv_phone_primary" value={{invigilator.phone_primary}}></td>                    
+                    <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
+                    <td><input type ="text" name="inv_email" value={{invigilator.email}}></td>
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                </tr>
+                {% endif %}
+
             {%endfor%}
-            <!-- Fills out remaining fields -->
+            
             {%for invigilator in invigilator_range%}
+            {% if invigilator_list|length = 0 and loopcounter.first %}
+                <tr>
+                    <td><input type="text" required name="inv_firstname"></td>
+                    <td><input type="text" required name="inv_surname"></td>
+                    <td><input type ="text" required name="inv_phone_primary"></td>                    
+                    <td><input type ="text" name="inv_phone_alt"></td>
+                    <td><input type ="text" required name="inv_email"></td>
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                </tr>
+            {% else %}
                 <tr>
                     <td><input type="text" name="inv_firstname"></td>
                     <td><input type="text" name="inv_surname"></td>
@@ -91,6 +115,8 @@
                     <td><input type ="text" name="inv_email"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
+            {% endif %}
+
             {%endfor%}
 
         </table>
@@ -105,9 +131,13 @@
         <div>
             <h3>Pairs:
             <select name = "pairs">
-                {%for p in pairs_per_grade%}
-                <option value='{{p}}'>{{p}}</option>
-                {%endfor%}
+                  {%for key, pair_list in pairs_per_grade.items%}
+                    {% if grade == key %}
+                        {%for p in pair_list%}
+                        <option value='{{p}}'>{{p}}</option>
+                        {%endfor%}
+                    {%endif%}
+                 {%endfor%}
             </select>
             </h3>
         </div> 
@@ -123,8 +153,10 @@
             {% if grade == key %} <!-- only for the current grade -->
                 {%for student in student_l%}
                 <tr>
-                    <td>{{student.firstname}}</td>
-                    <td>{{student.surname}}</td>
+                    <td><input type="text" name="firstname" value={{student.firstname}}></td>
+                    <td><input type="text" name="surname" value={{student.surname}}></td>
+                    <input type='hidden' name='grade' value='{{grade}}'>
+                    <input type ="hidden" name="registered_by" value ={{ user.id }} >
                 </tr>
                 {%endfor%}
             {%endif%}
@@ -149,8 +181,7 @@
     {%endfor%} <!-- endfor grade -->
 	<div id='alert'>
 		<input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? <br> </br>
-	</div>
-	<input class="bluebutton left" type="submit" name='save_form' value="Save">
+    </div>
     <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
 
     </form>
