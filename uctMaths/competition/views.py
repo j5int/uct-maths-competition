@@ -20,6 +20,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
 import confirmation
+import compadmin
 
 # def auth(request):
 #   if not request.user.is_authenticated():
@@ -37,13 +38,15 @@ def profile(request):
     try:
         #Attempt to find user's chosen school
         assigned_school = School.objects.get(assigned_to=request.user)
-        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms.'
+        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms. Navigate to \'Entry Form\' from the side-bar to review or edit your entry.'
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
-        school_blurb += 'not associated with any school. Click on \'Register Students\' to continue. (TODO: Should be clearer. Headings will change)'
+        school_blurb += 'not associated with any school. Navigate to \'Entry Form\' on the side-bar to continue.'
         pass
+
+    closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
         #return HttpResponseRedirect('../register/school_select/school_select.html')
-    return render_to_response('profile.html',{'school_blurb':school_blurb})
+    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb})
 
 
 # submitted thingszz
@@ -213,6 +216,7 @@ def entry_review(request):
         'responsible_teacher':responsible_teacher[0],
         'student_list':individual_list,
         'pair_list':pair_list,
+        'entries_open':compadmin.isOpen(),
         'invigilator_list': invigilator_list,
         'grades':range(8,13), 
         'error':error,
@@ -220,7 +224,7 @@ def entry_review(request):
         'igrades':range(8,13),
         'ierror':error}
 
-    if request.method == 'POST' and 'edit_entry' in request.POST:  # If the form has been submitted.
+    if request.method == 'POST' and 'edit_entry' in request.POST and compadmin.isOpen():  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, recipient=request.user) #Needs to only be bound to this user's email address
@@ -359,14 +363,11 @@ def newstudents(request):
         form = StudentForm() # An unbound form
 
     if responsible_teacher:
-        print 'Hello World'
         responsible_teacher = responsible_teacher[0]
     else:
         #If not null, then the form has been filled out.
         #Therefore - redirect to entry_review page
         pass #HttpResponseRedirect('../entry_review.html')
-    
-    print 'Hello!', responsible_teacher
 
     c = {'type':'Students',
         'schooln':assigned_school,
@@ -377,6 +378,7 @@ def newstudents(request):
         'pair_range':pairs_per_grade,
         'entries_per_grade':entries_per_grade,
         'invigilator_list': invigilator_list,
+        'entries_open':compadmin.isOpen(),
         'grades':range(8,13), 
         'error':error,
         'invigilator_range':range(10-len(invigilator_list)), 
