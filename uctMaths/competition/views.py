@@ -419,7 +419,7 @@ def school_select(request):
         try:
         #Attempt to find user's chosen school
             assigned_school = School.objects.get(assigned_to=request.user)
-            inv_req_message = 'This profile is already bound to ' + assigned_school.name + '. Please proceed with student registration for the UCT Mathematics Competition by selecting "Registration Form." If you have selected the incorrect school, please contact admin@competition.something'
+            inv_req_message = 'This profile is already bound to ' + assigned_school.name + '. Please proceed with student registration for the UCT Mathematics Competition by selecting "Registration Form." If you have selected the incorrect school, please contact ' + compadmin.admin_emailaddress + '.'
             invalid_request=True
         except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Continue
@@ -439,7 +439,7 @@ def school_select(request):
                 return HttpResponseRedirect('../students/newstudents.html')
             else:
                 invalid_request = True 
-                inv_req_message = 'This school has already been assigned to another user. If you believe this to be an error, please contact admin@stjames.com.'
+                inv_req_message = 'This school has already been assigned to another user. If you believe this to be an error, please contact ' + compadmin.admin_emailaddress + '.'
 
     schoolOptions = School.objects.all()
     c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error} 
@@ -526,8 +526,3 @@ def newinvigilators (request):
   c.update(csrf(request))
   return render_to_response('newinvigilators.html', c,context_instance=RequestContext(request))
 
-
-#******************************************  
-#disables submit box
-#@login_required
-#def checked(request)
