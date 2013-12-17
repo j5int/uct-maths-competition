@@ -21,7 +21,7 @@
 
     <input class="bluebutton left" type="submit" name='Continue' value="Continue">
 
-    {% if already_assigned %}
-    <p> This school has already been assigned to {{assigned_to}}. If you believe this to be an error, please contact admin@stjames.com </p>
+    {% if invalid_request %}
+    <p> {{inv_req_message}} </p>
     {% endif %}
 {%endblock%}

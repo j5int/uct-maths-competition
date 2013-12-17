@@ -1,0 +1,114 @@
+{%extends "base.html"%}
+
+{%block title%}Entry Review{%endblock%}
+{%block content%}
+<h1 >Review Entry for {{schooln}}</h1>
+<p> {{ error }} </p>
+<form action="." method="post">
+    {% csrf_token %}
+    <!-- {{ form.as_p  }} -->
+    {% if user.is_authenticated %}
+    {% else %}
+        <p>Not working.</p>
+    {% endif %}
+
+    <!-- register responsible teacher from here --->
+    <div>
+        <h1>Responsible Teacher</h1>
+        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.</p>
+        <p> {{ ierror }} </p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
+            </tr>
+            <tr>
+                <td>{{responsible_teacher.firstname}}</td>
+                <td>{{responsible_teacher.surname}}</td>
+                <td>{{responsible_teacher.phone_primary}}</td>
+                <td>{{responsible_teacher.phone_alt}}</td>
+                <td>{{responsible_teacher.email}}</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <!-- register invigilators from here -->
+    <div>
+        <h1>Invigilators</h1>
+        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Compulsory 1 per school, 2 if 75 entries.</p>
+        <p> {{ ierror }} </p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
+            </tr>
+            <!-- Populates the list with previously registered invigilators -->
+            {%for invigilator in invigilator_list%}
+                <tr>
+                    <td>{{invigilator.firstname}}</td>
+                    <td>{{invigilator.surname}}</td>
+                    <td>{{invigilator.phone_primary}}</td>                    
+                    <td>{{invigilator.phone_alt}}</td>
+                    <td>{{invigilator.email}}</td>
+                </tr>
+            {%endfor%}
+        </table>
+
+
+    </div>
+
+    {%for grade in grades%}
+    <div>
+        <!-- <form action="." method="post"> -->
+        <h2>Grade {{grade}}</h2>
+        <div>
+            <h3>Pairs:
+                {%for key, p in pair_list.items%}
+                    {% if grade == key %}
+                    <p> {{p}} pairs (teams of 2) have been registered for grade {{grade}}</p>
+                    {%endif%}
+                 {%endfor%}
+            </h3>
+        </div> 
+
+        <h3>Individuals:</h3>
+        <table>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+        </tr>
+        <!-- Populates the list with previously registered students -->
+        {%for key, student_l in student_list.items%}
+            {% if grade == key %} <!-- only for the current grade -->
+            {% if student_l|length != 0 %}
+                {%for student in student_l%}
+                <tr>
+                    <td>{{student.firstname}}</td>
+                    <td>{{student.surname}}</td>
+                </tr>
+                {%endfor%}
+            {%endif%}
+            {%endif%}
+        {%endfor%}
+
+        </table>
+        <br><br>
+    </div>
+    {%endfor%} <!-- endfor grade -->
+    <!-- <input class="bluebutton left" type="submit" name='save_form' value="Save"> -->
+    <input class="bluebutton left" type="submit" name='edit_entry' value="Edit">
+
+    </form>
+{%endblock%}
