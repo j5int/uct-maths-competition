@@ -181,6 +181,52 @@ def invigilators(request):
     return render_to_response('invigilators.html', c,context_instance=RequestContext(request))
 
 #*****************************************
+# Entry Review
+ 
+@login_required
+def entry_review(request):
+    error = " "
+    try:
+        #Attempt to find user's chosen school
+        assigned_school = School.objects.get(assigned_to=request.user)
+    except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Redirect to the select_schools page
+        return HttpResponseRedirect('../school_select/school_select.html')
+
+    #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
+
+    #Required that school form is pre-fetched to populate form
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
+    invigilator_list = Invigilator.objects.filter(school = assigned_school)
+    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+
+    for p in range(8,13):
+        pair_list[p] = pair_list[p]/2
+
+    if not responsible_teacher:
+        return HttpResponseRedirect('../students/newstudents.html')
+
+    c = {'type':'Students',
+        'schooln':assigned_school,
+        'responsible_teacher':responsible_teacher[0],
+        'student_list':individual_list,
+        'pair_list':pair_list,
+        'invigilator_list': invigilator_list,
+        'grades':range(8,13), 
+        'error':error,
+        'invigilator_range':range(10-len(invigilator_list)), 
+        'igrades':range(8,13),
+        'ierror':error}
+
+    if request.method == 'POST' and 'edit_entry' in request.POST:  # If the form has been submitted.
+        return HttpResponseRedirect('../students/newstudents.html')
+
+    c.update(csrf(request))
+    return render_to_response('entry_review.html', c, context_instance=RequestContext(request))
+
+
+#*****************************************
 # Register Students   
 #User can register 5 students per grade and 5 pairs per grade 
 @login_required
@@ -200,6 +246,9 @@ def newstudents(request):
     individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+
+    #if responsible_teacher:
+     #   return HttpResponseRedirect('../entry_review/entry_review.html')
 
     entries_per_grade = {} #Dictionary with grade:range(...)
     pairs_per_grade = {}
@@ -243,20 +292,19 @@ def newstudents(request):
               #Information is set to null, only school name is given and reference
               #Reference if the ID of the first person in the pair
               for p in range(int(form.getlist("pairs",'')[grade-8])):
-                    firstname = ''
-                    surname = ''
+                    firstname = 'Pair/Paar'
+                    surname = str(grade)+chr(65+p)
                     language = form.getlist('language','')[0]
-                    reference = 1234
                     school = assigned_school
-                  # sex = ''
+                    reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(10+p).zfill(2))
                     registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
                     paired = True 
+                    #Save first entry for pair
                     query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                             school = school, grade = grade , registered_by= registered_by, paired = paired)
                     query.save()
-                    query.reference=query.id
-                    query.save()
-                    query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = query.id,
+                    #Save second entry for pair
+                    query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                             school = school, grade = grade , registered_by= registered_by, paired = paired)
                     query1.save()
 
@@ -268,17 +316,15 @@ def newstudents(request):
                 firstname = form.getlist('firstname','')[i]
                 surname = form.getlist('surname','')[i]
                 language = form.getlist('language','')[0]
-                reference = 1234
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
-             #   sex = form.getlist('sex','')[i]
+                reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5).zfill(2))
                 registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
                 paired = False 
+
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                         school = school, grade = grade , registered_by= registered_by, paired = paired)
 
-                query.save()
-                query.reference=query.id
                 query.save()
 
             for j in range(10):
@@ -297,14 +343,9 @@ def newstudents(request):
                                        phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail, registered_by= iregistered_by)
                     query.save()
 
-            #send_mail command generates Exception ('Connection refused') if used on local database (pgadmin3)
-            #send_mail('Save successful', 'Here is the message.', 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-            
-            if 'save_form' in request.POST: #Just save the form and commit to database, refresh page with changes
-                return HttpResponseRedirect('newstudents.html')
-            elif 'submit_form' in request.POST: #Send confirmation email and continue
+            if 'submit_form' in request.POST: #Send confirmation email and continue
                 confirmation.send_confirmation(request, assigned_school)
-                return render_to_response('submitted.html', {'type':'Student'}) # Redirect after POST
+                return render_to_response('submitted.html')
             else:
                 print 'This should not happen'
 
@@ -313,20 +354,27 @@ def newstudents(request):
     else:
         form = StudentForm() # An unbound form
 
+    if responsible_teacher:
+        responsible_teacher = responsible_teacher[0]
+    else:
+        #If not null, then the form has been filled out.
+        #Therefore - redirect to entry_review page
+        HttpResponseRedirect('../entry_review.html')
+
     c = {'type':'Students',
         'schooln':assigned_school,
         #'schools':schoolOptions,
-        'responsible_teacher':responsible_teacher[0],
+        'responsible_teacher':responsible_teacher,
         'student_list':individual_list,
         'pairs_per_grade':pairs_per_grade,
+        'pair_range':pairs_per_grade,
         'entries_per_grade':entries_per_grade,
         'invigilator_list': invigilator_list,
-        'pairs_per_grade2':range(0,6), 
         'grades':range(8,13), 
         'error':error,
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
-        'ierror':error} # Modified ticked#11005
+        'ierror':error}
 
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
