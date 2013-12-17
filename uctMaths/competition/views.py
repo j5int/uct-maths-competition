@@ -13,6 +13,7 @@ from django.forms.formsets import formset_factory
 from competition.forms import StudentForm, SchoolForm, InvigilatorForm, ResponsibleTeacherForm
 from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
 from django.contrib.auth.models import User
+#from django.contrib.contenttypes import *
 from django.db import connection
 from django.core import exceptions 
 from django.contrib.auth.decorators import login_required
