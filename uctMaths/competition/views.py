@@ -355,11 +355,14 @@ def newstudents(request):
         form = StudentForm() # An unbound form
 
     if responsible_teacher:
+        print 'Hello World'
         responsible_teacher = responsible_teacher[0]
     else:
         #If not null, then the form has been filled out.
         #Therefore - redirect to entry_review page
-        HttpResponseRedirect('../entry_review.html')
+        pass #HttpResponseRedirect('../entry_review.html')
+    
+    print 'Hello!', responsible_teacher
 
     c = {'type':'Students',
         'schooln':assigned_school,
