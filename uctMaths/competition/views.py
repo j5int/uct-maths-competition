@@ -227,7 +227,7 @@ def entry_review(request):
     if request.method == 'POST' and 'edit_entry' in request.POST and compadmin.isOpen():  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
-        confirmation.send_confirmation(request, assigned_school, recipient=request.user) #Needs to only be bound to this user's email address
+        confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
         return render_to_response('submitted.html')
 
     c.update(csrf(request))
@@ -352,7 +352,7 @@ def newstudents(request):
                     query.save()
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
-                confirmation.send_confirmation(request, assigned_school)
+                confirmation.send_confirmation(request, assigned_school,cc_admin=True)
                 return render_to_response('submitted.html')
             else:
                 print 'This should not happen'

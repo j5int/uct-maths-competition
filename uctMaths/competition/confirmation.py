@@ -3,12 +3,15 @@ from competition.models import SchoolStudent, School, Invigilator, Venue, Respon
 from django.core.mail import send_mail
 import datetime
 
+import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
+                 # confirmation email.
+
 
 # Methods for very simple formatting of data entered by a certain user (filter)
 # See info in settings.py for SMTP server emulation and set-up
 
 @login_required
-def send_confirmation(request, in_school='UNDEFINED',recipient=None):#Not happy with having 'school' here
+def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy with having 'school' here
     """ Formats student information for the particular user and sends it via. smtp"""
 
     username = request.user #Current user
@@ -31,10 +34,10 @@ def send_confirmation(request, in_school='UNDEFINED',recipient=None):#Not happy 
     #temp_output.close()
 
     ### Send mail ###
-    if not recipient: #If no recipient has been specified
-        send_mail('Confirmation Email', output_string, 'support@sjsoft.com',['hayleym@sjsoft.com'], fail_silently=False)
-    else:
-        send_mail('Confirmation Email', output_string, 'support@sjsoft.com',[recipient.email], fail_silently=False)
+    if cc_admin: #If no recipient has been specified
+        send_mail('Confirmation Email', output_string, 'support@sjsoft.com',[username.email, compadmin.admin_emailaddress], fail_silently=False)
+    else: 
+        send_mail('Confirmation Email', output_string, 'support@sjsoft.com',[username.email], fail_silently=False)
 
 
 
