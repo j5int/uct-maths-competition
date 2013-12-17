@@ -50,3 +50,15 @@ function disableElement(checkBox)
   else
 	{sbmt.disabled = true;}
 }
+
+function validateForm()
+{
+var x=document.forms["registration"]["inv_firstname"][0].value;
+if (x==null || x=="")
+  {
+  alert("Please fill out the required fields for an invigilator");
+  return false;
+  }
+ else
+ {return true;}
+}
