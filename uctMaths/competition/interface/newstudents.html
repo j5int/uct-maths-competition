@@ -1,10 +1,15 @@
 {%extends "base.html"%}
 
+{%block head%}
+<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+<script type='text/javascript' src='/static/sidebar.js'></script>
+<script type='text/javascript' src='/static/tables.js'></script>
+{%endblock%}
 {%block title%}New Students{%endblock%}
 {%block content%}
 <h1 >Student registration form for {{schooln}}</h1>
 <p> {{ error }} </p>
-<form action="." method="post">
+<form action='.' method='post' > <!-- onsubmit='return validate();'> -->
     {% csrf_token %}
     <!-- {{ form.as_p  }} -->
     {% if user.is_authenticated %}
@@ -22,24 +27,24 @@
     <!-- register responsible teacher from here --->
     <div>
         <h1>Register Responsible Teacher</h1>
-        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.</p>
+        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.<br><i> All fields marked with an <b>asterisk (*) must be filled.</b></i></p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
         <table>
             <tr>
-                <th>First Name</th>
+                <th>First Name*</th>
                 <th>Surname</th>
-                <th>Phone </th>
+                <th>Phone*</th>
                 <th>Phone (Alternative)</th>
-                <th>Email </th>
+                <th>Email* </th>
             </tr>
-            <tr>
-                <td><input type="text" name="rt_firstname"></td>
+            <tr>	<!-- the required attribute does not work with IE9 and lower -->
+                <td><input type="text" name="rt_firstname" required></td>
                 <td><input type="text" name="rt_surname"></td>
-                <td><input type ="text" name="rt_phone_primary"></td>                    
+                <td><input type ="text" name="rt_phone_primary" required></td>                    
                 <td><input type ="text" name="rt_phone_alt"></td>
-                <td><input type ="text" name="rt_email"></td>
+                <td><input id="rmail" type ="text" name="rt_email" required></td>
                 <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
             </tr>
 
@@ -51,17 +56,19 @@
     <!-- register invigilators from here -->
     <div>
         <h1>Register Invigilators</h1>
-        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Compulsory 1 per school, 2 if 75 entries.</p>
+        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Compulsory 1 per school, 2 if 75 entries.<br><i> All fields marked with an <b>asterisk (*) must be filled.</b></i></p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
         <table>
             <tr>
-                <th>First Name</th>
+                <!-- <th>School</th> -->
+                <th>First Name*</th>
                 <th>Surname</th>
-                <th>Phone </th>
-                <th>Phone (Alternative)</th>
-                <th>Email </th>
+                <!-- <th>Venue</th> -->
+				<th>Phone* </th>
+				<th>Phone (Alternative)</th>
+				<th>Email* </th>
             </tr>
             <!-- Populates the list with previously registered invigilators -->
             {%for invigilator in invigilator_list%}
@@ -107,7 +114,7 @@
         <h3>Individuals:</h3>
         <table>
         <tr>
-            <th>Name</th>
+            <th>Name*</th>
             <th>Surname</th>
         </tr>
         <!-- Populates the list with previously registered students -->
@@ -139,11 +146,11 @@
         <br><br>
     </div>
     {%endfor%} <!-- endfor grade -->
-    <div id='alert'>
-        <input type="checkbox" name="confirm" align="left"> Have you confirmed that all the information entered is correct? <br> </br>
-    </div>
-    <input class="bluebutton left" type="submit" name='save_form' value="Save">
-    <input class="bluebutton left" type="submit" name='submit_form' value="Submit">
+	<div id='alert'>
+		<input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? <br> </br>
+	</div>
+	<input class="bluebutton left" type="submit" name='save_form' value="Save">
+    <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
 
     </form>
 {%endblock%}
