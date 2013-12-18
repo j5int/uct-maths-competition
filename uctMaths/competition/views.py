@@ -288,7 +288,7 @@ def newstudents(request):
         rtemail = form.getlist('rt_email','')[0]
         #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
         query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary, 
-                                  phone_alt = rtphone_alt, school = rtschool, registered_by= rtregistered_by,
+                                  phone_alt = rtphone_alt, school = rtschool,
                                   email = rtemail)
         query.save()
         query.reference=query.id
@@ -309,11 +309,12 @@ def newstudents(request):
                     paired = True 
                     #Save first entry for pair
                     query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                            school = school, grade = grade , registered_by= registered_by, paired = paired)
+                            school = school, grade = grade , paired = paired)
                     query.save()
                     #Save second entry for pair
-                    query1 = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                            school = school, grade = grade , registered_by= registered_by, paired = paired)
+                    query1 = SchoolStudent(firstname = firstname , surname = surname, language = language, reference = reference, 
+                            school = school, grade=grade,
+                            paired = paired)
                     query1.save()
 
         #Registering students, maximum number of students 25
