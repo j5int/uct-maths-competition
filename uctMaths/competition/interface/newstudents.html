@@ -28,7 +28,7 @@
     <!-- register responsible teacher from here --->
     <div>
         <h1>Register Responsible Teacher</h1>
-        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.<br><i> All fields marked with an <b>asterisk (*) must be filled.</b></i></p>
+        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.<br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -145,7 +145,7 @@
         <h3>Individuals:</h3>
         <table>
         <tr>
-            <th>Name*</th>
+            <th>Name</th>
             <th>Surname</th>
         </tr>
         <!-- Populates the list with previously registered students -->
@@ -179,10 +179,16 @@
         <br><br>
     </div>
     {%endfor%} <!-- endfor grade -->
-	<div id='alert'>
-		<input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? <br> </br>
-    </div>
-    <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
 
+
+    <div id='alert'>
+        <input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? It is your responsibility to ensure that your application has met the requirements stated for each section.<br> </br>
+    </div>
+
+    {% if entries_open %}
+    <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
+    {% else %}
+    <h3> Sign-up closed </h3> <p> No more entries are to be accepted for this year's UCT Mathematics Competition </p>
+    {% endif %}
     </form>
 {%endblock%}
