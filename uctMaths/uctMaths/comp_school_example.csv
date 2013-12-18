@@ -1,0 +1,8 @@
+id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to
+1,Test School A,2,e,Example addres 12345,021 123-1234,027 123-1234,,1,0,1test@test.com,
+2,Test School B,3,e,Example addres 12346,022 123-1234,028 123-1234,,1,0,2test@test.com,
+3,Test School C,4,a,Example addres 12347,023 123-1234,029 123-1234,,1,0,3test@test.com,
+4,Test School D,5,e,Example addres 12348,024 123-1234,030 123-1234,,0,0,4test@test.com,
+5,Test School E,6,b,Example addres 12349,025 123-1234,031 123-1234,,0,0,5test@test.com,
+6,Test School F,7,a,Example addres 12350,026 123-1234,032 123-1234,,1,0,6test@test.com,
+7,Test School G,9,e,Example addres 12351,027 123-1234,033 123-1234,,0,0,7test@test.com,

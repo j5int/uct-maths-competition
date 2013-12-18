@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 #Import_export models(https://django-import-export.readthedocs.org/en/latest/getting_started.html)
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-
+import tablib
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
@@ -27,7 +27,7 @@ class School(models.Model):
     score       = models.IntegerField(null=True, db_column='Score', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=True) 
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForreignKey (gets assigned a single user)
-    registered_by = models.CharField(max_length=255L, db_column='Registered By') #Changed to CharField
+    #registered_by = models.CharField(max_length=255L, db_column='Registered By') #Changed to CharField
 
     def __str__(self):
         return self.name
@@ -54,7 +54,7 @@ class SchoolStudent(models.Model):
         ])    
  #   sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
-    registered_by = models.ForeignKey(User, db_column='Registered By')
+    #registered_by = models.ForeignKey(User, db_column='Registered By')
     paired = models.BooleanField(db_column='Paired')
 
     def __str__(self):
@@ -99,7 +99,7 @@ class Venue(models.Model):
     bums        = models.IntegerField(db_column='Bums')
     grade       = models.IntegerField(db_column='Grade')
     pairs       = models.IntegerField(db_column='Pairs')
-    registered_by = models.ForeignKey(User, db_column='Registered By')
+    #registered_by = models.ForeignKey(User, db_column='Registered By')
 
     def __str__(self):
         return self.building+', '+self.code
@@ -117,7 +117,7 @@ class Invigilator(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
-    registered_by = models.ForeignKey(User, db_column='Registered By')
+    #registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname
     class Meta:
@@ -134,7 +134,7 @@ class ResponsibleTeacher(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
-    registered_by = models.ForeignKey(User, db_column='Registered By')
+    #registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
     class Meta:
@@ -163,7 +163,7 @@ class SchoolStudentArchive(models.Model):
         ])    
    # sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
-    registered_by = models.ForeignKey(User, db_column='Registered By')
+    #registered_by = models.ForeignKey(User, db_column='Registered By')
     paired = models.BooleanField(db_column='Paired')
 
     def __str__(self):
@@ -185,7 +185,7 @@ class InvigilatorArchive(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt   = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
-    registered_by = models.ForeignKey(User, db_column='Registered By')
+    #registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
     class Meta:

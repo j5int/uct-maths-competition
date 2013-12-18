@@ -286,7 +286,7 @@ def newstudents(request):
         rtphone_primary = form.getlist('rt_phone_primary','')[0]
         rtphone_alt = form.getlist('rt_phone_alt','')[0]
         rtemail = form.getlist('rt_email','')[0]
-        rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
+        #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
         query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary, 
                                   phone_alt = rtphone_alt, school = rtschool, registered_by= rtregistered_by,
                                   email = rtemail)
@@ -305,7 +305,7 @@ def newstudents(request):
                     language = form.getlist('language','')[0]
                     school = assigned_school
                     reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(10+p).zfill(2))
-                    registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
+                    #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
                     paired = True 
                     #Save first entry for pair
                     query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
@@ -327,11 +327,11 @@ def newstudents(request):
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
                 reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5).zfill(2))
-                registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
+                #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
                 paired = False 
 
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                        school = school, grade = grade , registered_by= registered_by, paired = paired)
+                        school = school, grade = grade , paired = paired)
 
                 query.save()
 
@@ -345,10 +345,10 @@ def newstudents(request):
                     iphone_primary = form.getlist('inv_phone_primary','')[j]
                     iphone_alt = form.getlist('inv_phone_alt','')[j]
                     iemail = form.getlist('inv_email','')[j]
-                    iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
+                    #iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
 
                     query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
-                                       phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail, registered_by= iregistered_by)
+                                       phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail)
                     query.save()
 
             if 'submit_form' in request.POST: #Send confirmation email and continue

@@ -11,6 +11,7 @@ import time, datetime
 #Import_export models(https://django-import-export.readthedocs.org/en/latest/getting_started.html)
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
+import tablib
 
 #Displays the address field as a text box
 class SchoolModelForm( forms.ModelForm ):
@@ -24,14 +25,21 @@ class SchoolUserAdmin(admin.ModelAdmin):
 	search_fields = ['name']
 
 #Displays different fields for School
-class SchoolAdmin(admin.ModelAdmin):
+class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('name','phone','email','assigned_to') ##Which columns should be kept here? 
+	list_display = ('id', 'name', 'language', 'address','phone','fax','contact','email','assigned_to') ##Which columns should be kept here? 
 	search_fields = ['name']
+	resource_class = SchoolResource
+    #import school dataset
+	#Expects csv (comma-separated) file with the first line being:
+    #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
+    #Entries are on separate rows (separated by line break)
+	dataset = tablib.Dataset()
+	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to']
 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
-	list_display = ('firstname', 'surname', 'phone_primary', 'email', 'registered_by')
+	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
@@ -42,13 +50,13 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
 	    cursor = connection.cursor()
-	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`,  `Venue`, `Registered By`, `Paired` FROM `competition_schoolstudent`")
+	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`,  `Venue`, `Paired` FROM `competition_schoolstudent`")
 	    cursor.execute("UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
 	    transaction.commit_unless_managed()
 
     # -------------- Import_Export functionality  ----------
 	resource_class = SchoolStudentResource
-	list_filter=('school', 'grade', 'paired', 'venue', 'language') #Field filters (shown as bar on right)
+	list_filter=('grade', 'paired', 'venue', 'language','school') #Field filters (shown as bar on right)
 
 #Displays different fields for Venue
 class VenueAdmin(admin.ModelAdmin):
@@ -59,7 +67,7 @@ class VenueAdmin(admin.ModelAdmin):
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(ImportExportModelAdmin):
     #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
-    list_display = ('school', 'firstname', 'surname', 'venue', 'registered_by')
+    list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue')
     actions = ['archive_invigilator']
     search_fields = ['firstname', 'surname']
 
