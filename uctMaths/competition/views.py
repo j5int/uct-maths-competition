@@ -281,8 +281,8 @@ def newstudents(request):
 
         #Register a single responsible teacher (assigned to that school)
         rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
-        rtfirstname = form.getlist('rt_firstname','')[0]
-        rtsurname = form.getlist('rt_surname','')[0]
+        rtfirstname = form.getlist('rt_firstname','')[0].capitalize()
+        rtsurname = form.getlist('rt_surname','')[0].capitalize()
         rtphone_primary = form.getlist('rt_phone_primary','')[0]
         rtphone_alt = form.getlist('rt_phone_alt','')[0]
         rtemail = form.getlist('rt_email','')[0]
@@ -322,8 +322,8 @@ def newstudents(request):
         try:
             for i in range (25):
                 if form.getlist('firstname','')[i] == u'': continue
-                firstname = form.getlist('firstname','')[i]
-                surname = form.getlist('surname','')[i]
+                firstname = form.getlist('firstname','')[i].capitalize()
+                surname = form.getlist('surname','')[i].capitalize()
                 language = form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
@@ -341,8 +341,8 @@ def newstudents(request):
                     ierror = "Invigilator information incomplete"
                 else:
                     school = assigned_school
-                    ifirstname = form.getlist('inv_firstname','')[j]
-                    isurname = form.getlist('inv_surname','')[j]
+                    ifirstname = form.getlist('inv_firstname','')[j].capitalize()
+                    isurname = form.getlist('inv_surname','')[j].capitalize()
                     iphone_primary = form.getlist('inv_phone_primary','')[j]
                     iphone_alt = form.getlist('inv_phone_alt','')[j]
                     iemail = form.getlist('inv_email','')[j]
@@ -501,8 +501,8 @@ def newinvigilators (request):
         try:
           for i in range (4):
               if form.getlist('firstname','')[i] == u'': continue
-              firstname = form.getlist('firstname','')[i]
-              surname = form.getlist('surname','')[i]
+              firstname = form.getlist('firstname','')[i].capitalize()
+              surname = form.getlist('surname','')[i].capitalize()
               phone_primary = form.getlist('phone_primary','')[i]
               phone_alt = form.getlist('phone_alt','')[i]
               email = form.getlist('email','')[i]
