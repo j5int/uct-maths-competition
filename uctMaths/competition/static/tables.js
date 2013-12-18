@@ -2,14 +2,14 @@
 // used in view and registration pages.
 // does the edit button and delete confirmation.
 
-//edit button: switch to iput mode
+//edit button: switch to input mode
 function show_input(id)
 {
 	$('#input'+id).show()	
 	$('#show'+id).hide()
 }
 
-//confirmation dialog for when you click 'Delete All' in views
+//confirmation dialogue for when you click 'Delete All' in views
 function drop(type)
 {
 	if (del){
@@ -41,6 +41,9 @@ return true;
 }
 */
 // todo: check first row of invigilator for empty forms
+
+//used in newstudents
+//enables the submit button for the form
 function disableElement(checkBox)
 {
   var sbmt = document.getElementById("complete");
@@ -51,10 +54,12 @@ function disableElement(checkBox)
 	{sbmt.disabled = true;}
 }
 
+/*
+//to be extended to double check empty fields
 function validateForm()
 {
-var x=document.forms["registration"]["inv_firstname"][0].value;
-if (x==null || x=="")
+var f=document.forms["registration"]["inv_firstname"][0].value;
+if (f==null || f=="")
   {
   alert("Please fill out the required fields for an invigilator");
   return false;
@@ -62,3 +67,4 @@ if (x==null || x=="")
  else
  {return true;}
 }
+*/
