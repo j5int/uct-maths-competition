@@ -15,8 +15,8 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy 
     """ Formats student information for the particular user and sends it via. smtp"""
 
     username = request.user #Current user
-    student_list = SchoolStudent.objects.filter(registered_by = username)
-    invigilator_list = Invigilator.objects.filter(registered_by = username)
+    student_list = SchoolStudent.objects.filter(school = in_school)
+    invigilator_list = Invigilator.objects.filter(school = in_school)
     rteacher = ResponsibleTeacher.objects.filter(school = in_school)[0] ##TODO only one per school
 
     #Header
