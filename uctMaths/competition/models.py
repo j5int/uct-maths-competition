@@ -5,6 +5,10 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
+#Import_export models(https://django-import-export.readthedocs.org/en/latest/getting_started.html)
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
@@ -186,3 +190,24 @@ class InvigilatorArchive(models.Model):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
     class Meta:
         ordering = ['archived', 'school', 'surname', 'firstname'] #defines the way the records are sorted.
+
+
+#Import_Export class functionality
+#ModelResource for exporting data
+class SchoolStudentResource(resources.ModelResource):
+    class Meta:
+        model = SchoolStudent
+
+class SchoolResource(resources.ModelResource):
+    class Meta:
+        model = School
+
+class InvigilatorResource(resources.ModelResource):
+    class Meta:
+        model = Invigilator
+
+class VenueResource(resources.ModelResource):
+    class Meta:
+        model = Venue
+
+

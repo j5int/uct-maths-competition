@@ -8,6 +8,9 @@ from django.contrib import admin
 from django.db import connection, transaction
 from django import forms
 import time, datetime
+#Import_export models(https://django-import-export.readthedocs.org/en/latest/getting_started.html)
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
 #Displays the address field as a text box
 class SchoolModelForm( forms.ModelForm ):
@@ -26,14 +29,15 @@ class SchoolAdmin(admin.ModelAdmin):
 	list_display = ('name','phone','email','assigned_to') ##Which columns should be kept here? 
 	search_fields = ['name']
 
-class ResponsibleTeacherAdmin(admin.ModelAdmin):
+
+class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 	list_display = ('firstname', 'surname', 'phone_primary', 'email', 'registered_by')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
-class SchoolStudentAdmin(admin.ModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'registered_by', 'paired')
+class SchoolStudentAdmin(ImportExportModelAdmin):
+	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'paired')
 	actions = ['archive_student']
-	search_fields = ['name']
+	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
@@ -42,16 +46,26 @@ class SchoolStudentAdmin(admin.ModelAdmin):
 	    cursor.execute("UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
 	    transaction.commit_unless_managed()
 
+    # -------------- Import_Export functionality  ----------
+	resource_class = SchoolStudentResource
+	list_filter=('school', 'grade', 'paired', 'venue', 'language') #Field filters (shown as bar on right)
+
 #Displays different fields for Venue
 class VenueAdmin(admin.ModelAdmin):
 	list_display = ('building', 'code', 'seats', 'bums')
-	search_fields = ['name']
+	#search_fields = ['building', 'code', 'seats']
+
 
 #Displays different fields for Invigilators and archives Invigilators
-class InvigilatorAdmin(admin.ModelAdmin):
+class InvigilatorAdmin(ImportExportModelAdmin):
     #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
     list_display = ('school', 'firstname', 'surname', 'venue', 'registered_by')
     actions = ['archive_invigilator']
+    search_fields = ['firstname', 'surname']
+
+    # -------------- Import_Export functionality  ----------
+    resource_class = InvigilatorResource
+    list_filter=('school', 'venue') #Field filters (shown as bar on right)
 
     #Adds all invigilators in the Invigilarors table, to the Archived table, and adds the current date
     def archive_invigilator(modeladmin, request, queryset):
@@ -61,6 +75,8 @@ class InvigilatorAdmin(admin.ModelAdmin):
 
         cursor.execute("UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
         transaction.commit_unless_managed()
+
+
 
 admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)
