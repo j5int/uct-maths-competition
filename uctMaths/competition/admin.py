@@ -12,6 +12,7 @@ import time, datetime
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 import tablib
+import compadmin
 
 #Displays the address field as a text box
 class SchoolModelForm( forms.ModelForm ):
@@ -43,7 +44,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'paired')
+	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired')
 	actions = ['archive_student']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 

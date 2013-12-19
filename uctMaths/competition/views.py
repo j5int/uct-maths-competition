@@ -72,7 +72,7 @@ def entry_review(request):
 
     #Required that school form is pre-fetched to populate form
     student_list = SchoolStudent.objects.filter(school = assigned_school)
-    individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
+    individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
 
@@ -99,6 +99,7 @@ def entry_review(request):
         return HttpResponseRedirect('../students/newstudents.html')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
+        compadmin.auto_allocate()
         return render_to_response('submitted.html')
 
     c.update(csrf(request))
@@ -259,23 +260,6 @@ def newstudents(request):
 
     c.update(csrf(request))
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
-
-
-def processGrade(student_list): #FIXME: Should this be in view.py?
-    """ Helper function for sorting students into grades """
-    pair_list = { 8 : 0, 9 : 0, 10 : 0, 11 : 0, 12 : 0}
-    individual_list = { 8 : [] , 9 :  [] , 10 :  [] , 11 : [] , 12 : [] }
-
-    try:
-        for student in student_list:
-            if student.paired: # Better pair condition logic for this!
-                pair_list[student.grade]+=1
-            else: 
-                individual_list[student.grade].append(student)
-    except IndexError:
-        print 'Index Error'
-    return individual_list, pair_list
-
 
 #*****************************************
 # School select.
