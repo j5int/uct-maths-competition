@@ -122,7 +122,7 @@ def newstudents(request):
 
     #Required that school form is pre-fetched to populate form
     student_list = SchoolStudent.objects.filter(school = assigned_school)
-    individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
+    individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
 
