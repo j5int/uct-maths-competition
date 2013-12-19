@@ -59,7 +59,7 @@ class InvigilatorForm (ModelForm):
 
 class InvigilatorForm (forms.Form):
         #fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email','responsible']
-        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt']
+        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt', 'email', 'rt_name', 'rt_phone_primary']
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
