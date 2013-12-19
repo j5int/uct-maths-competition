@@ -67,7 +67,7 @@ class VenueAdmin(admin.ModelAdmin):
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(ImportExportModelAdmin):
     #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
-    list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue')
+    list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name','rt_phone_primary','rt_email')
     actions = ['archive_invigilator']
     search_fields = ['firstname', 'surname']
 

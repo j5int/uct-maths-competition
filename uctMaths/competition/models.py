@@ -6,7 +6,7 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 #Import_export models(https://django-import-export.readthedocs.org/en/latest/getting_started.html)
-from import_export import resources
+from import_export import resources, fields
 from import_export.admin import ImportExportModelAdmin
 import tablib
 
@@ -117,7 +117,42 @@ class Invigilator(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
-    #registered_by = models.ForeignKey(User, db_column='Registered By')
+
+
+#REQUIREMENT: admin requests responsible teacher details when querying invigilators. 
+#             The following methods cater for this. Performing the lookup based on assigned school.
+    def rt_name(self):
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = self.school)
+        if responsible_teacher:        
+            return responsible_teacher[0].firstname + ' ' + responsible_teacher[0].surname
+        else:
+            return 'Not specified' #This should not happen!
+
+    def rt_phone_primary(self):
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = self.school)
+        if responsible_teacher:
+            return responsible_teacher[0].phone_primary
+        else:
+            return 'Not specified' #This should not happen!
+
+    def rt_email(self):
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = self.school)
+        if responsible_teacher:
+            return responsible_teacher[0].email
+        else:
+            return 'Not specified' #This should not happen!
+
+    def school_name(self):
+        #school_name = School.objects.filter(pk=self.school.id)
+        #if school_name:
+        return self.school.name
+        #else:
+#            return 'Not specified' #This should not happen!
+
+    rt_name.short_description = 'Resp. teach. name'
+    rt_phone_primary.short_description = 'Resp. teach. phone'
+    rt_email.short_description = 'Resp. teach. email'
+
     def __str__(self):
         return self.surname+', '+self.firstname
     class Meta:
@@ -160,7 +195,7 @@ class SchoolStudentArchive(models.Model):
         validators = [
             MaxValueValidator(12),
             MinValueValidator(0)
-        ])    
+        ])
    # sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     #registered_by = models.ForeignKey(User, db_column='Registered By')
@@ -203,8 +238,16 @@ class SchoolResource(resources.ModelResource):
         model = School
 
 class InvigilatorResource(resources.ModelResource):
+    #Custom fields for export.
+    rt_name = fields.Field(attribute = 'rt_name', column_name='resp. teach. name')
+    rt_phone_primary = fields.Field(attribute = 'rt_phone_primary', column_name='resp. teach. phone')
+    rt_email = fields.Field(attribute = 'rt_email', column_name='resp. teach. email')
+    school_name = fields.Field(attribute = 'school_name', column_name='school name') #otherwise it just printed the school id (forreign key)
+
     class Meta:
         model = Invigilator
+        export_order = ('school_name', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name','rt_phone_primary','rt_email') #Custom order with custom-fields as last few columns (otherwise they are added in the front)
+
 
 class VenueResource(resources.ModelResource):
     class Meta:
