@@ -20,9 +20,9 @@ class SchoolModelForm( forms.ModelForm ):
 		model=School
 
 #Displays different fields for SchoolUsers
-class SchoolUserAdmin(admin.ModelAdmin):
-	list_display = ('user', 'school', 'email')
-	search_fields = ['name']
+#class SchoolUserAdmin(admin.ModelAdmin):
+#	list_display = ('user', 'school', 'email')
+#	search_fields = ['name']
 
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
@@ -58,10 +58,24 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	resource_class = SchoolStudentResource
 	list_filter=('grade', 'paired', 'venue', 'language','school') #Field filters (shown as bar on right)
 
+	dataset = tablib.Dataset()
+	dataset.headers = ['school', 'firstname', 'surname', 'grade', 'reference', 'paired']
+
 #Displays different fields for Venue
-class VenueAdmin(admin.ModelAdmin):
-	list_display = ('building', 'code', 'seats', 'bums')
-	#search_fields = ['building', 'code', 'seats']
+class VenueAdmin(ImportExportModelAdmin):
+	resource_class = VenueResource
+	list_display = ('building', 'code', 'seats', 'grade', 'pairs', 'individuals')
+	search_fields = ['building', 'code']
+	list_filter = ('grade',)
+
+    # -------------- Import_Export functionality  ----------
+	resource_class = VenueResource
+	#Expects csv (comma-separated) file with the first line being:
+    #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
+    #Entries are on separate rows (separated by line break)
+	dataset = tablib.Dataset()
+	dataset.headers = ['building', 'code', 'seats','grade', 'pairs', 'individuals']
+
 
 
 #Displays different fields for Invigilators and archives Invigilators
@@ -86,7 +100,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
 
 
 
-admin.site.register(SchoolUser, SchoolUserAdmin)
+#admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(ResponsibleTeacher, ResponsibleTeacherAdmin)
 admin.site.register(School, SchoolAdmin)
