@@ -99,7 +99,6 @@ def entry_review(request):
         return HttpResponseRedirect('../students/newstudents.html')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
-        compadmin.auto_allocate()
         return render_to_response('submitted.html')
 
     c.update(csrf(request))
@@ -226,6 +225,7 @@ def newstudents(request):
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
                 confirmation.send_confirmation(request, assigned_school,cc_admin=True)
+                compadmin.auto_allocate() #WHERE TO PUT THIS?
                 return render_to_response('submitted.html')
             else:
                 print 'This should not happen'
