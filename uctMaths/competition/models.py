@@ -97,9 +97,9 @@ class Venue(models.Model):
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
     grade       = models.IntegerField(db_column='Grade',null=True, blank=True)
-    #occupied_seats = models.IntegerField(db_column='Occupied')
-    pairs       = models.IntegerField(db_column='Pairs')
-    individuals = models.IntegerField(db_column='Individuals')
+    allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS')
+    occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True)
+    #individuals = models.IntegerField(db_column='Individuals')
     #registered_by = models.ForeignKey(User, db_column='Registered By')
 
     def __str__(self):
