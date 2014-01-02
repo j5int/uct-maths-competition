@@ -194,3 +194,54 @@ def output_register(venue_list):
         return response
     except IndexError:
         print 'No full sheets!'
+
+
+#Export venue lists to workbook.
+#See http://scienceoss.com/write-excel-files-with-python-using-xlwt/
+
+def output_studentlists(student_list):
+    """Output 10 lists (arg) as sheets on an xls (Paired, Individuals) for each grade"""
+
+    grade_bucket = gradeBucket(student_list)
+
+    output_workbook = xlwt.Workbook()
+    student_header = ['School', 'Reference No.', 'First name(s)', 'Surname', 'Venue']
+
+    for grade in range(8, 13):
+        #Process individual page
+        student_sheet = output_workbook.add_sheet('Grade ' + str(grade)+' individuals')
+
+        student_sheet.write(0, 0, 'Grade ' + str(grade) + ' individuals')
+        for h_index, word in enumerate(student_header):
+            student_sheet.write(1,h_index,word)
+
+        for index, student in enumerate(grade_bucket[grade, False]):
+            student_sheet.write(index+2,0,str(student.school))
+            student_sheet.write(index+2,1,str(student.reference))
+            student_sheet.write(index+2,2,str(student.firstname))
+            student_sheet.write(index+2,3,str(student.surname))
+            student_sheet.write(index+2,4,str(student.venue))
+
+        #Process pair page
+        student_sheet = output_workbook.add_sheet('Grade ' + str(grade)+' pairs')
+
+        student_sheet.write(0, 0, 'Grade ' + str(grade) + ' pairs')
+        for h_index, word in enumerate(student_header):
+            student_sheet.write(1,h_index,word)
+
+        for index, student in enumerate(grade_bucket[grade, True]):
+            student_sheet.write(index+2,0,str(student.school))
+            student_sheet.write(index+2,1,str(student.reference))
+            student_sheet.write(index+2,2,str(student.firstname))
+            student_sheet.write(index+2,3,str(student.surname))
+            student_sheet.write(index+2,4,str(student.venue))
+
+    try:
+        response = HttpResponse(mimetype='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=venue_register.xls'
+        output_workbook.save(response)
+        return response
+    except IndexError:
+        print 'No full sheets!'
+
+
