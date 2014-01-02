@@ -65,17 +65,23 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
 	resource_class = VenueResource
-	list_display = ('building', 'code', 'seats', 'grade', 'pairs', 'individuals')
+	list_display = ('building', 'code', 'seats', 'grade', 'allocated_to_pairs', 'occupied_seats')
 	search_fields = ['building', 'code']
-	list_filter = ('grade',)
-
+	list_filter = ('grade', 'allocated_to_pairs')
+	actions = ['auto_allocate', 'deallocate']
     # -------------- Import_Export functionality  ----------
 	resource_class = VenueResource
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
     #Entries are on separate rows (separated by line break)
 	dataset = tablib.Dataset()
-	dataset.headers = ['building', 'code', 'seats','grade', 'pairs', 'individuals']
+	dataset.headers = ['building', 'code', 'seats','grade', 'allocated_to_pairs', 'occupied_seats']
+	
+	def auto_allocate(self, request, queryset):
+	    compadmin.auto_allocate(queryset)
+
+	def deallocate(self, request, queryset):
+	    compadmin.venue_deallocate(queryset)
 
 
 
