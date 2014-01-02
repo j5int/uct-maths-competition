@@ -68,7 +68,7 @@ class VenueAdmin(ImportExportModelAdmin):
 	list_display = ('building', 'code', 'seats', 'grade', 'allocated_to_pairs', 'occupied_seats')
 	search_fields = ['building', 'code']
 	list_filter = ('grade', 'allocated_to_pairs')
-	actions = ['auto_allocate', 'deallocate']
+	actions = ['auto_allocate', 'deallocate', 'write_venue_register']
     # -------------- Import_Export functionality  ----------
 	resource_class = VenueResource
 	#Expects csv (comma-separated) file with the first line being:
@@ -83,8 +83,12 @@ class VenueAdmin(ImportExportModelAdmin):
 	def deallocate(self, request, queryset):
 	    compadmin.venue_deallocate(queryset)
 
+	def write_venue_register(self, request, queryset):
+	    return compadmin.output_register(queryset)
+
 	auto_allocate.short_description = 'Auto-allocate unallocated students to selected venue(s)' 
 	deallocate.short_description = 'Deallocate students from selected of venue(s)'
+	write_venue_register.short_description = 'Generate and download (xls) student registry for selected venue(s)'
 
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(ImportExportModelAdmin):
