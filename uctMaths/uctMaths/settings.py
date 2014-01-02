@@ -167,6 +167,9 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.linkedin',
     #endallauth
 
+
+    #Import-export functionality
+    'import_export', #(https://django-import-export.readthedocs.org/en/latest/configuration.html)
 )
 
 # A sample logging configuration. The only tangible logging

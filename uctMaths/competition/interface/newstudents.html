@@ -28,7 +28,7 @@
     <!-- register responsible teacher from here --->
     <div>
         <h1>Register Responsible Teacher</h1>
-        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.<br><i> All fields marked with an <b>asterisk (*) must be filled.</b></i></p>
+        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.<br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -41,11 +41,11 @@
                 <th>Email* </th>
             </tr>
             <tr>	<!-- the required attribute does not work with IE9 and lower -->
-                <td><input type="text" name="rt_firstname" required value={{responsible_teacher.firstname}}></td>
-                <td><input type="text" name="rt_surname" value={{responsible_teacher.surname}}></td>
+                <td><input type="text" name="rt_firstname" required value={{responsible_teacher.firstname|lower|capfirst}}></td>
+                <td><input type="text" name="rt_surname" value={{responsible_teacher.surname|lower|capfirst}}></td>
                 <td><input type ="text" name="rt_phone_primary" required value={{responsible_teacher.phone_primary}}></td>                    
                 <td><input type ="text" name="rt_phone_alt" value={{responsible_teacher.phone_alt}}></td>
-                <td><input id="rmail" type ="text" name="rt_email" required value={{responsible_teacher.email}}></td>
+                <td><input id="rmail" type ="text" name="rt_email" required value={{responsible_teacher.email|lower}}></td>
                 <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
             </tr>
         </table>
@@ -76,20 +76,20 @@
             {%for invigilator in invigilator_list%}
                 {% if forloop.first %} <!-- if this is the first iteration of the loop -->
                 <tr>
-                    <td><input type="text" name="inv_firstname" required value={{invigilator.firstname}}></td>
-                    <td><input type="text" name="inv_surname" required value={{invigilator.surname}}></td>
+                    <td><input type="text" name="inv_firstname" required value={{invigilator.firstname|lower|capfirst}}></td>
+                    <td><input type="text" name="inv_surname" required value={{invigilator.surname|lower|capfirst}}></td>
                     <td><input type ="text" name="inv_phone_primary" required value={{invigilator.phone_primary}}></td>                    
                     <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
-                    <td><input type ="text" name="inv_email" required value={{invigilator.email}}></td>
+                    <td><input type ="text" name="inv_email" required value={{invigilator.email|lower}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
                 {% else %}
                 <tr>
-                    <td><input type="text" name="inv_firstname" value={{invigilator.firstname}}></td>
-                    <td><input type="text" name="inv_surname" value={{invigilator.surname}}></td>
+                    <td><input type="text" name="inv_firstname" value={{invigilator.firstname|lower|capfirst}}></td>
+                    <td><input type="text" name="inv_surname" value={{invigilator.surname|lower|capfirst}}></td>
                     <td><input type ="text" name="inv_phone_primary" value={{invigilator.phone_primary}}></td>                    
                     <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
-                    <td><input type ="text" name="inv_email" value={{invigilator.email}}></td>
+                    <td><input type ="text" name="inv_email" value={{invigilator.email|lower}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
                 {% endif %}
@@ -145,7 +145,7 @@
         <h3>Individuals:</h3>
         <table>
         <tr>
-            <th>Name*</th>
+            <th>Name</th>
             <th>Surname</th>
         </tr>
         <!-- Populates the list with previously registered students -->
@@ -153,8 +153,8 @@
             {% if grade == key %} <!-- only for the current grade -->
                 {%for student in student_l%}
                 <tr>
-                    <td><input type="text" name="firstname" value={{student.firstname}}></td>
-                    <td><input type="text" name="surname" value={{student.surname}}></td>
+                    <td><input type="text" name="firstname" value={{student.firstname|lower|capfirst}}></td>
+                    <td><input type="text" name="surname" value={{student.surname|lower|capfirst}}></td>
                     <input type='hidden' name='grade' value='{{grade}}'>
                     <input type ="hidden" name="registered_by" value ={{ user.id }} >
                 </tr>
@@ -179,10 +179,16 @@
         <br><br>
     </div>
     {%endfor%} <!-- endfor grade -->
-	<div id='alert'>
-		<input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? <br> </br>
-    </div>
-    <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
 
+
+    <div id='alert'>
+        <input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? It is your responsibility to ensure that your application has met the requirements stated for each section.<br> </br>
+    </div>
+
+    {% if entries_open %}
+    <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
+    {% else %}
+    <h3> Sign-up closed </h3> <p> No more entries are to be accepted for this year's UCT Mathematics Competition </p>
+    {% endif %}
     </form>
 {%endblock%}
