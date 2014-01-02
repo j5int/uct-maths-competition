@@ -76,14 +76,15 @@ class VenueAdmin(ImportExportModelAdmin):
     #Entries are on separate rows (separated by line break)
 	dataset = tablib.Dataset()
 	dataset.headers = ['building', 'code', 'seats','grade', 'allocated_to_pairs', 'occupied_seats']
-	
+
 	def auto_allocate(self, request, queryset):
 	    compadmin.auto_allocate(queryset)
 
 	def deallocate(self, request, queryset):
 	    compadmin.venue_deallocate(queryset)
 
-
+	auto_allocate.short_description = 'Auto-allocate unallocated students to selected venue(s)' 
+	deallocate.short_description = 'Deallocate students from selected of venue(s)'
 
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(ImportExportModelAdmin):
