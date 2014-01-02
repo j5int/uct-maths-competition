@@ -225,7 +225,6 @@ def newstudents(request):
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
                 confirmation.send_confirmation(request, assigned_school,cc_admin=True)
-                compadmin.auto_allocate() #WHERE TO PUT THIS?
                 return render_to_response('submitted.html')
             else:
                 print 'This should not happen'
