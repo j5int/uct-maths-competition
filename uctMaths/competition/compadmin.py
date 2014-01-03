@@ -133,10 +133,10 @@ def output_register(venue_list):
     """Output selected venues (arg) as sheets on an xls"""
 
     output_workbook = xlwt.Workbook()
-    student_header = ['Reference No.','Surname, first name(s)', 'School']
+    student_header = ['Reference No.','School', 'First name(s)','Surname']
 
     #Generate a list of unallocated invigilators and students
-    summary_sheet = output_workbook.add_sheet('Unallocated')
+    summary_sheet = output_workbook.add_sheet('Venue_summary')
     summary_sheet.write(0,0,'Summary page')
 
     venue_h = ['Venue', 'Building', 'Grade', 'Available seats', 'Occupied seats','Allocation']
@@ -184,16 +184,18 @@ def output_register(venue_list):
 
             for s_index, student in enumerate(student_list):
                 venue_sheet.write(s_index+7,0,str(student.reference))
-                venue_sheet.write(s_index+7,1,str(student.surname)+', '+str(student.firstname))
-                venue_sheet.write(s_index+7,2,str(student.school))
+                venue_sheet.write(s_index+7,2,str(student.firstname))
+                venue_sheet.write(s_index+7,3,str(student.surname))
+                venue_sheet.write(s_index+7,1,str(student.school))
 
         else:
             pass #Venue is empty - no point making a sheet for it...
             #print 'Empty venue!'
 
     try:
-        response = HttpResponse(mimetype='application/ms-excel')
+        response = HttpResponse()
         response['Content-Disposition'] = 'attachment; filename=venue_register.xls'
+        response['Content-Type'] = 'application/ms-excel'
         output_workbook.save(response)
         return response
     except IndexError:
@@ -241,8 +243,9 @@ def output_studentlists(student_list):
             student_sheet.write(index+2,4,str(student.venue))
 
     try:
-        response = HttpResponse(mimetype='application/ms-excel')
+        response = HttpResponse()
         response['Content-Disposition'] = 'attachment; filename=studentlist.xls'
+        response['Content-Type'] = 'application/ms-excel'
         output_workbook.save(response)
         return response
     except IndexError:
@@ -296,6 +299,7 @@ def output_studenttags(student_list):
             zipf.writestr('Mailmerge_Grade'+str(grade) +'_pairs.txt',output_string.getvalue())
 
     try:
+        #response = HttpResponse(output_stringIO.getvalue(), mimetype='application/x-zip-compressed')
         response = HttpResponse(output_stringIO.getvalue())
         response['Content-Disposition'] = 'attachment; filename=mailmergestudents.zip'
         response['Content-Type'] = 'application/x-zip-compressed'
