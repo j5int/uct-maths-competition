@@ -90,6 +90,11 @@ class SchoolStudent(models.Model):
 #        return self.user
 #    class Meta:
 #        ordering = ['school', 'user'] #defines the way the records are sorted.
+class Competition(models.Model):
+    newentries_Opendate = models.DateField(db_column='newentries_Opendate')
+    newentries_Closedate = models.DateField(db_column='newentries_Closedate')
+
+
 
 class Venue(models.Model):
     '''Venues are locations for the event. Many SchoolStudents to one Venue.'''

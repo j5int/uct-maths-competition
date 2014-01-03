@@ -120,10 +120,14 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         cursor.execute("UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
         transaction.commit_unless_managed()
 
+class CompetitionAdmin(admin.ModelAdmin):
+    #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
+    list_display = ('newentries_Opendate', 'newentries_Closedate')
 
 
 #admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)
+admin.site.register(Competition, CompetitionAdmin)
 admin.site.register(ResponsibleTeacher, ResponsibleTeacherAdmin)
 admin.site.register(School, SchoolAdmin)
 admin.site.register(SchoolStudent, SchoolStudentAdmin)

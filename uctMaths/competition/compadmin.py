@@ -1,6 +1,6 @@
 # Some auxiliary functions and constants for competition
 # administration.
-from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher 
+from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
 from datetime import date
 import operator
 import glob
@@ -15,23 +15,31 @@ import StringIO
 #A few administration constants and associated methods to be used around the website.
 
 #The date until which entries are accepted
-comp_closingdate=date(2014, 12, 21) #(YYYY, MM, DD) format
-#The date of prizegiving
-comp_prizegivingdate=date(2013, 12,13 ) #(YYYY, MM, DD) format
 
 admin_emailaddress='admin@admin.com' #Email address for inquiries/outgoing emails
 
 def isOpen():
     """Logic to compare the closing date of the competition with today's date"""
-    if date.today() > comp_closingdate:
-        #print 'The competition is closed'
-        return False
+    comp = Competition.objects.all()
+
+    if comp.count() == 1:
+        if date.today() > comp[0].newentries_Closedate or date.today() < comp[0].newentries_Opendate:
+            #print 'The competition is closed'
+            return False
+        else:
+            #print 'The competition is open'
+            return True
     else:
-        #print 'The competition is open'
-        return True
+            return False #Error!!
 
 def closingDate():
-    return str(comp_closingdate.day) + '/' + str(comp_closingdate.month)  + '/' + str(comp_closingdate.year)
+    comp = Competition.objects.all()
+    if comp.count() == 1:
+        comp_closingdate = comp[0].newentries_Closedate
+        return str(comp_closingdate.day) + '/' + str(comp_closingdate.month)  + '/' + str(comp_closingdate.year)
+    else:
+        return 'a date yet to be set by the admin'
+
 
 #TODO: Auto-venue allocation algorithm
 def auto_allocate(venue_list):
