@@ -28,7 +28,7 @@ class SchoolModelForm( forms.ModelForm ):
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('id', 'name', 'language', 'address','phone','fax','contact','email','assigned_to') ##Which columns should be kept here? 
+	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
 	actions = ['remove_user_associations', 'output_schooltaglist']
