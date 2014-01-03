@@ -9,6 +9,8 @@ import xlwt
 import os
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
+import zipfile
+import StringIO
 
 #A few administration constants and associated methods to be used around the website.
 
@@ -94,7 +96,7 @@ def venue_deallocate(venue_list):
 #Would this be more/less efficient than query-based binning?
 # I need to be able to access length of list, each student's details.
 def gradeBucket(student_list):
-    grade_bucket = { #(grade, is_paired) tuple as a key
+    grade_bucket = { #(grade, is_paired)
                      (8, True) : [], (8, False) : [],
                      (9, True) : [], (9, False) : [],
                      (10, True) : [], (10, False) : [],
@@ -155,6 +157,8 @@ def output_register(venue_list):
             summary_sheet.write(v_index+2,5,'Pairs')
         else:
             summary_sheet.write(v_index+2,5,'Individuals')
+
+    #Print out the unallocated students?
 
     #Create a new sheet for each venue
     for venue in venue_list:
@@ -222,7 +226,7 @@ def output_studentlists(student_list):
             student_sheet.write(index+2,3,str(student.surname))
             student_sheet.write(index+2,4,str(student.venue))
 
-        #Process pair page
+        #Process pairs page
         student_sheet = output_workbook.add_sheet('Grade ' + str(grade)+' pairs')
 
         student_sheet.write(0, 0, 'Grade ' + str(grade) + ' pairs')
@@ -238,10 +242,65 @@ def output_studentlists(student_list):
 
     try:
         response = HttpResponse(mimetype='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename=venue_register.xls'
+        response['Content-Disposition'] = 'attachment; filename=studentlist.xls'
         output_workbook.save(response)
         return response
     except IndexError:
         print 'No full sheets!'
+
+
+def output_studenttags(student_list):
+    """Output 10 lists (arg) as sheets on an xls (Paired, Individuals) for each grade"""
+
+    grade_bucket = gradeBucket(student_list)
+
+    #Generate individuals name tags 
+    #Eg: "1860801","Kauthar Hoosen","Al-Azhar High School",8,"Mathematics M 320"
+    venue_list = Venue.objects.all()
+    output_stringIO = StringIO.StringIO()
+    with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
+        for grade in range(8, 13):
+            #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
+            output_string = StringIO.StringIO()
+
+            for student in grade_bucket[grade, False]:
+                venue_object = [venue for venue in venue_list if venue.code == student.venue]
+                s_line = ''
+                if len(venue_object) == 1:
+                    s_line += '\"' + str(student.reference) + '\",'
+                    s_line += '\"' + str(student.firstname) + ' ' + str(student.surname) + '\",'
+                    s_line += '\"' + str(student.school) +  '\",'
+                    s_line += str(student.grade) + ','
+                    s_line += '\"' + str(venue_object[0]) + '\"\n'
+                    output_string.write(s_line)
+                else:
+                    print 'Error!' #Error on unallocated/unfound venue!
+
+            zipf.writestr('Mailmerge_Grade'+str(grade) +'_individuals.txt',output_string.getvalue())
+        
+            output_string = StringIO.StringIO()
+
+            for student in grade_bucket[grade, True]:
+                venue_object = [venue for venue in venue_list if venue.code == student.venue]
+                s_line = ''
+                if len(venue_object) == 1:
+                    s_line += '\"' + str(student.reference) + '\",'
+                    s_line += '\"' + str(student.firstname) + ' ' + str(student.surname) + '\",'
+                    s_line += '\"' + str(student.school) +  '\",'
+                    s_line += str(student.grade) + ','
+                    s_line += '\"' + str(venue_object[0]) + '\"\n'
+                    output_string.write(s_line)
+                else:
+                    print 'Error!' #Error on unallocated/unfound venue!
+
+            zipf.writestr('Mailmerge_Grade'+str(grade) +'_pairs.txt',output_string.getvalue())
+
+    try:
+        response = HttpResponse(output_stringIO.getvalue())
+        response['Content-Disposition'] = 'attachment; filename=mailmergestudents.zip'
+        response['Content-Type'] = 'application/x-zip-compressed'
+        return response
+    except IndexError:
+        print 'Error!'
 
 
