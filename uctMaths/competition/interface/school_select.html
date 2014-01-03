@@ -12,7 +12,7 @@
         <p>Not working.</p>
     {% endif %}
     <p>There is no school currently associated with your user name. Please select the school you are responsible for. This school will be associated
-       with your user name. If your school is not on the list, please contact admin@sjsoft.com. </p>
+       with your user name. If your school is not on the list, please contact {{admin_emailaddress}}. </p>
     <select name = "school">
         {% for school in schools %}
             <option value="{{ school.id }}">{{ school.name }}</option>

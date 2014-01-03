@@ -16,7 +16,15 @@ import StringIO
 
 #The date until which entries are accepted
 
-admin_emailaddress='admin@admin.com' #Email address for inquiries/outgoing emails
+#admin_emailaddress='admin@admin.com' #Email address for inquiries/outgoing emails
+def admin_emailaddress():
+        #Get competition admin's email address
+    comp = Competition.objects.all()
+    if comp.count() == 1:
+        return comp[0].admin_emailaddress
+    else:
+        return 'Not specified' #ERROR - essentially
+
 
 def isOpen():
     """Logic to compare the closing date of the competition with today's date"""
@@ -26,8 +34,7 @@ def isOpen():
         if date.today() > comp[0].newentries_Closedate or date.today() < comp[0].newentries_Opendate:
             #print 'The competition is closed'
             return False
-        else:
-            #print 'The competition is open'
+        else: #'The competition is open'
             return True
     else:
             return False #Error!!
