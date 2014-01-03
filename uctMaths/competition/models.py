@@ -103,7 +103,7 @@ class Venue(models.Model):
     #registered_by = models.ForeignKey(User, db_column='Registered By')
 
     def __str__(self):
-        return self.building+', '+self.code
+        return self.building+' '+self.code
     class Meta:
         ordering = ['building', 'code'] #defines the way the records are sorted.
 

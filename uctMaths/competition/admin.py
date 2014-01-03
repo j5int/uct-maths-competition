@@ -45,7 +45,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired')
-	actions = ['archive_student','write_studentlist']
+	actions = ['archive_student','write_studentlist','write_studenttags']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -65,6 +65,11 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	def write_studentlist(self, request, queryset):
 	    return compadmin.output_studentlists(queryset)
 	write_studentlist.short_description = 'Download (xls) formatted student registry for selected students'
+
+
+	def write_studenttags(self, request, queryset):
+	    return compadmin.output_studenttags(queryset)
+	write_studenttags.short_description = 'Generate MailMerge files for student tags for selected students'
 
 
 #Displays different fields for Venue
