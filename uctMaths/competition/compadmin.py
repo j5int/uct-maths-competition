@@ -277,32 +277,27 @@ def output_studenttags(student_list):
             for student in grade_bucket[grade, False]:
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
                 s_line = ''
-                if len(venue_object) == 1:
-                    s_line += '\"' + str(student.reference) + '\",'
-                    s_line += '\"' + str(student.firstname) + ' ' + str(student.surname) + '\",'
-                    s_line += '\"' + str(student.school) +  '\",'
-                    s_line += str(student.grade) + ','
-                    s_line += '\"' + str(venue_object[0]) + '\"\n'
-                    output_string.write(s_line)
-                else:
-                    print 'Error!' #Error on unallocated/unfound venue!
-
+                s_line += '\"' + str(student.reference) + '\",'
+                s_line += '\"' + str(student.firstname) + ' ' + str(student.surname) + '\",'
+                s_line += '\"' + str(student.school) +  '\",'
+                s_line += str(student.grade) + ','
+                venue_str = str(venue_object[0]) if len(venue_object)==1 else 'Unallocated'
+                s_line += '\"' + venue_str + '\"\n'
+                output_string.write(s_line)
+                
             zipf.writestr('Mailmerge_Grade'+str(grade) +'_individuals.txt',output_string.getvalue())
-        
-            output_string = StringIO.StringIO()
 
-            for student in grade_bucket[grade, True]:
+            output_string = StringIO.StringIO()
+            for student in grade_bucket[grade, True]: #Paired students in [grade]
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
                 s_line = ''
-                if len(venue_object) == 1:
-                    s_line += '\"' + str(student.reference) + '\",'
-                    s_line += '\"' + str(student.firstname) + ' ' + str(student.surname) + '\",'
-                    s_line += '\"' + str(student.school) +  '\",'
-                    s_line += str(student.grade) + ','
-                    s_line += '\"' + str(venue_object[0]) + '\"\n'
-                    output_string.write(s_line)
-                else:
-                    print 'Error!' #Error on unallocated/unfound venue!
+                s_line += '\"' + str(student.reference) + '\",'
+                s_line += '\"' + str(student.firstname) + ' ' + str(student.surname) + '\",'
+                s_line += '\"' + str(student.school) +  '\",'
+                s_line += str(student.grade) + ','
+                venue_str = str(venue_object[0]) if len(venue_object)==1 else 'Unallocated'
+                s_line += '\"' + venue_str + '\"\n'
+                output_string.write(s_line)
 
             zipf.writestr('Mailmerge_Grade'+str(grade) +'_pairs.txt',output_string.getvalue())
 
