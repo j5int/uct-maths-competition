@@ -131,7 +131,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-    list_display = ('newentries_Opendate', 'newentries_Closedate')
+    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress')
 
 
 #admin.site.register(SchoolUser, SchoolUserAdmin)

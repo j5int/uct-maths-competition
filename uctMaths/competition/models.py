@@ -10,6 +10,11 @@ from import_export import resources, fields
 from import_export.admin import ImportExportModelAdmin
 import tablib
 
+class Competition(models.Model):
+    newentries_Opendate = models.DateField(db_column='newentries_Opendate')
+    newentries_Closedate = models.DateField(db_column='newentries_Closedate')
+    admin_emailaddress = models.CharField(max_length=30L)
+
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
     name        = models.CharField(max_length=255L, db_column='Name')
@@ -61,11 +66,6 @@ class SchoolStudent(models.Model):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname
     class Meta:
         ordering = ['school', 'grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
-
-class Competition(models.Model):
-    newentries_Opendate = models.DateField(db_column='newentries_Opendate')
-    newentries_Closedate = models.DateField(db_column='newentries_Closedate')
-    admin_emailaddress = models.CharField(max_length=30L)
 
 class Venue(models.Model):
     '''Venues are locations for the event. Many SchoolStudents to one Venue.'''
