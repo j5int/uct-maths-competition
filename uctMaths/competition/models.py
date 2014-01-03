@@ -62,39 +62,10 @@ class SchoolStudent(models.Model):
     class Meta:
         ordering = ['school', 'grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
-#class SchoolUser(models.Model):
-#    # The administrator for a single school. 
-#    # A User can register/update/remove SchoolStudents and Invigilators.
-
-#    school      = models.ForeignKey('School', db_column='School') 
-#    count       = models.IntegerField()
-#    address     = models.CharField(max_length=255L, db_column='Address')
-#    town        = models.CharField(max_length=50L, db_column='Town')
-#    postal_code = models.CharField(max_length=4L, db_column='Postal_Code') 
-#    phone       = models.CharField(max_length=15L, db_column='Telephone') 
-#    fax         = models.CharField(max_length=15L, db_column='Fax', blank=True) 
-#    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
-#    correction  = models.IntegerField(db_column='Correction') 
-#    entered     = models.IntegerField(db_column='Entered')  
-#    language    = models.CharField(max_length=1L, db_column='Language', choices=(
-#        ('e', 'English'), 
-#        ('a', 'Afrikaans'),
-#		('b', 'Bilingual')
-#    )) 
-#    counter     = models.IntegerField(db_column='Count')
-#    last_login  = models.DateField(null=True, blank=True, db_column='Last Login')
-#    non_uct     = models.IntegerField(db_column='Non UCT') 
-#    user        = models.OneToOneField(User)
-
-#    def __str__(self):
-#        return self.user
-#    class Meta:
-#        ordering = ['school', 'user'] #defines the way the records are sorted.
 class Competition(models.Model):
     newentries_Opendate = models.DateField(db_column='newentries_Opendate')
     newentries_Closedate = models.DateField(db_column='newentries_Closedate')
-
-
+    admin_emailaddress = models.CharField(max_length=30L)
 
 class Venue(models.Model):
     '''Venues are locations for the event. Many SchoolStudents to one Venue.'''

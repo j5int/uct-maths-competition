@@ -17,7 +17,7 @@ class CompetitionForm (forms.Form): #THERE MUST ONLY BE ONE OF THESE!
         fields = ['newentries_Opendate', 'newentries_Closedate', 'Admin_email_address']
         newentries_Opendate = forms.DateField()
         newentries_Closedate = forms.DateField()
-        admin_emailaddress = forms.CharField()
+        #admin_emailaddress = forms.CharField()
         #prizegiving_date = forms.DateField()
 
 #**********************************
