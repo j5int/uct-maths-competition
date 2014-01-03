@@ -315,4 +315,8 @@ def output_studenttags(student_list):
     except IndexError:
         print 'Error!'
 
-
+#Called by admin to remove users associated with schools (Just clear that field)
+def remove_user_assoc(queryset):
+    for school in queryset:
+        school.assigned_to = None
+        school.save()

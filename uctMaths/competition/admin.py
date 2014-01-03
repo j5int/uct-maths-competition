@@ -31,6 +31,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	list_display = ('id', 'name', 'language', 'address','phone','fax','contact','email','assigned_to') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
+	actions = ['remove_user_associations']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -38,6 +39,10 @@ class SchoolAdmin(ImportExportModelAdmin):
 	dataset = tablib.Dataset()
 	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to']
 
+	def remove_user_associations(self, request, queryset):
+	    return compadmin.remove_user_assoc(queryset)
+
+	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email')
