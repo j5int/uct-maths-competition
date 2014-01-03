@@ -71,24 +71,42 @@ if (f==null || f=="")
 
 function validateForm(doc)
 {
+/**********************
+*** EMAIL VALIDATION***
+***********************/
   var mail = document.getElementsByClassName('mail');   // array of email fields
+  var error= false;
   
   // for each email field
   for (var i=0; i < mail.length; i++)
-  {	var x=mail[i].value;
-  
+  {	var x=mail[i].value;	//email value
+	
+	//skip empty fields and validate others
     if (x == '')
     {  break;  }
     else
     {
-		var atpos=x.indexOf('@');
-		var dotpos=x.lastIndexOf('.');
+		var atpos=x.indexOf('@');	// position of '@' symbol
+		var dotpos=x.lastIndexOf('.');	//position of last period('.')
       if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length)
-      {  alert("The following email address is not valid: '"+x+"'");
-          return false;
+      {//  alert("The following email address is not valid: '"+x+"'");	// notify user of invalid 
+		mail[i].style.background ='Yellow';	error =true;
+      //    return false;
       }
+	  else
+	  {
+		mail[i].style.background = 'White';
+	  }
     }
   }
   
+  if (error)
+  {
+	alert("One or more email addresses are invalid. Please check again.");
+	return false;
+  }
+ /************************************
+ *** NO# of INVIGILATORS VALIDATION **
+ *************************************/ 
    return true;
 }
