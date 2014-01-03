@@ -31,7 +31,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	list_display = ('id', 'name', 'language', 'address','phone','fax','contact','email','assigned_to') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations']
+	actions = ['remove_user_associations', 'output_schooltaglist']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -42,6 +42,10 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def remove_user_associations(self, request, queryset):
 	    return compadmin.remove_user_assoc(queryset)
 
+	def output_schooltaglist(self, request, queryset):
+	    return compadmin.output_schooltaglists(queryset)
+
+	output_schooltaglist.short_description = 'Generate and download school tags file for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
@@ -69,6 +73,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def write_studentlist(self, request, queryset):
 	    return compadmin.output_studentlists(queryset)
+
 	write_studentlist.short_description = 'Download (xls) formatted student registry for selected students'
 
 
@@ -126,7 +131,6 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-    #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
     list_display = ('newentries_Opendate', 'newentries_Closedate')
 
 
