@@ -301,17 +301,30 @@ def output_studenttags(student_list):
 
             zipf.writestr('Mailmerge_Grade'+str(grade) +'_pairs.txt',output_string.getvalue())
 
-    try:
-        #response = HttpResponse(output_stringIO.getvalue(), mimetype='application/x-zip-compressed')
-        response = HttpResponse(output_stringIO.getvalue())
-        response['Content-Disposition'] = 'attachment; filename=mailmergestudents.zip'
-        response['Content-Type'] = 'application/x-zip-compressed'
-        return response
-    except IndexError:
-        print 'Error!'
+
+    response = HttpResponse(output_stringIO.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=mailmergestudents.zip'
+    response['Content-Type'] = 'application/x-zip-compressed'
+    return response
 
 #Called by admin to remove users associated with schools (Just clear that field)
-def remove_user_assoc(queryset):
-    for school in queryset:
+def remove_user_assoc(school_list):
+    for school in school_list:
         school.assigned_to = None
         school.save()
+
+#Called by admin to generate formatted 'tag list' for selected schools
+def output_schooltaglists(school_list):
+    output_stringio = StringIO.StringIO()
+
+    #Generate and format school entry (as in spec. sheet)
+    for school in school_list:
+        s_entry = '\"' + str(school.contact) + '\",'
+        s_entry += '\"' + str(school.name) + '\",'
+        s_entry += '\"' + str(school.address) + '\"\n'
+        output_stringio.write(s_entry)
+
+    response = HttpResponse(output_stringio.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=schooltags.txt'
+    return response
+
