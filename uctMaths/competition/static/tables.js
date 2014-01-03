@@ -68,3 +68,27 @@ if (f==null || f=="")
  {return true;}
 }
 */
+
+function validateForm(doc)
+{
+  var mail = document.getElementsByClassName('mail');   // array of email fields
+  
+  // for each email field
+  for (var i=0; i < mail.length; i++)
+  {	var x=mail[i].value;
+  
+    if (x == '')
+    {  break;  }
+    else
+    {
+		var atpos=x.indexOf('@');
+		var dotpos=x.lastIndexOf('.');
+      if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length)
+      {  alert("The following email address is not valid: '"+x+"'");
+          return false;
+      }
+    }
+  }
+  
+   return true;
+}
