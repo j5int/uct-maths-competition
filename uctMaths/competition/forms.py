@@ -105,8 +105,8 @@ class ResponsibleTeacherForm(forms.Form):
 
 class UploadResultsForm(forms.Form):
         upload_file = forms.FileField(
-                        label='Select a file',
-                        help_text = 'Hope this works!'
+                        label='Select a file'
+                        #help_text = 'Hope this works!'
                         )
 #*****************************************
 
