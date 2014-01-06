@@ -68,3 +68,78 @@ if (f==null || f=="")
  {return true;}
 }
 */
+
+function validateForm(doc)
+{
+/**********************
+*** EMAIL VALIDATION***
+***********************/
+  var mail = document.getElementsByClassName('mail');   // array of email fields
+  var error= false;
+  
+  // highlight invalid email fields
+  for (var i=0; i < mail.length; i++)
+  {	var x=mail[i].value;	//email value
+	
+	//skip empty fields and validate others
+    if (x == '')
+    {  break;  }
+    else
+    {
+		var atpos=x.indexOf('@');	// position of '@' symbol
+		var dotpos=x.lastIndexOf('.');	//position of last period('.')
+      if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length)
+      {//  alert("The following email address is not valid: '"+x+"'");	// notify user of invalid 
+		mail[i].style.background ='Yellow';	error =true;
+      //    return false;
+      }
+	  else
+	  {
+		mail[i].style.background = 'White';
+	  }
+    }
+  }
+  
+  if (error)
+  {
+	alert("One or more email addresses seem to be invalid. Please verify your input.");
+	return false;
+  }
+ /************************************
+ *** NO# of INVIGILATORS VALIDATION **
+ *************************************/ 
+//	var students = document.getElementByClassName('pupil');
+	var individuals = document.getElementsByClassName('single');	//# of individuals
+	var pairs = document.getElementsByClassName('double');			//# of paired students
+	var count =0;													// number of students
+	var invig = document.getElementsByClassName('invig');			// 10 invigilator fields
+	var numOfInvig =0;
+	
+//  count the number of students	
+	for (var j=0; j<individuals.length; j++)
+	{
+		if (individuals[j].value != '')
+		{ count++;}
+	}
+	
+	for (var k=0; k<pairs.length; k++)
+	{ count += pairs[k].options[pairs[k].selectedIndex].value*2; }
+	
+	// prompt user to add invigilator
+	if (count ==75)
+	{
+		//check for 2nd invigilator
+		if(invig[1].value =='')
+		{
+			invig[1].style.background = 'Yellow';
+			alert("Reminder: to enter 75 students for this competition, 2 or more invigilators are required!");
+			return false;
+		}
+		invig[1].style.background = 'White';
+	}
+//	alert(numOfInvig);
+	
+ 
+ //	else if()
+   return true;
+}
