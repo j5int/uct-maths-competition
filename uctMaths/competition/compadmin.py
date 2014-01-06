@@ -8,7 +8,7 @@ import csv
 import xlwt
 import os
 from django.core.servers.basehttp import FileWrapper
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import zipfile
 import StringIO
 
@@ -334,4 +334,10 @@ def output_schooltaglists(school_list):
     response = HttpResponse(output_stringio.getvalue())
     response['Content-Disposition'] = 'attachment; filename=schooltags.txt'
     return response
+    
+def upload_results(request, student_list):
+    pass
+    #response = HttpResponseRedirect('../submitted.html')
+    #return response
+        #HttpResponseRedirect('../entry_review.html')
 
