@@ -76,7 +76,7 @@
             {%for invigilator in invigilator_list%}
                 {% if forloop.first %} <!-- if this is the first iteration of the loop -->
                 <tr>
-                    <td><input type="text" name="inv_firstname" required value={{invigilator.firstname|lower|capfirst}}></td>
+                    <td><input type="text" class="invig" name="inv_firstname" required value={{invigilator.firstname|lower|capfirst}}></td>
                     <td><input type="text" name="inv_surname" required value={{invigilator.surname|lower|capfirst}}></td>
                     <td><input type ="text" name="inv_phone_primary" required value={{invigilator.phone_primary}}></td>                    
                     <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
@@ -85,7 +85,7 @@
                 </tr>
                 {% else %}
                 <tr>
-                    <td><input type="text" name="inv_firstname" required value={{invigilator.firstname|lower|capfirst}}></td>
+                    <td><input type="text" class="invig" name="inv_firstname" value={{invigilator.firstname|lower|capfirst}}></td>
                     <td><input type="text" name="inv_surname" value={{invigilator.surname|lower|capfirst}}></td>
                     <td><input type ="text" name="inv_phone_primary" value={{invigilator.phone_primary}}></td>                    
                     <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
@@ -99,7 +99,7 @@
             {%for invigilator in invigilator_range%}
             {% if invigilator_list|length = 0 and loopcounter.first %}
                 <tr>
-                    <td><input type="text" required name="inv_firstname"></td>
+                    <td><input type="text" class="invig" required name="inv_firstname"></td>
                     <td><input type="text" required name="inv_surname"></td>
                     <td><input type ="text" required name="inv_phone_primary"></td>                    
                     <td><input type ="text" name="inv_phone_alt"></td>
@@ -108,7 +108,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td><input type="text" name="inv_firstname"></td>
+                    <td><input type="text" class="invig" name="inv_firstname"></td>
                     <td><input type="text" name="inv_surname"></td>
                     <td><input type ="text" name="inv_phone_primary"></td>                    
                     <td><input type ="text" name="inv_phone_alt"></td>
@@ -130,7 +130,7 @@
         <h2>Grade {{grade}}</h2>
         <div>
             <h3>Pairs:
-            <select name = "pairs">
+            <select name = "pairs" class='double'>
                   {%for key, pair_list in pairs_per_grade.items%}
                     {% if grade == key %}
                         {%for p in pair_list%}
@@ -153,7 +153,7 @@
             {% if grade == key %} <!-- only for the current grade -->
                 {%for student in student_l%}
                 <tr>
-                    <td><input type="text" name="firstname" value={{student.firstname|lower|capfirst}}></td>
+                    <td><input type="text" name="firstname" class='single' value={{student.firstname|lower|capfirst}}></td>
                     <td><input type="text" name="surname" value={{student.surname|lower|capfirst}}></td>
                     <input type='hidden' name='grade' value='{{grade}}'>
                     <input type ="hidden" name="registered_by" value ={{ user.id }} >
@@ -166,7 +166,7 @@
             {% if grade == key %}
                 {% for entry in entry_range %}
                 <tr>
-                  <td><input type="text" name="firstname"></td>
+                  <td><input type="text" class='single' name="firstname"></td>
                   <td><input type="text" name="surname"></td>
                   <input type='hidden' name='grade' value='{{grade}}'>
                   <input type ="hidden" name="registered_by" value ={{ user.id }} >
