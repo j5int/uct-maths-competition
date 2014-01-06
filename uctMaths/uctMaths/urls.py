@@ -22,7 +22,7 @@ urlpatterns = patterns('',
 
 	#loads competitions/urls.py
     url(r'^competition/', include('competition.urls')),
-    
+
 
     #admin and admin docs
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

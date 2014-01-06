@@ -336,8 +336,11 @@ def output_schooltaglists(school_list):
     return response
     
 def upload_results(request, student_list):
-    pass
-    #response = HttpResponseRedirect('../submitted.html')
-    #return response
-        #HttpResponseRedirect('../entry_review.html')
-
+    if request.POST:
+        print 'POST'
+    
+    else:
+        print 'Nothing'
+    
+    response = HttpResponseRedirect('/competition/admin/upload_results.html')
+    return response
