@@ -22,6 +22,7 @@ from django.core.mail import send_mail
 import confirmation
 import compadmin
 
+import csv
 
 @login_required
 def upload_results(request):
@@ -29,18 +30,40 @@ def upload_results(request):
     if request.method == 'POST':
         #a=request.POST
         form = UploadResultsForm(request.POST, request.FILES)
-        handle_uploaded_file(request.FILES['upload_file'])
+        handler_output = handle_uploaded_file(request.FILES['upload_file'])
     else:
-        pass
+        handler_output = ''
         
     fileUpload = UploadResultsForm()
-    c = {'fileUpload' : fileUpload}
+    c = {'fileUpload' : fileUpload, 'handler_output' : handler_output}
     c.update(csrf(request))
 
     return render_to_response('admin/upload_results.html', c, context_instance=RequestContext(request))
-    
+
+
 def handle_uploaded_file(inputf):
-#    with file as open(file_name):
-    print inputf.name
+    """ Handle input .RES file and print any errors to user (ie. return a string to be used in template) """
+    #TODO Better file format checking!
+    if '.RES' not in inputf.name:
+        return 'Incorrect file format provided.'
+    
+    input_fstring=''
+    #Chunks for handling larger files - will essentially just have a long string of char's after this
     for chunk in inputf.chunks():
-        print str(chunk)
+        input_fstring += chunk
+
+    #Format for INIDIVIDUALS is (INDGR in filename):
+    #"ReferenceN      ","ENG", "School; SurnameName, (I)nitial" 11,    8,   11,  75.0, 41.7, 41.7, 208, 5
+    #Format for PAIRS is (PRGR in filename):
+    #"ReferenceN      ","ENG", "School; Pair / Paar X" 11,    8,   11,  75.0, 41.7, 41.7, 208, 5
+    #NOTE: "ABSENT" can replace all scores
+
+    list_input = input_fstring.replace('\n', '').replace('"', '').replace(';',',').split('\r')#Split based on carriage returns
+    output_string = ''
+
+    #For each line in the input string, complete formatting steps
+    #for line in list_input:
+    #    stripped_line = line.split(',')
+    #    output_string+=str(stripped_line)+'\n'
+
+    return list_input
