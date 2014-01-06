@@ -9,7 +9,7 @@
 {%block content%}
 <h1 >Student registration form for {{schooln}}</h1>
 <p> {{ error }} </p>
-<form name='registration' action='.' method='post' onsubmit='return validateForm()'> <!-- onsubmit='return validate();'> -->
+<form name='registration' action='.' method='post' onsubmit='return validateForm(this)'> <!-- onsubmit='return validate();'> -->
     {% csrf_token %}
     <!-- {{ form.as_p  }} -->
     {% if user.is_authenticated %}
@@ -45,7 +45,7 @@
                 <td><input type="text" name="rt_surname" value={{responsible_teacher.surname|lower|capfirst}}></td>
                 <td><input type ="text" name="rt_phone_primary" required value={{responsible_teacher.phone_primary}}></td>                    
                 <td><input type ="text" name="rt_phone_alt" value={{responsible_teacher.phone_alt}}></td>
-                <td><input id="rmail" type ="text" name="rt_email" required value={{responsible_teacher.email|lower}}></td>
+                <td><input id="rmail" class="mail" type ="text" name="rt_email" required value={{responsible_teacher.email|lower}}></td>
                 <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
             </tr>
         </table>
@@ -64,7 +64,7 @@
             <tr>
                 <!-- <th>School</th> -->
                 <th>First Name*</th>
-                <th>Surname</th>
+                <th>Surname*</th>
                 <!-- <th>Venue</th> -->
 				<th>Phone* </th>
 				<th>Phone (Alternative)</th>
@@ -76,16 +76,16 @@
             {%for invigilator in invigilator_list%}
                 {% if forloop.first %} <!-- if this is the first iteration of the loop -->
                 <tr>
-                    <td><input type="text" name="inv_firstname" required value={{invigilator.firstname|lower|capfirst}}></td>
+                    <td><input type="text" class="invig" name="inv_firstname" required value={{invigilator.firstname|lower|capfirst}}></td>
                     <td><input type="text" name="inv_surname" required value={{invigilator.surname|lower|capfirst}}></td>
                     <td><input type ="text" name="inv_phone_primary" required value={{invigilator.phone_primary}}></td>                    
                     <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
-                    <td><input type ="text" name="inv_email" required value={{invigilator.email|lower}}></td>
+                    <td><input type ="text" class="mail" name="inv_email" required value={{invigilator.email|lower}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
                 {% else %}
                 <tr>
-                    <td><input type="text" name="inv_firstname" value={{invigilator.firstname|lower|capfirst}}></td>
+                    <td><input type="text" class="invig" name="inv_firstname" value={{invigilator.firstname|lower|capfirst}}></td>
                     <td><input type="text" name="inv_surname" value={{invigilator.surname|lower|capfirst}}></td>
                     <td><input type ="text" name="inv_phone_primary" value={{invigilator.phone_primary}}></td>                    
                     <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
@@ -99,20 +99,20 @@
             {%for invigilator in invigilator_range%}
             {% if invigilator_list|length = 0 and loopcounter.first %}
                 <tr>
-                    <td><input type="text" required name="inv_firstname"></td>
+                    <td><input type="text" class="invig" required name="inv_firstname"></td>
                     <td><input type="text" required name="inv_surname"></td>
                     <td><input type ="text" required name="inv_phone_primary"></td>                    
                     <td><input type ="text" name="inv_phone_alt"></td>
-                    <td><input type ="text" required name="inv_email"></td>
+                    <td><input type ="text" class="mail" required name="inv_email"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
             {% else %}
                 <tr>
-                    <td><input type="text" name="inv_firstname"></td>
+                    <td><input type="text" class="invig" name="inv_firstname"></td>
                     <td><input type="text" name="inv_surname"></td>
                     <td><input type ="text" name="inv_phone_primary"></td>                    
                     <td><input type ="text" name="inv_phone_alt"></td>
-                    <td><input type ="text" name="inv_email"></td>
+                    <td><input type ="text" class="mail" name="inv_email"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
             {% endif %}
@@ -130,7 +130,7 @@
         <h2>Grade {{grade}}</h2>
         <div>
             <h3>Pairs:
-            <select name = "pairs">
+            <select name = "pairs" class='double'>
                   {%for key, pair_list in pairs_per_grade.items%}
                     {% if grade == key %}
                         {%for p in pair_list%}
@@ -153,7 +153,7 @@
             {% if grade == key %} <!-- only for the current grade -->
                 {%for student in student_l%}
                 <tr>
-                    <td><input type="text" name="firstname" value={{student.firstname|lower|capfirst}}></td>
+                    <td><input type="text" name="firstname" class='single' value={{student.firstname|lower|capfirst}}></td>
                     <td><input type="text" name="surname" value={{student.surname|lower|capfirst}}></td>
                     <input type='hidden' name='grade' value='{{grade}}'>
                     <input type ="hidden" name="registered_by" value ={{ user.id }} >
@@ -166,7 +166,7 @@
             {% if grade == key %}
                 {% for entry in entry_range %}
                 <tr>
-                  <td><input type="text" name="firstname"></td>
+                  <td><input type="text" class='single' name="firstname"></td>
                   <td><input type="text" name="surname"></td>
                   <input type='hidden' name='grade' value='{{grade}}'>
                   <input type ="hidden" name="registered_by" value ={{ user.id }} >
