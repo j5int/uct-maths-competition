@@ -12,7 +12,9 @@
 </form>
 
     <p>
-    {{handler_output}}
+    {%for error in handler_output%}
+    {{error}}<br>
+    {% endfor %}
     </p>
     
 {% endblock %}
