@@ -53,7 +53,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired')
+	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
 	actions = ['archive_student','write_studentlist','write_studenttags', 'upload_results']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
