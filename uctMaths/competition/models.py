@@ -18,7 +18,7 @@ class Competition(models.Model):
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
     name        = models.CharField(max_length=255L, db_column='Name')
-    key         = models.CharField(max_length=3L, db_column='Key') 
+    key         = models.CharField(max_length=3L, db_column='Key', unique=True) 
     language    = models.CharField(max_length=1L, choices=( 
     ('e', 'English'), 
     ('a', 'Afrikaans'), 
@@ -69,7 +69,7 @@ class SchoolStudent(models.Model):
 
 class Venue(models.Model):
     '''Venues are locations for the event. Many SchoolStudents to one Venue.'''
-    code        = models.CharField(max_length=40L, db_column='Code')
+    code        = models.CharField(max_length=40L, db_column='Code', unique=True)
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
     grade       = models.IntegerField(db_column='Grade',null=True, blank=True)
@@ -82,6 +82,7 @@ class Venue(models.Model):
         return self.building+' '+self.code
     class Meta:
         ordering = ['building', 'code'] #defines the way the records are sorted.
+        
 
 class Invigilator(models.Model):
     # Invigilators registered by SchoolUsers. Many Invigilator to one School. 
