@@ -18,6 +18,7 @@ from django.db import connection
 from django.core import exceptions 
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.core.exceptions import ObjectDoesNotExist
 
 import confirmation
 import compadmin
@@ -46,7 +47,25 @@ def handle_uploaded_file(inputf):
     #TODO Better file format checking!
     if '.RES' not in inputf.name:
         return 'Incorrect file format provided.'
-    
+
+
+
+    #Find student based on reference number.
+#    student_list = Student.objects.all()
+
+    # *Filter* student DB based on filename? Allow "Escape Character"
+#    if 'X' not in inputf.name:
+#        grade = 0
+#        if 'PR' in inputf.name:
+#            paired = True #A pair file
+#        elif 'IND' in inputf.name:
+#            paired = False
+#        for k in range (8,13):
+#            if k in inputf.name:
+#                grade = k
+#                break
+#    else:
+
     input_fstring=''
     #Chunks for handling larger files - will essentially just have a long string of char's after this
     for chunk in inputf.chunks():
@@ -55,7 +74,7 @@ def handle_uploaded_file(inputf):
     #Format for INIDIVIDUALS is (INDGR in filename):
     #"ReferenceN      ","ENG", "School; SurnameName, (I)nitial" 11,    8,   11,  75.0, 41.7, 41.7, 208, 5
     #Format for PAIRS is (PRGR in filename):
-    #"ReferenceN      ","ENG", "School; Pair / Paar X" 11,    8,   11,  75.0, 41.7, 41.7, 208, 5
+    #"ReferenceN      ","ENG", "School; Pair / Paar X" 11,    8,   11,  75.0, ... ,[10]: 208 (Rank), 5
     #NOTE: "ABSENT" can replace all scores
 
     list_input = input_fstring.replace('\n', '').replace('"', '').replace(';',',').split('\r')#Split based on carriage returns
@@ -65,8 +84,28 @@ def handle_uploaded_file(inputf):
     for line in list_input:
         proc_line = line.split(',')
         try:
-            reference_number = proc_line[0]
-            #print reference_number
+            ref_num = proc_line[0].strip() #strip white space
+
+            #Populate the relevant details 
+            if 'ABSENT' in line:
+                score = 0
+                rank = 'ABSENT'
+            else:
+                score = proc_line[8].strip()
+                rank = proc_line[11].strip()
+
+        #Search DB for that reference number:
+            try:
+                student = SchoolStudent.objects.get(reference=ref_num)
+                print student
+                student.score = float(score)
+                student.rank = rank
+                student.save()
+            except ObjectDoesNotExist:
+                print ref_num, 'does not exist!'
+            except ValueError:
+                print 'Val Error!'
+
         except IndexError:
             pass #Empty line or somesuch
 
