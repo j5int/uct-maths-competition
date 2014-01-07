@@ -19,6 +19,7 @@ from django.core import exceptions
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datastructures import MultiValueDictKeyError
 
 import confirmation
 import compadmin
@@ -27,15 +28,23 @@ import csv
 
 @login_required
 def upload_results(request):
-
+    """ Handle upload files from the user. Bound to the upload_results.html admin page """
     if request.method == 'POST':
         #a=request.POST
-        form = UploadResultsForm(request.POST, request.FILES)
-        handler_output = handle_uploaded_file(request.FILES['upload_file'])
-    else:
-        handler_output = ''
-        
+        try: #Try receive file from 'Submit' post from user
+            form = UploadResultsForm(request.POST, request.FILES)
+            handler_output = handle_uploaded_file(request.FILES['upload_file'])
+        except MultiValueDictKeyError:#If the user just spams the 'Submit' button without selecting file
+            handler_output = ['Please select a valid .RES file from your computer by clicking the \'Browse...\' button']
+            
     fileUpload = UploadResultsForm()
+
+    if not handler_output: #No errors have occured
+        handler_output = [
+                        'No errors occured while importing results.', 
+                        'Please double check that all students in the database have been updated in the SchoolStudents tab'
+                        ]
+        
     c = {'fileUpload' : fileUpload, 'handler_output' : handler_output}
     c.update(csrf(request))
 
@@ -43,10 +52,11 @@ def upload_results(request):
 
 
 def handle_uploaded_file(inputf):
-    """ Handle input .RES file and print any errors to user (ie. return a string to be used in template) """
+    """ Handle input .RES file and return any errors to calling function (ie. return a string to be used in template) """
     #TODO Better file format checking!
+    
     if '.RES' not in inputf.name:
-        return 'Incorrect file format provided.'
+        return ['Incorrect file format provided.']
 
 
 
@@ -54,6 +64,7 @@ def handle_uploaded_file(inputf):
 #    student_list = Student.objects.all()
 
     # *Filter* student DB based on filename? Allow "Escape Character"
+        #------------------------------------------------#
 #    if 'X' not in inputf.name:
 #        grade = 0
 #        if 'PR' in inputf.name:
@@ -65,6 +76,8 @@ def handle_uploaded_file(inputf):
 #                grade = k
 #                break
 #    else:
+#           ... ... ... (TODO?)
+        #------------------------------------------------#
 
     input_fstring=''
     #Chunks for handling larger files - will essentially just have a long string of char's after this
@@ -72,14 +85,14 @@ def handle_uploaded_file(inputf):
         input_fstring += chunk
 
     #Format for INIDIVIDUALS is (INDGR in filename):
-    #"ReferenceN      ","ENG", "School; SurnameName, (I)nitial" 11,    8,   11,  75.0, 41.7, 41.7, 208, 5
+    #"ReferenceN [0]      ","ENG", "School; Surname, (I)nitials", ... , [8] 75.0 (Score), ... ,[11] 208 (Rank), ...
     #Format for PAIRS is (PRGR in filename):
-    #"ReferenceN      ","ENG", "School; Pair / Paar X" 11,    8,   11,  75.0, ... ,[10]: 208 (Rank), 5
+    #"ReferenceN [0]      ","ENG", "School; Pair / Paar X" , ... , [8] 75.0 (Score), ... ,[11] 208 (Rank), ...
     #NOTE: "ABSENT" can replace all scores
 
     list_input = input_fstring.replace('\n', '').replace('"', '').replace(';',',').split('\r')#Split based on carriage returns
-    output_string = ''
-
+    dne_list = [] #Hold "list of errors" to be placed on template
+    
     #For each line in the input string, complete formatting steps
     for line in list_input:
         proc_line = line.split(',')
@@ -89,7 +102,7 @@ def handle_uploaded_file(inputf):
             #Populate the relevant details 
             if 'ABSENT' in line:
                 score = 0
-                rank = 'ABSENT'
+                rank = None #TODO:Check that this is okay...
             else:
                 score = proc_line[8].strip()
                 rank = proc_line[11].strip()
@@ -97,16 +110,16 @@ def handle_uploaded_file(inputf):
         #Search DB for that reference number:
             try:
                 student = SchoolStudent.objects.get(reference=ref_num)
-                print student
                 student.score = float(score)
                 student.rank = rank
                 student.save()
             except ObjectDoesNotExist:
-                print ref_num, 'does not exist!'
+                dne_list.append('Reference number: '+str(ref_num)+' not found in database.')
             except ValueError:
-                print 'Val Error!'
+                dne_list.append('Reference number: '+str(ref_num)+' contains a data-input error.')
 
         except IndexError:
             pass #Empty line or somesuch
 
-    return list_input
+    #Return error list
+    return dne_list
