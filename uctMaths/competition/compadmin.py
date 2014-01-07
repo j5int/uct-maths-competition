@@ -62,7 +62,7 @@ def auto_allocate(venue_list):
 
     for venue in venue_list:
 
-        while grade_bucket[venue.grade, venue.allocated_to_pairs]:
+        while venue.grade and grade_bucket[venue.grade, venue.allocated_to_pairs]:
             if venue.occupied_seats < venue.seats - 1 and venue.allocated_to_pairs: #enough space for the pair
 
                 studentp1 = grade_bucket[venue.grade, venue.allocated_to_pairs].pop()

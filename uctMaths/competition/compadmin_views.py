@@ -29,6 +29,8 @@ import csv
 @login_required
 def upload_results(request):
     """ Handle upload files from the user. Bound to the upload_results.html admin page """
+    
+    handler_output=[]
     if request.method == 'POST':
         #a=request.POST
         try: #Try receive file from 'Submit' post from user
@@ -57,8 +59,6 @@ def handle_uploaded_file(inputf):
     
     if '.RES' not in inputf.name:
         return ['Incorrect file format provided.']
-
-
 
     #Find student based on reference number.
 #    student_list = Student.objects.all()
