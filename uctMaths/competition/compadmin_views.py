@@ -62,8 +62,12 @@ def handle_uploaded_file(inputf):
     output_string = ''
 
     #For each line in the input string, complete formatting steps
-    #for line in list_input:
-    #    stripped_line = line.split(',')
-    #    output_string+=str(stripped_line)+'\n'
+    for line in list_input:
+        proc_line = line.split(',')
+        try:
+            reference_number = proc_line[0]
+            #print reference_number
+        except IndexError:
+            pass #Empty line or somesuch
 
     return list_input
