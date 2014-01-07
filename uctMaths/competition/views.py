@@ -175,7 +175,7 @@ def newstudents(request):
                     surname = str(grade)+chr(65+p)
                     language = form.getlist('language','')[0]
                     school = assigned_school
-                    reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(10+p).zfill(2))
+                    reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
                     #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
                     paired = True 
                     #Save first entry for pair
@@ -198,7 +198,7 @@ def newstudents(request):
                 language = form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
-                reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5).zfill(2))
+                reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5+1).zfill(2))
                 #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
                 paired = False 
 
