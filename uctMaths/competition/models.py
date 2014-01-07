@@ -55,7 +55,7 @@ class SchoolStudent(models.Model):
     grade       = models.IntegerField(db_column='Grade', 
         validators = [
             MaxValueValidator(12),
-            MinValueValidator(0)
+            MinValueValidator(8)
         ])    
  #   sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
@@ -72,7 +72,7 @@ class Venue(models.Model):
     code        = models.CharField(max_length=40L, db_column='Code', unique=True)
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
-    grade       = models.IntegerField(db_column='Grade',null=True, blank=True)
+    grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
     allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS')
     occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True)
     #individuals = models.IntegerField(db_column='Individuals')
@@ -172,7 +172,7 @@ class SchoolStudentArchive(models.Model):
     grade       = models.IntegerField(db_column='Grade', 
         validators = [
             MaxValueValidator(12),
-            MinValueValidator(0)
+            MinValueValidator(8)
         ])
    # sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
