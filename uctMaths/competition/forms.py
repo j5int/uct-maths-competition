@@ -2,9 +2,23 @@
 from django import forms
 from django.forms import ModelForm, Textarea
 from django.forms import ModelChoiceField
-from competition.models import SchoolStudent, School, Invigilator, ResponsibleTeacher, Venue
+from competition.models import SchoolStudent, School, Invigilator, ResponsibleTeacher, Venue, Competition
 from django.forms.models import modelformset_factory
 from django.contrib.auth.models import User
+
+
+#**********************************
+#FORM FOR COMPETITION ADMINISTRATION
+class CompetitionForm (ModelForm):
+    class Meta:
+        model=Competition
+        
+class CompetitionForm (forms.Form): #THERE MUST ONLY BE ONE OF THESE!
+        fields = ['newentries_Opendate', 'newentries_Closedate']
+        newentries_Opendate = forms.DateField()
+        newentries_Closedate = forms.DateField()
+        admin_emailaddress = forms.CharField()
+        #prizegiving_date = forms.DateField()
 
 #**********************************
 #FORM TO ENTER A NEW SCHOOL STUDENT
@@ -87,6 +101,13 @@ class ResponsibleTeacherForm(forms.Form):
         email = forms.CharField()
         #registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
+#*****************************************
+
+class UploadResultsForm(forms.Form):
+        upload_file = forms.FileField(
+                        label='Select a file'
+                        #help_text = 'Hope this works!'
+                        )
 #*****************************************
 
 

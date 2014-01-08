@@ -42,11 +42,11 @@ def profile(request):
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
         school_blurb += 'not associated with any school. Navigate to \'Entry Form\' on the side-bar to continue.'
-        pass
-
+    
+    admin_contact = compadmin.admin_emailaddress()
     closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
         #return HttpResponseRedirect('../register/school_select/school_select.html')
-    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb})
+    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact})
 
 
 # submitted thingszz
@@ -175,7 +175,7 @@ def newstudents(request):
                     surname = str(grade)+chr(65+p)
                     language = form.getlist('language','')[0]
                     school = assigned_school
-                    reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(10+p).zfill(2))
+                    reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
                     #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
                     paired = True 
                     #Save first entry for pair
@@ -198,7 +198,7 @@ def newstudents(request):
                 language = form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
-                reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5).zfill(2))
+                reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5+1).zfill(2))
                 #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
                 paired = False 
 
@@ -274,7 +274,7 @@ def school_select(request):
         try:
         #Attempt to find user's chosen school
             assigned_school = School.objects.get(assigned_to=request.user)
-            inv_req_message = 'This profile is already bound to ' + assigned_school.name + '. Please proceed with student registration for the UCT Mathematics Competition by selecting "Registration Form." If you have selected the incorrect school, please contact ' + compadmin.admin_emailaddress + '.'
+            inv_req_message = 'This profile is already bound to ' + assigned_school.name + '. Please proceed with student registration for the UCT Mathematics Competition by selecting "Entry form." If you have selected the incorrect school, please contact ' + compadmin.admin_emailaddress() + '.'
             invalid_request=True
         except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Continue
@@ -294,9 +294,9 @@ def school_select(request):
                 return HttpResponseRedirect('../students/newstudents.html')
             else:
                 invalid_request = True 
-                inv_req_message = 'This school has already been assigned to another user. If you believe this to be an error, please contact ' + compadmin.admin_emailaddress + '.'
+                inv_req_message = 'This school has already been assigned to another user. If you believe this to be an error, please contact ' + compadmin.admin_emailaddress() + '.'
 
     schoolOptions = School.objects.all()
-    c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error} 
+    c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error, 'admin_emailaddress':compadmin.admin_emailaddress()} 
     c.update(csrf(request))
     return render_to_response('school_select.html', c, context_instance=RequestContext(request))

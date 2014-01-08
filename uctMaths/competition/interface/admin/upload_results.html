@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+{% block title %}Upload student results{% endblock %}
+ 
+{% block content %}
+<p> Please select the .RES file that contains the results data of the students. When uploaded, the names of the respective registered students will be updated. Any errors will be written below. </p>
+<form enctype="multipart/form-data" method="post">
+   {% csrf_token %}   
+   <table>
+       {{fileUpload.as_table}}
+    </table>
+    <input type="submit" value="Submit" id="Save"/>
+</form>
+
+    <p>
+    {%for error in handler_output%}
+    {{error}}<br>
+    {% endfor %}
+    </p>
+    
+{% endblock %}
