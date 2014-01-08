@@ -28,7 +28,7 @@ class SchoolModelForm( forms.ModelForm ):
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score') ##Which columns should be kept here? 
+	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
 	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks']
@@ -37,7 +37,7 @@ class SchoolAdmin(ImportExportModelAdmin):
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
     #Entries are on separate rows (separated by line break)
 	dataset = tablib.Dataset()
-	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to']
+	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank']
 
 	def remove_user_associations(self, request, queryset):
 	    return compadmin.remove_user_assoc(queryset)
