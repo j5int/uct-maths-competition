@@ -118,10 +118,12 @@ def handle_uploaded_file(inputf):
                 else:
                 #Pairs - expecting two students with same ref_num
                     student_pair = SchoolStudent.objects.filter(reference=ref_num)
-                    
-                    if not student_pair:
+                    #If reference number is not found at all
+                    if not student_pair: 
                         dne_list.append('Pairing error: no student with reference %s found in database'%{ref_num})
-                    
+                        #Not a fatal error; continue with import
+                        
+                    #If both of the pair are found; update and save them
                     elif student_pair.count()==2:
                         
                         student_pair[0].score=float(score)
@@ -132,22 +134,27 @@ def handle_uploaded_file(inputf):
                         student_pair[1].rank=rank
                         student_pair[1].save()
                     
+                    #If only one of the pair is found; display error
                     elif student_pair.count() == 1:
                         dne_list.append('Pairing error: only one student with reference %s found in database'%{ref_num})
+                        #Not a fatal error; continue with import
                     
+                    #If more than two are found; display error
                     else:
                         dne_list.append('Pairing error: more than 2 students with reference %s found in file.'%{ref_num})
-
+            #Individual exceptions: using get() generates exceptions
             except ObjectDoesNotExist:
                 dne_list.append('Reference number: %s not found in database.'%{ref_num})
+                #Not a fatal error; continue with import
             except ValueError:
                 dne_list.append('Reference number: %s contains a data-input error.'%{ref_num})
+                #Not a fatal error; continue with import
             except exceptions.MultipleObjectsReturned:
                 dne_list.append('ERROR. Import halted. Two students with the same reference: %s were found in the file. Please ensure that, if the file contains information for PAIRS that PR is present on the file name.'%{ref_num})
-                return dne_list
-                
+                return dne_list#Fatal error; STOP IMPORT where the error occured
+        #Input data error (not vital to know this; likely not a student-invalid line)
         except IndexError:
-            print 'Index Error!'
+            pass #TODO Find out what kind of data generates this error!
 
     #Return error list
     return dne_list
