@@ -28,10 +28,11 @@ import csv
 
 @login_required
 def upload_results(request):
-    """ Handle upload files from the user. Bound to the upload_results.html admin page """
-    
-    handler_output=[]
-    
+    """ Handle upload files from the user. Bound to the upload_results.html admin page."""
+
+    handler_output=[]#Sent to html template for feedback to user
+
+    #Once the user has pressed 'Submit'
     if request.method == 'POST':
         #a=request.POST
         try: #Try receive file from 'Submit' post from user
@@ -45,12 +46,13 @@ def upload_results(request):
                             'No errors occured while importing results.', 
                             'Please double check that all students in the database have been updated in the SchoolStudents tab'
                             ]
-
+    #Present UploadResultsForm (defined in forms.py)
     fileUpload = UploadResultsForm()
 
     if not handler_output:
         handler_output = ['Please select a file to upload']
 
+    #Present upload form and handler message (prompt for input/errors text) to the user
     c = {'fileUpload' : fileUpload, 'handler_output' : handler_output}
     c.update(csrf(request))
 
@@ -59,8 +61,8 @@ def upload_results(request):
 
 def handle_uploaded_file(inputf):
     """ Handle input .RES file and return any errors to calling function (ie. return a string to be used in template) """
+
     #TODO Better file format checking!
-    
     if '.RES' not in inputf.name:
         return ['Incorrect file format provided.']
 
