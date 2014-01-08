@@ -360,3 +360,63 @@ def upload_results(request, student_list):
     #Return response of redirect page
     response = HttpResponseRedirect('/competition/admin/upload_results.html')
     return response
+    
+#TODO
+def rank_schools(school_list):
+    """ Ranks schools based on a sum of the top X scores. X is set via the 'Competition' form. """
+    comp = Competition.objects.all() #Should only be one!
+    
+    if comp.count() == 1:
+        top_score_candidates = comp[0].num_schoolcandidate_scores
+    else:
+        num_schoolcandidate_scores = 0
+        
+    all_schools = School.objects.all()
+    
+    #Calculate total scores for all schools
+    for school in all_schools:
+        #Get ONLY the candidates from that school and order by score DESCENDING
+        candidates = SchoolStudent.objects.all().filter(school=school, paired = False).exclude(score=None).order_by('-score')
+        
+        #Calculate schools' total scores
+        total_score = 0
+        #Sum candidates scores (already sorted in descending order)
+        for i, c in enumerate(candidates):
+            print i, c.surname, c.score
+            if i < top_score_candidates:
+                total_score = total_score + c.score
+            #else:
+            #     break
+        print total_score
+        school.score = total_score
+        school.save()
+
+    #Rank schools
+    #Order all schools in descending order
+    all_schools = all_schools.order_by('-score')
+    print all_schools
+    rank_base = 1
+
+    #TODO: Add logic for two schools having the same score
+    #TODO: Add 'Rank' attribute for schools
+    for school in all_schools:
+        school.rank = rank_base
+        rank_base = rank_base + 1
+        school.save()
+
+
+
+#TODO
+def assign_awards(student_list):
+    """ Assign awards to participants (QuerySet is list of students) to students based on their rank. """
+    pass
+
+#TODO
+def rank_students(student_list):
+    """Rank students on their uploaded score. """
+    pass
+
+
+
+
+
