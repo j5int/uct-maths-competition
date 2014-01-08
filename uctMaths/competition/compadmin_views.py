@@ -31,6 +31,7 @@ def upload_results(request):
     """ Handle upload files from the user. Bound to the upload_results.html admin page """
     
     handler_output=[]
+    
     if request.method == 'POST':
         #a=request.POST
         try: #Try receive file from 'Submit' post from user
@@ -38,15 +39,18 @@ def upload_results(request):
             handler_output = handle_uploaded_file(request.FILES['upload_file'])
         except MultiValueDictKeyError:#If the user just spams the 'Submit' button without selecting file
             handler_output = ['Please select a valid .RES file from your computer by clicking the \'Browse...\' button']
-            
+
+        if not handler_output: #No errors have occured
+            handler_output = [
+                            'No errors occured while importing results.', 
+                            'Please double check that all students in the database have been updated in the SchoolStudents tab'
+                            ]
+
     fileUpload = UploadResultsForm()
 
-    if not handler_output: #No errors have occured
-        handler_output = [
-                        'No errors occured while importing results.', 
-                        'Please double check that all students in the database have been updated in the SchoolStudents tab'
-                        ]
-        
+    if not handler_output:
+        handler_output = ['Please select a file to upload']
+
     c = {'fileUpload' : fileUpload, 'handler_output' : handler_output}
     c.update(csrf(request))
 
@@ -91,7 +95,7 @@ def handle_uploaded_file(inputf):
     #NOTE: "ABSENT" can replace all scores
 
     list_input = input_fstring.replace('\n', '').replace('"', '').replace(';',',').split('\r')#Split based on carriage returns
-    dne_list = [] #Hold "list of errors" to be placed on template
+    dne_list = [] #Hold "list of errors" to be placed on template. Called "Does Not Exist (DNE) list"
     
     #For each line in the input string, complete formatting steps
     for line in list_input:
