@@ -14,7 +14,7 @@ class Competition(models.Model):
     newentries_Opendate = models.DateField(db_column='newentries_Opendate')
     newentries_Closedate = models.DateField(db_column='newentries_Closedate')
     admin_emailaddress = models.CharField(max_length=30L)
-    num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores')
+    num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True)
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
@@ -34,7 +34,7 @@ class School(models.Model):
     email       = models.CharField(max_length=50L, db_column='Email', blank=True) 
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForreignKey (gets assigned a single user)
     #registered_by = models.CharField(max_length=255L, db_column='Registered By') #Changed to CharField
-    #rank = models.IntegerField(null=True, db_column='Rank', blank=True)
+    rank = models.IntegerField(null=True, db_column='Rank', blank=True)
 
     def __str__(self):
         return self.name
