@@ -15,7 +15,7 @@ from competition.models import SchoolStudent, School, Invigilator, Venue, Respon
 from django.contrib.auth.models import User
 #from django.contrib.contenttypes import *
 from django.db import connection
-from django.core import exceptions 
+from django.core import exceptions
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.exceptions import ObjectDoesNotExist
@@ -69,21 +69,15 @@ def handle_uploaded_file(inputf):
     #Find student based on reference number.
 #    student_list = Student.objects.all()
 
-    # *Filter* student DB based on filename? Allow "Escape Character"
-        #------------------------------------------------#
-#    if 'X' not in inputf.name:
-#        grade = 0
-#        if 'PR' in inputf.name:
-#            paired = True #A pair file
-#        elif 'IND' in inputf.name:
-#            paired = False
-#        for k in range (8,13):
-#            if k in inputf.name:
-#                grade = k
-#                break
-#    else:
-#           ... ... ... (TODO?)
-        #------------------------------------------------#
+    # Pairs require separate logic
+#------------------------------------------------#
+    if 'PR' in inputf.name:
+        pair_logic = True
+    elif 'IND' in inputf.name:
+        pair_logic = False
+    else:
+        return ['Input filename error. Please ensure that the file name contains PR or IND so that pair or individual (respectively) results import can ocur.']
+ #------------------------------------------------#
 
     input_fstring=''
     #Chunks for handling larger files - will essentially just have a long string of char's after this
@@ -96,9 +90,9 @@ def handle_uploaded_file(inputf):
     #"ReferenceN [0]      ","ENG", "School; Pair / Paar X" , ... , [8] 75.0 (Score), ... ,[11] 208 (Rank), ...
     #NOTE: "ABSENT" can replace all scores
 
-    list_input = input_fstring.replace('\n', '').replace('"', '').replace(';',',').split('\r')#Split based on carriage returns
+    list_input = input_fstring.replace('\r', '').replace('"', '').replace(';',',').split('\n')#Split based on carriage returns
     dne_list = [] #Hold "list of errors" to be placed on template. Called "Does Not Exist (DNE) list"
-    
+
     #For each line in the input string, complete formatting steps
     for line in list_input:
         proc_line = line.split(',')
@@ -115,17 +109,45 @@ def handle_uploaded_file(inputf):
 
         #Search DB for that reference number:
             try:
-                student = SchoolStudent.objects.get(reference=ref_num)
-                student.score = float(score)
-                student.rank = rank
-                student.save()
-            except ObjectDoesNotExist:
-                dne_list.append('Reference number: '+str(ref_num)+' not found in database.')
-            except ValueError:
-                dne_list.append('Reference number: '+str(ref_num)+' contains a data-input error.')
+                #Individuals - expecting only a single student with ref_num
+                if not pair_logic:
+                    student = SchoolStudent.objects.get(reference=ref_num)
+                    student.score = float(score)
+                    student.rank = rank
+                    student.save()
+                else:
+                #Pairs - expecting two students with same ref_num
+                    student_pair = SchoolStudent.objects.filter(reference=ref_num)
+                    
+                    if not student_pair:
+                        dne_list.append('Pairing error: no student with reference %s found in database'%{ref_num})
+                    
+                    elif student_pair.count()==2:
+                        
+                        student_pair[0].score=float(score)
+                        student_pair[0].rank=rank
+                        student_pair[0].save()
+                        
+                        student_pair[1].score=float(score)
+                        student_pair[1].rank=rank
+                        student_pair[1].save()
+                    
+                    elif student_pair.count() == 1:
+                        dne_list.append('Pairing error: only one student with reference %s found in database'%{ref_num})
+                    
+                    else:
+                        dne_list.append('Pairing error: more than 2 students with reference %s found in file.'%{ref_num})
 
+            except ObjectDoesNotExist:
+                dne_list.append('Reference number: %s not found in database.'%{ref_num})
+            except ValueError:
+                dne_list.append('Reference number: %s contains a data-input error.'%{ref_num})
+            except exceptions.MultipleObjectsReturned:
+                dne_list.append('ERROR. Import halted. Two students with the same reference: %s were found in the file. Please ensure that, if the file contains information for PAIRS that PR is present on the file name.'%{ref_num})
+                return dne_list
+                
         except IndexError:
-            pass #Empty line or somesuch
+            print 'Index Error!'
 
     #Return error list
     return dne_list
