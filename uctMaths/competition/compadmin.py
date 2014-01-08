@@ -372,12 +372,29 @@ def rank_schools(school_list):
         num_schoolcandidate_scores = 0
         
     all_schools = School.objects.all()
-    
+
     #Calculate total scores for all schools
     for school in all_schools:
         #Get ONLY the candidates from that school and order by score DESCENDING
-        candidates = SchoolStudent.objects.all().filter(school=school, paired = False).exclude(score=None).order_by('-score')
+        #FIXME ?: These DB operations just wouldn't work with the distinct command. Using less efficient python-lists methods
+        #candidates = SchoolStudent.objects.order_by('reference').distinct('reference')#.filter(school=school).exclude(score=None)
+        #candidates = candidates.order_by('-score')
         
+        candidatesQS = SchoolStudent.objects.filter(school=school).exclude(score=None).order_by('-score')
+        #Remove pairs (duplicate REF numbers)
+        candidates = []
+        
+        #Pretty sloppy way of doing it. Need to be able to remove a C from list without affecting DB record
+            #Couldn't find a method in QuerySet API
+
+        for c in candidatesQS:
+            candidates.append(c)
+            
+        for c in candidates:
+            for index, p in enumerate(candidates):
+                if p.reference == c.reference: #Match is found
+                    candidates.pop(index)
+
         #Calculate schools' total scores
         total_score = 0
         #Sum candidates scores (already sorted in descending order)
@@ -385,16 +402,13 @@ def rank_schools(school_list):
             print i, c.surname, c.score
             if i < top_score_candidates:
                 total_score = total_score + c.score
-            #else:
-            #     break
-        print total_score
+
         school.score = total_score
         school.save()
 
     #Rank schools
     #Order all schools in descending order
     all_schools = all_schools.order_by('-score')
-    print all_schools
     rank_base = 1
 
     #TODO: Add logic for two schools having the same score
@@ -404,19 +418,12 @@ def rank_schools(school_list):
         rank_base = rank_base + 1
         school.save()
 
-
-
 #TODO
 def assign_awards(student_list):
-    """ Assign awards to participants (QuerySet is list of students) to students based on their rank. """
+    """ Assign awards to participants (QuerySet is list of students) to students based on their rank."""
     pass
 
 #TODO
 def rank_students(student_list):
-    """Rank students on their uploaded score. """
+    """Rank students on their uploaded score. Used if a score has been changed and the remaining students need to be re-classified"""
     pass
-
-
-
-
-
