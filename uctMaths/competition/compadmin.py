@@ -412,15 +412,38 @@ def rank_schools(school_list):
     rank_base = 1
 
     #TODO: Add logic for two schools having the same score
-    #TODO: Add 'Rank' attribute for schools
-    for school in all_schools:
-        school.rank = rank_base
-        rank_base = rank_base + 1
-        school.save()
+
+    
+    #Ensure that schools with equal scores are assigned the same rank
+    #TODO Needs testing!
+    #Generate a list from the schools (so that I can use .pop(0) commands on it)
+    school_selection = []
+    for s in all_schools:
+        school_selection.append(s)
+    
+    school = school_selection.pop(0)
+    school.rank = rank_base
+    current_score = school.score
+    school.save()
+
+    rank_delta = 0
+    while school_selection: #while the list is not empty
+        school = school_selection.pop(0)
+        
+        rank_base = rank_base + rank_delta
+        rank_delta = 1
+
+        #Assign all schools with the same score the same rank
+        #Use the rank_delta as a ticket
+        while school_selection and school.score == current_score: 
+            school = school_selection.pop(0)
+            school.rank = rank_base
+            rank_delta = rank_delta + 1
+            school.save()
 
 #TODO
 def assign_awards(student_list):
-    """ Assign awards to participants (QuerySet is list of students) to students based on their rank."""
+    """ Assign awards to participants (QuerySet is list of students) to students based on their rank. Serves an excel workboow with the awards for each student."""
     pass
 
 #TODO
