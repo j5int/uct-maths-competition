@@ -411,20 +411,15 @@ def rank_schools(school_list):
     #Order all schools in descending order
     all_schools = all_schools.order_by('-score')
 
-
-    #TODO: Add logic for two schools having the same score
-
-    
     #Ensure that schools with equal scores are assigned the same rank
-    #TODO Needs testing!
     #Generate a list from the schools (so that I can use .pop(0) commands on it)
     school_selection = []
     for s in all_schools:
         school_selection.append(s)
 
-    rank_base = 1
-    rank_delta = 0
-    
+    rank_base = 1 
+    rank_delta = 0 #Used when multiple schools have the same score
+
     while school_selection: #while the list is not empty
 
         rank_base = rank_base + rank_delta
@@ -436,7 +431,7 @@ def rank_schools(school_list):
         
         rank_delta = 1
         #Assign all schools with the same score the same rank
-        #Use the rank_delta as a ticket
+        #Use the rank_delta as a counter
         while school_selection and school_selection[0].score == current_score: 
             school = school_selection.pop(0)
             school.rank = rank_base
@@ -451,4 +446,38 @@ def assign_awards(student_list):
 #TODO
 def rank_students(student_list):
     """Rank students on their uploaded score. Used if a score has been changed and the remaining students need to be re-classified"""
-    pass
+    
+    
+    #Rank students
+    #Order all students in descending score order
+    all_students = SchoolStudent.objects.all().exclude(score=None).order_by('-score')
+
+    #Ensure that students with equal scores are assigned the same rank
+    #Generate a list from the students (so that I can use .pop(0) commands on it)
+    student_selection = []
+    for s in all_students:
+        student_selection.append(s)
+
+    rank_base = 1 
+    rank_delta = 0 #Used when multiple schools have the same score
+
+    while student_selection: #while the list is not empty
+
+        rank_base = rank_base + rank_delta
+        
+        student = student_selection.pop(0)
+        student.rank = rank_base
+        current_score = student.score
+        student.save()
+        
+        rank_delta = 1
+        #Assign all schools with the same score the same rank
+        #Use the rank_delta as a counter
+        while student_selection and student_selection[0].score == current_score: 
+            student = student_selection.pop(0)
+            student.rank = rank_base
+            rank_delta = rank_delta + 1
+            student.save()
+
+
+
