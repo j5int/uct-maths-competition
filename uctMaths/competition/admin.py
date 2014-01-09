@@ -60,7 +60,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
-	actions = ['archive_student','write_studentlist','write_studenttags', 'upload_results']
+	actions = ['archive_student','write_studentlist','write_studenttags', 'upload_results', 'rank_students']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -89,7 +89,12 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def upload_results(self, request, queryset):
 	    return compadmin.upload_results(request, queryset)
-	
+	upload_results.short_description = 'Upload students\' results (.RES file required)'
+
+	def rank_students(self, request, queryset):
+	    return compadmin.rank_students(queryset)
+	rank_students.short_description = 'Re-rank students. (All ranked regardless of selection)'
+
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
