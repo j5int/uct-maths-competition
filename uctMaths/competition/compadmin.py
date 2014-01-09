@@ -388,28 +388,29 @@ def rank_schools(school_list):
             #Couldn't find a method in QuerySet API
 
         for c in candidatesQS:
+            #print c.firstname, c.surname, c.score
             candidates.append(c)
             
         for c in candidates:
             for index, p in enumerate(candidates):
-                if p.reference == c.reference: #Match is found
+                if p.paired and c.paired and p.reference == c.reference: #Match is found
                     candidates.pop(index)
 
         #Calculate schools' total scores
         total_score = 0
         #Sum candidates scores (already sorted in descending order)
         for i, c in enumerate(candidates):
-            print i, c.surname, c.score
+            #print i, c.firstname, c.surname, c.score
             if i < top_score_candidates:
                 total_score = total_score + c.score
-
+        #print school.name, total_score
         school.score = total_score
         school.save()
 
     #Rank schools
     #Order all schools in descending order
     all_schools = all_schools.order_by('-score')
-    rank_base = 1
+
 
     #TODO: Add logic for two schools having the same score
 
@@ -420,22 +421,23 @@ def rank_schools(school_list):
     school_selection = []
     for s in all_schools:
         school_selection.append(s)
-    
-    school = school_selection.pop(0)
-    school.rank = rank_base
-    current_score = school.score
-    school.save()
 
+    rank_base = 1
     rank_delta = 0
+    
     while school_selection: #while the list is not empty
-        school = school_selection.pop(0)
-        
-        rank_base = rank_base + rank_delta
-        rank_delta = 1
 
+        rank_base = rank_base + rank_delta
+        
+        school = school_selection.pop(0)
+        school.rank = rank_base
+        current_score = school.score
+        school.save()
+        
+        rank_delta = 1
         #Assign all schools with the same score the same rank
         #Use the rank_delta as a ticket
-        while school_selection and school.score == current_score: 
+        while school_selection and school_selection[0].score == current_score: 
             school = school_selection.pop(0)
             school.rank = rank_base
             rank_delta = rank_delta + 1
