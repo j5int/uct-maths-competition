@@ -439,11 +439,50 @@ def rank_schools(school_list):
             school.save()
 
 #TODO
-def assign_awards(student_list):
+def assign_awards(request, student_list):
     """ Assign awards to participants (QuerySet is list of students) to students based on their rank. Serves an excel workboow with the awards for each student."""
-    pass
+    studentQS_individuals = student_list.filter(paired=False).order_by('-score')
+    studentQS_pairs = student_list.filter(paired=True).order_by('-score')
+    
+    #Generate gold-awards list (Top 10 individuals, top 3 pairs)
+    gold_awards_individuals = []
+    gold_awards_pairs = []
 
-#TODO
+    try:
+        for i in range(0,10):
+            gold_awards_individuals.append(studentQS_individuals[i]) 
+    except IndexError:
+        pass #too few participants for particular award quota
+
+    try:
+        for i in range(0,6):
+            gold_awards_pairs.append(studentQS_pairs[i]) 
+    except IndexError:
+        pass #too few participants for particular award quota
+
+    merit_awards_individuals = []
+    merit_awards_pairs = []
+
+    #Generate merit awards list
+    try:
+        for i in range(11, 200):
+            merit_awards_individuals.append(studentQS_individuals[i])
+    except IndexError:
+        pass #too few participants for particular award quota
+
+    try:
+        for i in range(7, 200):
+            merit_awards_pairs.append(studentQS_pairs[i])
+    except IndexError:
+        pass #too few participants for particular award quota
+
+    #TODO THe other awards
+    #TODO Exporting to xls workbook (separate sheets)
+    #TODO Serving to the user
+
+    return None
+
+
 def rank_students(student_list):
     """Rank students on their uploaded score. Used if a score has been changed and the remaining students need to be re-classified"""
     
