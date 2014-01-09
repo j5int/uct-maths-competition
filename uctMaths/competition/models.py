@@ -10,10 +10,16 @@ from import_export import resources, fields
 from import_export.admin import ImportExportModelAdmin
 import tablib
 
+class Competition(models.Model):
+    newentries_Opendate = models.DateField(db_column='newentries_Opendate')
+    newentries_Closedate = models.DateField(db_column='newentries_Closedate')
+    admin_emailaddress = models.CharField(max_length=30L)
+    num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True)
+
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
     name        = models.CharField(max_length=255L, db_column='Name')
-    key         = models.CharField(max_length=3L, db_column='Key') 
+    key         = models.CharField(max_length=3L, db_column='Key', unique=True) 
     language    = models.CharField(max_length=1L, choices=( 
     ('e', 'English'), 
     ('a', 'Afrikaans'), 
@@ -28,6 +34,7 @@ class School(models.Model):
     email       = models.CharField(max_length=50L, db_column='Email', blank=True) 
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForreignKey (gets assigned a single user)
     #registered_by = models.CharField(max_length=255L, db_column='Registered By') #Changed to CharField
+    rank = models.IntegerField(null=True, db_column='Rank', blank=True)
 
     def __str__(self):
         return self.name
@@ -50,7 +57,7 @@ class SchoolStudent(models.Model):
     grade       = models.IntegerField(db_column='Grade', 
         validators = [
             MaxValueValidator(12),
-            MinValueValidator(0)
+            MinValueValidator(8)
         ])    
  #   sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
@@ -62,50 +69,22 @@ class SchoolStudent(models.Model):
     class Meta:
         ordering = ['school', 'grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
-#class SchoolUser(models.Model):
-#    # The administrator for a single school. 
-#    # A User can register/update/remove SchoolStudents and Invigilators.
-
-#    school      = models.ForeignKey('School', db_column='School') 
-#    count       = models.IntegerField()
-#    address     = models.CharField(max_length=255L, db_column='Address')
-#    town        = models.CharField(max_length=50L, db_column='Town')
-#    postal_code = models.CharField(max_length=4L, db_column='Postal_Code') 
-#    phone       = models.CharField(max_length=15L, db_column='Telephone') 
-#    fax         = models.CharField(max_length=15L, db_column='Fax', blank=True) 
-#    email       = models.CharField(max_length=50L, db_column='Email', blank=True)
-#    correction  = models.IntegerField(db_column='Correction') 
-#    entered     = models.IntegerField(db_column='Entered')  
-#    language    = models.CharField(max_length=1L, db_column='Language', choices=(
-#        ('e', 'English'), 
-#        ('a', 'Afrikaans'),
-#		('b', 'Bilingual')
-#    )) 
-#    counter     = models.IntegerField(db_column='Count')
-#    last_login  = models.DateField(null=True, blank=True, db_column='Last Login')
-#    non_uct     = models.IntegerField(db_column='Non UCT') 
-#    user        = models.OneToOneField(User)
-
-#    def __str__(self):
-#        return self.user
-#    class Meta:
-#        ordering = ['school', 'user'] #defines the way the records are sorted.
-
 class Venue(models.Model):
     '''Venues are locations for the event. Many SchoolStudents to one Venue.'''
-    code        = models.CharField(max_length=40L, db_column='Code')
+    code        = models.CharField(max_length=40L, db_column='Code', unique=True)
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
-    grade       = models.IntegerField(db_column='Grade',null=True, blank=True)
+    grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
     allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS')
     occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True)
     #individuals = models.IntegerField(db_column='Individuals')
     #registered_by = models.ForeignKey(User, db_column='Registered By')
 
     def __str__(self):
-        return self.building+', '+self.code
+        return self.building+' '+self.code
     class Meta:
         ordering = ['building', 'code'] #defines the way the records are sorted.
+        
 
 class Invigilator(models.Model):
     # Invigilators registered by SchoolUsers. Many Invigilator to one School. 
@@ -195,7 +174,7 @@ class SchoolStudentArchive(models.Model):
     grade       = models.IntegerField(db_column='Grade', 
         validators = [
             MaxValueValidator(12),
-            MinValueValidator(0)
+            MinValueValidator(8)
         ])
    # sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
