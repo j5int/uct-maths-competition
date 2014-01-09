@@ -28,15 +28,30 @@ class SchoolModelForm( forms.ModelForm ):
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('id', 'name', 'language', 'address','phone','fax','contact','email','assigned_to') ##Which columns should be kept here? 
+	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
     #Entries are on separate rows (separated by line break)
 	dataset = tablib.Dataset()
-	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to']
+	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank']
+
+	def remove_user_associations(self, request, queryset):
+	    return compadmin.remove_user_assoc(queryset)
+
+	def output_schooltaglist(self, request, queryset):
+	    return compadmin.output_schooltaglists(queryset)
+
+	def assign_school_ranks(self, request, queryset):
+	    return compadmin.rank_schools(queryset)
+
+	output_schooltaglist.short_description = 'Generate and download school tags file for selected school(s)'
+	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
+	assign_school_ranks.short_description = 'Assign rank based on score to selected school(s)' 
+
 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
@@ -44,8 +59,8 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired')
-	actions = ['archive_student']
+	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
+	actions = ['archive_student','write_studentlist','write_studenttags', 'upload_results', 'rank_students', 'output_assign_awards']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -62,13 +77,35 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	dataset = tablib.Dataset()
 	dataset.headers = ['school', 'firstname', 'surname', 'grade', 'reference', 'paired']
 
+	def write_studentlist(self, request, queryset):
+	    return compadmin.output_studentlists(queryset)
+
+	write_studentlist.short_description = 'Download (xls) formatted student registry for selected students'
+
+
+	def write_studenttags(self, request, queryset):
+	    return compadmin.output_studenttags(queryset)
+	write_studenttags.short_description = 'Generate MailMerge files for student tags for selected students'
+
+	def upload_results(self, request, queryset):
+	    return compadmin.upload_results(request, queryset)
+	upload_results.short_description = 'Upload students\' results (.RES file required)'
+
+	def rank_students(self, request, queryset):
+	    return compadmin.rank_students(queryset)
+	rank_students.short_description = 'Re-rank students. (All ranked regardless of selection)'
+
+	def output_assign_awards(self, request, queryset):
+	    return compadmin.assign_awards(request, queryset)
+	output_assign_awards.short_description = 'Assign awards and export (xls) document (regardless of selection)'
+
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
 	resource_class = VenueResource
 	list_display = ('building', 'code', 'seats', 'grade', 'allocated_to_pairs', 'occupied_seats')
 	search_fields = ['building', 'code']
 	list_filter = ('grade', 'allocated_to_pairs')
-	actions = ['auto_allocate', 'deallocate']
+	actions = ['auto_allocate', 'deallocate', 'write_venue_register']
     # -------------- Import_Export functionality  ----------
 	resource_class = VenueResource
 	#Expects csv (comma-separated) file with the first line being:
@@ -83,8 +120,12 @@ class VenueAdmin(ImportExportModelAdmin):
 	def deallocate(self, request, queryset):
 	    compadmin.venue_deallocate(queryset)
 
+	def write_venue_register(self, request, queryset):
+	    return compadmin.output_register(queryset)
+
 	auto_allocate.short_description = 'Auto-allocate unallocated students to selected venue(s)' 
 	deallocate.short_description = 'Deallocate students from selected of venue(s)'
+	write_venue_register.short_description = 'Generate and download (xls) student registry for selected venue(s)'
 
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(ImportExportModelAdmin):
@@ -106,10 +147,13 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         cursor.execute("UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
         transaction.commit_unless_managed()
 
+class CompetitionAdmin(admin.ModelAdmin):
+    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress')
 
 
 #admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)
+admin.site.register(Competition, CompetitionAdmin)
 admin.site.register(ResponsibleTeacher, ResponsibleTeacherAdmin)
 admin.site.register(School, SchoolAdmin)
 admin.site.register(SchoolStudent, SchoolStudentAdmin)

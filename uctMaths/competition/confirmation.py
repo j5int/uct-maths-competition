@@ -35,7 +35,7 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy 
 
     ### Send mail ###
     if cc_admin: #If no recipient has been specified
-        send_mail('Confirmation Email', output_string, 'support@sjsoft.com',[username.email, compadmin.admin_emailaddress], fail_silently=False)
+        send_mail('Confirmation Email', output_string, 'support@sjsoft.com',[username.email, compadmin.admin_emailaddress()], fail_silently=False)
     else: 
         send_mail('Confirmation Email', output_string, 'support@sjsoft.com',[username.email], fail_silently=False)
 
