@@ -514,11 +514,13 @@ def assign_awards(request, student_list):
     #Alphabetical list of school award winners
     #Generate gold-awards list (Top 10 individuals, top 3 pairs)
     
+    school_list = School.objects.all()
+    
     for igrade in range(8, 13):
         #Gold awards
         wb_sheet = output_workbook.add_sheet('Gold Grade %d'%(igrade))
         #Generate QuerySets for GOLD medal winners (sorted by rank (descnding))
-        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=10).order_by('rank')
+        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=4).order_by('rank')
         individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=11).order_by('rank')
         pairs_offset = 4 #Using an offset accounts for situations where more than 10 people are getting gold (ties at rank=10)
 
@@ -531,6 +533,7 @@ def assign_awards(request, student_list):
             wb_sheet.write(index+2,2,str(individual.reference))
             wb_sheet.write(index+2,3,str(individual.firstname))
             wb_sheet.write(index+2,4,str(individual.surname))
+            school_list=school_list.exclude(name=individual.school) #Exclude school for Oxford prize
             pairs_offset = pairs_offset + 1
         
         wb_sheet.write(pairs_offset,0,'Gold award winners: Grade %d pairs'%(igrade))
@@ -541,12 +544,12 @@ def assign_awards(request, student_list):
             wb_sheet.write(index+pairs_offset,2,str(pair.reference))
             wb_sheet.write(index+pairs_offset,3,str(pair.firstname))
             wb_sheet.write(index+pairs_offset,4,str(pair.surname))
-
+            school_list=school_list.exclude(name=pair.school) #Exclude school for Oxford prize
 
         #Merit awards
         wb_sheet = output_workbook.add_sheet('Merit Grade %d'%(igrade))
         #Generate QuerySets for MERIT medal winners (sorted by school0 (name descending))
-        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=201, rank__gt=10).order_by('school')
+        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=101, rank__gt=4).order_by('school')
         individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=201, rank__gt=10).order_by('school')
         pairs_offset = 4 #Using an offset accounts for situations where more than 10 people are getting merit (ties at rank=200)
 
@@ -570,7 +573,24 @@ def assign_awards(request, student_list):
             wb_sheet.write(index+pairs_offset,4,str(pair.surname))
 
     #TODO Oxford prizes. 
+    #School awards (Oxford prizes) are assigned to the top individual in each school where the school did not receive an individual or pair Gold award
     wb_sheet = output_workbook.add_sheet('Oxford prizes (School Award)')
+    award_winners = []
+    
+    for school in school_list:
+        #Get the students from the eligible school, order by score (descending)
+        school_students = SchoolStudent.objects.filter(school=school).order_by('-score')
+        
+        #The award winner  is that with the highest score at the school
+        if school_students and school_students[0].score:
+            award_winners.append(school_students[0])
+
+    wb_sheet.write(0,0,'Oxford School award')
+    for index, aw in enumerate(award_winners):
+        wb_sheet.write(index+1,1,str(aw.school))
+        wb_sheet.write(index+1,2,str(aw.reference))
+        wb_sheet.write(index+1,3,str(aw.firstname))
+        wb_sheet.write(index+1,4,str(aw.surname))
 
     #Return the response with attached content to the user
     response = HttpResponse()
