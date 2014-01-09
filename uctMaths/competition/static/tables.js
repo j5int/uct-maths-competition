@@ -117,7 +117,7 @@ function validateForm(doc)
 		if(invig[1].value =='')
 		{
 			invig[1].style.background = 'Yellow';
-			alert("Reminder: A minimum of two invigilators are required for 75 students!");
+			alert("Reminder: A minimum of two invigilators is required for 75 students!");
 			return false;
 		}
 		invig[1].style.background = 'White';
