@@ -18,7 +18,9 @@ class CompetitionForm (forms.Form): #THERE MUST ONLY BE ONE OF THESE!
         newentries_Opendate = forms.DateField()
         newentries_Closedate = forms.DateField()
         admin_emailaddress = forms.CharField()
-        #prizegiving_date = forms.DateField()
+        number_of_pairs = forms.IntegerField()
+        number_of_individuals = forms.IntegerField()
+        prizegiving_date = forms.DateField()
 
 #**********************************
 #FORM TO ENTER A NEW SCHOOL STUDENT

@@ -22,6 +22,38 @@ def admin_emailaddress():
     else:
         return 'Not specified' #ERROR - essentially
 
+def admin_number_of_pairs():
+    """Get the number of pairs allowed in the competition"""
+    comp = Competition.objects.all() #Should only be one!
+    if comp.count() == 1:
+        return comp[0].number_of_pairs
+    else:
+        return 0 #ERROR - essentially
+
+def admin_number_of_individuals():
+    """Get the number of individuals allowed in the competition"""
+    comp = Competition.objects.all() #Should only be one!
+    if comp.count() == 1:
+        return comp[0].number_of_individuals
+    else:
+        return 0 #ERROR - essentially
+
+def admin_individuals_range(begin=0):
+    """Get the range of individuals allowed in the competition"""
+    comp = Competition.objects.all() #Should only be one!
+    if comp.count() == 1:
+        return range(begin, comp[0].number_of_individuals)
+    else:
+        return 0 #ERROR - essentially
+
+def admin_pairs_range(begin=0):
+    """Get the range of pairs allowed in the competition"""
+    comp = Competition.objects.all() #Should only be one!
+    if comp.count() == 1:
+        return range(begin, comp[0].number_of_pairs)
+    else:
+        return 0 #ERROR - essentially
+
 
 def isOpen():
     """Logic to compare the closing date of the competition with today's date"""

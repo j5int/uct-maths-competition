@@ -132,10 +132,10 @@ def newstudents(request):
     entries_per_grade = {} #Dictionary with grade:range(...)
     pairs_per_grade = {}
     for grade in range(8,13):
-        entries_per_grade[grade] = range(5-len(individual_list[grade]))
+        entries_per_grade[grade] = range(compadmin.admin_number_of_individuals()-len(individual_list[grade]))
         #Place the "Previously Selected" number of pairs at the top of the list (So it appears as a default)
         pairs_per_grade[grade] = [pair_list[grade]/2]
-        pairs_per_grade[grade].extend([i for i in range(0,6) if i != pair_list[grade]/2])
+        pairs_per_grade[grade].extend([i for i in range(0,compadmin.admin_number_of_pairs()+1) if i != pair_list[grade]/2])
 
     if request.method == 'POST':  # If the form has been submitted...
 
@@ -191,7 +191,7 @@ def newstudents(request):
         #Registering students, maximum number of students 25
         #Returns an error if information entered incorrectly         
         try:
-            for i in range (25):
+            for i in range (5*compadmin.admin_number_of_individuals()):
                 if form.getlist('firstname','')[i] == u'': continue
                 firstname = form.getlist('firstname','')[i].capitalize()
                 surname = form.getlist('surname','')[i].capitalize()
