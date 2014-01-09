@@ -15,6 +15,8 @@ class Competition(models.Model):
     newentries_Closedate = models.DateField(db_column='newentries_Closedate')
     admin_emailaddress = models.CharField(max_length=30L)
     num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True)
+    number_of_individuals = models.IntegerField(db_column='num_individuals')
+    number_of_pairs = models.IntegerField(db_column='num_pairs')
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
