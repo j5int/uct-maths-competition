@@ -56,7 +56,8 @@
     <!-- register invigilators from here -->
     <div>
         <h1>Register Invigilators</h1>
-        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Compulsory 1 per school, 2 if 75 entries.<br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
+        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> “Schools which send a full entry of 75 participants must send at least two invigilators.”
+ <br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -125,10 +126,13 @@
 
     {%for grade in grades%}
     <div>
+    
+        <h1>Register Participants</h1>
+        <p> For each grade, please select the number of pair entrants, and enter the names of the individual entrants.</p>
         <!-- <form action="." method="post"> -->
         <h2>Grade {{grade}}</h2>
         <div>
-            <h3>Pairs:
+            <h3>Number of pairs:
             <select name = "pairs" class='double'>
                   {%for key, pair_list in pairs_per_grade.items%}
                     {% if grade == key %}
