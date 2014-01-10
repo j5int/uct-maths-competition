@@ -69,7 +69,7 @@ class AppSettings(object):
         """
         The user is required to hand over an e-mail address when signing up
         """
-        return self._setting("EMAIL_REQUIRED", False)
+        return self._setting("EMAIL_REQUIRED", True)
 
     @property
     def EMAIL_VERIFICATION(self):
