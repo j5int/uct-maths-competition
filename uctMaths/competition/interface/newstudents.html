@@ -89,7 +89,7 @@
                     <td><input type="text" name="inv_surname" value={{invigilator.surname|lower|capfirst}}></td>
                     <td><input type ="text" name="inv_phone_primary" value={{invigilator.phone_primary}}></td>                    
                     <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
-                    <td><input type ="text" name="inv_email" value={{invigilator.email|lower}}></td>
+                    <td><input type ="text" class='mail' name="inv_email" value={{invigilator.email|lower}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
                 {% endif %}
