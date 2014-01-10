@@ -28,20 +28,21 @@ def auth(request):
      return HttpResponseRedirect('/accounts/login')
 
 def index(request):
-    return render_to_response('index.html', {})
+    return HttpResponseRedirect('/accounts/login')
+    #return render_to_response('index.html', {})
 
 
 @login_required
 def profile(request):
     # auth(request)
-    school_blurb = 'This profile is currently '
+    school_blurb = 'Welcome. This profile is currently '
     try:
         #Attempt to find user's chosen school
         assigned_school = School.objects.get(assigned_to=request.user)
-        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms. Navigate to \'Entry Form\' from the side-bar to review or edit your entry.'
+        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms. Please navigate to \'Entry Form\' from the side-bar to review or edit your entry.'
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
-        school_blurb += 'not associated with any school. Navigate to \'Entry Form\' on the side-bar to continue.'
+        school_blurb += 'not associated with any school. Navigate to \'Entry Form\' and select your school.'
     
     admin_contact = compadmin.admin_emailaddress()
     closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
