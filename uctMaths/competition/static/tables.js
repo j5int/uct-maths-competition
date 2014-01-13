@@ -110,16 +110,19 @@ function validateForm(doc)
 	// count the number of students	
 	for (var j=0; j<st_firstname.length; j++)
 	{
-	    student_valid = validate_student(st_firstname[j], st_surname[j]);
+	    student_valid = validate_student(st_firstname[j].value, st_surname[j].value);
+
 	    if (student_valid>0){ //error
-	     switch(validity){
+	     switch(student_valid){
 	        case 1: st_firstname[j].style.background = 'Yellow'; break;
 	        case 2: st_surname[j].style.background = 'Yellow'; break;
 	        }
+	    return false;
 	    }
-	    if (validity == 0) {
+	    if (student_valid == 0) {
+	    st_firstname[j].style.background = 'White';
+	    st_surname[j].style.background = 'White';
 	    count += 1;
-	    	alert("HELLO!");
 	    }
 	}
 	
@@ -127,11 +130,11 @@ function validateForm(doc)
 	{ count += pairs[k].options[pairs[k].selectedIndex].value*2; }
 	
 	// prompt user to add invigilator
-	if (count ==75 && num_invigilators < 2)
+	if (count == 75 && num_invigilators < 2)
 	{
 	invig[1].style.background = 'Yellow';
 	window.scrollTo(100,500);
-    alert("Reminder: A minimum of two invigilators are required for 75 students!");
+    alert("Reminder: A minimum of two invigilators are required for 75 students.");
 	return false;
 	}
 
@@ -174,15 +177,18 @@ function blankForm()
 }
 
 function validate_student(firstname, surname){
-	alert("Validate student!");
-    if(firstname=="" && surname=="")
+	//alert("Validate student!");
+    if(firstname=="" && surname==""){
         return -1; //Empty field
+        }
     else if(firstname=="" && surname!=""){
         alert("A student requires a firstname");
+        window.scrollTo(200,700);
         return 1; //error in firstname
         }
-    else if(firstname!=""&& surname==""){
+    else if(firstname!="" && surname==""){
         alert("A student requires a surname");
+        window.scrollTo(200,700);
         return 2; //error in surname
         }
     else {
@@ -199,7 +205,8 @@ function validate_invigilator(firstname, surname, phone_primary, phone_alt, emai
         return -1; //Valid
     }
     else if(firstname!="" && surname != "" && email != "" && phone_primary != ""){
-        alert("Valid full line");
+        
+        //alert("Valid full line");
         //return 1; //Valid - continue to other criteria
         }
     else {
