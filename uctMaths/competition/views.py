@@ -78,7 +78,7 @@ def entry_review(request):
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
 
     for p in range(8,13):
-        pair_list[p] = pair_list[p]/2
+        pair_list[p] = pair_list[p]
 
     if not responsible_teacher:
         return HttpResponseRedirect('../students/newstudents.html')
@@ -132,8 +132,8 @@ def newstudents(request):
     for grade in range(8,13):
         entries_per_grade[grade] = range(compadmin.admin_number_of_individuals()-len(individual_list[grade]))
         #Place the "Previously Selected" number of pairs at the top of the list (So it appears as a default)
-        pairs_per_grade[grade] = [pair_list[grade]/2]
-        pairs_per_grade[grade].extend([i for i in range(0,compadmin.admin_number_of_pairs()+1) if i != pair_list[grade]/2])
+        pairs_per_grade[grade] = [pair_list[grade]]
+        pairs_per_grade[grade].extend([i for i in range(0,compadmin.admin_number_of_pairs()+1) if i != pair_list[grade]])
 
     if request.method == 'POST':  # If the form has been submitted...
 
@@ -180,10 +180,10 @@ def newstudents(request):
                                 school = school, grade = grade , paired = paired)
                         query.save()
                         #Save second entry for pair
-                        query1 = SchoolStudent(firstname = firstname , surname = surname, language = language, reference = reference, 
-                                school = school, grade=grade,
-                                paired = paired)
-                        query1.save()
+                        #query1 = SchoolStudent(firstname = firstname , surname = surname, language = language, reference = reference, 
+                                #school = school, grade=grade,
+                                #paired = paired)
+                        #query1.save()
 
             #Add invigilator information
             for invigilator in invigilator_list:
