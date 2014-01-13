@@ -1,4 +1,5 @@
 # Create your views here.
+from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render, render_to_response

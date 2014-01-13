@@ -1,4 +1,5 @@
 # Create your views here.
+from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render, render_to_response
@@ -188,7 +189,7 @@ def newstudents(request):
             #Add invigilator information
             for invigilator in invigilator_list:
                 invigilator.delete()
-
+ 
             for j in range(10):
                 if form.getlist('inv_firstname','')[j] == u'':
                     ierror = "Invigilator information incomplete"

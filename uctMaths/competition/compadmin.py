@@ -1,5 +1,6 @@
 # Some auxiliary functions and constants for competition
 # administration.
+from __future__ import unicode_literals
 from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
 from datetime import date
 import operator
