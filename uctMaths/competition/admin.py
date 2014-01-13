@@ -2,7 +2,7 @@
 # registers models for the admin view.
 # sets up how each model is displayed (list_display in each <Model>Admin class)
 # methods for archiving student and invigilators
-
+from __future__ import unicode_literals
 from competition.models import *
 from django.contrib import admin
 from django.db import connection, transaction
