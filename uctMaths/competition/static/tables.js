@@ -80,9 +80,24 @@ function validateForm(doc)
  *** NO# of INVIGILATORS VALIDATION **
  *************************************/ 
 	var count =0;													// number of students
-	var invig = document.getElementsByClassName('invig');			// 10 invigilator fields
+	var invig_firstname = document.getElementsByClassName('invig_firstname');			// 10 invigilator fields
+	var invig_surname = document.getElementsByClassName('invig_surname');
+	var invig_phone_primary = document.getElementsByClassName('invig_phone_primary');
+	var invig_mail = document.getElementsByClassName('mail');
+	
 	var numOfInvig =0;
 	
+	for(var i = 0; i < 10; ++i)
+	{
+	    validity = validate_invigilator(invig_firstname[i].value, invig_surname[i].value, invig_phone_primary[i].value, invig_mail[i+1].value);
+	    if (validity == 0)
+	    {
+	        invig_firstname[i].style.background = 'Yellow';
+	    	window.scrollTo(100,500);
+			alert("Invalid entry");
+			return false;
+	    }
+	}
 	// count the number of students	
 	for (var j=0; j<individuals.length; j++)
 	{
@@ -142,6 +157,24 @@ function blankForm()
 	}
 	else if(!blank)				// all required fields filled
 		return false;
+}
+
+function validate_invigilator(firstname, surname, phone_primary, email){
+    alert("Invigilator:"+firstname+", "+surname+"; "+phone_primary+"; " + email);
+    
+    #Validate that all comopulsory fields have been set out
+    if(firstname=="" && surname == "" && email == "" && phone_primary == ""){
+        //alert("Valid empty line");
+        return 1; //Valid
+    }
+    else if(firstname!="" && surname != "" && email != "" && phone_primary != ""){
+        //alert("Valid full line");
+        return 1; //Valid
+        }
+    else {
+        //alert("Invalid line");
+        return 0; //Invalid
+        }
 }
 
 
