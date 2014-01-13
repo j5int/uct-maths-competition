@@ -160,9 +160,9 @@ function blankForm()
 }
 
 function validate_invigilator(firstname, surname, phone_primary, email){
-    alert("Invigilator:"+firstname+", "+surname+"; "+phone_primary+"; " + email);
+    //alert("Invigilator:"+firstname+", "+surname+"; "+phone_primary+"; " + email);
     
-    #Validate that all comopulsory fields have been set out
+    //Validate that all comopulsory fields have been set out
     if(firstname=="" && surname == "" && email == "" && phone_primary == ""){
         //alert("Valid empty line");
         return 1; //Valid
