@@ -1,4 +1,3 @@
-# Create your views here.
 from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.http import Http404
@@ -214,9 +213,9 @@ def newstudents(request):
 
             for i in range (5*compadmin.admin_number_of_individuals()):
                 if form.getlist('firstname','')[i] == u'': continue
-                firstname = form.getlist('firstname','')[i].capitalize()
-                surname = form.getlist('surname','')[i].capitalize()
-                language = form.getlist('language','')[0]
+                firstname =  form.getlist('firstname','')[i].capitalize()
+                surname =  form.getlist('surname','')[i].capitalize()
+                language =  form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
                 reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5+1).zfill(2))
