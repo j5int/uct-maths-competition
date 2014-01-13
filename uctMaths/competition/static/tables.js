@@ -1,7 +1,8 @@
-// tables.js
-// used in view and registration pages.
-// does the edit button and delete confirmation.
-
+/**********************************************
+***				 table.js					***
+*** 	  used in newstudents.html		    ***
+*** does client-side validation of the form ***
+**********************************************/
 //edit button: switch to input mode
 function show_input(id)
 {
@@ -18,45 +19,28 @@ function drop(type)
 	else {return true}
 }
 
-/*
-//checks for empty responsible teacher form
-function validate(){ 
-//var mail = document.getElementById('rt_email'); 
-//var sub = document.getElementById('submit');
-//var m = document.getElementById('rmail');
-//return false;
-//var box = document.getElementById('confirm');
-
-if(mail.value.length == 0){ 
-//sub.disabled = true;
-//sub.setAttribute("disabled", "disabled");
-//m.setattribute("re")
-return true; 
-} 
-else{ 
-return true; 
-} 
-//document.getElementById("submits").disabled = true;
-//$('#submits').prop('disabled', true);
-}
-*/
-// todo: check first row of invigilator for empty forms
-
-//used in newstudents
-//enables the submit button for the form
+/****************************************
+*** ENABLE/DISABLE FORM SUBMIT BUTTON ***
+*****************************************/
 function disableElement(checkBox)
 {
-  var sbmt = document.getElementById("complete");
+  var sbmt = document.getElementById("complete");				//submit button iD
   
   if (checkBox.checked)
-	{sbmt.disabled = false;}
+	{sbmt.disabled = false;}		//enable
   else
-	{sbmt.disabled = true;}
+	{sbmt.disabled = true;}			//disable
 }
 
 // [FIX NEEDED] allows second invigilator to not have an email address
 function validateForm(doc)
 {
+  var individuals = document.getElementsByClassName('single');	//# of individual student first names
+  var pairs = document.getElementsByClassName('double');		//# of paired students
+
+  //prevent submission of empty forms
+  if (blankForm())
+	{return false;}
 /**********************
 *** EMAIL VALIDATION***
 ***********************/
@@ -87,6 +71,7 @@ function validateForm(doc)
   
   if (error)
   {
+	window.scrollTo(100,400);
 	alert("One or more email addresses seem to be invalid. Please verify your input.");
 	return false;
   }
@@ -94,13 +79,11 @@ function validateForm(doc)
  /************************************
  *** NO# of INVIGILATORS VALIDATION **
  *************************************/ 
-	var individuals = document.getElementsByClassName('single');	//# of individuals
-	var pairs = document.getElementsByClassName('double');			//# of paired students
 	var count =0;													// number of students
 	var invig = document.getElementsByClassName('invig');			// 10 invigilator fields
 	var numOfInvig =0;
 	
-//  count the number of students	
+	// count the number of students	
 	for (var j=0; j<individuals.length; j++)
 	{
 		if (individuals[j].value != '')
@@ -117,11 +100,48 @@ function validateForm(doc)
 		if(invig[1].value =='')
 		{
 			invig[1].style.background = 'Yellow';
-			alert("Reminder: A minimum of two invigilators is required for 75 students!");
+			window.scrollTo(100,500);
+			alert("Reminder: A minimum of two invigilators are required for 75 students!");
 			return false;
 		}
 		invig[1].style.background = 'White';
 	}
-	
+/*********************
+*** ALL TESTS PAST ***
+*********************/	
    return true;
 }
+
+function blankForm()
+{
+/********************************************************
+*** 1. SAFARI BROWSER FIX: PREVENTS EMPTY SUBMISSIONS ***
+*** 2. WARN USER WHEN NO STUDENTS ARE REGISTERED      ***
+*********************************************************/
+	// all the inputs within form
+    var inputs = document.getElementsByTagName('input');
+	var blank = false;
+    for (var i = 0; i < inputs.length; i++) {
+        // only validate the inputs that have the required attribute
+        if(inputs[i].hasAttribute("required")){
+            if(inputs[i].value == ""){
+                // found an empty field that is required
+				inputs[i].style.background = 'Yellow';
+				window.scrollTo(100,400);
+				blank = true;
+            }
+			else {
+			//found a highlighted field that is no longer empty
+			inputs[i].style.background = 'White';
+			}
+        }
+    }
+	if (blank){
+		alert("Please fill all required fields");
+		return true;			// empty required fields found
+	}
+	else if(!blank)				// all required fields filled
+		return false;
+}
+
+
