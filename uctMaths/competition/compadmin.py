@@ -316,31 +316,32 @@ def output_studenttags(student_list):
 
             for student in grade_bucket[grade, False]:
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
-                s_line = ''
-                s_line += '\"' + str(student.reference) + '\",'
-                s_line += '\"' + str(student.firstname) + ' ' + str(student.surname) + '\",'
-                s_line += '\"' + str(student.school) +  '\",'
+                s_line = u''
+                s_line += '\"' + student.reference + '\",'
+                s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
+                s_line += '\"' + unicode(student.school) +  '\",'
                 s_line += str(student.grade) + ','
                 venue_str = str(venue_object[0]) if len(venue_object)==1 else 'Unallocated'
                 s_line += '\"' + venue_str + '\"\n'
                 output_string.write(s_line)
                 
-            zipf.writestr('Mailmerge_Grade'+str(grade) +'_individuals.txt',output_string.getvalue())
+            #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
+            zipf.writestr('Mailmerge_Grade'+str(grade) +'_individuals.txt',output_string.getvalue().encode('utf-8'))
 
             output_string = StringIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students in [grade]
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
-                s_line = ''
-                s_line += '\"' + str(student.reference) + '\",'
-                s_line += '\"' + str(student.firstname) + ' ' + str(student.surname) + '\",'
-                s_line += '\"' + str(student.school) +  '\",'
+                s_line = u''
+                s_line += '\"' + student.reference + '\",'
+                s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
+                s_line += '\"' + unicode(student.school) +  '\",'
                 s_line += str(student.grade) + ','
-                venue_str = str(venue_object[0]) if len(venue_object)==1 else 'Unallocated'
+                venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
                 s_line += '\"' + venue_str + '\"\n'
                 output_string.write(s_line)
 
-            #Generate file from StringIO and write to zip
-            zipf.writestr('Mailmerge_Grade'+str(grade) +'_pairs.txt',output_string.getvalue())
+            #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
+            zipf.writestr('Mailmerge_Grade'+str(grade) +'_pairs.txt',output_string.getvalue().encode('utf-8'))
 
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
@@ -363,13 +364,13 @@ def output_schooltaglists(school_list):
 
     #Generate and format school entry (as in spec. sheet)
     for school in school_list:
-        s_entry = '\"' + str(school.contact) + '\",'
-        s_entry += '\"' + str(school.name) + '\",'
-        s_entry += '\"' + str(school.address) + '\"\n'
+        s_entry = '\"' + school.contact + '\",'
+        s_entry += '\"' + unicode(school.name) + '\",'
+        s_entry += '\"' + school.address + '\"\n'
         output_stringio.write(s_entry)
 
     #Serve to user as text file
-    response = HttpResponse(output_stringio.getvalue())
+    response = HttpResponse(output_stringio.getvalue().encode('utf-8'))
     response['Content-Disposition'] = 'attachment; filename=schooltags.txt'
     return response
 
