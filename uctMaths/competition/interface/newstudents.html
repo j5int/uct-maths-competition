@@ -44,7 +44,7 @@
                 <td><input type="text" name="rt_firstname" required value={{responsible_teacher.firstname|lower|capfirst}}></td>
                 <td><input type="text" name="rt_surname" value={{responsible_teacher.surname|lower|capfirst}}></td>
                 <td><input type ="text" name="rt_phone_primary" required value={{responsible_teacher.phone_primary | cut:" "}}></td>                    
-                <td><input type ="text" name="rt_phone_alt" value={{responsible_teacher.phone_alt}}></td>
+                <td><input type ="text" name="rt_phone_alt" value={{responsible_teacher.phone_alt | cut:" "}}></td>
                 <td><input id="rmail" class="mail" type ="text" name="rt_email" required value={{responsible_teacher.email|lower}}></td>
                 <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
             </tr>
@@ -78,8 +78,8 @@
                 <tr>
                     <td><input type="text" class="invig" name="inv_firstname" required value={{invigilator.firstname|lower|capfirst}}></td>
                     <td><input type="text" name="inv_surname" required value={{invigilator.surname|lower|capfirst}}></td>
-                    <td><input type ="text" name="inv_phone_primary" required value={{invigilator.phone_primary}}></td>                    
-                    <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
+                    <td><input type ="text" name="inv_phone_primary" required value={{invigilator.phone_primary | cut:" "}}></td>                    
+                    <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt | cut:" "}}></td>
                     <td><input type ="text" class="mail" name="inv_email" required value={{invigilator.email|lower}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
@@ -87,8 +87,8 @@
                 <tr>
                     <td><input type="text" class="invig" name="inv_firstname" value={{invigilator.firstname|lower|capfirst}}></td>
                     <td><input type="text" name="inv_surname" value={{invigilator.surname|lower|capfirst}}></td>
-                    <td><input type ="text" name="inv_phone_primary" value={{invigilator.phone_primary}}></td>                    
-                    <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt}}></td>
+                    <td><input type ="text" name="inv_phone_primary" value={{invigilator.phone_primary | cut:" "}}></td>                    
+                    <td><input type ="text" name="inv_phone_alt" value={{invigilator.phone_alt | cut:" "}}></td>
                     <td><input type ="text" class='mail' name="inv_email" value={{invigilator.email|lower}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
