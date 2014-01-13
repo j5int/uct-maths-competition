@@ -39,7 +39,7 @@ def profile(request):
     try:
         #Attempt to find user's chosen school
         assigned_school = School.objects.get(assigned_to=request.user)
-        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms. Please navigate to \'Entry Form\' from the side-bar to review or edit your entry.'
+        school_blurb += 'associated with ' + unicode(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms. Please navigate to \'Entry Form\' from the side-bar to review or edit your entry.'
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
         school_blurb += 'not associated with any school. Navigate to \'Entry Form\' and select your school.'
