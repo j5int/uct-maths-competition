@@ -1,4 +1,5 @@
 # forms.py
+from __future__ import unicode_literals
 from django import forms
 from django.forms import ModelForm, Textarea
 from django.forms import ModelChoiceField

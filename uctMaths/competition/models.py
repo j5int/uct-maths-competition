@@ -1,6 +1,5 @@
 # models.py
 # defines django models (correspond to db tables)
-
 from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
