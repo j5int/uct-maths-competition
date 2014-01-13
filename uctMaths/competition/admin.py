@@ -80,7 +80,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	def write_studentlist(self, request, queryset):
 	    return compadmin.output_studentlists(queryset)
 
-	write_studentlist.short_description = 'Download (xls) formatted student registry for selected students'
+	write_studentlist.short_description = 'Export formatted XLS student registry for selected students'
 
 
 	def write_studenttags(self, request, queryset):
@@ -124,8 +124,8 @@ class VenueAdmin(ImportExportModelAdmin):
 	    return compadmin.output_register(queryset)
 
 	auto_allocate.short_description = 'Auto-allocate unallocated students to selected venue(s)' 
-	deallocate.short_description = 'Deallocate students from selected of venue(s)'
-	write_venue_register.short_description = 'Generate and download (xls) student registry for selected venue(s)'
+	deallocate.short_description = 'Deallocate students from selected venue(s)'
+	write_venue_register.short_description = 'Export XLS student registry for selected venue(s)'
 
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(ImportExportModelAdmin):
