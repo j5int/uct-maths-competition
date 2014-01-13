@@ -114,30 +114,15 @@ def auto_allocate(venue_list):
         while venue.grade and grade_bucket[venue.grade, venue.allocated_to_pairs]:
             #Pair logic
             if venue.occupied_seats < venue.seats - 1 and venue.allocated_to_pairs:
-                #First student of the pair
                 studentp1 = grade_bucket[venue.grade, venue.allocated_to_pairs].pop()
 
-                try:
-                    #Try find paired student. IndexError if not found
-                    for index, possible_pair in enumerate(grade_bucket[venue.grade, venue.allocated_to_pairs]):
-                                if possible_pair.reference == studentp1.reference: #Match is found
-                                    studentp2 = grade_bucket[venue.grade, venue.allocated_to_pairs].pop(index)
+                #Update both students in the pair
+                studentp1.venue = venue.code
+                studentp1.save()
 
-                    #Update both students in the pair
-                    studentp1.venue = venue.code
-                    studentp2.venue = venue.code
-
-                    studentp1.save()
-                    studentp2.save()
-
-                    #Update venue
-                    venue.occupied_seats+=2
-                    venue.save()
-
-                except IndexError: #Matching reference number (pair partner) can't be found! 
-                    #TODO? Serious error here. Notify integrity error to admin?
-                    grade_bucket[venue.grade, venue.allocated_to_pairs].append(studentp1)
-                    print 'Pairing error!' 
+                #Update venue
+                venue.occupied_seats+=2
+                venue.save()
 
             #Individual logic
             elif venue.occupied_seats < venue.seats and not venue.allocated_to_pairs:
