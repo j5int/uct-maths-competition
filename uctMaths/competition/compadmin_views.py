@@ -109,39 +109,10 @@ def handle_uploaded_file(inputf):
 
         #Search DB for that reference number:
             try:
-                #Individuals - expecting only a single student with ref_num
-                if not pair_logic:
-                    student = SchoolStudent.objects.get(reference=ref_num)
-                    student.score = float(score)
-                    student.rank = rank
-                    student.save()
-                else:
-                #Pairs - expecting two students with same ref_num
-                    student_pair = SchoolStudent.objects.filter(reference=ref_num)
-                    #If reference number is not found at all
-                    if not student_pair: 
-                        dne_list.append('Pairing error: no student with reference %s found in database'%{ref_num})
-                        #Not a fatal error; continue with import
-                        
-                    #If both of the pair are found; update and save them
-                    elif student_pair.count()==2:
-                        
-                        student_pair[0].score=float(score)
-                        student_pair[0].rank=rank
-                        student_pair[0].save()
-                        
-                        student_pair[1].score=float(score)
-                        student_pair[1].rank=rank
-                        student_pair[1].save()
-                    
-                    #If only one of the pair is found; display error
-                    elif student_pair.count() == 1:
-                        dne_list.append('Pairing error: only one student with reference %s found in database'%{ref_num})
-                        #Not a fatal error; continue with import
-                    
-                    #If more than two are found; display error
-                    else:
-                        dne_list.append('Pairing error: more than 2 students with reference %s found in file.'%{ref_num})
+                student = SchoolStudent.objects.get(reference=ref_num)
+                student.score = float(score)
+                student.rank = rank
+                student.save()
             #Individual exceptions: using get() generates exceptions
             except ObjectDoesNotExist:
                 dne_list.append('Reference number: %s not found in database.'%{ref_num})
