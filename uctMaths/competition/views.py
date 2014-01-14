@@ -194,8 +194,8 @@ def newstudents(request):
                     ierror = "Invigilator information incomplete"
                 else:
                     school = assigned_school
-                    ifirstname = form.getlist('inv_firstname','')[j].capitalize()
-                    isurname = form.getlist('inv_surname','')[j].capitalize()
+                    ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
+                    isurname = correctCapitals(form.getlist('inv_surname','')[j])
                     iphone_primary = form.getlist('inv_phone_primary','')[j]
                     iphone_alt = form.getlist('inv_phone_alt','')[j]
                     iemail = form.getlist('inv_email','')[j]
@@ -213,8 +213,8 @@ def newstudents(request):
 
             for i in range (5*compadmin.admin_number_of_individuals()):
                 if form.getlist('firstname','')[i] == u'': continue
-                firstname =  form.getlist('firstname','')[i]
-                surname =  form.getlist('surname','')[i]
+                firstname =  correctCapitals(form.getlist('firstname','')[i])
+                surname =  correctCapitals(form.getlist('surname','')[i])
                 language =  form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
@@ -267,6 +267,20 @@ def newstudents(request):
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
+
+
+def correctCapitals(input_name):
+    
+    #Return true if all cased characters in the string are uppercase and there is at least one cased character, false otherwise.
+    if not input_name.isupper():
+        return input_name # Return unaltered input if it is not all capitals
+    else:
+        words = input_name.split()
+        output = []
+        for wd in words:
+            output.append(wd.capitalize())
+            
+        return ' '.join(output) #Otherwise return name as first-letter-capitalised
 
 #*****************************************
 # School select.
