@@ -144,8 +144,8 @@ def newstudents(request):
         try:
             #Register a single responsible teacher (assigned to that school)
             rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
-            rtfirstname = form.getlist('rt_firstname','')[0].capitalize()
-            rtsurname = form.getlist('rt_surname','')[0].capitalize()
+            rtfirstname = form.getlist('rt_firstname','')[0]
+            rtsurname = form.getlist('rt_surname','')[0]
             rtphone_primary = form.getlist('rt_phone_primary','')[0]
             rtphone_alt = form.getlist('rt_phone_alt','')[0]
             rtemail = form.getlist('rt_email','')[0]
@@ -213,8 +213,8 @@ def newstudents(request):
 
             for i in range (5*compadmin.admin_number_of_individuals()):
                 if form.getlist('firstname','')[i] == u'': continue
-                firstname =  form.getlist('firstname','')[i].capitalize()
-                surname =  form.getlist('surname','')[i].capitalize()
+                firstname =  form.getlist('firstname','')[i]
+                surname =  form.getlist('surname','')[i]
                 language =  form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
