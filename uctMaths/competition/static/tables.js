@@ -299,6 +299,9 @@ function validate_invigilator(firstname, surname, phone_primary, phone_alt, emai
 
 function validate_phonenumber(phone_number){
 
+    //Remove spaces in telephone number
+    phone_number = phone_number.replace(/\s+/g, '');
+    
         if (phone_number.length!=10){
             alert("Invalid phone number length.");
             return 3; //invalid -- incorrect length for phone number
