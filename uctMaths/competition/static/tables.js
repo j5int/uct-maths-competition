@@ -54,13 +54,15 @@ function validateForm(doc)
 	
 	validity = validate_invigilator(resp_firstname[0].value, resp_surname[0].value, resp_phone_primary[0].value, resp_phone_alt[0].value, resp_mail[0].value);
 
+
     resp_firstname[0].style.background = 'White'; 
     resp_surname[0].style.background = 'White'; 
     resp_phone_primary[0].style.background = 'White'; 
     resp_phone_alt[0].style.background = 'White'; 
-    resp_email[0].style.background = 'White'; 
+    resp_mail[0].style.background = 'White'; 
 
 
+	
 	if (validity!=0) {
 	    window.scrollTo(100,500);
 	    switch(validity){
@@ -69,7 +71,7 @@ function validateForm(doc)
         case 2:resp_surname[0].style.background = 'Yellow'; break;
         case 3:resp_phone_primary[0].style.background = 'Yellow'; break;
         case 4:resp_phone_alt[0].style.background = 'Yellow'; break;
-        case 5:resp_email[0].style.background = 'Yellow'; break;
+        case 5:resp_mail[0].style.background = 'Yellow'; break;
 	    }
 	    return false; //Error
 	}
@@ -118,7 +120,7 @@ function validateForm(doc)
 	var pairs = document.getElementsByClassName('pairs');
 
 	var count = 0; 
-	
+
 	// count the number of students	
 	for (var j=0; j<st_firstname.length; j++)
 	{
@@ -141,7 +143,14 @@ function validateForm(doc)
 	}
 	
 	for (var k=0; k<pairs.length; k++)
-	{ count += pairs[k].options[pairs[k].selectedIndex].value*2; }
+	{
+	 if (pairs[k].options[pairs[k].selectedIndex].value > 5){
+	    alert("Please ensure that the number of pairs for each grade is between 0 and 5 (inclusive.)");
+	    window.scrollTo(100,500);
+        return false;
+        }
+	 count += pairs[k].options[pairs[k].selectedIndex].value*2;
+	 }
 	
 	// prompt user to add invigilator
 	if (count == 75 && num_invigilators < 2)
