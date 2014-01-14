@@ -163,7 +163,11 @@ function validateForm(doc)
 	window.scrollTo(100,500);
     alert("Reminder: A minimum of two invigilators are required for 75 students.");
     return false;
-}
+    }
+    
+    if (count == 0){
+     alert("Note: you have not signed up any students (pairs or individuals). Your form will be submitted. You may return to this page to sign up students at a later date.\n");
+    }
 
 /*********************
 *** ALL TESTS PAST ***
