@@ -69,7 +69,7 @@ def print_students(student_list,width=40):
         for single in single_list[grade]:
             grade_string+= '%s, %s\n'%(single[1], single[0])#str(single[2].upper()))
 
-        grade_string += '\n%d pair(s) registered for grade %d\n'%(pair_list[grade]/2, grade) 
+        grade_string += '\n%d pair(s) registered for grade %d\n'%(pair_list[grade], grade) 
 
         #for pair_register in range(1, pair_list[grade]/2+1):
         #    grade_string += 'Group %d: \n\n'%(pair_register)
