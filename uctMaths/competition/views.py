@@ -50,7 +50,11 @@ def profile(request):
         school_blurb += 'not associated with any school. Navigate to \'Entry Form\' and select your school.'
     
     admin_contact = compadmin.admin_emailaddress()
-    closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
+
+    if compadmin.isOpen():
+        closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
+    else:
+        closingdate_blurb='Entry submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
         #return HttpResponseRedirect('../register/school_select/school_select.html')
     return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact})
 
