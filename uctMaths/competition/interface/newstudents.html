@@ -7,7 +7,7 @@
 {%endblock%}
 {%block title%}New Students{%endblock%}
 {%block content%}
-<noscript>WARNNING: Your Browser does not support JavaScript! In order to complete this form please switch to a browser that supports it or enable JavaScript</noscript>
+<noscript> <h2> WARNING: Your browser does not support JavaScript! In order to complete this form please switch to a browser that supports it or enable JavaScript. You are not currently able to submit. </h2> </noscript>
 <h1 >Student registration form for {{schooln}}</h1>
 <p> {{ error }} </p>
 <form name='registration' action='.' method='post' onsubmit='return validateForm(this)'>
@@ -88,7 +88,7 @@
                 <tr>
                     <td><input type="text" class="invig_firstname" name="inv_firstname" value="{{invigilator.firstname}}"></td>
                     <td><input type="text" class="invig_surname" name="inv_surname" value="{{invigilator.surname}}"></td>
-                    <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" value="{{invigilator.phone_primary}}"></td>                    
+                    <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" value="{{invigilator.phone_primary | cut:" "}}"></td>                    
                     <td><input type ="text"  class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
                     <td><input type ="text" class="invig_mail" name="inv_email" value={{invigilator.email|lower}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
@@ -191,10 +191,12 @@
         <input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? It is your responsibility to ensure that your application has met the requirements stated for each section.<br> </br>
     </div>
 
+
     {% if entries_open %}
     <input class="bluebutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
     {% else %}
     <h3> Sign-up closed </h3> <p> No more entries are to be accepted for this year's UCT Mathematics Competition </p>
     {% endif %}
+
     </form>
 {%endblock%}
