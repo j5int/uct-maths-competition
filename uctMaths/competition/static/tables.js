@@ -54,6 +54,13 @@ function validateForm(doc)
 	
 	validity = validate_invigilator(resp_firstname[0].value, resp_surname[0].value, resp_phone_primary[0].value, resp_phone_alt[0].value, resp_mail[0].value);
 
+    resp_firstname[0].style.background = 'White'; 
+    resp_surname[0].style.background = 'White'; 
+    resp_phone_primary[0].style.background = 'White'; 
+    resp_phone_alt[0].style.background = 'White'; 
+    resp_email[0].style.background = 'White'; 
+
+
 	if (validity!=0) {
 	    window.scrollTo(100,500);
 	    switch(validity){
@@ -82,6 +89,12 @@ function validateForm(doc)
 	{
 	validity = validate_invigilator(invig_firstname[i].value, invig_surname[i].value, invig_phone_primary[i].value, invig_phone_alt[i].value, invig_mail[i].value);
 	
+		invig_firstname[i].style.background = 'White'; 
+		invig_surname[i].style.background = 'White'; 
+		invig_phone_primary[i].style.background = 'White'; 
+		invig_phone_alt[i].style.background = 'White';
+		invig_mail[i].style.background = 'White'; 
+	
 	    if (validity > 0) //Any error condition
 	    {
 	    	window.scrollTo(100,500);
@@ -90,7 +103,7 @@ function validateForm(doc)
 		        case 2:invig_surname[i].style.background = 'Yellow'; break;
 		        case 3:invig_phone_primary[i].style.background = 'Yellow'; break;
 		        case 4:invig_phone_alt[i].style.background = 'Yellow'; break;
-		        case 5:invig_phone_mail[i].style.background = 'Yellow'; break;
+		        case 5:invig_mail[i].style.background = 'Yellow'; break;
 		    }
 			return false;
 	    }
@@ -103,7 +116,6 @@ function validateForm(doc)
 	var st_firstname = document.getElementsByClassName('st_firstname');
 	var st_surname = document.getElementsByClassName('st_surname');
 	var pairs = document.getElementsByClassName('pairs');
-	
 
 	var count = 0; 
 	
@@ -111,7 +123,9 @@ function validateForm(doc)
 	for (var j=0; j<st_firstname.length; j++)
 	{
 	    student_valid = validate_student(st_firstname[j].value, st_surname[j].value);
-
+        st_firstname[j].style.background = 'White';
+	    st_surname[j].style.background = 'White';
+	    
 	    if (student_valid>0){ //error
 	     switch(student_valid){
 	        case 1: st_firstname[j].style.background = 'Yellow'; break;
@@ -139,8 +153,8 @@ function validateForm(doc)
 
 	window.scrollTo(100,500);
     alert("Reminder: A minimum of two invigilators are required for 75 students.");
-	return false;
-	}
+    return false;
+}
 
 /*********************
 *** ALL TESTS PAST ***
@@ -239,7 +253,7 @@ function validate_invigilator(firstname, surname, phone_primary, phone_alt, emai
         if (firstname=="") return 1;
         else if (surname=="") return 2;
         else if (phone_primary=="") return 3;
-        else if (phone_alt=="") return 5;
+        //else if (phone_alt=="") return 4;
         else if (email=="") return 5;
         }
         
@@ -275,8 +289,6 @@ function validate_invigilator(firstname, surname, phone_primary, phone_alt, emai
 }
 
 function validate_phonenumber(phone_number){
-
-        //TODO Strip spaces
 
         if (phone_number.length!=10){
             alert("Invalid phone number length.");
