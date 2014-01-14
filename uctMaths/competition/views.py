@@ -28,7 +28,12 @@ def auth(request):
      return HttpResponseRedirect('/accounts/login')
 
 def index(request):
+    #If the due date has not passed:
+#    if compadmin.isOpen():
     return HttpResponseRedirect('/accounts/login')
+#    else:
+#        return render_to_response('index.html')
+
     #return render_to_response('index.html', {})
 
 
@@ -291,8 +296,11 @@ def school_select(request):
     invalid_request = False
     inv_req_message = ''
     school_assignment = ''
-    if request.method == 'POST':  # If the form has been submitted...
 
+    if not compadmin.isOpen():
+        return HttpResponseRedirect('/accounts/profile')
+
+    if request.method == 'POST':  # If the form has been submitted...
         try:
         #Attempt to find user's chosen school
             assigned_school = School.objects.get(assigned_to=request.user)
