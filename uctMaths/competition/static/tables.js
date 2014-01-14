@@ -86,11 +86,11 @@ function validateForm(doc)
 	    {
 	    	window.scrollTo(100,500);
 		    switch(validity){
-		        case 1:invig_firstname[0].style.background = 'Yellow'; break;
-		        case 2:invig_surname[0].style.background = 'Yellow'; break;
-		        case 3:invig_phone_primary[0].style.background = 'Yellow'; break;
-		        case 4:invig_phone_alt[0].style.background = 'Yellow'; break;
-		        case 5:invig_phone_alt[0].style.background = 'Yellow'; break;
+		        case 1:invig_firstname[i].style.background = 'Yellow'; break;
+		        case 2:invig_surname[i].style.background = 'Yellow'; break;
+		        case 3:invig_phone_primary[i].style.background = 'Yellow'; break;
+		        case 4:invig_phone_alt[i].style.background = 'Yellow'; break;
+		        case 5:invig_phone_mail[i].style.background = 'Yellow'; break;
 		    }
 			return false;
 	    }
@@ -132,7 +132,11 @@ function validateForm(doc)
 	// prompt user to add invigilator
 	if (count == 75 && num_invigilators < 2)
 	{
-	invig[1].style.background = 'Yellow';
+	invig_firstname[1].style.background = 'Yellow';
+    invig_surname[1].style.background = 'Yellow';
+    invig_phone_primary[1].style.background = 'Yellow';
+    invig_mail[1].style.background = 'Yellow'; 
+
 	window.scrollTo(100,500);
     alert("Reminder: A minimum of two invigilators are required for 75 students.");
 	return false;
@@ -245,8 +249,10 @@ function validate_invigilator(firstname, surname, phone_primary, phone_alt, emai
 
 function validate_phonenumber(phone_number){
 
+        //TODO Strip spaces
+
         if (phone_number.length!=10){
-       //     alert("Invalid phone number length " + phone_number);
+            alert("Invalid phone number length.");
             return 3; //invalid -- incorrect length for phone number
         }
        // else alert("Valid phone number length " + phone_number);
@@ -256,7 +262,7 @@ function validate_phonenumber(phone_number){
         {
          if (isNaN(parseInt(phone_number.substr(c,1)), 10))
          { 
-         //   alert("Invalid character in phone number");
+            alert("Invalid character in phone number");
             return 3;//Invalid
           }
         }
