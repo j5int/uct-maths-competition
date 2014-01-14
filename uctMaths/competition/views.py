@@ -14,7 +14,7 @@ from competition.forms import StudentForm, SchoolForm, InvigilatorForm, Responsi
 from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
 from django.contrib.auth.models import User
 #from django.contrib.contenttypes import *
-from django.db import connection, DataError
+from django.db import connection
 from django.core import exceptions 
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -33,7 +33,6 @@ def index(request):
     return HttpResponseRedirect('/accounts/login')
 #    else:
 #        return render_to_response('index.html')
-
     #return render_to_response('index.html', {})
 
 
@@ -44,17 +43,17 @@ def profile(request):
     try:
         #Attempt to find user's chosen school
         assigned_school = School.objects.get(assigned_to=request.user)
-        school_blurb += 'associated with ' + unicode(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms. Please navigate to \'Entry Form\' from the side-bar to review or edit your entry.'
+        school_blurb += 'associated with ' + unicode(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics Competition entry forms. Please navigate to \'Entry Form\' on the side-bar to review or edit your entry.'
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
-        school_blurb += 'not associated with any school. Navigate to \'Entry Form\' and select your school.'
+        school_blurb += 'not associated with any school. Navigate to \'Entry Form\' to select your school.'
     
     admin_contact = compadmin.admin_emailaddress()
 
     if compadmin.isOpen():
         closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
     else:
-        closingdate_blurb='Entry submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
+        closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
         #return HttpResponseRedirect('../register/school_select/school_select.html')
     return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact})
 
@@ -135,6 +134,10 @@ def newstudents(request):
     individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+    
+    editEntry = False
+    if responsible_teacher:
+        editEntry = True
 
     entries_per_grade = {} #Dictionary with grade:range(...)
     pairs_per_grade = {}
@@ -242,9 +245,6 @@ def newstudents(request):
             else:
                 print 'This should not happen'
 
-
-        except DataError:
-            error = 'Invalid entry for responsible teacher or invigilator fields. Please check your entry'
         except Exception as e:
             error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
     else:
@@ -271,6 +271,7 @@ def newstudents(request):
         'error':error,
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
+        'editEntry':editEntry,
         'ierror':error}
 
     c.update(csrf(request))
