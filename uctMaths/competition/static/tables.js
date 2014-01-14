@@ -55,16 +55,16 @@ function validateForm(doc)
 	validity = validate_invigilator(resp_firstname[0].value, resp_surname[0].value, resp_phone_primary[0].value, resp_phone_alt[0].value, resp_mail[0].value);
 
 	if (validity!=0) {
-		    window.scrollTo(100,500);
-		    switch(validity){
-		        case -1: alert("Responsible teacher field must be completed"); break;
-		        case 1:resp_firstname[0].style.background = 'Yellow'; break;
-		        case 2:resp_surname[0].style.background = 'Yellow'; break;
-		        case 3:resp_phone_primary[0].style.background = 'Yellow'; break;
-		        case 4:resp_phone_alt[0].style.background = 'Yellow'; break;
-		        case 5:resp_email[0].style.background = 'Yellow'; break;
-		    }
-		    return false; //Error
+	    window.scrollTo(100,500);
+	    switch(validity){
+        case -1: alert("Responsible teacher field must be completed"); break;
+        case 1:resp_firstname[0].style.background = 'Yellow'; break;
+        case 2:resp_surname[0].style.background = 'Yellow'; break;
+        case 3:resp_phone_primary[0].style.background = 'Yellow'; break;
+        case 4:resp_phone_alt[0].style.background = 'Yellow'; break;
+        case 5:resp_email[0].style.background = 'Yellow'; break;
+	    }
+	    return false; //Error
 	}
   
     /*---------------------------------------------
@@ -182,6 +182,16 @@ function blankForm()
 
 function validate_student(firstname, surname){
 	//alert("Validate student!");
+
+    if (firstname.length > 254){
+            alert("Firstname is too long");
+            return 1;
+        }
+        if (surname.length > 254){
+            alert("Surname is too long");
+            return 2;
+        }
+
     if(firstname=="" && surname==""){
         return -1; //Empty field
         }
@@ -203,6 +213,17 @@ function validate_student(firstname, surname){
 function validate_invigilator(firstname, surname, phone_primary, phone_alt, email){
     //alert("Invigilator:"+firstname+", "+surname+"; "+phone_primary+"; " + email);
     
+    if (firstname.length > 254)
+        {
+            alert("Firstname is too long");
+            return 1;
+        }
+        if (surname.length > 254)
+        {
+            alert("Surname is too long");
+            return 2;
+        }
+
     //Validate that all comopulsory fields have been set out
     if(firstname=="" && surname == "" && email == "" && phone_primary == ""){
         //alert("Valid empty line");
@@ -232,6 +253,12 @@ function validate_invigilator(firstname, surname, phone_primary, phone_alt, emai
         //If the user has attempted to input alternative phone number
         if (phone_alt!="" && validate_phonenumber(phone_alt)!=0)
             return 4;
+
+        if (email.length > 49)
+        {
+            alert("Invalid email address. Address too long");
+            return 5;
+        }
 
 //        //Check validity of email
 		var atpos=email.indexOf('@');		// position of '@' symbol
