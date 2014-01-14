@@ -1,6 +1,5 @@
 # models.py
 # defines django models (correspond to db tables)
-
 from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -40,6 +39,8 @@ class School(models.Model):
 
     def __str__(self):
         return self.name
+    def __unicode__(self):
+        return u'%s'%(self.name)
     class Meta:
         ordering = ['name']     #defines the way the records are sorted.
 
@@ -67,7 +68,10 @@ class SchoolStudent(models.Model):
     paired = models.BooleanField(db_column='Paired')
 
     def __str__(self):
-        return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname
+        return self.surname+', '+self.firstname
+
+    def __unicode__(self):
+        return u'%s, %s'%(self.surname,self.firstname)
     class Meta:
         ordering = ['school', 'grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
@@ -84,6 +88,8 @@ class Venue(models.Model):
 
     def __str__(self):
         return self.building+' '+self.code
+    def __unicode__(self):
+        return u'%s, %s'%(self.building,self.code)
     class Meta:
         ordering = ['building', 'code'] #defines the way the records are sorted.
         
@@ -137,6 +143,8 @@ class Invigilator(models.Model):
 
     def __str__(self):
         return self.surname+', '+self.firstname
+    def __unicode__(self):
+        return u'%s, %s'%(self.surname,self.firstname)
     class Meta:
         ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
 
@@ -154,6 +162,9 @@ class ResponsibleTeacher(models.Model):
     #registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
+    def __unicode__(self):
+        return u'%s, %s'%(self.surname,self.firstname)
+        
     class Meta:
         ordering = ['school', 'surname', 'firstname'] #defines the way the records are sorted.
 
@@ -185,6 +196,8 @@ class SchoolStudentArchive(models.Model):
 
     def __str__(self):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname+' ('+self.archived+')'
+    def __unicode__(self):
+        return u'%s, %s (%s)'%(self.surname,self.firstname,self.archived)
     class Meta:
         ordering = ['archived','grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
@@ -205,6 +218,8 @@ class InvigilatorArchive(models.Model):
     #registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
+    def __unicode__(self):
+        return u'%s, %s (%s)'%(self.surname,self.firstname,self.archived)
     class Meta:
         ordering = ['archived', 'school', 'surname', 'firstname'] #defines the way the records are sorted.
 

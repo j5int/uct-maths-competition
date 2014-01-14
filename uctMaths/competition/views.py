@@ -1,4 +1,4 @@
-# Create your views here.
+from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render, render_to_response
@@ -14,7 +14,7 @@ from competition.forms import StudentForm, SchoolForm, InvigilatorForm, Responsi
 from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
 from django.contrib.auth.models import User
 #from django.contrib.contenttypes import *
-from django.db import connection
+from django.db import connection, DataError
 from django.core import exceptions 
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -28,7 +28,12 @@ def auth(request):
      return HttpResponseRedirect('/accounts/login')
 
 def index(request):
+    #If the due date has not passed:
+#    if compadmin.isOpen():
     return HttpResponseRedirect('/accounts/login')
+#    else:
+#        return render_to_response('index.html')
+
     #return render_to_response('index.html', {})
 
 
@@ -39,13 +44,17 @@ def profile(request):
     try:
         #Attempt to find user's chosen school
         assigned_school = School.objects.get(assigned_to=request.user)
-        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms. Please navigate to \'Entry Form\' from the side-bar to review or edit your entry.'
+        school_blurb += 'associated with ' + unicode(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics competition entry forms. Please navigate to \'Entry Form\' from the side-bar to review or edit your entry.'
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
         school_blurb += 'not associated with any school. Navigate to \'Entry Form\' and select your school.'
     
     admin_contact = compadmin.admin_emailaddress()
-    closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
+
+    if compadmin.isOpen():
+        closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
+    else:
+        closingdate_blurb='Entry submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
         #return HttpResponseRedirect('../register/school_select/school_select.html')
     return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact})
 
@@ -78,7 +87,7 @@ def entry_review(request):
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
 
     for p in range(8,13):
-        pair_list[p] = pair_list[p]/2
+        pair_list[p] = pair_list[p]
 
     if not responsible_teacher:
         return HttpResponseRedirect('../students/newstudents.html')
@@ -127,76 +136,95 @@ def newstudents(request):
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
 
-    #if responsible_teacher:
-     #   return HttpResponseRedirect('../entry_review/entry_review.html')
-
     entries_per_grade = {} #Dictionary with grade:range(...)
     pairs_per_grade = {}
     for grade in range(8,13):
         entries_per_grade[grade] = range(compadmin.admin_number_of_individuals()-len(individual_list[grade]))
         #Place the "Previously Selected" number of pairs at the top of the list (So it appears as a default)
-        pairs_per_grade[grade] = [pair_list[grade]/2]
-        pairs_per_grade[grade].extend([i for i in range(0,compadmin.admin_number_of_pairs()+1) if i != pair_list[grade]/2])
+        pairs_per_grade[grade] = [pair_list[grade]]
+        pairs_per_grade[grade].extend([i for i in range(0,compadmin.admin_number_of_pairs()+1) if i != pair_list[grade]])
 
     if request.method == 'POST':  # If the form has been submitted...
 
         form = (request.POST) # A form bound to the POST data
 
         #Delete all previously stored information
-        for rt in responsible_teacher:
-            rt.delete()
-        for student in student_list:
-            student.delete()
-        for invigilator in invigilator_list:
-            invigilator.delete()
 
+        try:
+            #Register a single responsible teacher (assigned to that school)
+            rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
+            rtfirstname = form.getlist('rt_firstname','')[0]
+            rtsurname = form.getlist('rt_surname','')[0]
+            rtphone_primary = form.getlist('rt_phone_primary','')[0]
+            rtphone_alt = form.getlist('rt_phone_alt','')[0]
+            rtemail = form.getlist('rt_email','')[0]
+            #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
+            query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary, 
+                                      phone_alt = rtphone_alt, school = rtschool,
+                                      email = rtemail)
 
-        #Register a single responsible teacher (assigned to that school)
-        rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
-        rtfirstname = form.getlist('rt_firstname','')[0].capitalize()
-        rtsurname = form.getlist('rt_surname','')[0].capitalize()
-        rtphone_primary = form.getlist('rt_phone_primary','')[0]
-        rtphone_alt = form.getlist('rt_phone_alt','')[0]
-        rtemail = form.getlist('rt_email','')[0]
-        #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
-        query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary, 
-                                  phone_alt = rtphone_alt, school = rtschool,
-                                  email = rtemail)
-        query.save()
-        query.reference=query.id
-        query.save()
+            #Delete responsible teacher before saving the new one
+            for rt in responsible_teacher:
+                rt.delete()
+
+            query.save()
+            query.reference=query.id
+            query.save()
 
         #Registering per grade
-        for grade in range (8,13):
-              #Registering the different pairs
-              #Information is set to null, only school name is given and reference
-              #Reference if the ID of the first person in the pair
-              for p in range(int(form.getlist("pairs",'')[grade-8])):
-                    firstname = 'Pair/Paar'
-                    surname = str(grade)+chr(65+p)
-                    language = form.getlist('language','')[0]
+            for grade in range (8,13):
+                  #Registering the different pairs
+                  #Information is set to null, only school name is given and reference
+                  #Reference if the ID of the first person in the pair
+                  for p in range(int(form.getlist("pairs",'')[grade-8])):
+                        firstname = 'Pair/Paar'
+                        surname = str(grade)+chr(65+p)
+                        language = form.getlist('language','')[0]
+                        school = assigned_school
+                        reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
+                        #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
+                        paired = True 
+                        #Save first entry for pair
+                        query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
+                                school = school, grade = grade , paired = paired)
+                        query.save()
+                        #Save second entry for pair
+                        #query1 = SchoolStudent(firstname = firstname , surname = surname, language = language, reference = reference, 
+                                #school = school, grade=grade,
+                                #paired = paired)
+                        #query1.save()
+
+            #Add invigilator information
+            for invigilator in invigilator_list:
+                invigilator.delete()
+ 
+            for j in range(10):
+                if form.getlist('inv_firstname','')[j] == u'':
+                    ierror = "Invigilator information incomplete"
+                else:
                     school = assigned_school
-                    reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
-                    #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
-                    paired = True 
-                    #Save first entry for pair
-                    query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                            school = school, grade = grade , paired = paired)
+                    ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
+                    isurname = correctCapitals(form.getlist('inv_surname','')[j])
+                    iphone_primary = form.getlist('inv_phone_primary','')[j]
+                    iphone_alt = form.getlist('inv_phone_alt','')[j]
+                    iemail = form.getlist('inv_email','')[j]
+                    #iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
+
+                    query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
+                                       phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail)
                     query.save()
-                    #Save second entry for pair
-                    query1 = SchoolStudent(firstname = firstname , surname = surname, language = language, reference = reference, 
-                            school = school, grade=grade,
-                            paired = paired)
-                    query1.save()
 
         #Registering students, maximum number of students 25
         #Returns an error if information entered incorrectly         
-        try:
+
+            for student in student_list:
+                student.delete()
+
             for i in range (5*compadmin.admin_number_of_individuals()):
                 if form.getlist('firstname','')[i] == u'': continue
-                firstname = form.getlist('firstname','')[i].capitalize()
-                surname = form.getlist('surname','')[i].capitalize()
-                language = form.getlist('language','')[0]
+                firstname =  correctCapitals(form.getlist('firstname','')[i])
+                surname =  correctCapitals(form.getlist('surname','')[i])
+                language =  form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
                 reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5+1).zfill(2))
@@ -208,30 +236,17 @@ def newstudents(request):
 
                 query.save()
 
-            for j in range(10):
-                if form.getlist('inv_firstname','')[j] == u'':
-                    ierror = "Invigilator information incomplete"
-                else:
-                    school = assigned_school
-                    ifirstname = form.getlist('inv_firstname','')[j].capitalize()
-                    isurname = form.getlist('inv_surname','')[j].capitalize()
-                    iphone_primary = form.getlist('inv_phone_primary','')[j]
-                    iphone_alt = form.getlist('inv_phone_alt','')[j]
-                    iemail = form.getlist('inv_email','')[j]
-                    #iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
-
-                    query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
-                                       phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail)
-                    query.save()
-
             if 'submit_form' in request.POST: #Send confirmation email and continue
                 confirmation.send_confirmation(request, assigned_school,cc_admin=True)
                 return render_to_response('submitted.html')
             else:
                 print 'This should not happen'
 
+
+        except DataError:
+            error = 'Invalid entry for responsible teacher or invigilator fields. Please check your entry'
         except Exception as e:
-              error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
+            error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
     else:
         form = StudentForm() # An unbound form
 
@@ -259,7 +274,22 @@ def newstudents(request):
         'ierror':error}
 
     c.update(csrf(request))
+    #TODO Cancel button (Go back to 'Entry Review' - if possible)
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
+
+
+def correctCapitals(input_name):
+    
+    #Return true if all cased characters in the string are uppercase and there is at least one cased character, false otherwise.
+    if not input_name.isupper():
+        return input_name # Return unaltered input if it is not all capitals
+    else:
+        words = input_name.split()
+        output = []
+        for wd in words:
+            output.append(wd.capitalize())
+            
+        return ' '.join(output) #Otherwise return name as first-letter-capitalised
 
 #*****************************************
 # School select.
@@ -270,8 +300,11 @@ def school_select(request):
     invalid_request = False
     inv_req_message = ''
     school_assignment = ''
-    if request.method == 'POST':  # If the form has been submitted...
 
+    if not compadmin.isOpen():
+        return HttpResponseRedirect('/accounts/profile')
+
+    if request.method == 'POST':  # If the form has been submitted...
         try:
         #Attempt to find user's chosen school
             assigned_school = School.objects.get(assigned_to=request.user)
