@@ -108,7 +108,7 @@
                 <div>
                 {%for key, p in pair_list.items%}
                 {% if grade|add:3 == key %}
-                <p><b> {{p}} pairs </b> (teams of 2) have been registered for grade {{grade}}. </p>
+                <p><b> {{p}} pairs </b> (teams of 2) have been registered for grade {{grade|add:3}}. </p>
                 {%endif%}
                 {%endfor%}
                 </div> 
