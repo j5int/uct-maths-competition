@@ -61,7 +61,7 @@ def profile(request):
 # submitted thingszz
 @login_required
 def submitted(request):
-    print 'Hello'
+
     school_summary_blurb = 'Thank you for using the UCT Mathematics Competition online Registration Portal. You have successfully registered:'
     
     try:
