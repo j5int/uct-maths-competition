@@ -60,9 +60,39 @@ def profile(request):
 
 # submitted thingszz
 @login_required
-def submitted(request, c):
-  c.update(csrf(request))
-  return render_to_response('submitted.html', c)
+def submitted(request):
+    print 'Hello'
+    school_summary_blurb = 'Thank you for using the UCT Mathematics Competition online Registration Portal. You have successfully registered:'
+    
+    try:
+        school_asmt = School.objects.get(assigned_to=request.user)
+        student_list = SchoolStudent.objects.all().filter(school=school_asmt)
+    except exceptions.ObjectDoesNotExist:
+        return HttpResponseRedirect('../school_select/school_select.html')
+    except Exception:
+        school_summary_blurb = 'An error has occured.'
+    
+    grade_summary = compadmin.gradeBucket(student_list)
+    school_summary_info = [] 
+    count_individuals = 0
+    count_pairs = 0
+    
+    for i in range(8,13):
+        school_summary_info.append('Grade %d: %d individuals and %d pairs'%(i, len(grade_summary[i,False]),len(grade_summary[i,True])))
+        count_pairs = count_pairs + len(grade_summary[i,True])
+        count_individuals = count_individuals + len(grade_summary[i,False])
+        
+        
+    school_summary_statistics = 'You have successfully registered %d students (%d individuals and %d pairs).'%(count_pairs*2+count_individuals, count_individuals, count_pairs)
+    
+    c = {
+        'school_summary_blurb':school_summary_blurb,
+        'school_summary_info':school_summary_info,
+        'school_summary_statistics':school_summary_statistics,
+        }
+
+    c.update(csrf(request))
+    return render_to_response('submitted.html', c)
 
 
 #*****************************************
@@ -108,7 +138,7 @@ def entry_review(request):
         return HttpResponseRedirect('../students/newstudents.html')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
-        return render_to_response('submitted.html')
+        return HttpResponseRedirect('../submitted.html')
 
     c.update(csrf(request))
     return render_to_response('entry_review.html', c, context_instance=RequestContext(request))
@@ -241,7 +271,7 @@ def newstudents(request):
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
                 confirmation.send_confirmation(request, assigned_school,cc_admin=True)
-                return render_to_response('submitted.html')
+                return HttpResponseRedirect('../submitted.html')
             else:
                 print 'This should not happen'
 
