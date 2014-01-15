@@ -26,6 +26,7 @@ from reportlab.pdfgen import canvas
 import ho.pisa as pisa
 import cStringIO as StringIO
 from django.template.loader import get_template
+from datetime import datetime
 
 def auth(request):
    if not request.user.is_authenticated():
@@ -41,7 +42,7 @@ def index(request):
     #return render_to_response('index.html', {})
 
 @login_required
-def printer_entry(request):
+def printer_entry_result(request):
 #had to easy_install html5lib pisa
 #Create the HttpResponse object with the appropriate PDF headers.
 
@@ -59,11 +60,13 @@ def printer_entry(request):
     individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-
+    timestamp = str(datetime.now())
+    
     if not responsible_teacher:
         return HttpResponseRedirect('../students/newstudents.html')
 
     c = {'type':'Students',
+        'timestamp':timestamp,
         'schooln':assigned_school,
         'responsible_teacher':responsible_teacher[0],
         'student_list':individual_list,
@@ -83,9 +86,15 @@ def printer_entry(request):
 
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
-        return HttpResponse(result.getvalue(), mimetype='application/pdf')
+        return result
     else:
-        pass #Error handling??
+        pass #Error handling?
+
+@login_required
+def printer_entry(request):
+    result = printer_entry_result(request)
+    return HttpResponse(result.getvalue(), mimetype='application/pdf')
+
 
 
 @login_required

@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher 
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 import datetime
 
 import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
                  # confirmation email.
-
+import views
 
 # Methods for very simple formatting of data entered by a certain user (filter)
 # See info in settings.py for SMTP server emulation and set-up
@@ -33,12 +33,19 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy 
     #temp_output.write(temp_output)
     #temp_output.close()
 
-    ### Send mail ###
-    if cc_admin: #If no recipient has been specified
-        send_mail('Confirmation Email', output_string, 'support@sjsoft.com',[username.email, compadmin.admin_emailaddress()], fail_silently=False)
-    else: 
-        send_mail('Confirmation Email', output_string, 'support@sjsoft.com',[username.email], fail_silently=False)
+    recipient_list = [username.email]
+    if cc_admin:
+        recipient_list.append(compadmin.admin_emailaddress())
 
+    email = EmailMessage(
+                        'UCT Mathematics Competition Entry Confirmation',#Subject line
+                        output_string, #Body
+                        'UCTMathsComp@sjsoft.com',#from
+                        recipient_list,
+                        )
+    result = views.printer_entry_result(request)
+    email.attach('%s_confirmation.pdf'%(unicode(in_school)),result.getvalue(), mimetype='application/pdf')
+    email.send()
 
 
 def print_students(student_list,width=40):
