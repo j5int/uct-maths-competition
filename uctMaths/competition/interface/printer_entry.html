@@ -1,0 +1,122 @@
+<h2>Entry for {{schooln}}</h2>
+    <!-- register responsible teacher from here --->
+    <div>
+        <h3>Responsible Teacher</h3>
+        {% csrf_token %}
+        <table border="0.1" width="450">
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
+            </tr>
+            <tr>
+                <td>{{responsible_teacher.firstname}}</td>
+                <td>{{responsible_teacher.surname}}</td>
+                <td>{{responsible_teacher.phone_primary}}</td>
+                <td>{{responsible_teacher.phone_alt}}</td>
+                <td>{{responsible_teacher.email}}</td>
+            </tr>
+        </table>
+    </div>
+    <!-- register invigilators from here -->
+    <div>
+        <p><b>Registered Invigilators</b> (2 are compulsorty if 75 students have been registered)</p>
+        <p> {{ ierror }} </p>
+        {% csrf_token %}
+        <table border="0.1" width="450">
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
+            </tr>
+            <!-- Populates the list with previously registered invigilators -->
+            {%for invigilator in invigilator_list%}
+                <tr>
+                    <td>{{invigilator.firstname}}</td>
+                    <td>{{invigilator.surname}}</td>
+                    <td>{{invigilator.phone_primary}}</td>                    
+                    <td>{{invigilator.phone_alt}}</td>
+                    <td>{{invigilator.email}}</td>
+                </tr>
+            {%endfor%}
+        </table>
+
+    </div>
+    <!-- <h3>Registered Participants</h3> -->
+    
+    <table>
+        {% for grade in grade_left %}
+        <tr>
+            <td>
+                <div>
+                <br>
+                <p><b>Registered Grade {{grade}} participants:</b></p>
+                <table border="0.1" width="200">
+                <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                </tr>
+                <!-- Populates the list with previously registered students -->
+                {%for key, student_l in student_list.items%}
+                {% if grade == key %} <!-- only for the current grade -->
+                {%for student in student_l%}
+                <tr>
+                <td>{{student.firstname}}</td>
+                <td>{{student.surname}}</td>
+                </tr>
+                {%endfor%}
+                {%endif%}
+                {%endfor%}
+                </table>        
+                <div>
+                {%for key, p in pair_list.items%}
+                {% if grade == key %}
+                <p><b> {{p}} pairs </b> (teams of 2) have been registered for grade {{grade}}. </p>
+                {%endif%}
+                {%endfor%}
+                </div> 
+                </div>
+            </td>
+            
+            {% if grade|add:3 < 13 %}
+            <td>
+                <div>
+                <br>
+                <p><b>Registered Grade {{grade|add:3}} participants:</b></p>
+                <table border="0.1" width="200">
+                <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                </tr>
+                <!-- Populates the list with previously registered students -->
+                {%for key, student_l in student_list.items%}
+                {% if grade|add:3 == key %} <!-- only for the current grade -->
+                {%for student in student_l%}
+                <tr>
+                <td>{{student.firstname}}</td>
+                <td>{{student.surname}}</td>
+                </tr>
+                {%endfor%}
+                {%endif%}
+                {%endfor%}
+                </table>        
+                <div>
+                {%for key, p in pair_list.items%}
+                {% if grade|add:3 == key %}
+                <p><b> {{p}} pairs </b> (teams of 2) have been registered for grade {{grade}}. </p>
+                {%endif%}
+                {%endfor%}
+                </div> 
+                </div>
+            </td>
+            {% endif %}
+        </tr>
+
+    {%endfor%} <!-- endfor grade -->
+    </table>
+    <p>Please remember that it is your responsibility to ensure that accurate information has been entered. You will be able to edit your school's entry up until the closing date for new entries to the competition. </p>
+    </form>

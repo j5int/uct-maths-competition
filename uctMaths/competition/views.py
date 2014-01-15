@@ -22,6 +22,11 @@ from django.core.mail import send_mail
 import confirmation
 import compadmin
 
+from reportlab.pdfgen import canvas
+import ho.pisa as pisa
+import cStringIO as StringIO
+from django.template.loader import get_template
+
 def auth(request):
    if not request.user.is_authenticated():
      print "not logged in"
@@ -35,6 +40,70 @@ def index(request):
 #        return render_to_response('index.html')
     #return render_to_response('index.html', {})
 
+@login_required
+def printer_entry(request):
+    # Create the HttpResponse object with the appropriate PDF headers.
+#    response = HttpResponse(content_type='application/pdf')
+#    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+#    # Create the PDF object, using the response object as its "file."
+#    p = canvas.Canvas(response)
+    try:
+        #Attempt to find user's chosen school
+        assigned_school = School.objects.get(assigned_to=request.user)
+    except exceptions.ObjectDoesNotExist:
+        # No school is associated with this user! Redirect to the select_schools page
+        return HttpResponseRedirect('../school_select/school_select.html')
+
+    #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
+
+    #Required that school form is pre-fetched to populate form
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
+    invigilator_list = Invigilator.objects.filter(school = assigned_school)
+    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+
+    for p in range(8,13):
+        pair_list[p] = pair_list[p]
+
+    if not responsible_teacher:
+        return HttpResponseRedirect('../students/newstudents.html')
+
+    c = {'type':'Students',
+        'schooln':assigned_school,
+        'responsible_teacher':responsible_teacher[0],
+        'student_list':individual_list,
+        'pair_list':pair_list,
+        'entries_open':compadmin.isOpen(),
+        'invigilator_list': invigilator_list,
+        'grade_left':range(8,11),
+        'grade_right':range(11,13), 
+        'invigilator_range':range(10-len(invigilator_list)), 
+        'igrades':range(8,13)}
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    #Get template
+    template = get_template('printer_entry.html')
+    
+    c.update(csrf(request))
+    context = Context(c)
+    html  = template.render(context)
+    result = StringIO.StringIO()
+    
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), mimetype='application/pdf')
+    #return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+    
+#    p.drawString(100, 100, "Hello world.")
+
+#    # Close the PDF object cleanly, and we're done.
+#    p.showPage()
+#    p.save()
+#    return response
+#    
+    
 
 @login_required
 def profile(request):
@@ -64,16 +133,16 @@ def submitted(request):
 
     school_summary_blurb = 'Thank you for using the UCT Mathematics Competition online Registration Portal. You have successfully registered:'
     
-    try:
+    try: #Try get the student list for the school assigned to the requesting user
         school_asmt = School.objects.get(assigned_to=request.user)
         student_list = SchoolStudent.objects.all().filter(school=school_asmt)
     except exceptions.ObjectDoesNotExist:
         return HttpResponseRedirect('../school_select/school_select.html')
     except Exception:
-        school_summary_blurb = 'An error has occured.'
+        school_summary_blurb = 'An error has occured.' #This could occur if a user has become associated with > 1 school.
     
-    grade_summary = compadmin.gradeBucket(student_list)
-    school_summary_info = [] 
+    grade_summary = compadmin.gradeBucket(student_list) #Bin into categories (Pairing, grade)
+    school_summary_info = [] #Entry for each grade
     count_individuals = 0
     count_pairs = 0
     
@@ -82,9 +151,8 @@ def submitted(request):
         count_pairs = count_pairs + len(grade_summary[i,True])
         count_individuals = count_individuals + len(grade_summary[i,False])
         
-        
     school_summary_statistics = 'You have successfully registered %d students (%d individuals and %d pairs).'%(count_pairs*2+count_individuals, count_individuals, count_pairs)
-    
+
     c = {
         'school_summary_blurb':school_summary_blurb,
         'school_summary_info':school_summary_info,
