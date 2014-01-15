@@ -321,8 +321,8 @@ def output_studenttags(student_list):
                 s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
                 s_line += '\"' + unicode(student.school) +  '\",'
                 s_line += str(student.grade) + ','
-                venue_str = str(venue_object[0]) if len(venue_object)==1 else 'Unallocated'
-                s_line += '\"' + venue_str + '\"\n'
+                venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
+                s_line += '\"' + unicode(venue_str) + '\"\n'
                 output_string.write(s_line)
                 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
@@ -337,7 +337,7 @@ def output_studenttags(student_list):
                 s_line += '\"' + unicode(student.school) +  '\",'
                 s_line += str(student.grade) + ','
                 venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
-                s_line += '\"' + venue_str + '\"\n'
+                s_line += '\"' + unicode(venue_str) + '\"\n'
                 output_string.write(s_line)
 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
