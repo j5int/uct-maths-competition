@@ -42,12 +42,9 @@ def index(request):
 
 @login_required
 def printer_entry(request):
-    # Create the HttpResponse object with the appropriate PDF headers.
-#    response = HttpResponse(content_type='application/pdf')
-#    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+#had to easy_install html5lib pisa
+#Create the HttpResponse object with the appropriate PDF headers.
 
-#    # Create the PDF object, using the response object as its "file."
-#    p = canvas.Canvas(response)
     try:
         #Attempt to find user's chosen school
         assigned_school = School.objects.get(assigned_to=request.user)
@@ -63,9 +60,6 @@ def printer_entry(request):
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
 
-    for p in range(8,13):
-        pair_list[p] = pair_list[p]
-
     if not responsible_teacher:
         return HttpResponseRedirect('../students/newstudents.html')
 
@@ -77,33 +71,22 @@ def printer_entry(request):
         'entries_open':compadmin.isOpen(),
         'invigilator_list': invigilator_list,
         'grade_left':range(8,11),
-        'grade_right':range(11,13), 
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13)}
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    #Get template
+    #Render the template with the context (from above)
     template = get_template('printer_entry.html')
-    
     c.update(csrf(request))
     context = Context(c)
     html  = template.render(context)
     result = StringIO.StringIO()
-    
+
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
         return HttpResponse(result.getvalue(), mimetype='application/pdf')
-    #return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
-    
-#    p.drawString(100, 100, "Hello world.")
+    else:
+        pass #Error handling??
 
-#    # Close the PDF object cleanly, and we're done.
-#    p.showPage()
-#    p.save()
-#    return response
-#    
-    
 
 @login_required
 def profile(request):
