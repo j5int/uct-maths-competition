@@ -112,7 +112,7 @@ def profile(request):
     admin_contact = compadmin.admin_emailaddress()
 
     if compadmin.isOpen():
-        closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
+        closingdate_blurb='Please note that online entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
     else:
         closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
         #return HttpResponseRedirect('../register/school_select/school_select.html')
