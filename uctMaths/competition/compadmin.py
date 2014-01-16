@@ -600,15 +600,16 @@ def school_summary(request):
     wb_sheet.write(0,0,'School summary sheet')
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
-    
-    
+
     header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Individuals', 'Pairs', 'Total']
+    responsible_teacher_mailinglist = []
+
+    cell_row_offset = 4
 
     for index, h in enumerate(header):
-        wb_sheet.write(3,index,'%s'%(h))
+        wb_sheet.write(cell_row_offset,index,'%s'%(h))
 
-
-    cell_row_offset = 3
+    cell_row_offset = cell_row_offset + 1
 
     for school_obj in school_list:
         try: #Try get the student list for the school assigned to the requesting user
@@ -635,6 +636,11 @@ def school_summary(request):
             wb_sheet.write(cell_row_offset,4,count_pairs)
             wb_sheet.write(cell_row_offset,3,count_individuals)
             wb_sheet.write(cell_row_offset,5,int(count_pairs*2 + count_individuals))
+            responsible_teacher_mailinglist.append(resp_teacher.email)
+
+
+    wb_sheet.write(3,0,'Mailing list')
+    wb_sheet.write(3,1,', '.join(responsible_teacher_mailinglist))
 
     #Return the response with attached content to the user
     response = HttpResponse()
