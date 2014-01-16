@@ -12,7 +12,8 @@ from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, HttpResponseRedirect
 import zipfile
 import StringIO
-
+import datetime
+from django.core import exceptions 
 #A few administration constants and associated methods to be used around the website.
 
 def admin_emailaddress():
@@ -585,3 +586,65 @@ def assign_awards(request, student_list):
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
+
+
+def school_summary(request):
+    """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant emai adresses. Or something like that."""
+    
+    
+    output_workbook = xlwt.Workbook()
+    school_list = School.objects.all().order_by('name') #ie. regardless of selection at admin screen
+    
+    
+    wb_sheet = output_workbook.add_sheet('Summary')
+    wb_sheet.write(0,0,'School summary sheet')
+    wb_sheet.write(1,0,'Generated')
+    wb_sheet.write(1,1,'%s'%(timestamp_now()))
+    
+    
+    header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Individuals', 'Pairs', 'Total']
+
+    for index, h in enumerate(header):
+        wb_sheet.write(3,index,'%s'%(h))
+
+
+    cell_row_offset = 3
+
+    for school_obj in school_list:
+        try: #Try get the student list for the school assigned to the requesting user
+            student_list = SchoolStudent.objects.all().filter(school=school_obj)
+            resp_teacher = ResponsibleTeacher.objects.get(school=school_obj)
+        except exceptions.ObjectDoesNotExist:#Non-entry
+            pass #Handled in if-not-empty statement below
+
+        if student_list and resp_teacher: #If the lists are not empty
+
+            grade_summary = gradeBucket(student_list) #Bin into categories (Pairing, grade)
+            school_summary_info = [] #Entry for each grade
+            count_individuals = 0
+            count_pairs = 0
+
+            for i in range(8,13):
+                count_pairs = count_pairs + len(grade_summary[i,True])
+                count_individuals = count_individuals + len(grade_summary[i,False])
+
+            cell_row_offset = cell_row_offset + 1
+            wb_sheet.write(cell_row_offset,0,unicode(school_obj.name))
+            wb_sheet.write(cell_row_offset,1,('%s %s')%(resp_teacher.firstname, resp_teacher.surname))
+            wb_sheet.write(cell_row_offset,2,resp_teacher.email)
+            wb_sheet.write(cell_row_offset,4,count_pairs)
+            wb_sheet.write(cell_row_offset,3,count_individuals)
+            wb_sheet.write(cell_row_offset,5,int(count_pairs*2 + count_individuals))
+
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=school_summary-%s.xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
+    
+    
+def timestamp_now():
+    now = datetime.datetime.now()
+    to_return = '%s:%s(%s-%s-%s)'%(now.hour, now.minute, now.day, now.month, now.year)
+    return to_return

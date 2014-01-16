@@ -31,7 +31,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -47,10 +47,16 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 	def assign_school_ranks(self, request, queryset):
 	    return compadmin.rank_schools(queryset)
+	    
+	def school_summary(self, request, queryset):
+	    return compadmin.school_summary(request)
 
-	output_schooltaglist.short_description = 'Generate and download school tags file for selected school(s)'
+
+	output_schooltaglist.short_description = 'Download school tags for schools (regardless of selection)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
-	assign_school_ranks.short_description = 'Assign rank based on score to selected school(s)' 
+	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
+	school_summary.short_description = 'Schools with entries (xls summary) (regardless of selection)' 
+
 
 
 
