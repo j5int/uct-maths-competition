@@ -69,7 +69,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
-	actions = ['archive_student','write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards']
+	actions = ['archive_student','write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -88,13 +88,11 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def write_studentlist(self, request, queryset):
 	    return compadmin.output_studentlists(queryset)
-
 	write_studentlist.short_description = 'Export formatted XLS student registry for selected students'
-
 
 	def write_studenttags(self, request, queryset):
 	    return compadmin.output_studenttags(queryset)
-	write_studenttags.short_description = 'Generate MailMerge files for student tags for selected students'
+	write_studenttags.short_description = 'Generate MailMerge student tags for all students (regardless of selection)'
 
 	def upload_results(self, request, queryset):
 	    return compadmin.upload_results(request, queryset)
@@ -102,11 +100,16 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def rank_students(self, request, queryset):
 	    return compadmin.rank_students(queryset)
-	rank_students.short_description = 'Re-rank students. (All ranked regardless of selection)'
+	rank_students.short_description = 'Re-rank students. (regardless of selection)'
 
 	def output_assign_awards(self, request, queryset):
 	    return compadmin.assign_awards(request, queryset)
 	output_assign_awards.short_description = 'Assign awards and export (xls) document (regardless of selection)'
+
+	def output_PRN_files(self, request, queryset):
+	    return compadmin.output_PRN_files(queryset)
+	output_PRN_files.short_description = 'Generate PRN files for all students (regardless of selection)'
+
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
