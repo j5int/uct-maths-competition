@@ -80,6 +80,7 @@ def printer_entry_result(request, school_list=None):
                 'pair_list':pair_list,
                 'entries_open':compadmin.isOpen(),
                 'invigilator_list': invigilator_list,
+                'grades':range(8,13),
                 'grade_left':range(8,11),
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13)}
