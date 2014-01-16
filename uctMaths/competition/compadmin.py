@@ -595,8 +595,51 @@ def school_summary(request):
     output_workbook = xlwt.Workbook()
     school_list = School.objects.all().order_by('name') #ie. regardless of selection at admin screen
     
+    wb_sheet = output_workbook.add_sheet('School Summary')
+    school_summary_sheet(school_list, wb_sheet)
+
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=school_summary(%s).xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
     
-    wb_sheet = output_workbook.add_sheet('Summary')
+    
+def timestamp_now():
+    now = datetime.datetime.now()
+    to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
+    return to_return
+    
+def export_competition(request):
+    """ Export all the information of this year's competition in single excel file"""
+
+    output_workbook = xlwt.Workbook()
+    school_list = School.objects.all().order_by('name') #ie. regardless of selection at admin screen
+    student_list = SchoolStudent.objects.all().order_by('school')
+    #resp_teachers = ResponsibleTeacher.objects.all().order_by('school')
+    invigilator_list = Invigilator.objects.all().order_by('school')
+    
+    # --------------------- Generate School Summary ---------------------------
+
+    wb_sheet = output_workbook.add_sheet('School Summary')
+    school_summary_sheet(school_list, wb_sheet)
+    
+    wb_sheet = output_workbook.add_sheet('Student Summary')
+    archive_all_students(student_list, wb_sheet)
+    
+    wb_sheet = output_workbook.add_sheet('Invigilator Summary')
+    archive_all_invigilators(invigilator_list, wb_sheet)
+    
+    
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=competition_archive(%s).xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
+
+def school_summary_sheet(school_list, wb_sheet):
     wb_sheet.write(0,0,'School summary sheet')
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
@@ -604,12 +647,10 @@ def school_summary(request):
     header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Individuals', 'Pairs', 'Total']
     responsible_teacher_mailinglist = []
 
-    cell_row_offset = 4
+    cell_row_offset = 6
 
     for index, h in enumerate(header):
         wb_sheet.write(cell_row_offset,index,'%s'%(h))
-
-    cell_row_offset = cell_row_offset + 1
 
     for school_obj in school_list:
         try: #Try get the student list for the school assigned to the requesting user
@@ -637,19 +678,62 @@ def school_summary(request):
             wb_sheet.write(cell_row_offset,3,count_individuals)
             wb_sheet.write(cell_row_offset,5,int(count_pairs*2 + count_individuals))
             responsible_teacher_mailinglist.append(resp_teacher.email)
-
-
+    
     wb_sheet.write(3,0,'Mailing list')
     wb_sheet.write(3,1,', '.join(responsible_teacher_mailinglist))
+    return wb_sheet
 
-    #Return the response with attached content to the user
-    response = HttpResponse()
-    response['Content-Disposition'] = 'attachment; filename=school_summary(%s).xls'%(timestamp_now())
-    response['Content-Type'] = 'application/ms-excel'
-    output_workbook.save(response)
-    return response
+def archive_all_students(student_list, wb_sheet):
+    wb_sheet.write(0,0,'Student summary sheet')
+    wb_sheet.write(1,0,'Generated')
+    wb_sheet.write(1,1,'%s'%(timestamp_now()))
+
+    header = ['Reference', 'School' , 'Firstname', 'Surname', 'Grade', 'Score', 'Rank']
+
+    cell_row_offset = 3
+
+    for index, h in enumerate(header):
+        wb_sheet.write(cell_row_offset,index,'%s'%(h))
     
+    cell_row_offset = cell_row_offset + 1
     
+    for student in student_list:    
+        wb_sheet.write(cell_row_offset,1,unicode(student.school))
+        wb_sheet.write(cell_row_offset,0, student.reference)
+        wb_sheet.write(cell_row_offset,2, student.firstname)
+        wb_sheet.write(cell_row_offset,3, student.surname)
+        wb_sheet.write(cell_row_offset,4, student.grade)
+        wb_sheet.write(cell_row_offset,5, student.score)
+        wb_sheet.write(cell_row_offset,6, student.rank)
+        cell_row_offset = cell_row_offset + 1
+
+    return wb_sheet
+    
+def archive_all_invigilators(invigilator_list, wb_sheet):
+    wb_sheet.write(0,0,'Invigilator summary sheet')
+    wb_sheet.write(1,0,'Generated')
+    wb_sheet.write(1,1,'%s'%(timestamp_now()))
+
+    header = ['School' , 'Firstname', 'Surname', 'Phone Primary', 'Alternate', 'Email']
+
+    cell_row_offset = 3
+
+    for index, h in enumerate(header):
+        wb_sheet.write(cell_row_offset,index,'%s'%(h))
+    
+    cell_row_offset = cell_row_offset + 1
+    
+    for invigilator in invigilator_list:    
+        wb_sheet.write(cell_row_offset,1,unicode(invigilator.school))
+        wb_sheet.write(cell_row_offset,2, invigilator.firstname)
+        wb_sheet.write(cell_row_offset,3, invigilator.surname)
+        wb_sheet.write(cell_row_offset,4, invigilator.phone_primary)
+        wb_sheet.write(cell_row_offset,5, invigilator.phone_alt)
+        wb_sheet.write(cell_row_offset,6, invigilator.email)
+        cell_row_offset = cell_row_offset + 1
+
+    return wb_sheet
+
 def timestamp_now():
     now = datetime.datetime.now()
     to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
