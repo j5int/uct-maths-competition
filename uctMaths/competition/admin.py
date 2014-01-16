@@ -160,7 +160,7 @@ class CompetitionAdmin(admin.ModelAdmin):
     def export_competition(self, request, queryset):
         return compadmin.export_competition(request)
 
-    export_competition.short_description('Export competition database (regardless of selection)')
+    export_competition.short_description = 'Export competition database (regardless of selection)'
 
 #admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)

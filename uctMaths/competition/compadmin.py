@@ -590,8 +590,7 @@ def assign_awards(request, student_list):
 
 def school_summary(request):
     """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant emai adresses. Or something like that."""
-    
-    
+
     output_workbook = xlwt.Workbook()
     school_list = School.objects.all().order_by('name') #ie. regardless of selection at admin screen
     
@@ -640,6 +639,8 @@ def export_competition(request):
     return response
 
 def school_summary_sheet(school_list, wb_sheet):
+    """ Helper function to export_entire_competition and school_summary methods."""
+    
     wb_sheet.write(0,0,'School summary sheet')
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
@@ -684,6 +685,8 @@ def school_summary_sheet(school_list, wb_sheet):
     return wb_sheet
 
 def archive_all_students(student_list, wb_sheet):
+    """ Helper function to export_entire_competition."""
+
     wb_sheet.write(0,0,'Student summary sheet')
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
@@ -697,7 +700,7 @@ def archive_all_students(student_list, wb_sheet):
     
     cell_row_offset = cell_row_offset + 1
     
-    for student in student_list:    
+    for student in student_list:#print details for every student on the list
         wb_sheet.write(cell_row_offset,1,unicode(student.school))
         wb_sheet.write(cell_row_offset,0, student.reference)
         wb_sheet.write(cell_row_offset,2, student.firstname)
@@ -710,12 +713,12 @@ def archive_all_students(student_list, wb_sheet):
     return wb_sheet
     
 def archive_all_invigilators(invigilator_list, wb_sheet):
+    """ Helper function to export_err'thing."""
     wb_sheet.write(0,0,'Invigilator summary sheet')
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
     header = ['School' , 'Firstname', 'Surname', 'Phone Primary', 'Alternate', 'Email']
-
     cell_row_offset = 3
 
     for index, h in enumerate(header):
@@ -723,7 +726,7 @@ def archive_all_invigilators(invigilator_list, wb_sheet):
     
     cell_row_offset = cell_row_offset + 1
     
-    for invigilator in invigilator_list:    
+    for invigilator in invigilator_list:#Print details for all invigilators on the list
         wb_sheet.write(cell_row_offset,1,unicode(invigilator.school))
         wb_sheet.write(cell_row_offset,2, invigilator.firstname)
         wb_sheet.write(cell_row_offset,3, invigilator.surname)
@@ -734,7 +737,9 @@ def archive_all_invigilators(invigilator_list, wb_sheet):
 
     return wb_sheet
 
+
 def timestamp_now():
+    """ Time-stamp-formatting method. Used for all files served by server and a few xls sheets. NB: check cross-OS compatibility! """
     now = datetime.datetime.now()
     to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
     return to_return
