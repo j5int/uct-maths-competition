@@ -246,7 +246,7 @@ def output_register(venue_list):
 
     #Generate response and serve file to the user
     response = HttpResponse()
-    response['Content-Disposition'] = 'attachment; filename=venue_register.xls'
+    response['Content-Disposition'] = 'attachment; filename=venue_register(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
@@ -295,7 +295,7 @@ def output_studentlists(student_list):
 
     #Generate response and serve file (xls) to user
     response = HttpResponse()
-    response['Content-Disposition'] = 'attachment; filename=studentlist.xls'
+    response['Content-Disposition'] = 'attachment; filename=studentlist(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
@@ -346,7 +346,7 @@ def output_studenttags(student_list):
 
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
-    response['Content-Disposition'] = 'attachment; filename=mailmergestudents.zip'
+    response['Content-Disposition'] = 'attachment; filename=mailmergestudents(%s).zip'%(timestamp_now())
     response['Content-Type'] = 'application/x-zip-compressed'
     return response
 
@@ -372,7 +372,7 @@ def output_schooltaglists(school_list):
 
     #Serve to user as text file
     response = HttpResponse(output_stringio.getvalue().encode('utf-8'))
-    response['Content-Disposition'] = 'attachment; filename=schooltags.txt'
+    response['Content-Disposition'] = 'attachment; filename=schooltags(%s).txt'%(timestamp_now())
     return response
 
 def upload_results(request, student_list):
@@ -582,7 +582,7 @@ def assign_awards(request, student_list):
 
     #Return the response with attached content to the user
     response = HttpResponse()
-    response['Content-Disposition'] = 'attachment; filename=awardlist.xls'
+    response['Content-Disposition'] = 'attachment; filename=awardlist(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
@@ -638,7 +638,7 @@ def school_summary(request):
 
     #Return the response with attached content to the user
     response = HttpResponse()
-    response['Content-Disposition'] = 'attachment; filename=school_summary-%s.xls'%(timestamp_now())
+    response['Content-Disposition'] = 'attachment; filename=school_summary(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
@@ -646,5 +646,5 @@ def school_summary(request):
     
 def timestamp_now():
     now = datetime.datetime.now()
-    to_return = '%s:%s(%s-%s-%s)'%(now.hour, now.minute, now.day, now.month, now.year)
+    to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
     return to_return
