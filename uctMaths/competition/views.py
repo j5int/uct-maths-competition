@@ -42,46 +42,50 @@ def index(request):
     #return render_to_response('index.html', {})
 
 @login_required
-def printer_entry_result(request):
+def printer_entry_result(request, school_list=None):
 #had to easy_install html5lib pisa
 #Create the HttpResponse object with the appropriate PDF headers.
-
-    try:
-        #Attempt to find user's chosen school
-        assigned_school = School.objects.get(assigned_to=request.user)
-    except exceptions.ObjectDoesNotExist:
-        # No school is associated with this user! Redirect to the select_schools page
-        return HttpResponseRedirect('../school_select/school_select.html')
-
+    temp_school_list = []
+    if not school_list: #If not called by the admin
+        try:
+            #Attempt to find user's chosen school
+            temp_school_list.append(School.objects.get(assigned_to=request.user))
+        except exceptions.ObjectDoesNotExist:
+            # No school is associated with this user! Redirect to the select_schools page
+            return HttpResponseRedirect('../school_select/school_select.html')
+    else:
+        temp_school_list = [school for school in school_list]
     #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
+    html = ''
+    for assigned_school in temp_school_list:
+        #Required that school form is pre-fetched to populate form
+        student_list = SchoolStudent.objects.filter(school = assigned_school)
+        individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
+        invigilator_list = Invigilator.objects.filter(school = assigned_school)
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+        timestamp = str(datetime.now())
+        
+        if not responsible_teacher and not school_list:
+            return HttpResponseRedirect('../students/newstudents.html')
+        elif responsible_teacher:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln':assigned_school,
+                'responsible_teacher':responsible_teacher[0],
+                'student_list':individual_list,
+                'pair_list':pair_list,
+                'entries_open':compadmin.isOpen(),
+                'invigilator_list': invigilator_list,
+                'grade_left':range(8,11),
+                'invigilator_range':range(10-len(invigilator_list)), 
+                'igrades':range(8,13)}
 
-    #Required that school form is pre-fetched to populate form
-    student_list = SchoolStudent.objects.filter(school = assigned_school)
-    individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
-    invigilator_list = Invigilator.objects.filter(school = assigned_school)
-    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-    timestamp = str(datetime.now())
-    
-    if not responsible_teacher:
-        return HttpResponseRedirect('../students/newstudents.html')
+            #Render the template with the context (from above)
+            template = get_template('printer_entry.html')
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context)
 
-    c = {'type':'Students',
-        'timestamp':timestamp,
-        'schooln':assigned_school,
-        'responsible_teacher':responsible_teacher[0],
-        'student_list':individual_list,
-        'pair_list':pair_list,
-        'entries_open':compadmin.isOpen(),
-        'invigilator_list': invigilator_list,
-        'grade_left':range(8,11),
-        'invigilator_range':range(10-len(invigilator_list)), 
-        'igrades':range(8,13)}
-
-    #Render the template with the context (from above)
-    template = get_template('printer_entry.html')
-    c.update(csrf(request))
-    context = Context(c)
-    html  = template.render(context)
     result = StringIO.StringIO()
 
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
@@ -91,8 +95,8 @@ def printer_entry_result(request):
         pass #Error handling?
 
 @login_required
-def printer_entry(request):
-    result = printer_entry_result(request)
+def printer_entry(request, queryset=None):
+    result = printer_entry_result(request, queryset)
     return HttpResponse(result.getvalue(), mimetype='application/pdf')
 
 

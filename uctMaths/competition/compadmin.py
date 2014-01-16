@@ -14,6 +14,7 @@ import zipfile
 import StringIO
 import datetime
 from django.core import exceptions 
+import views
 #A few administration constants and associated methods to be used around the website.
 
 def admin_emailaddress():
@@ -737,7 +738,13 @@ def archive_all_invigilators(invigilator_list, wb_sheet):
 
     return wb_sheet
 
-
+def print_school_confirmations(request, school_list):
+    result = views.printer_entry_result(request, school_list)
+    response = HttpResponse(result.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=school_confirmation(%s).pdf'%(timestamp_now())
+    response['Content-Type'] = 'application/pdf'
+    return response
+    
 def timestamp_now():
     """ Time-stamp-formatting method. Used for all files served by server and a few xls sheets. NB: check cross-OS compatibility! """
     now = datetime.datetime.now()
