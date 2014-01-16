@@ -303,24 +303,32 @@ function validate_invigilator(firstname, surname, phone_primary, phone_alt, emai
 
 function validate_phonenumber(phone_number){
 
-    //Remove spaces in telephone number
-    phone_number = phone_number.replace(/\s+/g, '');
-    
-        if (phone_number.length!=10){
-            alert("Invalid phone number length.");
+    //Protect the database
+        if (phone_number.length>13){
+            alert("Invalid phone number format entered.");
             return 3; //invalid -- incorrect length for phone number
         }
-       // else alert("Valid phone number length " + phone_number);
-        
+
+    //Remove spaces in telephone number
+        phone_number = phone_number.replace(/\s+/g,"");
+    //Check validity of the phone number
+            
         //Check for invalid characters in primary phone number
         for (c=0; c < 10; ++c)
         {
          if (isNaN(parseInt(phone_number.substr(c,1)), 10))
          { 
-            alert("Invalid character in phone number");
+            alert("Invalid character in phone number. Please only use spaces and numbers in your entry.");
             return 3;//Invalid
           }
         }
+        
+        if (phone_number.length>10){
+            alert("Invalid phone number length. Please enter a 10-digit phone number.");
+            return 3; //invalid -- incorrect length for phone number
+        }
+       // else alert("Valid phone number length " + phone_number);
+
       //  alert("Valid phone number");
         return 0; //Valid
 }

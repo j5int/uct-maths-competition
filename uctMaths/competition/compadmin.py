@@ -12,7 +12,9 @@ from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, HttpResponseRedirect
 import zipfile
 import StringIO
-
+import datetime
+from django.core import exceptions 
+import views
 #A few administration constants and associated methods to be used around the website.
 
 def admin_emailaddress():
@@ -245,7 +247,7 @@ def output_register(venue_list):
 
     #Generate response and serve file to the user
     response = HttpResponse()
-    response['Content-Disposition'] = 'attachment; filename=venue_register.xls'
+    response['Content-Disposition'] = 'attachment; filename=venue_register(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
@@ -294,7 +296,7 @@ def output_studentlists(student_list):
 
     #Generate response and serve file (xls) to user
     response = HttpResponse()
-    response['Content-Disposition'] = 'attachment; filename=studentlist.xls'
+    response['Content-Disposition'] = 'attachment; filename=studentlist(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
@@ -321,8 +323,8 @@ def output_studenttags(student_list):
                 s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
                 s_line += '\"' + unicode(student.school) +  '\",'
                 s_line += str(student.grade) + ','
-                venue_str = str(venue_object[0]) if len(venue_object)==1 else 'Unallocated'
-                s_line += '\"' + venue_str + '\"\n'
+                venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
+                s_line += '\"' + unicode(venue_str) + '\"\n'
                 output_string.write(s_line)
                 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
@@ -337,7 +339,7 @@ def output_studenttags(student_list):
                 s_line += '\"' + unicode(student.school) +  '\",'
                 s_line += str(student.grade) + ','
                 venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
-                s_line += '\"' + venue_str + '\"\n'
+                s_line += '\"' + unicode(venue_str) + '\"\n'
                 output_string.write(s_line)
 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
@@ -345,7 +347,7 @@ def output_studenttags(student_list):
 
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
-    response['Content-Disposition'] = 'attachment; filename=mailmergestudents.zip'
+    response['Content-Disposition'] = 'attachment; filename=mailmergestudents(%s).zip'%(timestamp_now())
     response['Content-Type'] = 'application/x-zip-compressed'
     return response
 
@@ -371,7 +373,7 @@ def output_schooltaglists(school_list):
 
     #Serve to user as text file
     response = HttpResponse(output_stringio.getvalue().encode('utf-8'))
-    response['Content-Disposition'] = 'attachment; filename=schooltags.txt'
+    response['Content-Disposition'] = 'attachment; filename=schooltags(%s).txt'%(timestamp_now())
     return response
 
 def upload_results(request, student_list):
@@ -581,7 +583,170 @@ def assign_awards(request, student_list):
 
     #Return the response with attached content to the user
     response = HttpResponse()
-    response['Content-Disposition'] = 'attachment; filename=awardlist.xls'
+    response['Content-Disposition'] = 'attachment; filename=awardlist(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
+
+
+def school_summary(request):
+    """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant emai adresses. Or something like that."""
+
+    output_workbook = xlwt.Workbook()
+    school_list = School.objects.all().order_by('name') #ie. regardless of selection at admin screen
+    
+    wb_sheet = output_workbook.add_sheet('School Summary')
+    school_summary_sheet(school_list, wb_sheet)
+
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=school_summary(%s).xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
+    
+    
+def timestamp_now():
+    now = datetime.datetime.now()
+    to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
+    return to_return
+    
+def export_competition(request):
+    """ Export all the information of this year's competition in single excel file"""
+
+    output_workbook = xlwt.Workbook()
+    school_list = School.objects.all().order_by('name') #ie. regardless of selection at admin screen
+    student_list = SchoolStudent.objects.all().order_by('school')
+    #resp_teachers = ResponsibleTeacher.objects.all().order_by('school')
+    invigilator_list = Invigilator.objects.all().order_by('school')
+    
+    # --------------------- Generate School Summary ---------------------------
+
+    wb_sheet = output_workbook.add_sheet('School Summary')
+    school_summary_sheet(school_list, wb_sheet)
+    
+    wb_sheet = output_workbook.add_sheet('Student Summary')
+    archive_all_students(student_list, wb_sheet)
+    
+    wb_sheet = output_workbook.add_sheet('Invigilator Summary')
+    archive_all_invigilators(invigilator_list, wb_sheet)
+    
+    
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=competition_archive(%s).xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
+
+def school_summary_sheet(school_list, wb_sheet):
+    """ Helper function to export_entire_competition and school_summary methods."""
+    
+    wb_sheet.write(0,0,'School summary sheet')
+    wb_sheet.write(1,0,'Generated')
+    wb_sheet.write(1,1,'%s'%(timestamp_now()))
+
+    header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Individuals', 'Pairs', 'Total']
+    responsible_teacher_mailinglist = []
+
+    cell_row_offset = 6
+
+    for index, h in enumerate(header):
+        wb_sheet.write(cell_row_offset,index,'%s'%(h))
+
+    for school_obj in school_list:
+        try: #Try get the student list for the school assigned to the requesting user
+            student_list = SchoolStudent.objects.all().filter(school=school_obj)
+            resp_teacher = ResponsibleTeacher.objects.get(school=school_obj)
+        except exceptions.ObjectDoesNotExist:#Non-entry
+            pass #Handled in if-not-empty statement below
+
+        if student_list and resp_teacher: #If the lists are not empty
+
+            grade_summary = gradeBucket(student_list) #Bin into categories (Pairing, grade)
+            school_summary_info = [] #Entry for each grade
+            count_individuals = 0
+            count_pairs = 0
+
+            for i in range(8,13):
+                count_pairs = count_pairs + len(grade_summary[i,True])
+                count_individuals = count_individuals + len(grade_summary[i,False])
+
+            cell_row_offset = cell_row_offset + 1
+            wb_sheet.write(cell_row_offset,0,unicode(school_obj.name))
+            wb_sheet.write(cell_row_offset,1,('%s %s')%(resp_teacher.firstname, resp_teacher.surname))
+            wb_sheet.write(cell_row_offset,2,resp_teacher.email)
+            wb_sheet.write(cell_row_offset,4,count_pairs)
+            wb_sheet.write(cell_row_offset,3,count_individuals)
+            wb_sheet.write(cell_row_offset,5,int(count_pairs*2 + count_individuals))
+            responsible_teacher_mailinglist.append(resp_teacher.email)
+    
+    wb_sheet.write(3,0,'Mailing list')
+    wb_sheet.write(3,1,', '.join(responsible_teacher_mailinglist))
+    return wb_sheet
+
+def archive_all_students(student_list, wb_sheet):
+    """ Helper function to export_entire_competition."""
+
+    wb_sheet.write(0,0,'Student summary sheet')
+    wb_sheet.write(1,0,'Generated')
+    wb_sheet.write(1,1,'%s'%(timestamp_now()))
+
+    header = ['Reference', 'School' , 'Firstname', 'Surname', 'Grade', 'Score', 'Rank']
+
+    cell_row_offset = 3
+
+    for index, h in enumerate(header):
+        wb_sheet.write(cell_row_offset,index,'%s'%(h))
+    
+    cell_row_offset = cell_row_offset + 1
+    
+    for student in student_list:#print details for every student on the list
+        wb_sheet.write(cell_row_offset,1,unicode(student.school))
+        wb_sheet.write(cell_row_offset,0, student.reference)
+        wb_sheet.write(cell_row_offset,2, student.firstname)
+        wb_sheet.write(cell_row_offset,3, student.surname)
+        wb_sheet.write(cell_row_offset,4, student.grade)
+        wb_sheet.write(cell_row_offset,5, student.score)
+        wb_sheet.write(cell_row_offset,6, student.rank)
+        cell_row_offset = cell_row_offset + 1
+
+    return wb_sheet
+    
+def archive_all_invigilators(invigilator_list, wb_sheet):
+    """ Helper function to export_err'thing."""
+    wb_sheet.write(0,0,'Invigilator summary sheet')
+    wb_sheet.write(1,0,'Generated')
+    wb_sheet.write(1,1,'%s'%(timestamp_now()))
+
+    header = ['School' , 'Firstname', 'Surname', 'Phone Primary', 'Alternate', 'Email']
+    cell_row_offset = 3
+
+    for index, h in enumerate(header):
+        wb_sheet.write(cell_row_offset,index,'%s'%(h))
+    
+    cell_row_offset = cell_row_offset + 1
+    
+    for invigilator in invigilator_list:#Print details for all invigilators on the list
+        wb_sheet.write(cell_row_offset,1,unicode(invigilator.school))
+        wb_sheet.write(cell_row_offset,2, invigilator.firstname)
+        wb_sheet.write(cell_row_offset,3, invigilator.surname)
+        wb_sheet.write(cell_row_offset,4, invigilator.phone_primary)
+        wb_sheet.write(cell_row_offset,5, invigilator.phone_alt)
+        wb_sheet.write(cell_row_offset,6, invigilator.email)
+        cell_row_offset = cell_row_offset + 1
+
+    return wb_sheet
+
+def print_school_confirmations(request, school_list):
+    result = views.printer_entry_result(request, school_list)
+    response = HttpResponse(result.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=school_confirmation(%s).pdf'%(timestamp_now())
+    response['Content-Type'] = 'application/pdf'
+    return response
+    
+def timestamp_now():
+    """ Time-stamp-formatting method. Used for all files served by server and a few xls sheets. NB: check cross-OS compatibility! """
+    now = datetime.datetime.now()
+    to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
+    return to_return

@@ -22,6 +22,12 @@ from django.core.mail import send_mail
 import confirmation
 import compadmin
 
+from reportlab.pdfgen import canvas
+import ho.pisa as pisa
+import cStringIO as StringIO
+from django.template.loader import get_template
+from datetime import datetime
+
 def auth(request):
    if not request.user.is_authenticated():
      print "not logged in"
@@ -35,6 +41,70 @@ def index(request):
 #        return render_to_response('index.html')
     #return render_to_response('index.html', {})
 
+@login_required
+def printer_entry_result(request, school_list=None):
+    """ Generate the printer entry template for each school (in the optional queryset or the one bound to the user issuing the request)."""
+#had to easy_install html5lib pisa
+#Create the HttpResponse object with the appropriate PDF headers.
+    temp_school_list = []
+    if not school_list: #If not called by the admin
+        try:
+            #Attempt to find user's chosen school
+            temp_school_list.append(School.objects.get(assigned_to=request.user))
+        except exceptions.ObjectDoesNotExist:
+            # No school is associated with this user! Redirect to the select_schools page
+            return HttpResponseRedirect('../school_select/school_select.html')
+    else:
+        temp_school_list = [school for school in school_list]
+
+    html = '' #Will hold rendered templates
+
+    for assigned_school in temp_school_list:
+        #Required that school form is pre-fetched to populate form
+        student_list = SchoolStudent.objects.filter(school = assigned_school)
+        individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
+        invigilator_list = Invigilator.objects.filter(school = assigned_school)
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+        timestamp = str(datetime.now())
+        
+        #If someone managed to get to this page without having made an entry
+        if not responsible_teacher and not school_list:
+            return HttpResponseRedirect('../students/newstudents.html')
+        #If the school has an entry
+        elif responsible_teacher:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln':assigned_school,
+                'responsible_teacher':responsible_teacher[0],
+                'student_list':individual_list,
+                'pair_list':pair_list,
+                'entries_open':compadmin.isOpen(),
+                'invigilator_list': invigilator_list,
+                'grade_left':range(8,11),
+                'invigilator_range':range(10-len(invigilator_list)), 
+                'igrades':range(8,13)}
+
+            #Render the template with the context (from above)
+            template = get_template('printer_entry.html')
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
+
+    result = StringIO.StringIO()
+
+    #Generate the pdf doc
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    if not pdf.err:
+        return result
+    else:
+        pass #Error handling?
+
+#Method bound to printer_entry.html request
+@login_required
+def printer_entry(request, queryset=None):
+    """ Method bound to printer_entry.html """
+    result = printer_entry_result(request, queryset)
+    return HttpResponse(result.getvalue(), mimetype='application/pdf')
 
 @login_required
 def profile(request):
@@ -51,7 +121,7 @@ def profile(request):
     admin_contact = compadmin.admin_emailaddress()
 
     if compadmin.isOpen():
-        closingdate_blurb='Please note that entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
+        closingdate_blurb='Please note that online entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
     else:
         closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
         #return HttpResponseRedirect('../register/school_select/school_select.html')
@@ -60,9 +130,38 @@ def profile(request):
 
 # submitted thingszz
 @login_required
-def submitted(request, c):
-  c.update(csrf(request))
-  return render_to_response('submitted.html', c)
+def submitted(request):
+
+    school_summary_blurb = 'Thank you for using the UCT Mathematics Competition online Registration Portal. You have successfully registered:'
+    
+    try: #Try get the student list for the school assigned to the requesting user
+        school_asmt = School.objects.get(assigned_to=request.user)
+        student_list = SchoolStudent.objects.all().filter(school=school_asmt)
+    except exceptions.ObjectDoesNotExist:
+        return HttpResponseRedirect('../school_select/school_select.html')
+    except Exception:
+        school_summary_blurb = 'An error has occured.' #This could occur if a user has become associated with > 1 school.
+    
+    grade_summary = compadmin.gradeBucket(student_list) #Bin into categories (Pairing, grade)
+    school_summary_info = [] #Entry for each grade
+    count_individuals = 0
+    count_pairs = 0
+    
+    for i in range(8,13):
+        school_summary_info.append('Grade %d: %d individuals and %d pairs'%(i, len(grade_summary[i,False]),len(grade_summary[i,True])))
+        count_pairs = count_pairs + len(grade_summary[i,True])
+        count_individuals = count_individuals + len(grade_summary[i,False])
+        
+    school_summary_statistics = 'You have successfully registered %d students (%d individuals and %d pairs).'%(count_pairs*2+count_individuals, count_individuals, count_pairs)
+
+    c = {
+        'school_summary_blurb':school_summary_blurb,
+        'school_summary_info':school_summary_info,
+        'school_summary_statistics':school_summary_statistics,
+        }
+
+    c.update(csrf(request))
+    return render_to_response('submitted.html', c)
 
 
 #*****************************************
@@ -108,7 +207,7 @@ def entry_review(request):
         return HttpResponseRedirect('../students/newstudents.html')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
-        return render_to_response('submitted.html')
+        return HttpResponseRedirect('../submitted.html')
 
     c.update(csrf(request))
     return render_to_response('entry_review.html', c, context_instance=RequestContext(request))
@@ -158,9 +257,10 @@ def newstudents(request):
             rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
             rtfirstname = form.getlist('rt_firstname','')[0]
             rtsurname = form.getlist('rt_surname','')[0]
-            rtphone_primary = form.getlist('rt_phone_primary','')[0]
-            rtphone_alt = form.getlist('rt_phone_alt','')[0]
-            rtemail = form.getlist('rt_email','')[0]
+            rtphone_primary = form.getlist('rt_phone_primary','')[0].strip().replace(' ', '')
+            rtphone_alt = form.getlist('rt_phone_alt','')[0].strip().replace(' ', '')
+            rtemail = form.getlist('rt_email','')[0].strip().replace(' ', '')
+
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
             query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary, 
                                       phone_alt = rtphone_alt, school = rtschool,
@@ -208,9 +308,9 @@ def newstudents(request):
                     school = assigned_school
                     ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
                     isurname = correctCapitals(form.getlist('inv_surname','')[j])
-                    iphone_primary = form.getlist('inv_phone_primary','')[j]
-                    iphone_alt = form.getlist('inv_phone_alt','')[j]
-                    iemail = form.getlist('inv_email','')[j]
+                    iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
+                    iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
+                    iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
                     #iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
 
                     query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
@@ -241,7 +341,7 @@ def newstudents(request):
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
                 confirmation.send_confirmation(request, assigned_school,cc_admin=True)
-                return render_to_response('submitted.html')
+                return HttpResponseRedirect('../submitted.html')
             else:
                 print 'This should not happen'
 
@@ -277,7 +377,6 @@ def newstudents(request):
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
-
 
 def correctCapitals(input_name):
     
