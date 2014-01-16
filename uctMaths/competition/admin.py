@@ -155,7 +155,10 @@ class InvigilatorAdmin(ImportExportModelAdmin):
 
 class CompetitionAdmin(admin.ModelAdmin):
     list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress')
-
+    actions = ['export_competition']
+    
+    def export_competition(self, request, queryset):
+        return compadmin.export_competition(request)
 
 #admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)
