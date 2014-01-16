@@ -248,9 +248,10 @@ def newstudents(request):
             rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
             rtfirstname = form.getlist('rt_firstname','')[0]
             rtsurname = form.getlist('rt_surname','')[0]
-            rtphone_primary = form.getlist('rt_phone_primary','')[0]
-            rtphone_alt = form.getlist('rt_phone_alt','')[0]
-            rtemail = form.getlist('rt_email','')[0]
+            rtphone_primary = form.getlist('rt_phone_primary','')[0].strip().replace(' ', '')
+            rtphone_alt = form.getlist('rt_phone_alt','')[0].strip().replace(' ', '')
+            rtemail = form.getlist('rt_email','')[0].strip().replace(' ', '')
+
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
             query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary, 
                                       phone_alt = rtphone_alt, school = rtschool,
@@ -298,9 +299,9 @@ def newstudents(request):
                     school = assigned_school
                     ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
                     isurname = correctCapitals(form.getlist('inv_surname','')[j])
-                    iphone_primary = form.getlist('inv_phone_primary','')[j]
-                    iphone_alt = form.getlist('inv_phone_alt','')[j]
-                    iemail = form.getlist('inv_email','')[j]
+                    iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
+                    iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
+                    iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
                     #iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
 
                     query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
@@ -367,7 +368,6 @@ def newstudents(request):
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
     return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
-
 
 def correctCapitals(input_name):
     
