@@ -20,7 +20,8 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy 
     rteacher = ResponsibleTeacher.objects.filter(school = in_school)[0] ##TODO only one per school
 
     #Header
-    output_string = UMC_header()
+    output_string = 'Dear %s, \n\nThis email is in confirmation of your entry for %s to the UCT Mathematics Competition. Attached you will find a printer-friendly .pdf file that contains a record of your school\'s entry. Below is a text-based summary of that same information.\n\nRegards,\n\nThe UCT Mathematics Competition team'%(username, in_school)
+    output_string += UMC_header()
     output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(in_school, username, UMC_datetime())
 
     #output_string += print_responsibleTeacher(rteacher) #In progress
@@ -38,7 +39,7 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy 
         recipient_list.append(compadmin.admin_emailaddress())
 
     email = EmailMessage(
-                        'UCT Mathematics Competition Entry Confirmation',#Subject line
+                        'UCT Mathematics Competition %s Entry Confirmation'%(in_school),#Subject line
                         output_string, #Body
                         'UCTMathsComp@sjsoft.com',#from
                         recipient_list,
@@ -91,12 +92,12 @@ def print_invigilators(invigilator_list, width=60):
 
     #Heading for invigilator section
     invig_string = '\nInvigilators:\n'
-    invig_string += '%-30s %-10s %-10s %-10s\n%s\n'%('Name', 'Phone','(Alternate)', 'Email','-'*width)
+    invig_string += '%-20s %-15s %-15s %-20s\n%s\n'%('Name', 'Phone','(Alternate)', 'Email','-'*80)
 
     try:
         for invigilator in invigilator_list:
         #first, surname, phonenumber (+alt), email_addrs 
-            invig_string += '%-30s %-10s %-10s %-10s\n'%(invigilator.surname+', '+invigilator.firstname, invigilator.phone_primary, invigilator.phone_alt,invigilator.email)
+            invig_string += '%-20s %-15s %-15s %-20s\n'%(invigilator.surname+', '+invigilator.firstname, invigilator.phone_primary, invigilator.phone_alt,invigilator.email)
 
     except IndexError: #If the user submitted an empty form
         print 'Index Error (Confirmation email - invigilator)'
@@ -109,10 +110,10 @@ def print_responsibleTeacher(rteacher, width=60):
 
     #Heading
     rt_string = 'Responsible teacher:\n'
-    rt_string += '%-30s %-10s %-10s %-10s\n%s\n'%('Name', 'Phone','(Alternate)', 'Email','-'*width)
+    rt_string += '%-20s %-15s %-15s %-20s\n%s\n'%('Name', 'Phone','(Alternate)', 'Email','-'*80)
 
     try:
-        rt_string += '%-30s %-10s %-10s %-10s\n'%(rteacher.surname+', '+rteacher.firstname, rteacher.phone_primary, rteacher.phone_alt,rteacher.email) 
+        rt_string += '%-20s %-15s %-15s %-20s\n'%(rteacher.surname+', '+rteacher.firstname, rteacher.phone_primary, rteacher.phone_alt,rteacher.email) 
 
     except IndexError: #If the user submitted an empty form
         print 'Index Error (Confirmation email - rteacher)'
@@ -123,12 +124,12 @@ def print_responsibleTeacher(rteacher, width=60):
 
 def UMC_header(width=40):
     """ Text header for email """
-    to_return = '\n%s\n%20s\n\n'%('_'*width,'UCT Mathematics Competition')
+    to_return = '\n\n%20s\n\n%20s\n\n'%('~'*10, 'UCT Mathematics Competition Entry')
     return to_return
 
 
 def UMC_datetime(width=40):
     """ Get/format current time/date of when the submission was passed """ 
     now = datetime.datetime.now()
-    to_return = 'Generated %s:%s %s/%s/%s\n%s\n'%(now.hour, now.minute, now.day, now.month, now.year,'_'*width)
+    to_return = 'Generated %s:%s %s/%s/%s\n\n'%(now.hour, now.minute, now.day, now.month, now.year)
     return to_return
