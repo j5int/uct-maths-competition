@@ -43,6 +43,7 @@ def index(request):
 
 @login_required
 def printer_entry_result(request, school_list=None):
+    """ Generate the printer entry template for each school (in the optional queryset or the one bound to the user issuing the request)."""
 #had to easy_install html5lib pisa
 #Create the HttpResponse object with the appropriate PDF headers.
     temp_school_list = []
@@ -55,8 +56,9 @@ def printer_entry_result(request, school_list=None):
             return HttpResponseRedirect('../school_select/school_select.html')
     else:
         temp_school_list = [school for school in school_list]
-    #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
-    html = ''
+
+    html = '' #Will hold rendered templates
+
     for assigned_school in temp_school_list:
         #Required that school form is pre-fetched to populate form
         student_list = SchoolStudent.objects.filter(school = assigned_school)
@@ -65,8 +67,10 @@ def printer_entry_result(request, school_list=None):
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.now())
         
+        #If someone managed to get to this page without having made an entry
         if not responsible_teacher and not school_list:
             return HttpResponseRedirect('../students/newstudents.html')
+        #If the school has an entry
         elif responsible_teacher:
             c = {'type':'Students',
                 'timestamp':timestamp,
@@ -84,22 +88,23 @@ def printer_entry_result(request, school_list=None):
             template = get_template('printer_entry.html')
             c.update(csrf(request))
             context = Context(c)
-            html += template.render(context)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
 
+    #Generate the pdf doc
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
         return result
     else:
         pass #Error handling?
 
+#Method bound to printer_entry.html request
 @login_required
 def printer_entry(request, queryset=None):
+    """ Method bound to printer_entry.html """
     result = printer_entry_result(request, queryset)
     return HttpResponse(result.getvalue(), mimetype='application/pdf')
-
-
 
 @login_required
 def profile(request):
