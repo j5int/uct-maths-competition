@@ -502,9 +502,10 @@ def assign_awards(request, student_list):
     #Ranked gold for each grade (pairs, individuals separated) (alphabetical by surname)
     #Alphabetical list of school award winners
     #Generate gold-awards list (Top 10 individuals, top 3 pairs)
-    
+
     school_list = School.objects.all()
-    
+    student_list = SchoolStudent.objects.all() #Regardless of admin UI selection
+
     for igrade in range(8, 13):
         #Gold awards
         wb_sheet = output_workbook.add_sheet('Gold Grade %d'%(igrade))
@@ -750,3 +751,38 @@ def timestamp_now():
     now = datetime.datetime.now()
     to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
     return to_return
+    
+def output_PRN_files(student_list):
+    """Generate PRN files lists for all students, regardless of selection at admin UI. Served to user as a .zip file with each (10 files) Paired/Grade list."""
+
+    student_list = SchoolStudent.objects.all()
+    grade_bucket = gradeBucket(student_list)
+
+    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+    
+    with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
+        for grade in range(8, 13):
+            #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
+            output_string = StringIO.StringIO()
+
+            for student in grade_bucket[grade, False]:#Individual students
+                s_line = u'%-10s %3s %s; %s, %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], student.surname, student.firstname[0])
+                output_string.write(s_line)
+                
+            #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
+            zipf.writestr('INDGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
+
+            output_string = StringIO.StringIO()
+            for student in grade_bucket[grade, True]: #Paired students
+                s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], 'Pair / Paar ', student.surname)  #TODO: Seems like an error to me... But it's like this in the sample files.
+                output_string.write(s_line)
+                
+            #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
+            zipf.writestr('PRGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
+
+    #Generate response and serve file to the user
+    response = HttpResponse(output_stringIO.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=PRN_files(%s).zip'%(timestamp_now())
+    response['Content-Type'] = 'application/x-zip-compressed'
+    return response
+
