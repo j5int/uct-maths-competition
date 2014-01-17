@@ -27,9 +27,15 @@ function disableElement(checkBox)
   var sbmt = document.getElementById("complete");				//submit button iD
   
   if (checkBox.checked)
-	{sbmt.disabled = false;}		//enable
+	{
+	sbmt.disabled = false;
+	sbmt.style.background='#204a87';
+	}		//enable
   else
-	{sbmt.disabled = true;}			//disable
+	{
+	sbmt.disabled = true;
+	sbmt.style.background='#d3d7cf';
+	}			//disable
 }
 
 // [FIX NEEDED] allows second invigilator to not have an email address
