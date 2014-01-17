@@ -203,7 +203,8 @@ def entry_review(request):
         return HttpResponseRedirect('../students/newstudents.html')
     else:
         assigned_school.entered=1 #The school has made an entry
-
+        assigned_school.save()
+        
     c = {'type':'Students',
         'schooln':assigned_school,
         'responsible_teacher':responsible_teacher[0],
@@ -354,7 +355,9 @@ def newstudents(request):
                 query.save()
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
-                school.entered=1 #The school has made an entry
+                assigned_school.entered=1 #The school has made an entry
+                assigned_school.save()
+                 #The school has made an entry
                 confirmation.send_confirmation(request, assigned_school,cc_admin=True)
                 return HttpResponseRedirect('../submitted.html')
             else:
