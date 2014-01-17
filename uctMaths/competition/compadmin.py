@@ -598,6 +598,10 @@ def school_summary(request):
     
     wb_sheet = output_workbook.add_sheet('School Summary')
     school_summary_sheet(school_list, wb_sheet)
+    
+    wb_sheet = output_workbook.add_sheet('School Ranking Summary')
+    school_rank = school_list.order_by('-rank')
+    school_summary_sheet(school_list, wb_sheet, rank_extend=True)
 
     #Return the response with attached content to the user
     response = HttpResponse()
@@ -624,15 +628,14 @@ def export_competition(request):
     # --------------------- Generate School Summary ---------------------------
 
     wb_sheet = output_workbook.add_sheet('School Summary')
-    school_summary_sheet(school_list, wb_sheet)
+    school_summary_sheet(school_list, wb_sheet, rank_extend=True)
     
     wb_sheet = output_workbook.add_sheet('Student Summary')
     archive_all_students(student_list, wb_sheet)
     
     wb_sheet = output_workbook.add_sheet('Invigilator Summary')
     archive_all_invigilators(invigilator_list, wb_sheet)
-    
-    
+
     #Return the response with attached content to the user
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment; filename=competition_archive(%s).xls'%(timestamp_now())
@@ -640,7 +643,7 @@ def export_competition(request):
     output_workbook.save(response)
     return response
 
-def school_summary_sheet(school_list, wb_sheet):
+def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
     """ Helper function to export_entire_competition and school_summary methods."""
     
     wb_sheet.write(0,0,'School summary sheet')
@@ -648,6 +651,10 @@ def school_summary_sheet(school_list, wb_sheet):
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
     header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Individuals', 'Pairs', 'Total']
+    if rank_extend:
+        header.append('Rank')
+        header.append('Score')
+
     responsible_teacher_mailinglist = []
 
     cell_row_offset = 6
@@ -680,6 +687,10 @@ def school_summary_sheet(school_list, wb_sheet):
             wb_sheet.write(cell_row_offset,4,count_pairs)
             wb_sheet.write(cell_row_offset,3,count_individuals)
             wb_sheet.write(cell_row_offset,5,int(count_pairs*2 + count_individuals))
+            if rank_extend:
+                wb_sheet.write(cell_row_offset,6,school_obj.rank)
+                wb_sheet.write(cell_row_offset,7,school_obj.score)
+
             responsible_teacher_mailinglist.append(resp_teacher.email)
     
     wb_sheet.write(3,0,'Mailing list')

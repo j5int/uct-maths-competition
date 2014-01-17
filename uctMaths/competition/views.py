@@ -29,17 +29,12 @@ from django.template.loader import get_template
 from datetime import datetime
 
 def auth(request):
-   if not request.user.is_authenticated():
-     print "not logged in"
-     return HttpResponseRedirect('/accounts/login')
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login')
 
 def index(request):
     #If the due date has not passed:
-#    if compadmin.isOpen():
     return HttpResponseRedirect('/accounts/login')
-#    else:
-#        return render_to_response('index.html')
-    #return render_to_response('index.html', {})
 
 @login_required
 def printer_entry_result(request, school_list=None):
