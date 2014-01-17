@@ -29,17 +29,12 @@ from django.template.loader import get_template
 from datetime import datetime
 
 def auth(request):
-   if not request.user.is_authenticated():
-     print "not logged in"
-     return HttpResponseRedirect('/accounts/login')
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login')
 
 def index(request):
     #If the due date has not passed:
-#    if compadmin.isOpen():
     return HttpResponseRedirect('/accounts/login')
-#    else:
-#        return render_to_response('index.html')
-    #return render_to_response('index.html', {})
 
 @login_required
 def printer_entry_result(request, school_list=None):
@@ -63,6 +58,16 @@ def printer_entry_result(request, school_list=None):
         #Required that school form is pre-fetched to populate form
         student_list = SchoolStudent.objects.filter(school = assigned_school)
         individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
+            
+        grade_summary = compadmin.gradeBucket(student_list) #Bin into categories (Pairing, grade)
+        school_summary_info = [] #Entry for each grade
+        count_individuals = 0
+        count_pairs = 0
+        
+        for i in range(8,13):
+            count_pairs = count_pairs + len(grade_summary[i,True])
+            count_individuals = count_individuals + len(grade_summary[i,False])
+        
         invigilator_list = Invigilator.objects.filter(school = assigned_school)
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.now())
@@ -80,9 +85,11 @@ def printer_entry_result(request, school_list=None):
                 'pair_list':pair_list,
                 'entries_open':compadmin.isOpen(),
                 'invigilator_list': invigilator_list,
+                'grades':range(8,13),
                 'grade_left':range(8,11),
                 'invigilator_range':range(10-len(invigilator_list)), 
-                'igrades':range(8,13)}
+                'igrades':range(8,13),
+                'total_num':int(count_pairs*2+count_individuals)}
 
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
@@ -189,7 +196,10 @@ def entry_review(request):
 
     if not responsible_teacher:
         return HttpResponseRedirect('../students/newstudents.html')
-
+    else:
+        assigned_school.entered=1 #The school has made an entry
+        assigned_school.save()
+        
     c = {'type':'Students',
         'schooln':assigned_school,
         'responsible_teacher':responsible_teacher[0],
@@ -340,6 +350,9 @@ def newstudents(request):
                 query.save()
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
+                assigned_school.entered=1 #The school has made an entry
+                assigned_school.save()
+                 #The school has made an entry
                 confirmation.send_confirmation(request, assigned_school,cc_admin=True)
                 return HttpResponseRedirect('../submitted.html')
             else:
