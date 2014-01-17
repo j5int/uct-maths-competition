@@ -786,3 +786,16 @@ def output_PRN_files(student_list):
     response['Content-Type'] = 'application/x-zip-compressed'
     return response
 
+def update_school_entry_status():
+    school_objects = School.objects.all()
+    for school_obj in school_objects:
+        try:
+            responsible_teachers = ResponsibleTeacher.objects.get(school=school_obj)
+        except exceptions.ObjectDoesNotExist:
+            school_obj.entered=0
+            school_obj.save()
+        school_obj.entered=1 #If a responsible teacher is found; the school has entered
+        school_obj.save()
+    
+    
+    
