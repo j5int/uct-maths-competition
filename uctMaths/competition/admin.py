@@ -57,7 +57,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def update_school_entry_status(self, request, queryset):
 	    return compadmin.update_school_entry_status()
 
-	output_schooltaglist.short_description = 'Download school tags for schools (regardless of selection)'
+	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
 	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)' 

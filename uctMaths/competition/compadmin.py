@@ -328,7 +328,7 @@ def output_studenttags(student_list):
                 output_string.write(s_line)
                 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
-            zipf.writestr('Mailmerge_Grade'+str(grade) +'_individuals.txt',output_string.getvalue().encode('utf-8'))
+            zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
 
             output_string = StringIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students in [grade]
@@ -343,7 +343,7 @@ def output_studenttags(student_list):
                 output_string.write(s_line)
 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
-            zipf.writestr('Mailmerge_Grade'+str(grade) +'_pairs.txt',output_string.getvalue().encode('utf-8'))
+            zipf.writestr('Mailmerge_GRD'+str(grade) +'_PAR.txt',output_string.getvalue().encode('utf-8'))
 
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
@@ -802,11 +802,9 @@ def update_school_entry_status():
     for school_obj in school_objects:
         try:
             responsible_teachers = ResponsibleTeacher.objects.get(school=school_obj)
+            school_obj.entered=1 #If a responsible teacher is found; the school has entered
+            school_obj.save()
         except exceptions.ObjectDoesNotExist:
             school_obj.entered=0
             school_obj.save()
-        school_obj.entered=1 #If a responsible teacher is found; the school has entered
-        school_obj.save()
-    
-    
-    
+
