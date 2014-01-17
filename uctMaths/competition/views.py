@@ -201,6 +201,8 @@ def entry_review(request):
 
     if not responsible_teacher:
         return HttpResponseRedirect('../students/newstudents.html')
+    else:
+        assigned_school.entered=1 #The school has made an entry
 
     c = {'type':'Students',
         'schooln':assigned_school,
@@ -352,6 +354,7 @@ def newstudents(request):
                 query.save()
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
+                school.entered=1 #The school has made an entry
                 confirmation.send_confirmation(request, assigned_school,cc_admin=True)
                 return HttpResponseRedirect('../submitted.html')
             else:
