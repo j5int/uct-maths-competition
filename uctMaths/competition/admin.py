@@ -60,8 +60,8 @@ class SchoolAdmin(ImportExportModelAdmin):
 	output_schooltaglist.short_description = 'Download school tags for schools (regardless of selection)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
-	school_summary.short_description = 'Schools with entries (xls summary) (regardless of selection)' 
-	school_summary.short_description = 'Check all schools for entry (regardless of selection)' 
+	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)' 
+	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)' 
 
 	list_filter=('entered',) #Field filters (shown as bar on right)
 
