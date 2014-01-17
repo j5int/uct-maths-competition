@@ -1,13 +1,66 @@
-<table width="500">
+<table width="550">
+
 <tr>
 <td>
-<H1>Entry for {{schooln}}</H1>
-<p>Generated: {{timestamp}}</p>
-    <!-- register responsible teacher from here --->
     <div>
-        <h3>Responsible Teacher</h3>
+        <table>
+            <tr>
+            <td>
+            <h1>UCT Mathematics Competition</h1>
+            <H2>Entry confirmation for {{schooln}}</H2>
+            </td>
+            
+            <td>
+                <table border="0.2" width="165">
+                    <tr align="center">
+                        <th>Grade:</th>
+                        <th><b>8</b></th>
+                        <th><b>9</b></th>
+                        <th><b>10</b></th>
+                        <th><b>11</b></th>
+                        <th><b>12</b></th>
+                    </tr>
+                    <tr align="center">
+                        <th width="80">Individuals:</th>
+                        {%for grd in grades%}
+                        {%for key, s in student_list.items%}
+                        {% if grd == key %}
+                        <td align="center">{{s|length}}</td>
+                        {%endif%}
+                        {%endfor%}
+                        {%endfor%}
+                    </tr>
+                    <tr align="center">
+                        <th width="80">Pairs:</th>
+                        {%for grd in grades%}
+                        {%for key, p in pair_list.items%}
+                        {% if grd == key %}
+                        <td align="center">{{p}}</td>
+                        {%endif%}
+                        {%endfor%}
+                        {%endfor%}
+                    </tr>
+                </table>
+            </td>
+            </tr>
+            <tr>
+                <td>
+                <br>
+                <b>Generated: {{timestamp}}</b>
+                </td>
+                <td>
+                <br>
+                <b>Total number of students: {{total_num}}</b> 
+                </td>
+            </tr>
+        </table>
+        <!-- register responsible teacher from here --->
+    </div>
+
+    <div>
+        <h2>Responsible Teacher</h2>
         {% csrf_token %}
-        <table border="0.1" width="450">
+        <table border="0.1" width="500">
             <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -26,10 +79,12 @@
     </div>
     <!-- register invigilators from here -->
     <div>
-        <p><b>Registered Invigilators</b> (2 are compulsorty if 75 students have been registered)</p>
+        <br>
+        <h2>Registered Invigilators</h2>
+        <p>Note that 2 are compulsorty if 75 students have been registered</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
-        <table border="0.1" width="450">
+        <table border="0.1" width="500">
             <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -59,7 +114,7 @@
                 <div>
                 <br>
                 <p><b>Registered Grade {{grade}} participants:</b></p>
-                <table border="0.1" width="200">
+                <table border="0.1" width="180">
                 <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -91,7 +146,7 @@
                 <div>
                 <br>
                 <p><b>Registered Grade {{grade|add:3}} participants:</b></p>
-                <table border="0.1" width="200">
+                <table border="0.1" width="180">
                 <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -127,4 +182,4 @@
     </td>
     </tr>
     </table>
-    <br>
+    <br><br><br><br>

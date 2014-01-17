@@ -328,7 +328,7 @@ def output_studenttags(student_list):
                 output_string.write(s_line)
                 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
-            zipf.writestr('Mailmerge_Grade'+str(grade) +'_individuals.txt',output_string.getvalue().encode('utf-8'))
+            zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
 
             output_string = StringIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students in [grade]
@@ -343,7 +343,7 @@ def output_studenttags(student_list):
                 output_string.write(s_line)
 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
-            zipf.writestr('Mailmerge_Grade'+str(grade) +'_pairs.txt',output_string.getvalue().encode('utf-8'))
+            zipf.writestr('Mailmerge_GRD'+str(grade) +'_PAR.txt',output_string.getvalue().encode('utf-8'))
 
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
@@ -502,9 +502,10 @@ def assign_awards(request, student_list):
     #Ranked gold for each grade (pairs, individuals separated) (alphabetical by surname)
     #Alphabetical list of school award winners
     #Generate gold-awards list (Top 10 individuals, top 3 pairs)
-    
+
     school_list = School.objects.all()
-    
+    student_list = SchoolStudent.objects.all() #Regardless of admin UI selection
+
     for igrade in range(8, 13):
         #Gold awards
         wb_sheet = output_workbook.add_sheet('Gold Grade %d'%(igrade))
@@ -597,6 +598,10 @@ def school_summary(request):
     
     wb_sheet = output_workbook.add_sheet('School Summary')
     school_summary_sheet(school_list, wb_sheet)
+    
+    wb_sheet = output_workbook.add_sheet('School Ranking Summary')
+    school_rank = school_list.order_by('-rank')
+    school_summary_sheet(school_list, wb_sheet, rank_extend=True)
 
     #Return the response with attached content to the user
     response = HttpResponse()
@@ -623,15 +628,14 @@ def export_competition(request):
     # --------------------- Generate School Summary ---------------------------
 
     wb_sheet = output_workbook.add_sheet('School Summary')
-    school_summary_sheet(school_list, wb_sheet)
+    school_summary_sheet(school_list, wb_sheet, rank_extend=True)
     
     wb_sheet = output_workbook.add_sheet('Student Summary')
     archive_all_students(student_list, wb_sheet)
     
     wb_sheet = output_workbook.add_sheet('Invigilator Summary')
     archive_all_invigilators(invigilator_list, wb_sheet)
-    
-    
+
     #Return the response with attached content to the user
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment; filename=competition_archive(%s).xls'%(timestamp_now())
@@ -639,7 +643,7 @@ def export_competition(request):
     output_workbook.save(response)
     return response
 
-def school_summary_sheet(school_list, wb_sheet):
+def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
     """ Helper function to export_entire_competition and school_summary methods."""
     
     wb_sheet.write(0,0,'School summary sheet')
@@ -647,6 +651,10 @@ def school_summary_sheet(school_list, wb_sheet):
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
     header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Individuals', 'Pairs', 'Total']
+    if rank_extend:
+        header.append('Rank')
+        header.append('Score')
+
     responsible_teacher_mailinglist = []
 
     cell_row_offset = 6
@@ -679,6 +687,10 @@ def school_summary_sheet(school_list, wb_sheet):
             wb_sheet.write(cell_row_offset,4,count_pairs)
             wb_sheet.write(cell_row_offset,3,count_individuals)
             wb_sheet.write(cell_row_offset,5,int(count_pairs*2 + count_individuals))
+            if rank_extend:
+                wb_sheet.write(cell_row_offset,6,school_obj.rank)
+                wb_sheet.write(cell_row_offset,7,school_obj.score)
+
             responsible_teacher_mailinglist.append(resp_teacher.email)
     
     wb_sheet.write(3,0,'Mailing list')
@@ -750,3 +762,49 @@ def timestamp_now():
     now = datetime.datetime.now()
     to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
     return to_return
+    
+def output_PRN_files(student_list):
+    """Generate PRN files lists for all students, regardless of selection at admin UI. Served to user as a .zip file with each (10 files) Paired/Grade list."""
+
+    student_list = SchoolStudent.objects.all()
+    grade_bucket = gradeBucket(student_list)
+
+    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+    
+    with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
+        for grade in range(8, 13):
+            #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
+            output_string = StringIO.StringIO()
+
+            for student in grade_bucket[grade, False]:#Individual students
+                s_line = u'%-10s %3s %s; %s, %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], student.surname, student.firstname[0])
+                output_string.write(s_line)
+                
+            #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
+            zipf.writestr('INDGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
+
+            output_string = StringIO.StringIO()
+            for student in grade_bucket[grade, True]: #Paired students
+                s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], 'Pair / Paar ', student.surname)  #TODO: Seems like an error to me... But it's like this in the sample files.
+                output_string.write(s_line)
+                
+            #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
+            zipf.writestr('PRGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
+
+    #Generate response and serve file to the user
+    response = HttpResponse(output_stringIO.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=PRN_files(%s).zip'%(timestamp_now())
+    response['Content-Type'] = 'application/x-zip-compressed'
+    return response
+
+def update_school_entry_status():
+    school_objects = School.objects.all()
+    for school_obj in school_objects:
+        try:
+            responsible_teachers = ResponsibleTeacher.objects.get(school=school_obj)
+            school_obj.entered=1 #If a responsible teacher is found; the school has entered
+            school_obj.save()
+        except exceptions.ObjectDoesNotExist:
+            school_obj.entered=0
+            school_obj.save()
+
