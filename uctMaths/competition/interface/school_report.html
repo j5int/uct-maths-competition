@@ -5,12 +5,13 @@
         <table>
             <tr>
             <td>
-            <h1>UCT Mathematics Competition</h1>
+            <h1>UCT Mathematics Competition Results</h1>
             <H2>School report for {{schooln}}</H2>
             </td>
 
             <td>
- <h3> Teacher in charge: </h3>
+
+                
             </td>
             </tr>
             <tr>
@@ -20,20 +21,21 @@
                 </td>
 
             <td>
-                <table width="200">
+                                <table width="225">
                     <tr>
-                        <th width="30">Name:</th>
-                        <td>{{responsible_teacher.firstname}} {{responsible_teacher.surname}}</td>
+                    <th width="80">Teacher in charge:</th>
+                    <td>{{responsible_teacher.firstname}} {{responsible_teacher.surname}}</td>
                     </tr>
                     <tr>
-                        <th width="30">Phone:</th>
+                        <th width="80">Phone:</th>
                         <td> {{responsible_teacher.phone_primary}} / {{responsible_teacher.phone_alt}} </td>
                     </tr>
                     <tr>
-                        <th width="30">Email:</th>
+                        <th width="80">Email:</th>
                         <td>{{responsible_teacher.email}}</td>
                     </tr>
                 </table>
+
             </td>
  
             </tr>
@@ -72,8 +74,16 @@
                     </table>
                 </div>
         {%endfor%}
+        
+    <div>
+    <br><br><br>
+    Number of certificates.
+    <br>
+    Blurb about some mathematics stuff. 
+    </div>    
 
     </form>
+    
     </td>
     </tr>
     </table>
