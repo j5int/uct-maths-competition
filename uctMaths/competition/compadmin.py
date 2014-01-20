@@ -194,7 +194,7 @@ def output_register(venue_list):
 
     for v_index, venue in enumerate(venue_list):
         summary_sheet.write(v_index+2,0,str(venue.code))
-        summary_sheet.write(v_index+2,1,str(venue.building))
+        summary_sheet.write(v_index+2,1,venue.building)
         summary_sheet.write(v_index+2,2,str(venue.grade))
         summary_sheet.write(v_index+2,3,str(venue.seats))
         summary_sheet.write(v_index+2,4,str(venue.occupied_seats))
@@ -237,9 +237,9 @@ def output_register(venue_list):
             #Print the students in that venue to sheet
             for s_index, student in enumerate(student_list):
                 venue_sheet.write(s_index+7,0,str(student.reference))
-                venue_sheet.write(s_index+7,2,str(student.firstname))
-                venue_sheet.write(s_index+7,3,str(student.surname))
-                venue_sheet.write(s_index+7,1,str(student.school))
+                venue_sheet.write(s_index+7,2,student.firstname)
+                venue_sheet.write(s_index+7,3,student.surname)
+                venue_sheet.write(s_index+7,1,unicode(student.school))
 
         else:
             pass #Venue is empty - no point making a sheet for it...
