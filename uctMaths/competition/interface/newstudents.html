@@ -21,9 +21,11 @@
     <!-- For "Confirm your school's language? -->
     <p> Please confirm your school's preferred language. </p>
     <select name = "language">
-        <option value="e">English</option>
-        <option value="a">Afrikaans</option>
-		<option value="b">Bilingual</option>
+        {%for lang in language_options%}
+        {%if lang == "e"%}<option value="e">English</option>{%endif%}
+        {%if lang == "a"%}<option value="a">Afrikaans</option>{%endif%}
+		{%if lang == "b"%}<option value="b">Bilingual</option>{%endif%}
+		{%endfor%}
     </select>
 
     <!-- register responsible teacher from here --->

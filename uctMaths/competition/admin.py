@@ -28,7 +28,7 @@ class SchoolModelForm( forms.ModelForm ):
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank') ##Which columns should be kept here? 
+	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
 	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status']
@@ -62,6 +62,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
 	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)' 
 	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)' 
+	print_school_confirmations.short_description = 'Print selected school(s) confirmation (.pdf)' 
 
 	list_filter=('entered',) #Field filters (shown as bar on right)
 
@@ -73,7 +74,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
-	actions = ['archive_student','write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files']
+	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -147,7 +148,7 @@ class VenueAdmin(ImportExportModelAdmin):
 class InvigilatorAdmin(ImportExportModelAdmin):
     #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
     list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name','rt_phone_primary','rt_email')
-    actions = ['archive_invigilator']
+    #actions = ['archive_invigilator']
     search_fields = ['firstname', 'surname']
 
     # -------------- Import_Export functionality  ----------

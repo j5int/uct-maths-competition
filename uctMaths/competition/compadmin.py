@@ -274,11 +274,11 @@ def output_studentlists(student_list):
             student_sheet.write(1,h_index,word)
         #Print each student's details
         for index, student in enumerate(grade_bucket[grade, False]):
-            student_sheet.write(index+2,0,str(student.school))
+            student_sheet.write(index+2,0,unicode(student.school))
             student_sheet.write(index+2,1,str(student.reference))
-            student_sheet.write(index+2,2,str(student.firstname))
-            student_sheet.write(index+2,3,str(student.surname))
-            student_sheet.write(index+2,4,str(student.venue))
+            student_sheet.write(index+2,2,student.firstname)
+            student_sheet.write(index+2,3,student.surname)
+            student_sheet.write(index+2,4,student.venue)
 
         #Process pairs page
         student_sheet = output_workbook.add_sheet('Grade ' + str(grade)+' pairs')
@@ -288,11 +288,11 @@ def output_studentlists(student_list):
             student_sheet.write(1,h_index,word)
         #Print each student's details
         for index, student in enumerate(grade_bucket[grade, True]):
-            student_sheet.write(index+2,0,str(student.school))
+            student_sheet.write(index+2,0,unicode(student.school))
             student_sheet.write(index+2,1,str(student.reference))
-            student_sheet.write(index+2,2,str(student.firstname))
-            student_sheet.write(index+2,3,str(student.surname))
-            student_sheet.write(index+2,4,str(student.venue))
+            student_sheet.write(index+2,2,student.firstname)
+            student_sheet.write(index+2,3,student.surname)
+            student_sheet.write(index+2,4,student.venue)
 
     #Generate response and serve file (xls) to user
     response = HttpResponse()
@@ -704,7 +704,7 @@ def archive_all_students(student_list, wb_sheet):
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
-    header = ['Reference', 'School' , 'Firstname', 'Surname', 'Grade', 'Score', 'Rank']
+    header = ['Reference', 'School' , 'Firstname', 'Surname', 'Grade', 'Score', 'Rank', 'Language']
 
     cell_row_offset = 3
 
@@ -712,6 +712,7 @@ def archive_all_students(student_list, wb_sheet):
         wb_sheet.write(cell_row_offset,index,'%s'%(h))
     
     cell_row_offset = cell_row_offset + 1
+    student_lang = {'b':'Bilingual', 'a':'Afrikaans', 'e':'English'}
     
     for student in student_list:#print details for every student on the list
         wb_sheet.write(cell_row_offset,1,unicode(student.school))
@@ -721,6 +722,7 @@ def archive_all_students(student_list, wb_sheet):
         wb_sheet.write(cell_row_offset,4, student.grade)
         wb_sheet.write(cell_row_offset,5, student.score)
         wb_sheet.write(cell_row_offset,6, student.rank)
+        wb_sheet.write(cell_row_offset,7, student_lang[student.language])
         cell_row_offset = cell_row_offset + 1
 
     return wb_sheet
@@ -740,12 +742,12 @@ def archive_all_invigilators(invigilator_list, wb_sheet):
     cell_row_offset = cell_row_offset + 1
     
     for invigilator in invigilator_list:#Print details for all invigilators on the list
-        wb_sheet.write(cell_row_offset,1,unicode(invigilator.school))
-        wb_sheet.write(cell_row_offset,2, invigilator.firstname)
-        wb_sheet.write(cell_row_offset,3, invigilator.surname)
-        wb_sheet.write(cell_row_offset,4, invigilator.phone_primary)
-        wb_sheet.write(cell_row_offset,5, invigilator.phone_alt)
-        wb_sheet.write(cell_row_offset,6, invigilator.email)
+        wb_sheet.write(cell_row_offset,0,unicode(invigilator.school))
+        wb_sheet.write(cell_row_offset,1, invigilator.firstname)
+        wb_sheet.write(cell_row_offset,2, invigilator.surname)
+        wb_sheet.write(cell_row_offset,3, invigilator.phone_primary)
+        wb_sheet.write(cell_row_offset,4, invigilator.phone_alt)
+        wb_sheet.write(cell_row_offset,5, invigilator.email)
         cell_row_offset = cell_row_offset + 1
 
     return wb_sheet
