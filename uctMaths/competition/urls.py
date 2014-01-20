@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 	url(r'^register/submitted', views.submitted, name='submitted'),
 	url(r'^register/entry_review', views.entry_review, name='entry_review'),	
 	url(r'^register/printer_entry', views.printer_entry, name='printer_entry'),
+	url(r'^register/school_report', views.printer_entry, name='school_report'),
 	url(r'^accounts/profile/$',views.profile),
 	url(r'^admin/upload_results',compadmin_views.upload_results, name='upload_results'),
 )

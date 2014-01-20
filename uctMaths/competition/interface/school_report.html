@@ -1,0 +1,79 @@
+<table width="550">
+<tr>
+<td>
+    <div>
+        <table>
+            <tr>
+            <td>
+            <h1>UCT Mathematics Competition</h1>
+            <H2>School report for {{schooln}}</H2>
+            </td>
+
+            <td>
+ <h3> Teacher in charge: </h3>
+            </td>
+            </tr>
+            <tr>
+                <td>
+                <br>
+                    <b>Generated: {{timestamp}}</b>
+                </td>
+
+            <td>
+                <table width="200">
+                    <tr>
+                        <th width="30">Name:</th>
+                        <td>{{responsible_teacher.firstname}} {{responsible_teacher.surname}}</td>
+                    </tr>
+                    <tr>
+                        <th width="30">Phone:</th>
+                        <td> {{responsible_teacher.phone_primary}} / {{responsible_teacher.phone_alt}} </td>
+                    </tr>
+                    <tr>
+                        <th width="30">Email:</th>
+                        <td>{{responsible_teacher.email}}</td>
+                    </tr>
+                </table>
+            </td>
+ 
+            </tr>
+        </table>
+        <!-- register responsible teacher from here --->
+    </div>
+
+    </div>
+    <!-- <h3>Registered Participants</h3> -->
+        {% for grade in grade_range %}
+                <div>
+                <br>
+                <p><b>Registered Grade {{grade}} participants:</b></p>
+                    <table border="0.1" width="180">
+                    <tr>
+                        <th>First Name</th>
+                        <th>Surname</th>
+                        <th>Score</th>
+                        <th>Rank</th> 
+                        <th>Award</th>
+                    </tr>
+                    <!-- Populates the list with previously registered students -->
+                    {%for key, student_l in student_list.items%}
+                        {% if grade == key %} <!-- only for the current grade -->
+                            {%for student in student_l%}
+                                <tr>
+                                <td>{{student.firstname}}</td>
+                                <td>{{student.surname}}</td>
+                                <td>{{student.score}}</td>
+                                <td>{{student.rank}}</td>
+                                <td>{{student.award}}</td>
+                                </tr>
+                            {%endfor%}
+                        {%endif%}
+                    {%endfor%}
+                    </table>
+                </div>
+        {%endfor%}
+
+    </form>
+    </td>
+    </tr>
+    </table>

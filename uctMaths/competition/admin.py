@@ -31,7 +31,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -57,12 +57,17 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def update_school_entry_status(self, request, queryset):
 	    return compadmin.update_school_entry_status()
 
+	def generate_school_reports(self, request, queryset):
+	    return compadmin.print_school_reports(request, queryset)
+
+
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
 	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)' 
 	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)' 
 	print_school_confirmations.short_description = 'Print selected school(s) confirmation (.pdf)' 
+	generate_school_reports.short_description = 'Print selected school(s) reports (.pdf)' 
 
 	list_filter=('entered','language') #Field filters (shown as bar on right)
 
