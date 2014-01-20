@@ -28,10 +28,10 @@ class SchoolModelForm( forms.ModelForm ):
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank') ##Which columns should be kept here? 
+	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -54,14 +54,14 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def print_school_confirmations(self, request, queryset):
 	    return compadmin.print_school_confirmations(request, queryset)
 
-	#def update_school_entry_status(self, request, queryset):
-	#    return compadmin.update_school_entry_status()
+	def update_school_entry_status(self, request, queryset):
+	    return compadmin.update_school_entry_status()
 
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
 	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)' 
-	#update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)' 
+	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)' 
 
 	list_filter=('entered',) #Field filters (shown as bar on right)
 
@@ -73,7 +73,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
-	actions = ['archive_student','write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files']
+	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -147,7 +147,7 @@ class VenueAdmin(ImportExportModelAdmin):
 class InvigilatorAdmin(ImportExportModelAdmin):
     #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
     list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name','rt_phone_primary','rt_email')
-    actions = ['archive_invigilator']
+    #actions = ['archive_invigilator']
     search_fields = ['firstname', 'surname']
 
     # -------------- Import_Export functionality  ----------
