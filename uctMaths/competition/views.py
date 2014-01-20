@@ -90,12 +90,27 @@ def printer_entry_result(request, school_list=None):
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13),
                 'total_num':int(count_pairs*2+count_individuals)}
-
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
             c.update(csrf(request))
             context = Context(c)
             html += template.render(context) #Concatenate each rendered template to the html "string"
+        else:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln': assigned_school,
+                'grades':range(8,13),
+                'grade_left':range(8,11),
+                'invigilator_range':range(10-len(invigilator_list)), 
+                'igrades':range(8,13),
+                'total_num':'No students entered for this school'}
+
+        #Render the template with the context (from above)
+            template = get_template('printer_entry.html')
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
+
 
     result = StringIO.StringIO()
 
@@ -243,10 +258,20 @@ def newstudents(request):
     individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-    
+
     editEntry = False
+    language_selection_options = ['e', 'a', 'b']
+
     if responsible_teacher:
         editEntry = True
+    
+    if assigned_school and responsible_teacher:
+        language_temp = assigned_school.language
+        language_selection = [language_temp]
+        language_selection.extend([c for c in language_selection_options if c != language_temp])
+    else:
+        language_selection = ['e', 'a', 'b']
+
 
     entries_per_grade = {} #Dictionary with grade:range(...)
     pairs_per_grade = {}
@@ -263,6 +288,9 @@ def newstudents(request):
         #Delete all previously stored information
 
         try:
+            assigned_school.language = form.getlist('language','')[0]
+            assigned_school.save()
+
             #Register a single responsible teacher (assigned to that school)
             rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
             rtfirstname = form.getlist('rt_firstname','')[0]
@@ -372,7 +400,7 @@ def newstudents(request):
 
     c = {'type':'Students',
         'schooln':assigned_school,
-        #'schools':schoolOptions,
+        'language_options':language_selection,
         'responsible_teacher':responsible_teacher,
         'student_list':individual_list,
         'pairs_per_grade':pairs_per_grade,
