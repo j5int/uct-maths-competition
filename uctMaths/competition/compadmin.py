@@ -742,12 +742,12 @@ def archive_all_invigilators(invigilator_list, wb_sheet):
     cell_row_offset = cell_row_offset + 1
     
     for invigilator in invigilator_list:#Print details for all invigilators on the list
-        wb_sheet.write(cell_row_offset,1,unicode(invigilator.school))
-        wb_sheet.write(cell_row_offset,2, invigilator.firstname)
-        wb_sheet.write(cell_row_offset,3, invigilator.surname)
-        wb_sheet.write(cell_row_offset,4, invigilator.phone_primary)
-        wb_sheet.write(cell_row_offset,5, invigilator.phone_alt)
-        wb_sheet.write(cell_row_offset,6, invigilator.email)
+        wb_sheet.write(cell_row_offset,0,unicode(invigilator.school))
+        wb_sheet.write(cell_row_offset,1, invigilator.firstname)
+        wb_sheet.write(cell_row_offset,2, invigilator.surname)
+        wb_sheet.write(cell_row_offset,3, invigilator.phone_primary)
+        wb_sheet.write(cell_row_offset,4, invigilator.phone_alt)
+        wb_sheet.write(cell_row_offset,5, invigilator.email)
         cell_row_offset = cell_row_offset + 1
 
     return wb_sheet

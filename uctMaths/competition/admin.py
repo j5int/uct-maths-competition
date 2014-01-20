@@ -62,6 +62,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
 	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)' 
 	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)' 
+	print_school_confirmations.short_description = 'Print selected school(s) confirmation (.pdf)' 
 
 	list_filter=('entered',) #Field filters (shown as bar on right)
 
