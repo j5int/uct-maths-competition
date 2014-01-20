@@ -17,6 +17,15 @@ from django.core import exceptions
 import views
 #A few administration constants and associated methods to be used around the website.
 
+from django.core.context_processors import csrf
+from reportlab.pdfgen import canvas
+import ho.pisa as pisa
+import cStringIO as StringIO
+from django.template.loader import get_template
+from django.template import loader, Context
+from django.template import RequestContext
+
+
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
     comp = Competition.objects.all() #Should only be one!
@@ -827,4 +836,51 @@ def update_school_entry_status():
         except exceptions.ObjectDoesNotExist:
             school_obj.entered=0
             school_obj.save()
+
+def print_school_reports(request, school_list):
+    result = printer_school_report(request, school_list)
+    response = HttpResponse(result.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=school_confirmation(%s).pdf'%(timestamp_now())
+    response['Content-Type'] = 'application/pdf'
+    return response
+
+def printer_school_report(request, school_list=None):
+    """ Generate the school report for each school in the query set"""
+
+    html = '' #Will hold rendered templates
+
+    for assigned_school in school_list:
+        student_list = SchoolStudent.objects.filter(school = assigned_school)
+
+        grade_bucket = {8:[], 9:[], 10:[], 11:[], 12:[]}
+        for igrade in range(8, 13):
+            grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
+            
+
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+        timestamp = str(datetime.datetime.now())
+
+        if responsible_teacher:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln':assigned_school,
+                'responsible_teacher':responsible_teacher[0],
+                'student_list':grade_bucket,
+                'entries_open':isOpen(),
+                'grade_range':range(8,13),}
+            #Render the template with the context (from above)
+
+            template = get_template('school_report.html')
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
+
+    result = StringIO.StringIO()
+
+    #Generate the pdf doc
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    if not pdf.err:
+        return result
+    else:
+        pass #Error handling?
 
