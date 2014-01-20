@@ -74,7 +74,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
-	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files']
+	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date

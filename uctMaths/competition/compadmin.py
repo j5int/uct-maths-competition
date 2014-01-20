@@ -462,20 +462,28 @@ def rank_schools(school_list):
 
 def rank_students(student_list):
     """Rank students on their uploaded score. Used if a score has been changed and the remaining students need to be re-classified"""
-    
-    
+
     #Rank students
     #Order all students in descending score order
-    all_students = SchoolStudent.objects.all().exclude(score=None).order_by('-score')
-
     #Ensure that students with equal scores are assigned the same rank
     #Generate a list from the students (so that I can use .pop(0) commands on it)
+
+    #Need to do this for each grade, for paired/individuals.
+    for grade_i in range(8, 13):
+        pstudent_list=SchoolStudent.objects.all().filter(paired=True, grade=grade_i).exclude(score=None).order_by('-score')
+        score_studentlist(pstudent_list)
+        istudent_list=SchoolStudent.objects.all().filter(paired=False, grade=grade_i).exclude(score=None).order_by('-score')
+        score_studentlist(istudent_list)
+
+def score_studentlist(student_list):
     student_selection = []
-    for s in all_students:
+
+    for s in student_list:
         student_selection.append(s)
 
     rank_base = 1 
     rank_delta = 0 #Used when multiple schools have the same score
+
 
     while student_selection: #while the list is not empty
 
@@ -494,6 +502,12 @@ def rank_students(student_list):
             student.rank = rank_base
             rank_delta = rank_delta + 1
             student.save()
+
+
+
+
+
+
 
 
 def assign_awards(request, student_list):
@@ -519,10 +533,10 @@ def assign_awards(request, student_list):
 
         for index, individual in enumerate(individualQS):
             wb_sheet.write(index+2,0,str(individual.rank))
-            wb_sheet.write(index+2,1,str(individual.school))
+            wb_sheet.write(index+2,1,unicode(individual.school))
             wb_sheet.write(index+2,2,str(individual.reference))
-            wb_sheet.write(index+2,3,str(individual.firstname))
-            wb_sheet.write(index+2,4,str(individual.surname))
+            wb_sheet.write(index+2,3,individual.firstname)
+            wb_sheet.write(index+2,4,individual.surname)
             school_list=school_list.exclude(name=individual.school) #Exclude school for Oxford prize
             pairs_offset = pairs_offset + 1
         
@@ -530,10 +544,10 @@ def assign_awards(request, student_list):
         pairs_offset = pairs_offset + 1
         for index, pair in enumerate(pairQS):
             wb_sheet.write(index+pairs_offset,0,str(pair.rank))
-            wb_sheet.write(index+pairs_offset,1,str(pair.school))
+            wb_sheet.write(index+pairs_offset,1,unicode(pair.school))
             wb_sheet.write(index+pairs_offset,2,str(pair.reference))
-            wb_sheet.write(index+pairs_offset,3,str(pair.firstname))
-            wb_sheet.write(index+pairs_offset,4,str(pair.surname))
+            wb_sheet.write(index+pairs_offset,3,pair.firstname)
+            wb_sheet.write(index+pairs_offset,4,pair.surname)
             school_list=school_list.exclude(name=pair.school) #Exclude school for Oxford prize
 
         #Merit awards
@@ -547,20 +561,20 @@ def assign_awards(request, student_list):
         pairs_offset = pairs_offset + 1
         for index, individual in enumerate(individualQS):
             #wb_sheet.write(index+2,0,str(individual.rank))
-            wb_sheet.write(index+2,1,str(individual.school))
+            wb_sheet.write(index+2,1,unicode(individual.school))
             wb_sheet.write(index+2,2,str(individual.reference))
-            wb_sheet.write(index+2,3,str(individual.firstname))
-            wb_sheet.write(index+2,4,str(individual.surname))
+            wb_sheet.write(index+2,3,individual.firstname)
+            wb_sheet.write(index+2,4,individual.surname)
             pairs_offset = pairs_offset + 1
         
         wb_sheet.write(pairs_offset,0,'Merit award winners: Grade %d pairs'%(igrade))
         pairs_offset = pairs_offset + 1
         for index, pair in enumerate(pairQS):
             #wb_sheet.write(index+pairs_offset,0,str(pair.rank))
-            wb_sheet.write(index+pairs_offset,1,str(pair.school))
+            wb_sheet.write(index+pairs_offset,1,unicode(pair.school))
             wb_sheet.write(index+pairs_offset,2,str(pair.reference))
-            wb_sheet.write(index+pairs_offset,3,str(pair.firstname))
-            wb_sheet.write(index+pairs_offset,4,str(pair.surname))
+            wb_sheet.write(index+pairs_offset,3,pair.firstname)
+            wb_sheet.write(index+pairs_offset,4,pair.surname)
 
     #TODO Oxford prizes. 
     #School awards (Oxford prizes) are assigned to the top individual in each school where the school did not receive an individual or pair Gold award
@@ -577,10 +591,10 @@ def assign_awards(request, student_list):
 
     wb_sheet.write(0,0,'Oxford School award')
     for index, aw in enumerate(award_winners):
-        wb_sheet.write(index+1,1,str(aw.school))
+        wb_sheet.write(index+1,1,unicode(aw.school))
         wb_sheet.write(index+1,2,str(aw.reference))
-        wb_sheet.write(index+1,3,str(aw.firstname))
-        wb_sheet.write(index+1,4,str(aw.surname))
+        wb_sheet.write(index+1,3,aw.firstname)
+        wb_sheet.write(index+1,4,aw.surname)
 
     #Return the response with attached content to the user
     response = HttpResponse()
