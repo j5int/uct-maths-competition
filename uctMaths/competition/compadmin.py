@@ -467,6 +467,10 @@ def rank_students(student_list):
     #Order all students in descending score order
     #Ensure that students with equal scores are assigned the same rank
     #Generate a list from the students (so that I can use .pop(0) commands on it)
+    absent_students = SchoolStudent.objects.all().filter(score=None)
+    for ab_stu in absent_students:
+        ab_stu.rank = None
+        ab_stu.save()
 
     #Need to do this for each grade, for paired/individuals.
     for grade_i in range(8, 13):
