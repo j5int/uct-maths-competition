@@ -274,11 +274,11 @@ def output_studentlists(student_list):
             student_sheet.write(1,h_index,word)
         #Print each student's details
         for index, student in enumerate(grade_bucket[grade, False]):
-            student_sheet.write(index+2,0,str(student.school))
+            student_sheet.write(index+2,0,unicode(student.school))
             student_sheet.write(index+2,1,str(student.reference))
-            student_sheet.write(index+2,2,str(student.firstname))
-            student_sheet.write(index+2,3,str(student.surname))
-            student_sheet.write(index+2,4,str(student.venue))
+            student_sheet.write(index+2,2,student.firstname)
+            student_sheet.write(index+2,3,student.surname)
+            student_sheet.write(index+2,4,student.venue)
 
         #Process pairs page
         student_sheet = output_workbook.add_sheet('Grade ' + str(grade)+' pairs')
@@ -288,11 +288,11 @@ def output_studentlists(student_list):
             student_sheet.write(1,h_index,word)
         #Print each student's details
         for index, student in enumerate(grade_bucket[grade, True]):
-            student_sheet.write(index+2,0,str(student.school))
+            student_sheet.write(index+2,0,unicode(student.school))
             student_sheet.write(index+2,1,str(student.reference))
-            student_sheet.write(index+2,2,str(student.firstname))
-            student_sheet.write(index+2,3,str(student.surname))
-            student_sheet.write(index+2,4,str(student.venue))
+            student_sheet.write(index+2,2,student.firstname)
+            student_sheet.write(index+2,3,student.surname)
+            student_sheet.write(index+2,4,student.venue)
 
     #Generate response and serve file (xls) to user
     response = HttpResponse()
