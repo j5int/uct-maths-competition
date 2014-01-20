@@ -651,9 +651,9 @@ def export_competition(request):
     student_list = SchoolStudent.objects.all().order_by('school')
     #resp_teachers = ResponsibleTeacher.objects.all().order_by('school')
     invigilator_list = Invigilator.objects.all().order_by('school')
-    
-    # --------------------- Generate School Summary ---------------------------
 
+
+    # --------------------- Generate School Summary ---------------------------
     wb_sheet = output_workbook.add_sheet('School Summary')
     school_summary_sheet(school_list, wb_sheet, rank_extend=True)
     
@@ -855,7 +855,6 @@ def printer_school_report(request, school_list=None):
         grade_bucket = {8:[], 9:[], 10:[], 11:[], 12:[]}
         for igrade in range(8, 13):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
-            
 
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.datetime.now())
