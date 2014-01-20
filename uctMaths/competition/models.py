@@ -30,7 +30,7 @@ class School(models.Model):
     phone       = models.CharField(max_length=15L, db_column='Phone', blank=True) 
     fax         = models.CharField(max_length=15L, db_column='Fax', blank=True) 
     contact     = models.CharField(max_length=255L, db_column='Contact', blank=True)
-    entered     = models.IntegerField(null=True, db_column='Entered', blank=True) 
+    entered     = models.IntegerField(null=True, db_column='Entered') 
     score       = models.IntegerField(null=True, db_column='Score', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=True) 
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForreignKey (gets assigned a single user)
