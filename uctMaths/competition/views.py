@@ -258,10 +258,20 @@ def newstudents(request):
     individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
     responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-    
+
     editEntry = False
+    language_selection_options = ['e', 'a', 'b']
+
     if responsible_teacher:
         editEntry = True
+    
+    if assigned_school and responsible_teacher:
+        language_temp = assigned_school.language
+        language_selection = [language_temp]
+        language_selection.extend([c for c in language_selection_options if c != language_temp])
+    else:
+        language_selection = ['e', 'a', 'b']
+
 
     entries_per_grade = {} #Dictionary with grade:range(...)
     pairs_per_grade = {}
@@ -278,6 +288,9 @@ def newstudents(request):
         #Delete all previously stored information
 
         try:
+            assigned_school.language = form.getlist('language','')[0]
+            assigned_school.save()
+
             #Register a single responsible teacher (assigned to that school)
             rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
             rtfirstname = form.getlist('rt_firstname','')[0]
@@ -387,7 +400,7 @@ def newstudents(request):
 
     c = {'type':'Students',
         'schooln':assigned_school,
-        #'schools':schoolOptions,
+        'language_options':language_selection,
         'responsible_teacher':responsible_teacher,
         'student_list':individual_list,
         'pairs_per_grade':pairs_per_grade,
