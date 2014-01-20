@@ -90,12 +90,27 @@ def printer_entry_result(request, school_list=None):
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13),
                 'total_num':int(count_pairs*2+count_individuals)}
-
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
             c.update(csrf(request))
             context = Context(c)
             html += template.render(context) #Concatenate each rendered template to the html "string"
+        else:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln': assigned_school,
+                'grades':range(8,13),
+                'grade_left':range(8,11),
+                'invigilator_range':range(10-len(invigilator_list)), 
+                'igrades':range(8,13),
+                'total_num':'No students entered for this school'}
+
+        #Render the template with the context (from above)
+            template = get_template('printer_entry.html')
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
+
 
     result = StringIO.StringIO()
 
