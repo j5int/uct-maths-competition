@@ -770,7 +770,7 @@ def archive_all_students(student_list, wb_sheet):
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
-    header = ['Reference', 'School' , 'Firstname', 'Surname', 'Grade', 'Score', 'Rank', 'Language']
+    header = ['Reference', 'School' , 'Firstname', 'Surname', 'Grade', 'Score', 'Rank', 'Award','Language']
 
     cell_row_offset = 3
 
@@ -788,7 +788,8 @@ def archive_all_students(student_list, wb_sheet):
         wb_sheet.write(cell_row_offset,4, student.grade)
         wb_sheet.write(cell_row_offset,5, student.score)
         wb_sheet.write(cell_row_offset,6, student.rank)
-        wb_sheet.write(cell_row_offset,7, student_lang[student.language])
+        wb_sheet.write(cell_row_offset,7, student.award)
+        wb_sheet.write(cell_row_offset,8, student_lang[student.language])
         cell_row_offset = cell_row_offset + 1
 
     return wb_sheet
