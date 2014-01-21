@@ -517,12 +517,6 @@ def score_studentlist(student_list):
             student.save()
 
 
-
-
-
-
-
-
 def assign_awards(request, student_list):
     """ Assign awards to participants (QuerySet is list of students) to students based on their rank. Serves an excel workboow with the awards for each student."""
     output_workbook = xlwt.Workbook()
@@ -906,7 +900,17 @@ def printer_school_report(request, school_list=None):
         merit_count = student_list.filter(award='M').count()
         merit_count = merit_count + student_list.filter(award='MOX').count()
         
+        school_award_blurb = 'Congratulations. %s has received '%(unicode(assigned_school))
         
+        if merit_count > 0 or gold_count > 0:
+            if gold_count > 0:
+                school_award_blurb+='%d Gold award%s'%(gold_count, 's' if gold_count>1 else '')
+            if gold_count and merit_count:
+                school_award_blurb+=' and '
+            if merit_count > 0:
+                school_award_blurb+='%d Merit award%s'%(merit_count, 's' if gold_count>1 else '')
+        else:
+            pass #TODO:Congratualte school prize winner instead?
 
         if responsible_teacher:
             c = {'type':'Students',
@@ -915,8 +919,7 @@ def printer_school_report(request, school_list=None):
                 'responsible_teacher':responsible_teacher[0],
                 'student_list':grade_bucket,
                 'entries_open':isOpen(),
-                'merit_count':merit_count,
-                'gold_count':gold_count,
+                'school_award_blurb':school_award_blurb,
                 'grade_range':range(8,13),}
             #Render the template with the context (from above)
 
@@ -933,4 +936,17 @@ def printer_school_report(request, school_list=None):
         return result
     else:
         pass #Error handling?
-        
+
+def multi_reportgen(request, school_list):
+    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+
+    with zipfile.ZipFile(output_stringIO, 'w') as zipf:
+        for ischool in school_list:
+            output_string=printer_school_report(request, [ischool])
+            zipf.writestr('R_%s_%s.pdf'%(ischool.name,timestamp_now()), output_string.getvalue())
+
+    response = HttpResponse(output_stringIO.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
+    response['Content-Type'] = 'application/x-zip-compressed'
+    return response
+
