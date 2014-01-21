@@ -49,24 +49,36 @@
                 <div>
                 <br>
                 <p><b>Registered Grade {{grade}} participants:</b></p>
-                    <table border="0.1" width="180">
+                    <table width="325">
                     <tr>
+                        <th>Reference </th>
                         <th>First Name</th>
                         <th>Surname</th>
-                        <th>Score</th>
-                        <th>Rank</th> 
-                        <th>Award</th>
+                        <th width="23">Score</th>
+                        <th width="23"> Rank </th>
+                        <th width="90"></th> 
                     </tr>
                     <!-- Populates the list with previously registered students -->
                     {%for key, student_l in student_list.items%}
                         {% if grade == key %} <!-- only for the current grade -->
                             {%for student in student_l%}
                                 <tr>
-                                <td>{{student.firstname}}</td>
-                                <td>{{student.surname}}</td>
-                                <td>{{student.score}}</td>
-                                <td>{{student.rank}}</td>
-                                <td>{{award_list}}</td>
+                                <td align="center">{{student.reference}}</td>
+                                <td align="center">{{student.firstname}}</td>
+                                <td align="center">{{student.surname}}</td>
+                                <td align="center">{{student.score}}</td>
+                                <td align="center">{%if student.award%}
+                                    {{student.rank}}
+                                    {%endif%}</td>
+                                <td align="center">{%if 'G' in student.award%}
+                                    Gold
+                                    {%elif 'M' in student.award%}
+                                    Merit
+                                    {%endif%}
+                                    {% if 'OX' in student.award %}
+                                    , School Award
+                                    {%endif%}
+                                    </td>
                                 </tr>
                             {%endfor%}
                         {%endif%}
@@ -76,12 +88,12 @@
         {%endfor%}
         
     <div>
-    <br><br><br>
-    Number of certificates.
-    <br>
-    Blurb about some mathematics stuff. 
+    <br><br>
+    {{schooln}} has received <b> {{gold_count}} Gold awards </b> and <b>{{merit_count}} Merit awards</b>.
+    <br><br>
+    The UCT Mathematics competition team thank you for your school's participation in the annual UCT Mathematics Competition.
     </div>    
-
+    <br><br><br>
     </form>
     
     </td>
