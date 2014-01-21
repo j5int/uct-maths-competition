@@ -1,10 +1,27 @@
 # forms.py
+from __future__ import unicode_literals
 from django import forms
 from django.forms import ModelForm, Textarea
 from django.forms import ModelChoiceField
-from competition.models import SchoolStudent, School, Invigilator, ResponsibleTeacher, Venue
+from competition.models import SchoolStudent, School, Invigilator, ResponsibleTeacher, Venue, Competition
 from django.forms.models import modelformset_factory
 from django.contrib.auth.models import User
+
+
+#**********************************
+#FORM FOR COMPETITION ADMINISTRATION
+class CompetitionForm (ModelForm):
+    class Meta:
+        model=Competition
+        
+class CompetitionForm (forms.Form): #THERE MUST ONLY BE ONE OF THESE!
+        fields = ['newentries_Opendate', 'newentries_Closedate']
+        newentries_Opendate = forms.DateField()
+        newentries_Closedate = forms.DateField()
+        admin_emailaddress = forms.CharField()
+        number_of_pairs = forms.IntegerField()
+        number_of_individuals = forms.IntegerField()
+        prizegiving_date = forms.DateField()
 
 #**********************************
 #FORM TO ENTER A NEW SCHOOL STUDENT
@@ -13,7 +30,7 @@ class StudentForm (ModelForm):
         model=SchoolStudent
         
 class StudentForm (forms.Form):
-        fields = ['firstname', 'surname', 'language', 'school','grade','venue', 'registered_by']
+        fields = ['firstname', 'surname', 'language', 'school','grade','venue']
         firstname = forms.CharField()
         surname = forms.CharField()
         language = forms.CharField()
@@ -21,7 +38,8 @@ class StudentForm (forms.Form):
         grade = forms.IntegerField()
      #   sex = forms.CharField()
         pair = forms.BooleanField()
-        registered_by = forms.ModelChoiceField(required=True, queryset = User.objects.all()) #for foreign key
+        award = forms.CharField()
+        #registered_by = forms.ModelChoiceField(required=True, queryset = User.objects.all()) #for foreign key
 
 #**************************************
 #FORM TO ENTER A NEW SCHOOL
@@ -38,7 +56,7 @@ class SchoolForm (forms.Form):
         fax = forms.CharField()
         contact = forms.CharField()
         email = forms.CharField()
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  #for foreign key
+        #registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  #for foreign key
         assigned_user = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #user_name forreign key
 
 #**************************************
@@ -59,7 +77,7 @@ class InvigilatorForm (ModelForm):
 
 class InvigilatorForm (forms.Form):
         #fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email','responsible']
-        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt']
+        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt', 'email', 'rt_name', 'rt_phone_primary']
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
@@ -67,7 +85,7 @@ class InvigilatorForm (forms.Form):
         phone_primary = forms.CharField()
         phone_alt = forms.CharField()
         email = forms.CharField()
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
+        #registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
 #*****************************************
 
@@ -85,8 +103,15 @@ class ResponsibleTeacherForm(forms.Form):
         phone_primary = forms.CharField()
         phone_alt = forms.CharField()
         email = forms.CharField()
-        registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
+        #registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
+#*****************************************
+
+class UploadResultsForm(forms.Form):
+        upload_file = forms.FileField(
+                        label='Select a file'
+                        #help_text = 'Hope this works!'
+                        )
 #*****************************************
 
 

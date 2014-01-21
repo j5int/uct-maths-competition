@@ -15,7 +15,7 @@
     <!-- register responsible teacher from here --->
     <div>
         <h1>Responsible Teacher</h1>
-        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.</p>
+        <p>One responsible teacher is compulsory for each school entry. The responsible teacher may be contacted by the university on administrative matters.</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -41,8 +41,8 @@
 
     <!-- register invigilators from here -->
     <div>
-        <h1>Invigilators</h1>
-        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Compulsory 1 per school, 2 if 75 entries.</p>
+        <h1>Registered Invigilators</h1>
+        <p>Please note that every school must send at least 1 invigilator; 2 invigilators are required if 75 entries are to be submitted. If the responsible teacher is going to invigilate kindly add his/her name to the list of invigilators.</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -68,31 +68,30 @@
 
 
     </div>
-
+    
+    <h1>Registered Participants</h1>
     {%for grade in grades%}
     <div>
         <!-- <form action="." method="post"> -->
         <h2>Grade {{grade}}</h2>
         <div>
-            <h3>Pairs:
+            <h3>Pairs:</h3>
                 {%for key, p in pair_list.items%}
                     {% if grade == key %}
-                    <p> {{p}} pairs (teams of 2) have been registered for grade {{grade}}</p>
+                    <p> {{p}} pairs (teams of 2) have been registered for grade {{grade}}. </p>
                     {%endif%}
                  {%endfor%}
-            </h3>
         </div> 
 
         <h3>Individuals:</h3>
         <table>
         <tr>
-            <th>Name</th>
+            <th>First Name</th>
             <th>Surname</th>
         </tr>
         <!-- Populates the list with previously registered students -->
         {%for key, student_l in student_list.items%}
             {% if grade == key %} <!-- only for the current grade -->
-            {% if student_l|length != 0 %}
                 {%for student in student_l%}
                 <tr>
                     <td>{{student.firstname}}</td>
@@ -100,15 +99,21 @@
                 </tr>
                 {%endfor%}
             {%endif%}
-            {%endif%}
         {%endfor%}
 
         </table>
         <br><br>
     </div>
     {%endfor%} <!-- endfor grade -->
+    <small> <a href="../printer_entry">Download Printer Friendly Version</a> </small>
     <!-- <input class="bluebutton left" type="submit" name='save_form' value="Save"> -->
+    {% if entries_open %}
+    <p>Please remember that it is your responsibility to ensure that accurate information has been entered. You will be able to edit your school's entry up until the closing date for new entries to the competition. </p>
     <input class="bluebutton left" type="submit" name='edit_entry' value="Edit">
+    {% else %}
+    <h3> Sign-up closed </h3> <p> No more entries are to be accepted for this year's UCT Mathematics Competition.</p>
+    {%endif%}
 
+    <input class="bluebutton left" type="submit" name='resend_confirmation' value="Re-send email">
     </form>
 {%endblock%}
