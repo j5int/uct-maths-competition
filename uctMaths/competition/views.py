@@ -70,7 +70,7 @@ def printer_entry_result(request, school_list=None):
         
         invigilator_list = Invigilator.objects.filter(school = assigned_school)
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-        timestamp = str(datetime.now())
+        timestamp = str(datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
         
         #If someone managed to get to this page without having made an entry
         if not responsible_teacher and not school_list:

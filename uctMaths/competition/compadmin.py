@@ -896,7 +896,7 @@ def printer_school_report(request, school_list=None):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
 
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-        timestamp = str(datetime.datetime.now())
+        timestamp = str(datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
         gold_count = student_list.filter(award='G').count()
         merit_count = student_list.filter(award='M').count()
         merit_count = merit_count + student_list.filter(award='MOX').count()
@@ -944,7 +944,7 @@ def multi_reportgen(request, school_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
             output_string=printer_school_report(request, [ischool])
-            zipf.writestr('R_%s_%s.pdf'%(ischool.name,timestamp_now()), output_string.getvalue())
+            zipf.writestr('UCTMaths_Report_%s.pdf'%(ischool.name), output_string.getvalue())
 
     response = HttpResponse(output_stringIO.getvalue())
     response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
