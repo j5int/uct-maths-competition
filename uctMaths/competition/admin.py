@@ -121,6 +121,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def assign_student_awards(self, request, queryset):
 	    return compadmin.assign_student_awards()
+	output_PRN_files.short_description = 'Assign student awards (regardless of selection)'
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):

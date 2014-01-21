@@ -884,7 +884,7 @@ def update_school_entry_status():
 def print_school_reports(request, school_list):
     result = printer_school_report(request, school_list)
     response = HttpResponse(result.getvalue())
-    response['Content-Disposition'] = 'attachment; filename=school_confirmation(%s).pdf'%(timestamp_now())
+    response['Content-Disposition'] = 'attachment; filename=SchoolsReport(%s).pdf'%(timestamp_now())
     response['Content-Type'] = 'application/pdf'
     return response
 
@@ -900,10 +900,13 @@ def printer_school_report(request, school_list=None):
         for igrade in range(8, 13):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
 
-        award_list = assign_awards_school(grade_bucket)
-        
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.datetime.now())
+        gold_count = student_list.filter(award='G').count()
+        merit_count = student_list.filter(award='M').count()
+        merit_count = merit_count + student_list.filter(award='MOX').count()
+        
+        
 
         if responsible_teacher:
             c = {'type':'Students',
@@ -912,7 +915,8 @@ def printer_school_report(request, school_list=None):
                 'responsible_teacher':responsible_teacher[0],
                 'student_list':grade_bucket,
                 'entries_open':isOpen(),
-                'award_list':award_list,
+                'merit_count':merit_count,
+                'gold_count':gold_count,
                 'grade_range':range(8,13),}
             #Render the template with the context (from above)
 
@@ -929,37 +933,4 @@ def printer_school_report(request, school_list=None):
         return result
     else:
         pass #Error handling?
-
-def assign_awards_school(student_list):
-    award_bucket = {8:[], 9:[], 10:[], 11:[], 12:[]}
-    gold_count = 0
-    merit_count = 0
-    
-    for grade in range(8, 13):
-        for st in len(student_list[grade]):
-            if student_list[grade][st].paired:
-                if student_list[grade][st].rank in range(0, 4):
-                    #gold award logic
-                    gold_count = gold_count + 1
-                    award_bucket[grade].append('G')
-                elif student_list[grade][st].rank in range(4, 101):
-                    #Merit award logic
-                    merit_count = merit_count + 1
-                    award_bucket[grade].append('M')
-                else:
-                    #No award
-                    award_bucket.append('X')
-            #Individuals logic
-            else:
-                if student_list[grade][st].rank in range(0, 11):
-                    #gold award logic
-                    gold_count = gold_count + 1
-                    award_bucket[grade].append('G')
-                elif student_list[grade][st].rank in range(11, 201):
-                    #Merit award logic
-                    merit_count = merit_count + 1
-                    award_bucket[grade].append('M')
-                else:
-                    #No award
-                    award_bucket.append('X')
-
+        
