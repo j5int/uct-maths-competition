@@ -60,14 +60,13 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def generate_school_reports(self, request, queryset):
 	    return compadmin.print_school_reports(request, queryset)
 
-
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
-	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
-	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
-	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)' 
-	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)' 
-	print_school_confirmations.short_description = 'Print selected school(s) confirmation (.pdf)' 
-	generate_school_reports.short_description = 'Print selected school(s) reports (.pdf)' 
+	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
+	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
+	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)'
+	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)'
+	print_school_confirmations.short_description = 'Print selected school(s) confirmation (.pdf)'
+	generate_school_reports.short_description = 'Print selected school(s) reports (.pdf)'
 
 	list_filter=('entered','language') #Field filters (shown as bar on right)
 
@@ -78,8 +77,8 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
-	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students']
+	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank', 'award')
+	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -120,6 +119,8 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	    return compadmin.output_PRN_files(queryset)
 	output_PRN_files.short_description = 'Generate PRN files for all students (regardless of selection)'
 
+	def assign_student_awards(self, request, queryset):
+	    return compadmin.assign_student_awards()
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):

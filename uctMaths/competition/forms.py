@@ -30,7 +30,7 @@ class StudentForm (ModelForm):
         model=SchoolStudent
         
 class StudentForm (forms.Form):
-        fields = ['firstname', 'surname', 'language', 'school','grade','venue', 'registered_by']
+        fields = ['firstname', 'surname', 'language', 'school','grade','venue']
         firstname = forms.CharField()
         surname = forms.CharField()
         language = forms.CharField()
@@ -38,6 +38,7 @@ class StudentForm (forms.Form):
         grade = forms.IntegerField()
      #   sex = forms.CharField()
         pair = forms.BooleanField()
+        award = forms.CharField()
         #registered_by = forms.ModelChoiceField(required=True, queryset = User.objects.all()) #for foreign key
 
 #**************************************
