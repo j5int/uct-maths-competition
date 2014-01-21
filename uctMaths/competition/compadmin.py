@@ -897,7 +897,7 @@ def printer_school_report(request, school_list=None):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
 
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-        timestamp = str(datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
+        timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
         gold_count = student_list.filter(award='G').count()
         merit_count = student_list.filter(award='M').count()
         merit_count = merit_count + student_list.filter(award='MOX').count()
