@@ -66,6 +66,7 @@ class SchoolStudent(models.Model):
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
     #registered_by = models.ForeignKey(User, db_column='Registered By')
     paired = models.BooleanField(db_column='Paired')
+    award = models.CharField(max_length=3L, db_column='Award', null=True, blank=True)
 
     def __str__(self):
         return self.surname+', '+self.firstname

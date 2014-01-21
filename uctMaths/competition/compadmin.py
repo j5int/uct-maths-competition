@@ -17,6 +17,16 @@ from django.core import exceptions
 import views
 #A few administration constants and associated methods to be used around the website.
 
+from django.core.context_processors import csrf
+from reportlab.pdfgen import canvas
+import ho.pisa as pisa
+import StringIO as StrIO
+import cStringIO as StringIO
+from django.template.loader import get_template
+from django.template import loader, Context
+from django.template import RequestContext
+
+
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
     comp = Competition.objects.all() #Should only be one!
@@ -194,7 +204,7 @@ def output_register(venue_list):
 
     for v_index, venue in enumerate(venue_list):
         summary_sheet.write(v_index+2,0,str(venue.code))
-        summary_sheet.write(v_index+2,1,str(venue.building))
+        summary_sheet.write(v_index+2,1,venue.building)
         summary_sheet.write(v_index+2,2,str(venue.grade))
         summary_sheet.write(v_index+2,3,str(venue.seats))
         summary_sheet.write(v_index+2,4,str(venue.occupied_seats))
@@ -237,9 +247,9 @@ def output_register(venue_list):
             #Print the students in that venue to sheet
             for s_index, student in enumerate(student_list):
                 venue_sheet.write(s_index+7,0,str(student.reference))
-                venue_sheet.write(s_index+7,2,str(student.firstname))
-                venue_sheet.write(s_index+7,3,str(student.surname))
-                venue_sheet.write(s_index+7,1,str(student.school))
+                venue_sheet.write(s_index+7,2,student.firstname)
+                venue_sheet.write(s_index+7,3,student.surname)
+                venue_sheet.write(s_index+7,1,unicode(student.school))
 
         else:
             pass #Venue is empty - no point making a sheet for it...
@@ -314,8 +324,7 @@ def output_studenttags(student_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
         for grade in range(8, 13):
             #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
-            output_string = StringIO.StringIO()
-
+            output_string = StrIO.StringIO()
             for student in grade_bucket[grade, False]:
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
                 s_line = u''
@@ -324,13 +333,13 @@ def output_studenttags(student_list):
                 s_line += '\"' + unicode(student.school) +  '\",'
                 s_line += str(student.grade) + ','
                 venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
-                s_line += '\"' + unicode(venue_str) + '\"\n'
+                s_line += '\"' + str(venue_str) + '\"\n'
                 output_string.write(s_line)
-                
+
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
-
-            output_string = StringIO.StringIO()
+            output_string.close()
+            output_string = StrIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students in [grade]
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
                 s_line = u''
@@ -344,6 +353,7 @@ def output_studenttags(student_list):
 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('Mailmerge_GRD'+str(grade) +'_PAR.txt',output_string.getvalue().encode('utf-8'))
+            output_string.close()
 
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
@@ -462,20 +472,32 @@ def rank_schools(school_list):
 
 def rank_students(student_list):
     """Rank students on their uploaded score. Used if a score has been changed and the remaining students need to be re-classified"""
-    
-    
+
     #Rank students
     #Order all students in descending score order
-    all_students = SchoolStudent.objects.all().exclude(score=None).order_by('-score')
-
     #Ensure that students with equal scores are assigned the same rank
     #Generate a list from the students (so that I can use .pop(0) commands on it)
+    absent_students = SchoolStudent.objects.all().filter(score=None)
+    for ab_stu in absent_students:
+        ab_stu.rank = None
+        ab_stu.save()
+
+    #Need to do this for each grade, for paired/individuals.
+    for grade_i in range(8, 13):
+        pstudent_list=SchoolStudent.objects.all().filter(paired=True, grade=grade_i).exclude(score=None).order_by('-score')
+        score_studentlist(pstudent_list)
+        istudent_list=SchoolStudent.objects.all().filter(paired=False, grade=grade_i).exclude(score=None).order_by('-score')
+        score_studentlist(istudent_list)
+
+def score_studentlist(student_list):
     student_selection = []
-    for s in all_students:
+
+    for s in student_list:
         student_selection.append(s)
 
     rank_base = 1 
     rank_delta = 0 #Used when multiple schools have the same score
+
 
     while student_selection: #while the list is not empty
 
@@ -519,10 +541,10 @@ def assign_awards(request, student_list):
 
         for index, individual in enumerate(individualQS):
             wb_sheet.write(index+2,0,str(individual.rank))
-            wb_sheet.write(index+2,1,str(individual.school))
+            wb_sheet.write(index+2,1,unicode(individual.school))
             wb_sheet.write(index+2,2,str(individual.reference))
-            wb_sheet.write(index+2,3,str(individual.firstname))
-            wb_sheet.write(index+2,4,str(individual.surname))
+            wb_sheet.write(index+2,3,individual.firstname)
+            wb_sheet.write(index+2,4,individual.surname)
             school_list=school_list.exclude(name=individual.school) #Exclude school for Oxford prize
             pairs_offset = pairs_offset + 1
         
@@ -530,10 +552,10 @@ def assign_awards(request, student_list):
         pairs_offset = pairs_offset + 1
         for index, pair in enumerate(pairQS):
             wb_sheet.write(index+pairs_offset,0,str(pair.rank))
-            wb_sheet.write(index+pairs_offset,1,str(pair.school))
+            wb_sheet.write(index+pairs_offset,1,unicode(pair.school))
             wb_sheet.write(index+pairs_offset,2,str(pair.reference))
-            wb_sheet.write(index+pairs_offset,3,str(pair.firstname))
-            wb_sheet.write(index+pairs_offset,4,str(pair.surname))
+            wb_sheet.write(index+pairs_offset,3,pair.firstname)
+            wb_sheet.write(index+pairs_offset,4,pair.surname)
             school_list=school_list.exclude(name=pair.school) #Exclude school for Oxford prize
 
         #Merit awards
@@ -547,20 +569,20 @@ def assign_awards(request, student_list):
         pairs_offset = pairs_offset + 1
         for index, individual in enumerate(individualQS):
             #wb_sheet.write(index+2,0,str(individual.rank))
-            wb_sheet.write(index+2,1,str(individual.school))
+            wb_sheet.write(index+2,1,unicode(individual.school))
             wb_sheet.write(index+2,2,str(individual.reference))
-            wb_sheet.write(index+2,3,str(individual.firstname))
-            wb_sheet.write(index+2,4,str(individual.surname))
+            wb_sheet.write(index+2,3,individual.firstname)
+            wb_sheet.write(index+2,4,individual.surname)
             pairs_offset = pairs_offset + 1
         
         wb_sheet.write(pairs_offset,0,'Merit award winners: Grade %d pairs'%(igrade))
         pairs_offset = pairs_offset + 1
         for index, pair in enumerate(pairQS):
             #wb_sheet.write(index+pairs_offset,0,str(pair.rank))
-            wb_sheet.write(index+pairs_offset,1,str(pair.school))
+            wb_sheet.write(index+pairs_offset,1,unicode(pair.school))
             wb_sheet.write(index+pairs_offset,2,str(pair.reference))
-            wb_sheet.write(index+pairs_offset,3,str(pair.firstname))
-            wb_sheet.write(index+pairs_offset,4,str(pair.surname))
+            wb_sheet.write(index+pairs_offset,3,pair.firstname)
+            wb_sheet.write(index+pairs_offset,4,pair.surname)
 
     #TODO Oxford prizes. 
     #School awards (Oxford prizes) are assigned to the top individual in each school where the school did not receive an individual or pair Gold award
@@ -577,10 +599,10 @@ def assign_awards(request, student_list):
 
     wb_sheet.write(0,0,'Oxford School award')
     for index, aw in enumerate(award_winners):
-        wb_sheet.write(index+1,1,str(aw.school))
+        wb_sheet.write(index+1,1,unicode(aw.school))
         wb_sheet.write(index+1,2,str(aw.reference))
-        wb_sheet.write(index+1,3,str(aw.firstname))
-        wb_sheet.write(index+1,4,str(aw.surname))
+        wb_sheet.write(index+1,3,aw.firstname)
+        wb_sheet.write(index+1,4,aw.surname)
 
     #Return the response with attached content to the user
     response = HttpResponse()
@@ -589,6 +611,50 @@ def assign_awards(request, student_list):
     output_workbook.save(response)
     return response
 
+
+def assign_student_awards():
+
+    school_list = School.objects.all()
+    student_list = SchoolStudent.objects.all()
+
+    for student in student_list:
+        student.award = None
+        student.save()
+
+    for igrade in range(8, 13):
+        #Assign gold awards
+        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=4, score__gt=0).order_by('rank')
+        individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=11, score__gt=0).order_by('rank')
+
+        for individual in individualQS:
+            school_list=school_list.exclude(name=individual.school)
+            individual.award='G'
+            individual.save()
+            
+        for pair in pairQS:
+            school_list=school_list.exclude(name=pair.school)
+            pair.award='G'
+            pair.save()
+
+        #Merit awards
+        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=101, rank__gt=3, score__gt=0).order_by('school')
+        individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=201, rank__gt=10, score__gt=0).order_by('school')
+
+        for individual in individualQS:
+            individual.award='M'
+            individual.save()
+
+        for pair in pairQS:
+            pair.award='M'
+            pair.save()
+
+    for ischool in school_list:
+        school_students = SchoolStudent.objects.filter(school=ischool).order_by('-score')
+        
+        #The award winner  is that with the highest score at the school
+        if school_students and school_students[0].score:
+            school_students[0].award=school_students[0].award+'OX'
+            school_students[0].save()
 
 def school_summary(request):
     """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant emai adresses. Or something like that."""
@@ -624,9 +690,9 @@ def export_competition(request):
     student_list = SchoolStudent.objects.all().order_by('school')
     #resp_teachers = ResponsibleTeacher.objects.all().order_by('school')
     invigilator_list = Invigilator.objects.all().order_by('school')
-    
-    # --------------------- Generate School Summary ---------------------------
 
+
+    # --------------------- Generate School Summary ---------------------------
     wb_sheet = output_workbook.add_sheet('School Summary')
     school_summary_sheet(school_list, wb_sheet, rank_extend=True)
     
@@ -762,7 +828,7 @@ def print_school_confirmations(request, school_list):
 def timestamp_now():
     """ Time-stamp-formatting method. Used for all files served by server and a few xls sheets. NB: check cross-OS compatibility! """
     now = datetime.datetime.now()
-    to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
+    to_return = '%s:%s-%s%s%s'%(str(now.hour).zfill(2), str(now.minute).zfill(2), str(now.day).zfill(2), str(now.month).zfill(2), str(now.year).zfill(4))
     return to_return
     
 def output_PRN_files(student_list):
@@ -776,7 +842,7 @@ def output_PRN_files(student_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
         for grade in range(8, 13):
             #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
-            output_string = StringIO.StringIO()
+            output_string = StrIO.StringIO()
 
             for student in grade_bucket[grade, False]:#Individual students
                 s_line = u'%-10s %3s %s; %s, %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], student.surname, student.firstname[0])
@@ -784,15 +850,16 @@ def output_PRN_files(student_list):
                 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('INDGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
-
-            output_string = StringIO.StringIO()
+            output_string.close()
+            output_string = StrIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students
-                s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], 'Pair / Paar ', student.surname)  #TODO: Seems like an error to me... But it's like this in the sample files.
+                s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], 'Pair / Paar ', student.surname)  
+                #TODO: Seems like an error to me... But it's like this in the sample files.
                 output_string.write(s_line)
-                
+            
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('PRGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
-
+            output_string.close()
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
     response['Content-Disposition'] = 'attachment; filename=PRN_files(%s).zip'%(timestamp_now())
@@ -809,4 +876,79 @@ def update_school_entry_status():
         except exceptions.ObjectDoesNotExist:
             school_obj.entered=0
             school_obj.save()
+
+def print_school_reports(request, school_list):
+    result = printer_school_report(request, school_list)
+    response = HttpResponse(result.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=SchoolsReport(%s).pdf'%(timestamp_now())
+    response['Content-Type'] = 'application/pdf'
+    return response
+
+def printer_school_report(request, school_list=None):
+    """ Generate the school report for each school in the query set"""
+
+    html = '' #Will hold rendered templates
+
+    for assigned_school in school_list:
+        student_list = SchoolStudent.objects.filter(school = assigned_school)
+
+        grade_bucket = {8:[], 9:[], 10:[], 11:[], 12:[]}
+        for igrade in range(8, 13):
+            grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
+
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+        timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
+        gold_count = student_list.filter(award='G').count()
+        merit_count = student_list.filter(award='M').count()
+        merit_count = merit_count + student_list.filter(award='MOX').count()
+
+        school_award_blurb = 'Congratulations. %s has received '%(unicode(assigned_school))
+
+        if merit_count > 0 or gold_count > 0:
+            if gold_count > 0:
+                school_award_blurb+='%d Gold award%s'%(gold_count, 's' if gold_count>1 else '')
+            if gold_count and merit_count:
+                school_award_blurb+=' and '
+            if merit_count > 0:
+                school_award_blurb+='%d Merit award%s'%(merit_count, 's' if gold_count>1 else '')
+        else:
+            pass #TODO:Congratualte school prize winner instead?
+
+        if responsible_teacher:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln':assigned_school,
+                'responsible_teacher':responsible_teacher[0],
+                'student_list':grade_bucket,
+                'entries_open':isOpen(),
+                'school_award_blurb':school_award_blurb,
+                'grade_range':range(8,13),}
+            #Render the template with the context (from above)
+
+            template = get_template('school_report.html')
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
+
+    result = StringIO.StringIO()
+
+    #Generate the pdf doc
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    if not pdf.err:
+        return result
+    else:
+        pass #Error handling?
+
+def multi_reportgen(request, school_list):
+    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+
+    with zipfile.ZipFile(output_stringIO, 'w') as zipf:
+        for ischool in school_list:
+            output_string=printer_school_report(request, [ischool])
+            zipf.writestr('UCTMaths_Report_%s.pdf'%(ischool.name), output_string.getvalue())
+
+    response = HttpResponse(output_stringIO.getvalue())
+    response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
+    response['Content-Type'] = 'application/x-zip-compressed'
+    return response
 
