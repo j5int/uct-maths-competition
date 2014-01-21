@@ -842,7 +842,7 @@ def output_PRN_files(student_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
         for grade in range(8, 13):
             #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
-            output_string = StringIO.StringIO()
+            output_string = StrIO.StringIO()
 
             for student in grade_bucket[grade, False]:#Individual students
                 s_line = u'%-10s %3s %s; %s, %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], student.surname, student.firstname[0])
@@ -850,16 +850,16 @@ def output_PRN_files(student_list):
                 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('INDGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
-
-            output_string = StringIO.StringIO()
+            output_string.close()
+            output_string = StrIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students
                 s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], 'Pair / Paar ', student.surname)  
                 #TODO: Seems like an error to me... But it's like this in the sample files.
                 output_string.write(s_line)
-
+            
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('PRGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
-
+            output_string.close()
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
     response['Content-Disposition'] = 'attachment; filename=PRN_files(%s).zip'%(timestamp_now())
