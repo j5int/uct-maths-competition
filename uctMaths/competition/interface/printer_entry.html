@@ -7,11 +7,11 @@
             <tr>
             <td>
             <h1>UCT Mathematics Competition</h1>
-            <H2>Entry confirmation for {{schooln}}</H2>
+            <H2>Entry confirmation for <u>{{schooln}}</u></H2>
             </td>
             
             <td>
-                <table border="0.2" width="165">
+                <table border="0.1" width="165">
                     <tr align="center">
                         <th>Grade:</th>
                         <th><b>8</b></th>
@@ -60,7 +60,7 @@
     <div>
         <h2>Responsible Teacher</h2>
         {% csrf_token %}
-        <table border="0.1" width="500">
+        <table width="500">
             <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -69,11 +69,11 @@
                 <th>Email </th>
             </tr>
             <tr>
-                <td>{{responsible_teacher.firstname}}</td>
-                <td>{{responsible_teacher.surname}}</td>
-                <td>{{responsible_teacher.phone_primary}}</td>
-                <td>{{responsible_teacher.phone_alt}}</td>
-                <td>{{responsible_teacher.email}}</td>
+                <td align="center">{{responsible_teacher.firstname}}</td>
+                <td align="center">{{responsible_teacher.surname}}</td>
+                <td align="center">{{responsible_teacher.phone_primary}}</td>
+                <td align="center">{{responsible_teacher.phone_alt}}</td>
+                <td align="center">{{responsible_teacher.email}}</td>
             </tr>
         </table>
     </div>
@@ -81,10 +81,10 @@
     <div>
         <br>
         <h2>Registered Invigilators</h2>
-        <p>Note that 2 are compulsorty if 75 students have been registered</p>
+        <p>Note that 2 invigilators are compulsory if 75 students have been registered.</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
-        <table border="0.1" width="500">
+        <table width="500">
             <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -95,11 +95,11 @@
             <!-- Populates the list with previously registered invigilators -->
             {%for invigilator in invigilator_list%}
                 <tr>
-                    <td>{{invigilator.firstname}}</td>
-                    <td>{{invigilator.surname}}</td>
-                    <td>{{invigilator.phone_primary}}</td>                    
-                    <td>{{invigilator.phone_alt}}</td>
-                    <td>{{invigilator.email}}</td>
+                    <td align="center">{{invigilator.firstname}}</td>
+                    <td align="center">{{invigilator.surname}}</td>
+                    <td align="center">{{invigilator.phone_primary}}</td>                    
+                    <td align="center">{{invigilator.phone_alt}}</td>
+                    <td align="center">{{invigilator.email}}</td>
                 </tr>
             {%endfor%}
         </table>
@@ -114,7 +114,7 @@
                 <div>
                 <br>
                 <p><b>Registered Grade {{grade}} participants:</b></p>
-                <table border="0.1" width="180">
+                <table width="160">
                 <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -124,8 +124,8 @@
                 {% if grade == key %} <!-- only for the current grade -->
                 {%for student in student_l%}
                 <tr>
-                <td>{{student.firstname}}</td>
-                <td>{{student.surname}}</td>
+                <td align="center">{{student.firstname}}</td>
+                <td align="center">{{student.surname}}</td>
                 </tr>
                 {%endfor%}
                 {%endif%}
@@ -134,7 +134,7 @@
                 <div>
                 {%for key, p in pair_list.items%}
                 {% if grade == key %}
-                <p><b> {{p}} pairs </b> (teams of 2) have been registered for grade {{grade}}. </p>
+                <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade}}.</b> </p>
                 {%endif%}
                 {%endfor%}
                 </div> 
@@ -146,7 +146,7 @@
                 <div>
                 <br>
                 <p><b>Registered Grade {{grade|add:3}} participants:</b></p>
-                <table border="0.1" width="180">
+                <table width="160">
                 <tr>
                 <th>First Name</th>
                 <th>Surname</th>
@@ -156,8 +156,8 @@
                 {% if grade|add:3 == key %} <!-- only for the current grade -->
                 {%for student in student_l%}
                 <tr>
-                <td>{{student.firstname}}</td>
-                <td>{{student.surname}}</td>
+                <td align="center">{{student.firstname}}</td>
+                <td align="center">{{student.surname}}</td>
                 </tr>
                 {%endfor%}
                 {%endif%}
@@ -166,7 +166,7 @@
                 <div>
                 {%for key, p in pair_list.items%}
                 {% if grade|add:3 == key %}
-                <p><b> {{p}} pairs </b> (teams of 2) have been registered for grade {{grade|add:3}}. </p>
+                <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade|add:3}}.</b> </p>
                 {%endif%}
                 {%endfor%}
                 </div> 

@@ -31,7 +31,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -57,14 +57,22 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def update_school_entry_status(self, request, queryset):
 	    return compadmin.update_school_entry_status()
 
-	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
-	remove_user_associations.short_description = 'Remove associated users to selected school(s)' 
-	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)' 
-	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)' 
-	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)' 
-	print_school_confirmations.short_description = 'Print selected school(s) confirmation (.pdf)' 
+	def generate_school_reports(self, request, queryset):
+	    return compadmin.print_school_reports(request, queryset)
 
-	list_filter=('entered',) #Field filters (shown as bar on right)
+	def generate_multi_school_reports(self, request, queryset):
+	    return compadmin.multi_reportgen(request, queryset)
+
+	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
+	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
+	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
+	school_summary.short_description = 'Schools summary (.xls) (only schools with entries, regardless of selection)'
+	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)'
+	print_school_confirmations.short_description = 'Print selected school(s) confirmation (single .pdf)'
+	generate_school_reports.short_description = 'Print selected school(s) reports (single .pdf)'
+	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
+
+	list_filter=('entered','language') #Field filters (shown as bar on right)
 
 
 
@@ -73,8 +81,8 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank')
-	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files']
+	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank', 'award')
+	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -86,14 +94,14 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
     # -------------- Import_Export functionality  ----------
 	resource_class = SchoolStudentResource
-	list_filter=('grade', 'paired', 'venue', 'language','school') #Field filters (shown as bar on right)
+	list_filter=('grade', 'paired', 'venue', 'language','school', 'award') #Field filters (shown as bar on right)
 
 	dataset = tablib.Dataset()
 	dataset.headers = ['school', 'firstname', 'surname', 'grade', 'reference', 'paired']
 
 	def write_studentlist(self, request, queryset):
 	    return compadmin.output_studentlists(queryset)
-	write_studentlist.short_description = 'Export formatted XLS student registry for selected students'
+	write_studentlist.short_description = 'Export (.xls) student registry for selected student(s)'
 
 	def write_studenttags(self, request, queryset):
 	    return compadmin.output_studenttags(queryset)
@@ -109,12 +117,15 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def output_assign_awards(self, request, queryset):
 	    return compadmin.assign_awards(request, queryset)
-	output_assign_awards.short_description = 'Assign awards and export (xls) document (regardless of selection)'
+	output_assign_awards.short_description = 'Assign awards and export (.xls) document (regardless of selection)'
 
 	def output_PRN_files(self, request, queryset):
 	    return compadmin.output_PRN_files(queryset)
 	output_PRN_files.short_description = 'Generate PRN files for all students (regardless of selection)'
 
+	def assign_student_awards(self, request, queryset):
+	    return compadmin.assign_student_awards()
+	assign_student_awards.short_description = 'Assign student awards (regardless of selection)'
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
