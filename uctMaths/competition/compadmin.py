@@ -852,9 +852,10 @@ def output_PRN_files(student_list):
 
             output_string = StringIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students
-                s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], 'Pair / Paar ', student.surname)  #TODO: Seems like an error to me... But it's like this in the sample files.
+                s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], 'Pair / Paar ', student.surname)  
+                #TODO: Seems like an error to me... But it's like this in the sample files.
                 output_string.write(s_line)
-                
+
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('PRGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
 
@@ -899,9 +900,9 @@ def printer_school_report(request, school_list=None):
         gold_count = student_list.filter(award='G').count()
         merit_count = student_list.filter(award='M').count()
         merit_count = merit_count + student_list.filter(award='MOX').count()
-        
+
         school_award_blurb = 'Congratulations. %s has received '%(unicode(assigned_school))
-        
+
         if merit_count > 0 or gold_count > 0:
             if gold_count > 0:
                 school_award_blurb+='%d Gold award%s'%(gold_count, 's' if gold_count>1 else '')

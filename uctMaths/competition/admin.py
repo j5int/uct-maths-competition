@@ -70,6 +70,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)'
 	print_school_confirmations.short_description = 'Print selected school(s) confirmation (.pdf)'
 	generate_school_reports.short_description = 'Print selected school(s) reports (.pdf)'
+	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
 
 	list_filter=('entered','language') #Field filters (shown as bar on right)
 
