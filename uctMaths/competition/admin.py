@@ -66,10 +66,10 @@ class SchoolAdmin(ImportExportModelAdmin):
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
-	school_summary.short_description = 'Schools summary (xls) (only schools with entries, regardless of selection)'
+	school_summary.short_description = 'Schools summary (.xls) (only schools with entries, regardless of selection)'
 	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)'
-	print_school_confirmations.short_description = 'Print selected school(s) confirmation (.pdf)'
-	generate_school_reports.short_description = 'Print selected school(s) reports (.pdf)'
+	print_school_confirmations.short_description = 'Print selected school(s) confirmation (single .pdf)'
+	generate_school_reports.short_description = 'Print selected school(s) reports (single .pdf)'
 	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
 
 	list_filter=('entered','language') #Field filters (shown as bar on right)
@@ -94,14 +94,14 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
     # -------------- Import_Export functionality  ----------
 	resource_class = SchoolStudentResource
-	list_filter=('grade', 'paired', 'venue', 'language','school') #Field filters (shown as bar on right)
+	list_filter=('grade', 'paired', 'venue', 'language','school', 'award') #Field filters (shown as bar on right)
 
 	dataset = tablib.Dataset()
 	dataset.headers = ['school', 'firstname', 'surname', 'grade', 'reference', 'paired']
 
 	def write_studentlist(self, request, queryset):
 	    return compadmin.output_studentlists(queryset)
-	write_studentlist.short_description = 'Export formatted XLS student registry for selected students'
+	write_studentlist.short_description = 'Export (.xls) student registry for selected student(s)'
 
 	def write_studenttags(self, request, queryset):
 	    return compadmin.output_studenttags(queryset)
@@ -117,7 +117,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def output_assign_awards(self, request, queryset):
 	    return compadmin.assign_awards(request, queryset)
-	output_assign_awards.short_description = 'Assign awards and export (xls) document (regardless of selection)'
+	output_assign_awards.short_description = 'Assign awards and export (.xls) document (regardless of selection)'
 
 	def output_PRN_files(self, request, queryset):
 	    return compadmin.output_PRN_files(queryset)
@@ -125,7 +125,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def assign_student_awards(self, request, queryset):
 	    return compadmin.assign_student_awards()
-	output_PRN_files.short_description = 'Assign student awards (regardless of selection)'
+	assign_student_awards.short_description = 'Assign student awards (regardless of selection)'
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):

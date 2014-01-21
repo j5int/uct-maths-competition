@@ -20,6 +20,7 @@ import views
 from django.core.context_processors import csrf
 from reportlab.pdfgen import canvas
 import ho.pisa as pisa
+import StringIO as StrIO
 import cStringIO as StringIO
 from django.template.loader import get_template
 from django.template import loader, Context
@@ -323,8 +324,7 @@ def output_studenttags(student_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
         for grade in range(8, 13):
             #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
-            output_string = StringIO.StringIO()
-
+            output_string = StrIO.StringIO()
             for student in grade_bucket[grade, False]:
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
                 s_line = u''
@@ -333,13 +333,13 @@ def output_studenttags(student_list):
                 s_line += '\"' + unicode(student.school) +  '\",'
                 s_line += str(student.grade) + ','
                 venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
-                s_line += '\"' + unicode(venue_str) + '\"\n'
+                s_line += '\"' + str(venue_str) + '\"\n'
                 output_string.write(s_line)
-                
+
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
-
-            output_string = StringIO.StringIO()
+            output_string.close()
+            output_string = StrIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students in [grade]
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
                 s_line = u''
@@ -353,6 +353,7 @@ def output_studenttags(student_list):
 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('Mailmerge_GRD'+str(grade) +'_PAR.txt',output_string.getvalue().encode('utf-8'))
+            output_string.close()
 
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
@@ -827,7 +828,7 @@ def print_school_confirmations(request, school_list):
 def timestamp_now():
     """ Time-stamp-formatting method. Used for all files served by server and a few xls sheets. NB: check cross-OS compatibility! """
     now = datetime.datetime.now()
-    to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
+    to_return = '%s:%s-%s%s%s'%(str(now.hour).zfill(2), str(now.minute).zfill(2), str(now.day).zfill(2), str(now.month).zfill(2), str(now.year).zfill(4))
     return to_return
     
 def output_PRN_files(student_list):
