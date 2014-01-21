@@ -617,6 +617,50 @@ def assign_awards(request, student_list):
     return response
 
 
+def assign_student_awards():
+
+    school_list = School.objects.all()
+    student_list = SchoolStudent.objects.all()
+
+    for student in student_list:
+        student.award = None
+        student.save()
+
+    for igrade in range(8, 13):
+        #Assign gold awards
+        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=4, score__gt=0).order_by('rank')
+        individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=11, score__gt=0).order_by('rank')
+
+        for individual in individualQS:
+            school_list=school_list.exclude(name=individual.school)
+            individual.award='G'
+            individual.save()
+            
+        for pair in pairQS:
+            school_list=school_list.exclude(name=pair.school)
+            pair.award='G'
+            pair.save()
+
+        #Merit awards
+        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=101, rank__gt=3, score__gt=0).order_by('school')
+        individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=201, rank__gt=10, score__gt=0).order_by('school')
+
+        for individual in individualQS:
+            individual.award='M'
+            individual.save()
+
+        for pair in pairQS:
+            pair.award='M'
+            pair.save()
+
+    for ischool in school_list:
+        school_students = SchoolStudent.objects.filter(school=ischool).order_by('-score')
+        
+        #The award winner  is that with the highest score at the school
+        if school_students and school_students[0].score:
+            school_students[0].award=school_students[0].award+'OX'
+            school_students[0].save()
+
 def school_summary(request):
     """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant emai adresses. Or something like that."""
 
@@ -856,6 +900,8 @@ def printer_school_report(request, school_list=None):
         for igrade in range(8, 13):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
 
+        award_list = assign_awards_school(grade_bucket)
+        
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.datetime.now())
 
@@ -866,6 +912,7 @@ def printer_school_report(request, school_list=None):
                 'responsible_teacher':responsible_teacher[0],
                 'student_list':grade_bucket,
                 'entries_open':isOpen(),
+                'award_list':award_list,
                 'grade_range':range(8,13),}
             #Render the template with the context (from above)
 
@@ -882,4 +929,37 @@ def printer_school_report(request, school_list=None):
         return result
     else:
         pass #Error handling?
+
+def assign_awards_school(student_list):
+    award_bucket = {8:[], 9:[], 10:[], 11:[], 12:[]}
+    gold_count = 0
+    merit_count = 0
+    
+    for grade in range(8, 13):
+        for st in len(student_list[grade]):
+            if student_list[grade][st].paired:
+                if student_list[grade][st].rank in range(0, 4):
+                    #gold award logic
+                    gold_count = gold_count + 1
+                    award_bucket[grade].append('G')
+                elif student_list[grade][st].rank in range(4, 101):
+                    #Merit award logic
+                    merit_count = merit_count + 1
+                    award_bucket[grade].append('M')
+                else:
+                    #No award
+                    award_bucket.append('X')
+            #Individuals logic
+            else:
+                if student_list[grade][st].rank in range(0, 11):
+                    #gold award logic
+                    gold_count = gold_count + 1
+                    award_bucket[grade].append('G')
+                elif student_list[grade][st].rank in range(11, 201):
+                    #Merit award logic
+                    merit_count = merit_count + 1
+                    award_bucket[grade].append('M')
+                else:
+                    #No award
+                    award_bucket.append('X')
 
