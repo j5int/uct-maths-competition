@@ -1,0 +1,149 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{fancyhdr}
+
+% Include page formatting here. 
+\parskip = 6mm
+\parindent = 0mm
+\renewcommand{\headrulewidth}{0pt}
+\rhead[]{\thesection}
+\lhead[\thechapter]{}
+
+
+\begin{document}
+ 
+% This section formats the title page of the Report.
+\thispagestyle{empty}
+{\Huge \begin{center}
+% Modify the line below to insert your title.
+UCT Mathematics Competition
+\hrule 
+% Modify the line below to insert your subtitle.
+{\Large A very hastily typed README}
+\end{center}}
+
+
+\vskip 5mm
+\begin{center}{\bf \today}
+\end{center}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+\fancyhead[RE,LO]{}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RO]{\rightmark}
+\pagestyle{fancy}
+
+\pagenumbering{arabic}
+\section{Competition}
+
+So I typed this up in ~20 min on the last day of my internship. Apolgies to whoever has to read it. Treating the \verb|uct-maths-competition/uctMaths/| as the base directory, I've based the section names and bolded-heading from an \verb|ls|. The excessive use of \verb|'\verb'| is just me being lazy. 
+
+\subsection{competition/:}
+
+\begin{itemize}
+
+\item \verb|admin.py|
+
+    Links the logic from \verb|compadmin.py| to the actions that can be taken in the admin interface. This file pretty much defines how each of those admin entries in the Competition section will look - this includes the filters on the right, the actions that can be run and the columns that are shown to the user. 
+    
+    All the \verb|___Admin(...)| classes inherit from \verb|ImportExportModelAdmin|, as opposed to the usual Django ModelAdmin. This is to allow the Import/Export buttons on the pages. This import/export functionality also requires a resource\_class, which is defined in the \verb|models.py|.
+    
+    . note:: The SchoolAdmin class has \verb|__str__| and \verb|__unicode__| methods. Use the latter in code (when representing the School object as a string)
+    
+\item \verb|compadmin.py| (\textit{"competition admin"})
+	
+	This class contains all of the methods that are called by methods in the \verb|admin.py| file. It's length is much to do with the number of lines of code it takes to get the formatting of Excel files right. 
+	
+	
+	
+\item \verb|compadmin_views.py|
+
+	In order to upload the results (RES) files, a new html view was needed. So its functionality is coded here. Much like \verb|views.py|, this handles rendering of the Django template (usually the errors that occur during import)/the POST data that is returned on "Submit."
+
+\item \verb|confirmation.py|
+	
+	This was actually the first thing I coded. It just generates a text-based email and sends it to the user's email address. There is an option to cc the competition administrator (which happens when a new entry is submitted or an entry is ammended).	
+
+\item \verb|forms.py|
+
+	These forms are usually sent to the html rendering methods. They're just the fields that exist in each of the entities. There are a number of widgets that you can tie in here... We didn't really change this file much. Fields that describe the database columns are actually contained in the \verb|models.py| file. 	
+	
+\item \verb|__init__.py|
+
+	This just tells \verb|python| that this folder is an entity. It's empty... but important. 
+	
+\item \verb|tests.py|
+
+	We didn't even touch this file.
+
+\item \verb|models.py|
+
+	Each of the entities is defined here. SchoolStudents, Venues, etc... The database entries are also defined here - 
+	
+	eg. \verb|firstname=models.CharField(max_length=255L, db_column='First_name')| defining the firstname of a SchoolStudent object.
+
+\item \verb|urls.py|
+
+	When a request for a page comes through, Django uses the regexes in here to find the page. This is also where html urls are bound to methods in \verb|views.py|.
+
+\item \verb|views.py|
+
+	Contains the underlying logic for all of the teachers' interface. Includes checking for school association (and redirecting as needed), rendering of html responses, generating forms and saving posted data to the databases. In \verb|urls.py|, these methods are bound to html files and are called when the particular url is called.
+	
+	If you're new to Django - this is where it all happens. And my understanding how methods, webpages and redirecting works came from understanding how this file is structured. (ie. how \verb|POST| data works).
+
+\end{itemize}
+
+\subsection{competition/interface:}
+
+In the second week we decided to make sure that the teachers' interface was as simple as possible. So most of these html files are actually not even used. The ones that are (and that are interesting). 
+
+The html file names also tell you which method in \verb|competition/views.py| they are bound to... but you can always look at \verb|competition/urls.py| if I'm wrong.
+
+\begin{itemize}
+\item \verb|newstudents.html|
+
+This is the main entry form. The related JavaScript file in \verb|competition/static/tables.js| is used for entry validation and has control of the Submit button at the bottom. This is the form that is autopopulated if any information has already been entered by the user... which makes the Django template code look quite nasty. (It's not!)
+
+When the user is redirected to this page (after having selected a school, or clicking the 'Edit entry' button), the form is populated server-side when the template is being filled (with an html \verb|value="..."| tag.)
+
+When the user has made his/her entry, the form is POST'd back to server when the Submit button is pressed. \textbf{The server then deletes all entry information related to that school}... before re-populating the database with the data in the new form.
+
+This is why validating the form before any data is POST'd back to server is important. When a valid Submit happens, the user and competition admin is snt 
+
+
+\item \verb|entry_review.html|
+
+This actually uses very simmilar logic to that in \verb|newstudents.html| except that no 
+
+
+\item \verb|profile.html|
+\item \verb|school_select.html|
+\item \verb|submitted.html|
+\end{itemize}
+
+The following two html templates are used in report generation - where the confirmation and school report pdf docuents are set. 
+
+\begin{itemize}
+\item \verb|school_report.html| 
+\item \verb|printer_entry.html|
+\end{itemize}
+
+The logic for \verb|school_report.html| is in \verb|competition/compadmin.py| while the logic for \verb|printer_entry.html| is in \verb|competition/views.py|
+
+
+\subsection{competition/interface/admin:}
+
+\begin{itemize}
+\item \verb|upload_results.html|
+
+This is where the \textbf{uctMaths} app finds the html template for requesting the .RES file from the admin interface. The logic for this is defined \verb|competition/compadmin_views.py|, called from an action defined in \verb|competition/admin.py|
+
+\end{itemize}
+
+
+\end{document}
