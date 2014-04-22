@@ -116,8 +116,8 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	rank_students.short_description = 'Re-rank students. (regardless of selection)'
 
 	def output_assign_awards(self, request, queryset):
-	    return compadmin.assign_awards(request, queryset)
-	output_assign_awards.short_description = 'Assign awards and export (.xls) document (regardless of selection)'
+	    return compadmin.export_awards(request, queryset)
+	output_assign_awards.short_description = 'Export (.xls) document (regardless of selection)'
 
 	def output_PRN_files(self, request, queryset):
 	    return compadmin.output_PRN_files(queryset)
