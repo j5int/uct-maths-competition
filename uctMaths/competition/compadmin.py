@@ -389,7 +389,7 @@ def output_schooltaglists(school_list):
 def upload_results(request, student_list):
     """Facilitate upload of .RES (the results) files. Redirects to custom Admin page (upload_results.html), the logic contained in compadmin_views.py."""
     #Return response of redirect page
-    response = HttpResponseRedirect('/competition/admin/upload_results.html')
+    response = HttpResponseRedirect('../../../competition/admin/upload_results.html')
     return response
     
 #TODO
@@ -653,6 +653,8 @@ def assign_student_awards():
         
         #The award winner  is that with the highest score at the school
         if school_students and school_students[0].score:
+            if school_students[0].award is None:
+                school_students[0].award = ''
             school_students[0].award=school_students[0].award+'OX'
             school_students[0].save()
 
