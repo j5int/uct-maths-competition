@@ -537,21 +537,27 @@ def export_awards(request, student_list):
         pairs_offset = 4 #Using an offset accounts for situations where more than 10 people are getting gold (ties at rank=10)
 
         wb_sheet.write(1,0,'Gold Award Winners: Grade %d Individuals'%(igrade))
-        pairs_offset = pairs_offset + 1
+
+        header = ['Rank', 'School', 'Reference', 'First Name', 'Last Name', 'Grade']
+        for i, h in enumerate(header):
+            wb_sheet.write(2, i, '%s'%h)
+        pairs_offset = pairs_offset + 2
 
         for index, individual in enumerate(individualQS):
-            wb_sheet.write(index+2,0,str(individual.rank))
-            wb_sheet.write(index+2,1,unicode(individual.school))
-            wb_sheet.write(index+2,2,str(individual.reference))
-            wb_sheet.write(index+2,3,individual.firstname)
-            wb_sheet.write(index+2,4,individual.surname)
-            wb_sheet.write(index+2,5,individual.grade)
-            wb_sheet.write(index+2,6,individual.rank)
+            wb_sheet.write(index+3,0,str(individual.rank))
+            wb_sheet.write(index+3,1,unicode(individual.school))
+            wb_sheet.write(index+3,2,str(individual.reference))
+            wb_sheet.write(index+3,3,individual.firstname)
+            wb_sheet.write(index+3,4,individual.surname)
+            wb_sheet.write(index+3,5,individual.grade)
             school_list=school_list.exclude(name=individual.school) #Exclude school for Oxford prize
             pairs_offset = pairs_offset + 1
         
         wb_sheet.write(pairs_offset,0,'Gold Award Winners: Grade %d Pairs'%(igrade))
-        pairs_offset = pairs_offset + 1
+        header = ['Rank', 'School', 'Reference', 'First Name', 'Last Name', 'Grade']
+        for i, h in enumerate(header):
+            wb_sheet.write(pairs_offset+1, i, '%s'%h)
+        pairs_offset = pairs_offset + 2
         for index, pair in enumerate(pairQS):
             wb_sheet.write(index+pairs_offset,0,str(pair.rank))
             wb_sheet.write(index+pairs_offset,1,unicode(pair.school))
@@ -559,7 +565,6 @@ def export_awards(request, student_list):
             wb_sheet.write(index+pairs_offset,3,pair.firstname)
             wb_sheet.write(index+pairs_offset,4,pair.surname)
             wb_sheet.write(index+pairs_offset,5,pair.grade)
-            wb_sheet.write(index+pairs_offset,6,pair.rank)
             school_list=school_list.exclude(name=pair.school) #Exclude school for Oxford prize
 
         #Merit awards
@@ -570,27 +575,33 @@ def export_awards(request, student_list):
         pairs_offset = 4 #Using an offset accounts for situations where more than 10 people are getting merit (ties at rank=200)
 
         wb_sheet.write(1,0,'Merit Award Winners: Grade %d Individuals'%(igrade))
-        pairs_offset = pairs_offset + 1
+        header = ['Rank', 'School', 'Reference', 'First Name', 'Last Name', 'Grade']
+        for i, h in enumerate(header):
+            wb_sheet.write(2, i, '%s'%h)
+        pairs_offset = pairs_offset + 2
+
         for index, individual in enumerate(individualQS):
-            #wb_sheet.write(index+2,0,str(individual.rank))
-            wb_sheet.write(index+2,1,unicode(individual.school))
-            wb_sheet.write(index+2,2,str(individual.reference))
-            wb_sheet.write(index+2,3,individual.firstname)
-            wb_sheet.write(index+2,4,individual.surname)
-            wb_sheet.write(index+2,5,individual.grade)
-            wb_sheet.write(index+2,6,individual.rank)
+            wb_sheet.write(index+3,0,str(individual.rank))
+            wb_sheet.write(index+3,1,unicode(individual.school))
+            wb_sheet.write(index+3,2,str(individual.reference))
+            wb_sheet.write(index+3,3,individual.firstname)
+            wb_sheet.write(index+3,4,individual.surname)
+            wb_sheet.write(index+3,5,individual.grade)
             pairs_offset = pairs_offset + 1
         
         wb_sheet.write(pairs_offset,0,'Merit Award Winners: Grade %d Pairs'%(igrade))
-        pairs_offset = pairs_offset + 1
+        header = ['Rank', 'School', 'Reference', 'First Name', 'Last Name', 'Grade']
+        for i, h in enumerate(header):
+            wb_sheet.write(pairs_offset+1, i, '%s'%h)
+        pairs_offset = pairs_offset + 2
         for index, pair in enumerate(pairQS):
-            #wb_sheet.write(index+pairs_offset,0,str(pair.rank))
+            wb_sheet.write(index+pairs_offset,0,str(pair.rank))
             wb_sheet.write(index+pairs_offset,1,unicode(pair.school))
             wb_sheet.write(index+pairs_offset,2,str(pair.reference))
             wb_sheet.write(index+pairs_offset,3,pair.firstname)
             wb_sheet.write(index+pairs_offset,4,pair.surname)
             wb_sheet.write(index+pairs_offset,5,pair.grade)
-            wb_sheet.write(index+pairs_offset,6,pair.rank)
+
 
     #TODO Oxford prizes. 
     #School awards (Oxford prizes) are assigned to the top individual in each school where the school did not receive an individual or pair Gold award
@@ -604,15 +615,19 @@ def export_awards(request, student_list):
         if school_students:
             award_winners.append(school_students[0])
 
-    wb_sheet.write(0,0,'Oxford School Award')
+    wb_sheet.write(0, 0, 'Oxford School Award')
+    header = ['', 'School', 'Reference', 'First Name', 'Last Name', 'Grade', 'Rank', 'Award']
+    for i, h in enumerate(header):
+        wb_sheet.write(1, i, '%s'%h)
+
     for index, aw in enumerate(award_winners):
-        wb_sheet.write(index+1,1,unicode(aw.school))
-        wb_sheet.write(index+1,2,str(aw.reference))
-        wb_sheet.write(index+1,3,aw.firstname)
-        wb_sheet.write(index+1,4,aw.surname)
-        wb_sheet.write(index+1,5,aw.grade)
-        wb_sheet.write(index+1,6,aw.rank)
-        wb_sheet.write(index+1,7,aw.award)
+        wb_sheet.write(index+2,1,unicode(aw.school))
+        wb_sheet.write(index+2,2,str(aw.reference))
+        wb_sheet.write(index+2,3,aw.firstname)
+        wb_sheet.write(index+2,4,aw.surname)
+        wb_sheet.write(index+2,5,aw.grade)
+        wb_sheet.write(index+2,6,aw.rank)
+        wb_sheet.write(index+2,7,aw.award)
 
     #Return the response with attached content to the user
     response = HttpResponse()
@@ -672,7 +687,7 @@ def assign_student_awards():
                 school_students[0].save()
 
 def school_summary(request):
-    """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant emai adresses. Or something like that."""
+    """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant email addresses. Or something like that."""
 
     output_workbook = xlwt.Workbook()
     school_list = School.objects.all().order_by('name') #ie. regardless of selection at admin screen
