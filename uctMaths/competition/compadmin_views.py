@@ -97,6 +97,7 @@ def handle_uploaded_file(inputf):
     #For each line in the input string, complete formatting steps
     for line in list_input:
         proc_line = line.split(',')
+
         try:
             ref_num = proc_line[0].strip() #strip white space
 
@@ -105,8 +106,12 @@ def handle_uploaded_file(inputf):
                 score = 0
                 rank = None #TODO:Check that this is okay...
             else:
-                score = proc_line[8].strip()
-                rank = proc_line[11].strip()
+                if not pair_logic:
+                    score = proc_line[8].strip()
+                    rank = proc_line[11].strip()
+                else:
+                    score = proc_line[7].strip()
+                    rank = proc_line[10].strip()
 
         #Search DB for that reference number:
             try:
