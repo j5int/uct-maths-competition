@@ -44,8 +44,8 @@ def upload_results(request):
 
         if not handler_output: #No errors have occured
             handler_output = [
-                            'No errors occured while importing results.', 
-                            'Please double check that all students in the database have been updated in the SchoolStudents tab'
+                            'No errors occurred while importing results.',
+                            'Please double check that all students in the database have been updated in the School Students tab'
                             ]
     #Present UploadResultsForm (defined in forms.py)
     fileUpload = UploadResultsForm()
@@ -77,7 +77,7 @@ def handle_uploaded_file(inputf):
     elif 'IND' in inputf.name:
         pair_logic = False
     else:
-        return ['Input filename error. Please ensure that the file name contains PR or IND so that pair or individual (respectively) results import can ocur.']
+        return ['Input filename error. Please ensure that the file name contains PR or IND so that pair or individual (respectively) results import can occur.']
  #------------------------------------------------#
 
     input_fstring=''
@@ -127,7 +127,7 @@ def handle_uploaded_file(inputf):
                 dne_list.append('Reference number: %s contains a data-input error.'%{ref_num})
                 #Not a fatal error; continue with import
             except exceptions.MultipleObjectsReturned:
-                dne_list.append('ERROR. Import halted. Two students with the same reference: %s were found in the file. Please ensure that, if the file contains information for PAIRS that PR is present on the file name.'%{ref_num})
+                dne_list.append('ERROR. Import halted. Two students with the same reference: %s were found in the file. Please ensure that, if the file contains information for PAIRS that PR is present in the filename.'%{ref_num})
                 return dne_list#Fatal error; STOP IMPORT where the error occured
         #Input data error (not vital to know this; likely not a student-invalid line)
         except IndexError:
