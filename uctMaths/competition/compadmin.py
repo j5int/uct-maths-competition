@@ -531,7 +531,7 @@ def export_awards(request, student_list):
     for igrade in range(8, 13):
         #Gold awards
         wb_sheet = output_workbook.add_sheet('Gold Grade %d'%(igrade))
-        #Generate QuerySets for GOLD medal winners (sorted by rank (descnding))
+        #Generate QuerySets for GOLD medal winners (sorted by rank (descending))
         pairQS = student_list.filter(grade = igrade, paired=True, award= 'G').order_by('rank')
         individualQS = student_list.filter(grade = igrade, paired=False, award = 'G').order_by('rank')
         pairs_offset = 4 #Using an offset accounts for situations where more than 10 people are getting gold (ties at rank=10)
@@ -928,7 +928,7 @@ def printer_school_report(request, school_list=None):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
 
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-        timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
+        timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M'))
         gold_count = student_list.filter(award='G').count()
         merit_count = student_list.filter(award='M').count()
         merit_count = merit_count + student_list.filter(award='MOX').count()
@@ -943,7 +943,8 @@ def printer_school_report(request, school_list=None):
             if merit_count > 0:
                 school_award_blurb+='%d Merit award%s'%(merit_count, 's' if gold_count>1 else '')
         else:
-            pass #TODO:Congratualte school prize winner instead?
+            school_award_blurb = ''
+            #TODO:Congratulate school prize winner instead?
 
         if responsible_teacher:
             c = {'type':'Students',
@@ -983,3 +984,58 @@ def multi_reportgen(request, school_list):
     response['Content-Type'] = 'application/x-zip-compressed'
     return response
 
+
+def certificate_list(request, school_list):
+    #Calculate number of gold, merit and participation certificates per school
+    output_workbook = xlwt.Workbook()
+
+    school_list = School.objects.all().filter(entered=1).order_by('name')
+    student_list = SchoolStudent.objects.all() #Regardless of admin UI selection
+
+    wb_sheet = output_workbook.add_sheet('Certificate List')
+    wb_sheet.write(1, 0, 'Certificates by school:')
+    header = ['School', 'Gold', 'Merit', 'Participation', 'Total Participated']
+    for i, h in enumerate(header):
+        wb_sheet.write(2, i, '%s' %h)
+    offset = 3
+    index = 0
+    gold_total = 0
+    merit_total = 0
+    part_total = 0
+    all_total = 0
+    for school in school_list:
+        ind_g = student_list.filter(school=school, paired=False, award='G')
+        pair_g = student_list.filter(school=school, paired=True, award='G')
+        ind_m = student_list.filter(school=school, paired=False, award__contains='M')
+        pair_m = student_list.filter(school=school, paired=True, award__contains='M')
+        ind_all = student_list.filter(school=school, paired=False, score__gt=0)
+        pair_all = student_list.filter(school=school, paired=True, score__gt=0)
+
+        gold_num = len(ind_g) + (len(pair_g) * 2)
+        merit_num = len(ind_m) + (len(pair_m) * 2)
+        part_num = len(ind_all) + (len(pair_all) * 2) - gold_num - merit_num
+        total = gold_num + merit_num + part_num
+        gold_total = gold_total + gold_num
+        merit_total = merit_total + merit_num
+        part_total = part_total + part_num
+
+        wb_sheet.write(index + offset, 0, unicode(school))
+        wb_sheet.write(index + offset, 1, gold_num)
+        wb_sheet.write(index + offset, 2, merit_num)
+        wb_sheet.write(index + offset, 3, part_num)
+        wb_sheet.write(index + offset, 4, total)
+        index = index + 1
+
+    all_total = gold_total + merit_total + part_total
+    offset = offset + 2
+    wb_sheet.write(index + offset, 0, 'Total')
+    wb_sheet.write(index + offset, 1, gold_total)
+    wb_sheet.write(index + offset, 2, merit_total)
+    wb_sheet.write(index + offset, 3, part_total)
+    wb_sheet.write(index + offset, 4, all_total)
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=certificate_list(%s).xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
