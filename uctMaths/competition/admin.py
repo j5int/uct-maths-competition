@@ -31,7 +31,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered') ##Which columns should be kept here? 
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','school_certificate_list']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -63,6 +63,9 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def generate_multi_school_reports(self, request, queryset):
 	    return compadmin.multi_reportgen(request, queryset)
 
+	def school_certificate_list(self, request, queryset):
+	    return compadmin.certificate_list(request, queryset)
+
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
@@ -71,6 +74,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	print_school_confirmations.short_description = 'Print selected school(s) confirmation (single .pdf)'
 	generate_school_reports.short_description = 'Print selected school(s) reports (single .pdf)'
 	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
+	school_certificate_list.short_description = 'Download school certificate list'
 
 	list_filter=('entered','language') #Field filters (shown as bar on right)
 
