@@ -2,7 +2,15 @@
 <!-- redirects here when new invigilators/students/schools are submitted. need 'type' in the context -->
 {%block title%}Success - {{type}}{%endblock%}
 {%block content%}
-<h1>Successful</h1>
-{{type}} registration successful. <br>
-Navigate to 'View: {{type}}s' in the sidebar on the left to view or edit them. 
+<h1>Application Submitted</h1>
+</br> UCT Mathematics Competition registration completed. A confirmation email has been sent to your email address. Navigate to <b>'Entry Form'</b> to review or edit your changes. A summary of your entry is presented below.</br>
+<div>
+<h2> Application summary </h2>
+{% for grade in school_summary_info %}
+<p> <b> {{grade}} </b> </p>
+{% endfor %}
+
+<p> {{school_summary_statistics}} </p>
+</div>
+
 {%endblock%}
