@@ -7,14 +7,14 @@ into a single table in a TEX file.
 
 This program consists of the following files:
  ItemAnalysis.exe     - performs the conversion for a single grade
- ItemAnalysis.C       - C program which was compiled to produce Itemanal.exe
+ ItemAnalysis.C       - C program which was compiled to produce ItemAnalysis.exe
  RunMe.bat            - calls ItemAnalysis.exe with the correct parameters for each grade.
 
 You should use the program RunMe.bat
 
 Input files: 
   Place the files INDGR8.ITM, PRGR8.ITM, ... INDGR12.ITM, PRGR12.ITM in the same
-  directory as the program RunMe.bat and Itemanal.exe.  
+  directory as the program RunMe.bat and ItemAnalysis.exe.
 
 Output files:
   The output will be placed in the files ALLGR8.ITM, ... ALLGR12.ITM
