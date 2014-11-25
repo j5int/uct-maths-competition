@@ -20,7 +20,12 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy 
     rteacher = ResponsibleTeacher.objects.filter(school = in_school)[0] ##TODO only one per school
 
     #Header
-    output_string = 'Dear %s, \n\nThis email is in confirmation of your entry for %s to the UCT Mathematics Competition. Attached you will find a printer-friendly .pdf file that contains a record of your school\'s entry. Below is a text-based summary of that same information.\n\nRegards,\n\nThe UCT Mathematics Competition team'%(username, in_school)
+    output_string = 'Dear %s, \n\n' \
+                    'This email is in confirmation of your entry for %s to the UCT Mathematics Competition. ' \
+                    'Attached you will find a printer-friendly .pdf file that contains a record of your school\'s ' \
+                    'entry. Below is a text-based summary of that same information.\n\n' \
+                    'Regards,\n\n' \
+                    'The UCT Mathematics Competition team'%(username, in_school)
     output_string += UMC_header()
     output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(in_school, username, UMC_datetime())
 
