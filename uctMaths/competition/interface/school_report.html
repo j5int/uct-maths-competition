@@ -1,0 +1,101 @@
+<table width="550">
+<tr>
+<td>
+    <div>
+        <table>
+            <tr>
+            <td>
+            <h1>UCT Mathematics Competition Results</h1>
+            <H2>School report for <u>{{schooln}}</u></H2>
+            </td>
+
+            <td>
+
+                
+            </td>
+            </tr>
+            <tr>
+                <td>
+                <br>
+                    <b>Generated: {{timestamp}}</b>
+                </td>
+
+            <td>
+                                <table width="225">
+                    <tr>
+                    <th width="80">Teacher in charge:</th>
+                    <td>{{responsible_teacher.firstname}} {{responsible_teacher.surname}}</td>
+                    </tr>
+                    <tr>
+                        <th width="80">Phone:</th>
+                        <td> {{responsible_teacher.phone_primary}} / {{responsible_teacher.phone_alt}} </td>
+                    </tr>
+                    <tr>
+                        <th width="80">Email:</th>
+                        <td>{{responsible_teacher.email}}</td>
+                    </tr>
+                </table>
+
+            </td>
+ 
+            </tr>
+        </table>
+        <!-- register responsible teacher from here --->
+    </div>
+
+    </div>
+    <!-- <h3>Registered Participants</h3> -->
+        {% for grade in grade_range %}
+                <div>
+                <br>
+                <p><b>Registered Grade {{grade}} participants:</b></p>
+                    <table width="325">
+                    <tr>
+                        <th>Reference </th>
+                        <th>First Name</th>
+                        <th>Surname</th>
+                        <th width="23">Score</th>
+                        <th width="23"> Rank </th>
+                        <th width="90"></th> 
+                    </tr>
+                    <!-- Populates the list with previously registered students -->
+                    {%for key, student_l in student_list.items%}
+                        {% if grade == key %} <!-- only for the current grade -->
+                            {%for student in student_l%}
+                                <tr>
+                                <td align="center">{{student.reference}}</td>
+                                <td align="center">{{student.firstname}}</td>
+                                <td align="center">{{student.surname}}</td>
+                                <td align="center">{{student.score}}</td>
+                                <td align="center">{%if student.award%}
+                                    {{student.rank}}
+                                    {%endif%}</td>
+                                <td align="center">{%if 'G' in student.award%}
+                                    Gold
+                                    {%elif 'M' in student.award%}
+                                    Merit
+                                    {%endif%}
+                                    {% if 'OX' in student.award %}
+                                    , School Award
+                                    {%endif%}
+                                    </td>
+                                </tr>
+                            {%endfor%}
+                        {%endif%}
+                    {%endfor%}
+                    </table>
+                </div>
+        {%endfor%}
+        
+    <div>
+    <br><br>
+    <b>{{school_award_blurb}}</b>
+    <br><br>
+    The UCT Mathematics competition team thanks you for your school's participation in the annual UCT Mathematics Competition.
+    </div>
+    <br><br>
+    </form>
+    
+    </td>
+    </tr>
+    </table>

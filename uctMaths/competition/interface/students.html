@@ -17,63 +17,19 @@
             <tr>
                 <th>First Name</th>
                 <th>Surname</th>
-                <th>Language</th>
-                <th class='wide'>School</th>
-                <th>Grade</th>
-                <th>Sex</th>
+                <th class= 'narrow'>Grade</th>
+                <th class= 'narrow'></th>
             </tr>
             {%for s in students%}
             <tr id='show{{s.id}}'>
                 <td>{{s.firstname}}</td>
-
                 <td>{{s.surname}}</td>
-                <td>
-                    {%if s.language == 'a'%}Afrikaans
-                    {%elif s.language == 'e'%}English
-                    {%else%}---{%endif%}
-
-                </td>
-                <td class='wide'>{{s.school}}</td>
                 <td>{{s.grade}}</td>
                 <td>
-                    {%if s.sex == 'f'%}Female
-                    {%elif s.sex == 'm'%}Male
-                    {%else%}---{%endif%}
-                    
+                <input id='{{s.id}}' name='del_student{{s.id}}' class='bluebutton narrow' type='submit' value='X'>
                 </td>
-
-            </tr>
-            <tr id='input{{s.id}}' style='display:none'>
-                <td><input class='value{{s.id}}' type='text' name='firstname' value='{{s.firstname}}'></td>
-                <td><input class='value{{s.id}}' type='text' name='surname'  value='{{s.surname}}'></td>
-
-               
-                <td>
-                    {%if s.language == 'a'%}Afrikaans{%endif%}
-                    {%if s.language == 'e'%}English{%endif%}
-                    {%if s.language == ''%}---{%endif%}
-
-                </td>
-               
-                </td>
-                <td class='wide'>{{s.school}}</td>
-                <td>{{s.grade}}</td>
-                <td>
-                <select class='value{{s.id}}' name = 'sex' selected='{{s.sex}}'>
-                    <option value=''>---</option>
-                    <option value='f'>Female</option>
-                    <option value='m'>Male</option>
-                </select>
-
-                <!-- <input type ='text' name='sex'> -->
-                </td>
-                <input type='hidden' name='studentID' value='{{s.id}}'>
             </tr>
             {%endfor%}
         </table>
-
-        <input name ='delete' class='bluebutton left' type='submit' value='Delete All' onclick='del=true;'>
-        <input name ='submit' class='bluebutton left' type='submit' value='Submit' onclick='del=false;'>
-
     </form>
 {%endblock%}
