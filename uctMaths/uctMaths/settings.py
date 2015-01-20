@@ -126,9 +126,6 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     # Can add additional paths
-    #'/home/aureliad/Desktop/uct-maths/uctMaths/competition/interface',
-    #'/home/amber/Desktop/uct-maths/uctMaths/competition/interface',
-    # '/srv/uctmaths/uct-maths/UCTMaths-desktop',
     config.get('paths', 'TEMPLATE_DIR')
  )
 
