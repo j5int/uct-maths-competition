@@ -505,6 +505,7 @@ def score_studentlist(student_list):
         
         student = student_selection.pop(0)
         student.rank = rank_base
+        student.award = ''
         current_score = student.score
         student.save()
         
@@ -514,6 +515,7 @@ def score_studentlist(student_list):
         while student_selection and student_selection[0].score == current_score: 
             student = student_selection.pop(0)
             student.rank = rank_base
+            student.award = ''
             rank_delta = rank_delta + 1
             student.save()
 
