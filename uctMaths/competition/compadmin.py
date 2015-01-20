@@ -674,17 +674,21 @@ def assign_student_awards():
             pair.save()
 
     for ischool in school_list:
-        school_students = SchoolStudent.objects.filter(school=ischool, paired=False).order_by('-score')
+        school_students = SchoolStudent.objects.filter(school=ischool, paired=False).order_by('rank')
 
         #School may only receive an OX award if 10 or more individuals entered.
         if len(school_students)>= 10:
         
-            #The award winner  is that with the highest score at the school
+            #The award winner is the one with the highest rank at the school (including possible ties)
             if school_students and school_students[0].score:
-                if school_students[0].award is None:
-                    school_students[0].award = ''
-                school_students[0].award=school_students[0].award+'OX'
-                school_students[0].save()
+                for student in school_students:
+                    if student.rank == school_students[0].rank:
+                        if student.award is None:
+                            student.award = ''
+                        student.award=student.award+'OX'
+                        student.save()
+                    else:
+                        break
 
 def school_summary(request):
     """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant email addresses. Or something like that."""
