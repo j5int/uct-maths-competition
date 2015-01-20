@@ -28,6 +28,7 @@ they can all be deleted from here.
                 <th>Phone </th>
                 <th>Phone (Alt)</th>                
                 <th>Email</th>
+                <th>Notes</th>
                 <th class= 'narrow'></th>
             </tr>
             {%for i in invigilators%}
@@ -40,6 +41,7 @@ they can all be deleted from here.
                 <td>{{i.phone_primary}}</td>
                 <td>{{i.phone_alt}}</td>
                 <td>{{i.email}}</td>                
+                <td>{{i.notes}}</td>
                 <td>
                     <!-- <input id='{{i.id}}' class='bluebutton narrow right editbutton' onClick='show_input(this.id)' value='edit'> -->
                     <input id='{{i.id}}' name='del_invig{{i.id}}' class='bluebutton narrow' type='submit' value='X'>

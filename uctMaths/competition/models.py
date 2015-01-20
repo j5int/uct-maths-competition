@@ -106,6 +106,7 @@ class Invigilator(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
+    notes       = models.CharField(max_length=500L, db_column='Notes', blank=True)
 
 
 #REQUIREMENT: admin requests responsible teacher details when querying invigilators. 
@@ -216,6 +217,7 @@ class InvigilatorArchive(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt   = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
+    notes       = models.CharField(max_length=500L, db_column='Notes', blank=False)
     #registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
@@ -240,11 +242,11 @@ class InvigilatorResource(resources.ModelResource):
     rt_name = fields.Field(attribute = 'rt_name', column_name='resp. teach. name')
     rt_phone_primary = fields.Field(attribute = 'rt_phone_primary', column_name='resp. teach. phone')
     rt_email = fields.Field(attribute = 'rt_email', column_name='resp. teach. email')
-    school_name = fields.Field(attribute = 'school_name', column_name='school name') #otherwise it just printed the school id (forreign key)
+    school_name = fields.Field(attribute = 'school_name', column_name='school name') #otherwise it just printed the school id (foreign key)
 
     class Meta:
         model = Invigilator
-        export_order = ('school_name', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name','rt_phone_primary','rt_email') #Custom order with custom-fields as last few columns (otherwise they are added in the front)
+        export_order = ('school_name', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'notes', 'venue', 'rt_name','rt_phone_primary','rt_email') #Custom order with custom-fields as last few columns (otherwise they are added in the front)
 
 
 class VenueResource(resources.ModelResource):
