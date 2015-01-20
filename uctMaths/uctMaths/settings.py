@@ -5,7 +5,7 @@ from ConfigParser import RawConfigParser
 config = RawConfigParser()
 config.read('uctMaths/settings.ini')
 
-DEBUG = True
+DEBUG = config.get('debug', 'DEBUG')
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
