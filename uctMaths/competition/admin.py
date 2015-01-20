@@ -170,11 +170,11 @@ class InvigilatorAdmin(ImportExportModelAdmin):
     resource_class = InvigilatorResource
     list_filter=('school', 'venue') #Field filters (shown as bar on right)
 
-    #Adds all invigilators in the Invigilarors table, to the Archived table, and adds the current date
+    #Adds all invigilators in the Invigilators table, to the Archived table, and adds the current date
     def archive_invigilator(modeladmin, request, queryset):
         cursor = connection.cursor()
         
-        cursor.execute ("INSERT INTO `competition_invigilatorarchive`( `School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`,  'Email', `Registered By`) select `School`, `First_name`, `Surname`, , `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By` FROM competition_invigilator ")
+        cursor.execute ("INSERT INTO `competition_invigilatorarchive`( `School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`,  'Email', `Registered By`, `Notes`) select `School`, `First_name`, `Surname`, , `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By`, `Notes` FROM competition_invigilator ")
 
         cursor.execute("UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
         transaction.commit_unless_managed()

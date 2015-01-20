@@ -1,23 +1,14 @@
 from __future__ import unicode_literals
 from django.http import HttpResponse
-from django.http import Http404
-from django.shortcuts import get_object_or_404, render, render_to_response
-from django.template import loader, Context
-from django.core.mail import send_mail
+from django.shortcuts import render_to_response
+from django.template import Context
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.template import RequestContext
-from django import forms
-from django.forms.models import modelformset_factory
-from django.forms.formsets import formset_factory
-from competition.forms import StudentForm, SchoolForm, InvigilatorForm, ResponsibleTeacherForm
-from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
-from django.contrib.auth.models import User
-#from django.contrib.contenttypes import *
-from django.db import connection
-from django.core import exceptions 
+from forms import StudentForm
+from models import SchoolStudent, School, Invigilator, ResponsibleTeacher
+from django.core import exceptions
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 
 import confirmation
 import compadmin
@@ -39,8 +30,8 @@ def index(request):
 @login_required
 def printer_entry_result(request, school_list=None):
     """ Generate the printer entry template for each school (in the optional queryset or the one bound to the user issuing the request)."""
-#had to easy_install html5lib pisa
-#Create the HttpResponse object with the appropriate PDF headers.
+    #had to easy_install html5lib pisa
+    #Create the HttpResponse object with the appropriate PDF headers.
     temp_school_list = []
     if not school_list: #If not called by the admin
         try:
@@ -60,7 +51,6 @@ def printer_entry_result(request, school_list=None):
         individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
             
         grade_summary = compadmin.gradeBucket(student_list) #Bin into categories (Pairing, grade)
-        school_summary_info = [] #Entry for each grade
         count_individuals = 0
         count_pairs = 0
         
@@ -105,7 +95,7 @@ def printer_entry_result(request, school_list=None):
                 'igrades':range(8,13),
                 'total_num':'No students entered for this school'}
 
-        #Render the template with the context (from above)
+            #Render the template with the context (from above)
             template = get_template('printer_entry.html')
             c.update(csrf(request))
             context = Context(c)
@@ -300,7 +290,7 @@ def newstudents(request):
             rtemail = form.getlist('rt_email','')[0].strip().replace(' ', '')
 
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
-            query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary, 
+            query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary,
                                       phone_alt = rtphone_alt, school = rtschool,
                                       email = rtemail)
 
@@ -312,7 +302,7 @@ def newstudents(request):
             query.reference=query.id
             query.save()
 
-        #Registering per grade
+            #Registering per grade
             for grade in range (8,13):
                   #Registering the different pairs
                   #Information is set to null, only school name is given and reference
@@ -323,22 +313,15 @@ def newstudents(request):
                         language = form.getlist('language','')[0]
                         school = assigned_school
                         reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
-                        #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[p]))
-                        paired = True 
-                        #Save first entry for pair
+                        paired = True
                         query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                                 school = school, grade = grade , paired = paired)
                         query.save()
-                        #Save second entry for pair
-                        #query1 = SchoolStudent(firstname = firstname , surname = surname, language = language, reference = reference, 
-                                #school = school, grade=grade,
-                                #paired = paired)
-                        #query1.save()
 
             #Add invigilator information
             for invigilator in invigilator_list:
                 invigilator.delete()
- 
+
             for j in range(10):
                 if form.getlist('inv_firstname','')[j] == u'':
                     ierror = "Invigilator information incomplete"
@@ -349,14 +332,14 @@ def newstudents(request):
                     iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
                     iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
                     iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
-                    #iregistered_by =  User.objects.get(pk=int(form.getlist('inv_registered_by','')[j]))
+                    inotes = form.getlist('inv_notes','')[j].strip()
 
-                    query = Invigilator(school = school, firstname = ifirstname,surname = isurname,
-                                       phone_primary = iphone_primary , phone_alt = iphone_alt, email = iemail)
+                    query = Invigilator(school=school, firstname=ifirstname, surname=isurname,
+                                       phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
                     query.save()
 
-        #Registering students, maximum number of students 25
-        #Returns an error if information entered incorrectly         
+            #Registering students, maximum number of students 25
+            #Returns an error if information entered incorrectly
 
             for student in student_list:
                 student.delete()
@@ -369,8 +352,7 @@ def newstudents(request):
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
                 reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5+1).zfill(2))
-                #registered_by =  User.objects.get(pk=int(form.getlist('registered_by','')[i]))
-                paired = False 
+                paired = False
 
                 query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
                         school = school, grade = grade , paired = paired)
@@ -387,6 +369,7 @@ def newstudents(request):
                 print 'This should not happen'
 
         except Exception as e:
+            #TODO: if the confirmation email fails to send, we do not want to end up with this error message.
             error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
     else:
         form = StudentForm() # An unbound form
