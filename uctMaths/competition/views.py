@@ -73,7 +73,7 @@ def printer_entry_result(request, school_list=None):
                 'responsible_teacher':responsible_teacher[0],
                 'student_list':individual_list,
                 'pair_list':pair_list,
-                'entries_open':compadmin.isOpen(),
+                'entries_open':compadmin.isOpen() or request.user.is_staff,
                 'invigilator_list': invigilator_list,
                 'grades':range(8,13),
                 'grade_left':range(8,11),
@@ -134,9 +134,10 @@ def profile(request):
 
     if compadmin.isOpen():
         closingdate_blurb='Please note that online entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
-    else:
+    elif not request.user.is_staff:
         closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
-        #return HttpResponseRedirect('../register/school_select/school_select.html')
+    else:
+        closingdate_blurb='Online entries are closed but you may still create and modify entries because you have admin rights.'
     return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact})
 
 
@@ -210,7 +211,7 @@ def entry_review(request):
         'responsible_teacher':responsible_teacher[0],
         'student_list':individual_list,
         'pair_list':pair_list,
-        'entries_open':compadmin.isOpen(),
+        'entries_open':compadmin.isOpen() or request.user.is_staff,
         'invigilator_list': invigilator_list,
         'grades':range(8,13), 
         'error':error,
@@ -218,7 +219,7 @@ def entry_review(request):
         'igrades':range(8,13),
         'ierror':error}
 
-    if request.method == 'POST' and 'edit_entry' in request.POST and compadmin.isOpen():  # If the form has been submitted.
+    if request.method == 'POST' and 'edit_entry' in request.POST and (compadmin.isOpen() or request.user.is_staff):  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
@@ -390,7 +391,7 @@ def newstudents(request):
         'pair_range':pairs_per_grade,
         'entries_per_grade':entries_per_grade,
         'invigilator_list': invigilator_list,
-        'entries_open':compadmin.isOpen(),
+        'entries_open':compadmin.isOpen() or request.user.is_staff,
         'grades':range(8,13), 
         'error':error,
         'invigilator_range':range(10-len(invigilator_list)), 
@@ -425,7 +426,7 @@ def school_select(request):
     inv_req_message = ''
     school_assignment = ''
 
-    if not compadmin.isOpen():
+    if not compadmin.isOpen() or request.user.is_staff:
         return HttpResponseRedirect('/accounts/profile')
 
     if request.method == 'POST':  # If the form has been submitted...
