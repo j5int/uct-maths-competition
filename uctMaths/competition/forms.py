@@ -36,10 +36,8 @@ class StudentForm (forms.Form):
         language = forms.CharField()
         school = forms.ModelChoiceField(required=True, widget = forms.Select(), queryset = School.objects.all()) #give all the school options
         grade = forms.IntegerField()
-     #   sex = forms.CharField()
         pair = forms.BooleanField()
         award = forms.CharField()
-        #registered_by = forms.ModelChoiceField(required=True, queryset = User.objects.all()) #for foreign key
 
 #**************************************
 #FORM TO ENTER A NEW SCHOOL
@@ -56,7 +54,6 @@ class SchoolForm (forms.Form):
         fax = forms.CharField()
         contact = forms.CharField()
         email = forms.CharField()
-        #registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all())  #for foreign key
         assigned_user = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #user_name forreign key
 
 #**************************************
@@ -76,8 +73,7 @@ class InvigilatorForm (ModelForm):
         model=Invigilator
 
 class InvigilatorForm (forms.Form):
-        #fields = ['school','firstname','surname', 'grade', 'invig_reg','phone_h','phone_w','fax','fax_w','email','responsible']
-        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt', 'email', 'rt_name', 'rt_phone_primary']
+        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt', 'email', 'notes', 'rt_name', 'rt_phone_primary']
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
@@ -85,7 +81,7 @@ class InvigilatorForm (forms.Form):
         phone_primary = forms.CharField()
         phone_alt = forms.CharField()
         email = forms.CharField()
-        #registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
+        notes = forms.CharField()
 
 #*****************************************
 
@@ -103,7 +99,6 @@ class ResponsibleTeacherForm(forms.Form):
         phone_primary = forms.CharField()
         phone_alt = forms.CharField()
         email = forms.CharField()
-        #registered_by = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #for foreign key
 
 #*****************************************
 
