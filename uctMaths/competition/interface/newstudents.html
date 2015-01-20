@@ -68,10 +68,10 @@
             <tr>
                 <th>First Name*</th>
                 <th>Surname*</th>
-                <!-- <th>Venue</th> -->
 				<th>Phone* </th>
 				<th>Phone (Alternative)</th>
 				<th>Email* </th>
+				<th>Notes </th>
             </tr>
             <!-- Populates the list with previously registered invigilators -->
 
@@ -84,6 +84,7 @@
                     <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" required value="{{invigilator.phone_primary}}"></td>                    
                     <td><input type ="text"  class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
                     <td><input type ="text" class="invig_mail" name="inv_email" required value={{invigilator.email|lower}}></td>
+                    <td><input type ="text" class="invig_notes" name="inv_notes" value={{invigilator.notes}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
                 {% else %}
@@ -91,8 +92,9 @@
                     <td><input type="text" class="invig_firstname" name="inv_firstname" value="{{invigilator.firstname}}"></td>
                     <td><input type="text" class="invig_surname" name="inv_surname" value="{{invigilator.surname}}"></td>
                     <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" value="{{invigilator.phone_primary | cut:" "}}"></td>                    
-                    <td><input type ="text"  class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
+                    <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
                     <td><input type ="text" class="invig_mail" name="inv_email" value={{invigilator.email|lower}}></td>
+                    <td><input type ="text" class="invig_notes" name="inv_notes" value={{invigilator.notes}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
                 {% endif %}
@@ -103,19 +105,21 @@
             {% if invigilator_list|length = 0 and forloop.first %}
                 <tr>
                     <td><input type="text" class="invig_firstname" required name="inv_firstname"></td>
-                    <td><input type="text"  class="invig_surname" required name="inv_surname"></td>
-                    <td><input type ="text"  class="invig_phone_primary" required name="inv_phone_primary"></td>                    
+                    <td><input type="text" class="invig_surname" required name="inv_surname"></td>
+                    <td><input type ="text" class="invig_phone_primary" required name="inv_phone_primary"></td>
                     <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt"></td>
                     <td><input type ="text" class="invig_mail" required name="inv_email"></td>
+                    <td><input type ="text" class="invig_notes" name="inv_notes"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
             {% else %}
                 <tr>
                     <td><input type="text" class="invig_firstname" name="inv_firstname"></td>
-                    <td><input type="text"   class="invig_surname" name="inv_surname"></td>
+                    <td><input type="text" class="invig_surname" name="inv_surname"></td>
                     <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary"></td>                    
                     <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt"></td>
                     <td><input type ="text" class="invig_mail" name="inv_email"></td>
+                    <td><input type ="text" class="invig_notes" name="inv_notes"></td>
                     <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
                 </tr>
             {% endif %}

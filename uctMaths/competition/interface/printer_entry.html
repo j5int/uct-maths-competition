@@ -91,6 +91,7 @@
                 <th>Phone </th>
                 <th>Phone (Alternative)</th>
                 <th>Email </th>
+                <th>Notes </th>
             </tr>
             <!-- Populates the list with previously registered invigilators -->
             {%for invigilator in invigilator_list%}
@@ -100,6 +101,7 @@
                     <td align="center">{{invigilator.phone_primary}}</td>                    
                     <td align="center">{{invigilator.phone_alt}}</td>
                     <td align="center">{{invigilator.email}}</td>
+                    <td align="center">{{invigilator.notes}}</td>
                 </tr>
             {%endfor%}
         </table>

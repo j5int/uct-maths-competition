@@ -845,6 +845,7 @@ def archive_all_invigilators(invigilator_list, wb_sheet):
         wb_sheet.write(cell_row_offset,3, invigilator.phone_primary)
         wb_sheet.write(cell_row_offset,4, invigilator.phone_alt)
         wb_sheet.write(cell_row_offset,5, invigilator.email)
+        wb_sheet.write(cell_row_offset,6, invigilator.notes)
         cell_row_offset = cell_row_offset + 1
 
     return wb_sheet

@@ -97,12 +97,11 @@ def print_invigilators(invigilator_list, width=60):
 
     #Heading for invigilator section
     invig_string = '\nInvigilators:\n'
-    invig_string += '%-20s %-15s %-15s %-20s\n%s\n'%('Name', 'Phone','(Alternate)', 'Email','-'*80)
+    invig_string += '%-20s %-15s %-15s %-20s %-20s\n%s\n'%('Name', 'Phone','(Alternate)', 'Email', 'Notes', '-'*80)
 
     try:
         for invigilator in invigilator_list:
-        #first, surname, phonenumber (+alt), email_addrs 
-            invig_string += '%-20s %-15s %-15s %-20s\n'%(invigilator.surname+', '+invigilator.firstname, invigilator.phone_primary, invigilator.phone_alt,invigilator.email)
+            invig_string += '%-20s %-15s %-15s %-20s %-20s\n'%(invigilator.surname+', '+invigilator.firstname, invigilator.phone_primary, invigilator.phone_alt, invigilator.email, invigilator.notes)
 
     except IndexError: #If the user submitted an empty form
         print 'Index Error (Confirmation email - invigilator)'
