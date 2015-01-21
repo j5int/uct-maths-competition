@@ -1,30 +1,22 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
-from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
+from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
 from datetime import date
-import operator
-import glob
-import csv
 import xlwt
-import os
-from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, HttpResponseRedirect
 import zipfile
-import StringIO
 import datetime
 from django.core import exceptions 
 import views
 #A few administration constants and associated methods to be used around the website.
 
 from django.core.context_processors import csrf
-from reportlab.pdfgen import canvas
 import ho.pisa as pisa
 import StringIO as StrIO
 import cStringIO as StringIO
 from django.template.loader import get_template
 from django.template import loader, Context
-from django.template import RequestContext
 
 
 def admin_emailaddress():
@@ -939,19 +931,23 @@ def printer_school_report(request, school_list=None):
         gold_count = student_list.filter(award='G').count()
         merit_count = student_list.filter(award='M').count()
         merit_count = merit_count + student_list.filter(award='MOX').count()
+        school_award = student_list.filter(award='OX') | student_list.filter(award='MOX')
 
-        school_award_blurb = 'Congratulations. %s has received '%(unicode(assigned_school))
+        school_award_blurb = 'Congratulations! %s has received '%(unicode(assigned_school))
 
         if merit_count > 0 or gold_count > 0:
             if gold_count > 0:
                 school_award_blurb+='%d Gold award%s'%(gold_count, 's' if gold_count>1 else '')
-            if gold_count and merit_count:
+            if school_award.count() > 0:
+                school_award_blurb+='an Oxford Prize for %s %s' % (student_list[0].firstname, student_list[0].surname)
+            if (gold_count > 0 or school_award.count() > 0) and merit_count > 0:
                 school_award_blurb+=' and '
             if merit_count > 0:
                 school_award_blurb+='%d Merit award%s'%(merit_count, 's' if merit_count>1 else '')
         else:
             school_award_blurb = ''
-            #TODO:Congratulate school prize winner instead?
+
+        year = str(datetime.datetime.now().strftime('%Y'))
 
         if responsible_teacher:
             c = {'type':'Students',
@@ -961,7 +957,8 @@ def printer_school_report(request, school_list=None):
                 'student_list':grade_bucket,
                 'entries_open':isOpen(),
                 'school_award_blurb':school_award_blurb,
-                'grade_range':range(8,13),}
+                'grade_range':range(8,13),
+                'year':year}
             #Render the template with the context (from above)
 
             template = get_template('school_report.html')

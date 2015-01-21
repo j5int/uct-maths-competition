@@ -5,8 +5,8 @@
         <table>
             <tr>
             <td>
-            <h1>UCT Mathematics Competition Results</h1>
-            <H2>School report for <u>{{schooln}}</u></H2>
+            <h1>UCT Mathematics Competition {{year}}</h1>
+            <h2>School report for <u>{{schooln}}</u></h2>
             </td>
 
             <td>
@@ -21,18 +21,18 @@
                 </td>
 
             <td>
-                                <table width="225">
+                <table width="225">
                     <tr>
-                    <th width="80">Teacher in charge:</th>
-                    <td>{{responsible_teacher.firstname}} {{responsible_teacher.surname}}</td>
+                    <th width="80" align="left">Teacher in charge:</th>
+                    <td align="left">{{responsible_teacher.firstname}} {{responsible_teacher.surname}}</td>
                     </tr>
                     <tr>
-                        <th width="80">Phone:</th>
-                        <td> {{responsible_teacher.phone_primary}} / {{responsible_teacher.phone_alt}} </td>
+                        <th width="80" align="left">Phone:</th>
+                        <td align="left"> {{responsible_teacher.phone_primary}} / {{responsible_teacher.phone_alt}} </td>
                     </tr>
                     <tr>
-                        <th width="80">Email:</th>
-                        <td>{{responsible_teacher.email}}</td>
+                        <th width="80" align="left">Email:</th>
+                        <td align="left">{{responsible_teacher.email}}</td>
                     </tr>
                 </table>
 
@@ -51,32 +51,33 @@
                 <p><b>Registered Grade {{grade}} participants:</b></p>
                     <table width="325">
                     <tr>
-                        <th>Reference </th>
-                        <th>First Name</th>
-                        <th>Surname</th>
-                        <th width="23">Score</th>
-                        <th width="23"> Rank </th>
-                        <th width="90"></th> 
+                        <th align="left">Reference </th>
+                        <th align="left">First Name</th>
+                        <th align="left">Surname</th>
+                        <th width="23" align="left">Score</th>
+                        <th width="23" align="left"> Rank </th>
+                        <th width="90" align="left"></th>
                     </tr>
                     <!-- Populates the list with previously registered students -->
                     {%for key, student_l in student_list.items%}
                         {% if grade == key %} <!-- only for the current grade -->
                             {%for student in student_l%}
                                 <tr>
-                                <td align="center">{{student.reference}}</td>
-                                <td align="center">{{student.firstname}}</td>
-                                <td align="center">{{student.surname}}</td>
-                                <td align="center">{{student.score}}</td>
-                                <td align="center">{%if student.award%}
+                                <td>{{student.reference}}</td>
+                                <td>{{student.firstname}}</td>
+                                <td>{{student.surname}}</td>
+                                <td>{{student.score}}</td>
+                                <td>{%if student.award%}
                                     {{student.rank}}
                                     {%endif%}</td>
-                                <td align="center">{%if 'G' in student.award%}
+                                <td>{%if 'G' == student.award%}
                                     Gold
-                                    {%elif 'M' in student.award%}
+                                    {%elif 'M' == student.award%}
                                     Merit
-                                    {%endif%}
-                                    {% if 'OX' in student.award %}
-                                    , School Award
+                                    {%elif 'MOX' == student.award%}
+                                    Merit, School Award
+                                    {%elif 'OX' == student.award %}
+                                    School Award
                                     {%endif%}
                                     </td>
                                 </tr>
