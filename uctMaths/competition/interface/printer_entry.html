@@ -6,22 +6,22 @@
         <table>
             <tr>
             <td>
-            <h1>UCT Mathematics Competition</h1>
-            <H2>Entry confirmation for <u>{{schooln}}</u></H2>
+            <h1>UCT Mathematics Competition {{year}}</h1>
+            <h2>Entry confirmation for <u>{{schooln}}</u></h2>
             </td>
             
             <td>
-                <table border="0.1" width="165">
-                    <tr align="center">
-                        <th>Grade:</th>
-                        <th><b>8</b></th>
-                        <th><b>9</b></th>
-                        <th><b>10</b></th>
-                        <th><b>11</b></th>
-                        <th><b>12</b></th>
+                <table width="165">
+                    <tr>
+                        <th align="left" valign="center">Grade:</th>
+                        <th align="center"><b>8</b></th>
+                        <th align="center"><b>9</b></th>
+                        <th align="center"><b>10</b></th>
+                        <th align="center"><b>11</b></th>
+                        <th align="center"><b>12</b></th>
                     </tr>
-                    <tr align="center">
-                        <th width="80">Individuals:</th>
+                    <tr>
+                        <th width="80" align="left">Individuals:</th>
                         {%for grd in grades%}
                         {%for key, s in student_list.items%}
                         {% if grd == key %}
@@ -30,8 +30,8 @@
                         {%endfor%}
                         {%endfor%}
                     </tr>
-                    <tr align="center">
-                        <th width="80">Pairs:</th>
+                    <tr>
+                        <th width="80" align="left">Pairs:</th>
                         {%for grd in grades%}
                         {%for key, p in pair_list.items%}
                         {% if grd == key %}
@@ -62,18 +62,18 @@
         {% csrf_token %}
         <table width="500">
             <tr>
-                <th>First Name</th>
-                <th>Surname</th>
-                <th>Phone </th>
-                <th>Phone (Alternative)</th>
-                <th>Email </th>
+                <th align="left">First Name</th>
+                <th align="left">Surname</th>
+                <th align="left">Phone </th>
+                <th align="left">Phone (Alternative)</th>
+                <th align="left">Email </th>
             </tr>
             <tr>
-                <td align="center">{{responsible_teacher.firstname}}</td>
-                <td align="center">{{responsible_teacher.surname}}</td>
-                <td align="center">{{responsible_teacher.phone_primary}}</td>
-                <td align="center">{{responsible_teacher.phone_alt}}</td>
-                <td align="center">{{responsible_teacher.email}}</td>
+                <td>{{responsible_teacher.firstname}}</td>
+                <td>{{responsible_teacher.surname}}</td>
+                <td>{{responsible_teacher.phone_primary}}</td>
+                <td>{{responsible_teacher.phone_alt}}</td>
+                <td>{{responsible_teacher.email}}</td>
             </tr>
         </table>
     </div>
@@ -86,22 +86,22 @@
         {% csrf_token %}
         <table width="500">
             <tr>
-                <th>First Name</th>
-                <th>Surname</th>
-                <th>Phone </th>
-                <th>Phone (Alternative)</th>
-                <th>Email </th>
-                <th>Notes </th>
+                <th align="left">First Name</th>
+                <th align="left">Surname</th>
+                <th align="left">Phone </th>
+                <th align="left">Phone (Alternative)</th>
+                <th align="left">Email </th>
+                <th align="left">Notes </th>
             </tr>
             <!-- Populates the list with previously registered invigilators -->
             {%for invigilator in invigilator_list%}
                 <tr>
-                    <td align="center">{{invigilator.firstname}}</td>
-                    <td align="center">{{invigilator.surname}}</td>
-                    <td align="center">{{invigilator.phone_primary}}</td>                    
-                    <td align="center">{{invigilator.phone_alt}}</td>
-                    <td align="center">{{invigilator.email}}</td>
-                    <td align="center">{{invigilator.notes}}</td>
+                    <td>{{invigilator.firstname}}</td>
+                    <td>{{invigilator.surname}}</td>
+                    <td>{{invigilator.phone_primary}}</td>
+                    <td>{{invigilator.phone_alt}}</td>
+                    <td>{{invigilator.email}}</td>
+                    <td>{{invigilator.notes}}</td>
                 </tr>
             {%endfor%}
         </table>
@@ -118,16 +118,16 @@
                 <p><b>Registered Grade {{grade}} participants:</b></p>
                 <table width="160">
                 <tr>
-                <th>First Name</th>
-                <th>Surname</th>
+                <th align="left">First Name</th>
+                <th align="left">Surname</th>
                 </tr>
                 <!-- Populates the list with previously registered students -->
                 {%for key, student_l in student_list.items%}
                 {% if grade == key %} <!-- only for the current grade -->
                 {%for student in student_l%}
                 <tr>
-                <td align="center">{{student.firstname}}</td>
-                <td align="center">{{student.surname}}</td>
+                <td>{{student.firstname}}</td>
+                <td>{{student.surname}}</td>
                 </tr>
                 {%endfor%}
                 {%endif%}
@@ -150,16 +150,16 @@
                 <p><b>Registered Grade {{grade|add:3}} participants:</b></p>
                 <table width="160">
                 <tr>
-                <th>First Name</th>
-                <th>Surname</th>
+                <th align="left">First Name</th>
+                <th align="left">Surname</th>
                 </tr>
                 <!-- Populates the list with previously registered students -->
                 {%for key, student_l in student_list.items%}
                 {% if grade|add:3 == key %} <!-- only for the current grade -->
                 {%for student in student_l%}
                 <tr>
-                <td align="center">{{student.firstname}}</td>
-                <td align="center">{{student.surname}}</td>
+                <td>{{student.firstname}}</td>
+                <td>{{student.surname}}</td>
                 </tr>
                 {%endfor%}
                 {%endif%}
