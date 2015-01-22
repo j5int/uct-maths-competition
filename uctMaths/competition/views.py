@@ -61,7 +61,8 @@ def printer_entry_result(request, school_list=None):
         invigilator_list = Invigilator.objects.filter(school = assigned_school)
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
-        
+        year = str(datetime.now().strftime('%Y'))
+
         #If someone managed to get to this page without having made an entry
         if not responsible_teacher and not school_list:
             return HttpResponseRedirect('../students/newstudents.html')
@@ -79,7 +80,8 @@ def printer_entry_result(request, school_list=None):
                 'grade_left':range(8,11),
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13),
-                'total_num':int(count_pairs*2+count_individuals)}
+                'total_num':int(count_pairs*2+count_individuals),
+                'year':year}
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
             c.update(csrf(request))
