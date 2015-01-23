@@ -44,9 +44,9 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy 
         recipient_list.append(compadmin.admin_emailaddress())
 
     email = EmailMessage(
-                        'UCT Mathematics Competition %s Entry Confirmation'%(in_school),#Subject line
+                        '(Do not reply) UCT Mathematics Competition %s Entry Confirmation'%(in_school),#Subject line
                         output_string, #Body
-                        'UCTMathsComp@sjsoft.com',#from
+                        'UCTMathsCompetition@j5int.com',#from
                         recipient_list,
                         )
     result = views.printer_entry_result(request)

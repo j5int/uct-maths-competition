@@ -80,10 +80,10 @@ def handle_uploaded_file(inputf):
         return ['Input filename error. Please ensure that the file name contains PR or IND so that pair or individual (respectively) results import can occur.']
  #------------------------------------------------#
 
-    input_fstring=''
+    input_fstring=u''
     #Chunks for handling larger files - will essentially just have a long string of char's after this
     for chunk in inputf.chunks():
-        input_fstring += chunk
+        input_fstring += chunk.decode('utf-8','replace') #Replace accented characters with unicode equivalents
 
     #Format for INIDIVIDUALS is (INDGR in filename):
     #"ReferenceN [0]      ","ENG", "School; Surname, (I)nitials", ... , [8] 75.0 (Score), ... ,[11] 208 (Rank), ...
@@ -92,6 +92,7 @@ def handle_uploaded_file(inputf):
     #NOTE: "ABSENT" can replace all scores
 
     list_input = input_fstring.replace('\r', '').replace('"', '').replace(';',',').split('\n')#Split based on carriage returns
+
     dne_list = [] #Hold "list of errors" to be placed on template. Called "Does Not Exist (DNE) list"
 
     #For each line in the input string, complete formatting steps
@@ -118,6 +119,7 @@ def handle_uploaded_file(inputf):
                 student = SchoolStudent.objects.get(reference=ref_num)
                 student.score = float(score)
                 student.rank = rank
+                student.award = ''
                 student.save()
             #Individual exceptions: using get() generates exceptions
             except ObjectDoesNotExist:
