@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from competition.models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher 
+from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
 from django.core.mail import EmailMessage
 import datetime
 
@@ -11,25 +11,26 @@ import views
 # See info in settings.py for SMTP server emulation and set-up
 
 @login_required
-def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy with having 'school' here
+def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):
     """ Formats student information for the particular user and sends it via. smtp"""
 
-    username = request.user #Current user
+    if request.user.first_name not in ['', None] and request.user.last_name  not in ['', None]:
+        name = request.user.first_name + " " + request.user.last_name
+    else:
+        name = request.user.username
     student_list = SchoolStudent.objects.filter(school = in_school)
     invigilator_list = Invigilator.objects.filter(school = in_school)
-    rteacher = ResponsibleTeacher.objects.filter(school = in_school)[0] ##TODO only one per school
+    rteacher = ResponsibleTeacher.objects.filter(school = in_school)[0]
 
     #Header
     output_string = 'Dear %s, \n\n' \
-                    'This email is in confirmation of your entry for %s to the UCT Mathematics Competition. ' \
+                    'This email confirms your entry for %s to the UCT Mathematics Competition. ' \
                     'Attached you will find a printer-friendly .pdf file that contains a record of your school\'s ' \
                     'entry. Below is a text-based summary of that same information.\n\n' \
                     'Regards,\n\n' \
-                    'The UCT Mathematics Competition team'%(username, in_school)
+                    'The UCT Mathematics Competition team'%(name, in_school)
     output_string += UMC_header()
-    output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(in_school, username, UMC_datetime())
-
-    #output_string += print_responsibleTeacher(rteacher) #In progress
+    output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(in_school, name, UMC_datetime())
 
     output_string += print_responsibleTeacher(rteacher)
     output_string += print_invigilators(invigilator_list)
@@ -39,14 +40,14 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):#Not happy 
     #temp_output.write(temp_output)
     #temp_output.close()
 
-    recipient_list = [username.email]
+    recipient_list = [request.user.email]
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
 
     email = EmailMessage(
                         '(Do not reply) UCT Mathematics Competition %s Entry Confirmation'%(in_school),#Subject line
                         output_string, #Body
-                        'UCTMathsCompetition@j5int.com',#from
+                        'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
                         recipient_list,
                         )
     result = views.printer_entry_result(request)
