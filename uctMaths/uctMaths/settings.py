@@ -24,6 +24,17 @@ DATABASES = {
     }
 }
 
+#Email settings
+SMTP_ENABLED = config.get('email', 'SMTP_ENABLED')
+EMAIL_BACKEND = config.get('email', 'EMAIL_BACKEND')
+EMAIL_USE_TLS = config.get('email', 'EMAIL_USE_TLS')
+EMAIL_HOST = config.get('email', 'EMAIL_HOST')
+EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = config.get('email', 'DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = config.get('email', 'SERVER_EMAIL')
+EMAIL_PORT = config.get('email', 'EMAIL_PORT')
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
