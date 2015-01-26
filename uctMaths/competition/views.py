@@ -428,7 +428,7 @@ def school_select(request):
     inv_req_message = ''
     school_assignment = ''
 
-    if not compadmin.isOpen() or request.user.is_staff:
+    if not (compadmin.isOpen() or request.user.is_staff):
         return HttpResponseRedirect('/accounts/profile')
 
     if request.method == 'POST':  # If the form has been submitted...
