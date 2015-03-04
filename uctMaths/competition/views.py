@@ -12,8 +12,8 @@ from django.contrib.auth.decorators import login_required
 
 import confirmation
 import compadmin
+import logging
 
-from reportlab.pdfgen import canvas
 import ho.pisa as pisa
 import cStringIO as StringIO
 from django.template.loader import get_template
@@ -366,13 +366,17 @@ def newstudents(request):
                 assigned_school.entered=1 #The school has made an entry
                 assigned_school.save()
                  #The school has made an entry
-                confirmation.send_confirmation(request, assigned_school,cc_admin=True)
-                return HttpResponseRedirect('../submitted.html')
+                try:
+                    confirmation.send_confirmation(request, assigned_school,cc_admin=True)
+                    return HttpResponseRedirect('../submitted.html')
+                except Exception:
+                    logger = logging.getLogger(__name__)
+                    logger.exception()
+                    return HttpResponseRedirect('../submitted_noemail.html')
             else:
                 print 'This should not happen'
 
         except Exception as e:
-            #TODO: if the confirmation email fails to send, we do not want to end up with this error message.
             error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
     else:
         form = StudentForm() # An unbound form
