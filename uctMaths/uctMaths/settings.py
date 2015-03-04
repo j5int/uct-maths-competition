@@ -200,7 +200,7 @@ LOGGING = {
         'applogfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': 'APPNAME.log',
+            'filename': 'UCTMATHS.log',
             'maxBytes': 1024*1024*15, # 15MB
             'backupCount': 10,
         },
