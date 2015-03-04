@@ -1,5 +1,4 @@
 # Django settings for uctMaths project.
-
 from ConfigParser import RawConfigParser
 
 config = RawConfigParser()
@@ -178,6 +177,7 @@ INSTALLED_APPS = (
     'import_export', #(https://django-import-export.readthedocs.org/en/latest/configuration.html)
 )
 
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
@@ -196,7 +196,14 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'applogfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': 'APPNAME.log',
+            'maxBytes': 1024*1024*15, # 15MB
+            'backupCount': 10,
+        },
     },
     'loggers': {
         'django.request': {
@@ -204,5 +211,10 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'APPNAME': {
+            'handlers': ['applogfile',],
+            'level': 'DEBUG',
+        },
+    }
     }
 }
