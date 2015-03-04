@@ -216,5 +216,4 @@ LOGGING = {
             'level': 'DEBUG',
         },
     }
-    }
 }
