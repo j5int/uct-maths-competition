@@ -111,9 +111,7 @@ def auto_allocate(venue_list):
     print len(student_list), ' students are unallocated' #TODO: Error message to user?
     grade_bucket = gradeBucket(student_list)
 
-    venue_list.order_by('-seats') #Order by number of seats, descending.
-
-    for venue in venue_list: 
+    for venue in venue_list.order_by('-seats'): #Allocate from the largest venue first.
         #Each venue in QuerySet where grade!=None; while students exist in grade bucket 
         #See method 'grade_bucket' for bucket format (Key is a tuple!)
         while venue.grade and grade_bucket[venue.grade, venue.allocated_to_pairs]:
@@ -315,31 +313,31 @@ def output_studenttags(student_list):
     
     with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
         for grade in range(8, 13):
-            #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
             output_string = StrIO.StringIO()
             for student in grade_bucket[grade, False]:
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
                 s_line = u''
                 s_line += '\"' + student.reference + '\",'
                 s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
-                s_line += '\"' + unicode(student.school) +  '\",'
+                s_line += '\"' + unicode(student.school) + '\",'
                 s_line += str(student.grade) + ','
-                venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
-                s_line += '\"' + str(venue_str) + '\"\n'
+                venue_str = venue_object[0] if len(venue_object) == 1 else 'Unallocated'
+                s_line += '\"' + unicode(venue_str) + '\"\n'
                 output_string.write(s_line)
 
             #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
             zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
             output_string.close()
+
             output_string = StrIO.StringIO()
             for student in grade_bucket[grade, True]: #Paired students in [grade]
                 venue_object = [venue for venue in venue_list if venue.code == student.venue]
                 s_line = u''
                 s_line += '\"' + student.reference + '\",'
                 s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
-                s_line += '\"' + unicode(student.school) +  '\",'
+                s_line += '\"' + unicode(student.school) + '\",'
                 s_line += str(student.grade) + ','
-                venue_str = venue_object[0] if len(venue_object)==1 else 'Unallocated'
+                venue_str = venue_object[0] if len(venue_object) == 1 else 'Unallocated'
                 s_line += '\"' + unicode(venue_str) + '\"\n'
                 output_string.write(s_line)
 
@@ -695,7 +693,7 @@ def school_summary(request):
     
     wb_sheet = output_workbook.add_sheet('School Ranking Summary')
     school_rank = school_list.order_by('-rank')
-    school_summary_sheet(school_list, wb_sheet, rank_extend=True)
+    school_summary_sheet(school_rank, wb_sheet, rank_extend=True)
 
     #Return the response with attached content to the user
     response = HttpResponse()
@@ -744,7 +742,7 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
-    header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Individuals', 'Pairs', 'Total']
+    header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Resp. Teach. Phone', 'Resp. Teach. Alt Phone', 'Individuals', 'Pairs', 'Total']
     if rank_extend:
         header.append('Rank')
         header.append('Score')
@@ -766,7 +764,6 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
         if student_list and resp_teacher: #If the lists are not empty
 
             grade_summary = gradeBucket(student_list) #Bin into categories (Pairing, grade)
-            school_summary_info = [] #Entry for each grade
             count_individuals = 0
             count_pairs = 0
 
@@ -778,12 +775,14 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
             wb_sheet.write(cell_row_offset,0,unicode(school_obj.name))
             wb_sheet.write(cell_row_offset,1,('%s %s')%(resp_teacher.firstname, resp_teacher.surname))
             wb_sheet.write(cell_row_offset,2,resp_teacher.email)
-            wb_sheet.write(cell_row_offset,4,count_pairs)
-            wb_sheet.write(cell_row_offset,3,count_individuals)
-            wb_sheet.write(cell_row_offset,5,int(count_pairs*2 + count_individuals))
+            wb_sheet.write(cell_row_offset,3,resp_teacher.phone_primary)
+            wb_sheet.write(cell_row_offset,4,resp_teacher.phone_alt)
+            wb_sheet.write(cell_row_offset,5,count_individuals)
+            wb_sheet.write(cell_row_offset,6,count_pairs)
+            wb_sheet.write(cell_row_offset,7,int(count_pairs*2 + count_individuals))
             if rank_extend:
-                wb_sheet.write(cell_row_offset,6,school_obj.rank)
-                wb_sheet.write(cell_row_offset,7,school_obj.score)
+                wb_sheet.write(cell_row_offset,8,school_obj.rank)
+                wb_sheet.write(cell_row_offset,9,school_obj.score)
 
             responsible_teacher_mailinglist.append(resp_teacher.email)
     
