@@ -666,13 +666,15 @@ def assign_student_awards():
             pair.save()
 
     for ischool in school_list:
-        school_students = SchoolStudent.objects.filter(school=ischool, paired=False).order_by('rank')
+        #See condition below (student must have entered AND written)
+        #TODO: Do this better - so far assumes no student actually scored 0
+        school_students = SchoolStudent.objects.filter(school=ischool, paired=False, score__gt=1).order_by('rank')
 
-        #School may only receive an OX award if 10 or more individuals entered.
+        #School may only receive an OX award if 10 or more individuals entered AND wrote.
         if len(school_students)>= 10:
         
             #The award winner is the one with the highest rank at the school (including possible ties)
-            if school_students and school_students[0].score:
+            if school_students:
                 for student in school_students:
                     if student.rank == school_students[0].rank:
                         if student.award is None:

@@ -66,7 +66,11 @@
                                 <td>{{student.reference}}</td>
                                 <td>{{student.firstname}}</td>
                                 <td>{{student.surname}}</td>
-                                <td>{{student.score}}</td>
+                                <td>{%if student.score > 0%}
+                                    {{student.score}}
+                                    {%else%}
+                                    ABSENT
+                                    {%endif%}</td>
                                 <td>{%if student.award%}
                                     {{student.rank}}
                                     {%endif%}</td>
