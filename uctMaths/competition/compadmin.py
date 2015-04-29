@@ -666,6 +666,8 @@ def assign_student_awards():
             pair.save()
 
     for ischool in school_list:
+        #See condition below (student must have entered AND written)
+        #TODO: Do this better - so far assumes no student actually scored 0
         school_students = SchoolStudent.objects.filter(school=ischool, paired=False, score__gt=1).order_by('rank')
 
         #School may only receive an OX award if 10 or more individuals entered AND wrote.
