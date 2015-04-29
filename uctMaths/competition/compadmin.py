@@ -938,7 +938,7 @@ def printer_school_report(request, school_list=None):
             if gold_count > 0:
                 school_award_blurb+='%d Gold award%s'%(gold_count, 's' if gold_count>1 else '')
             if school_award.count() > 0:
-                school_award_blurb+='an Oxford Prize for %s %s' % (student_list[0].firstname, student_list[0].surname)
+                school_award_blurb+='an Oxford Prize for %s %s' % (school_award[0].firstname, school_award[0].surname)
             if (gold_count > 0 or school_award.count() > 0) and merit_count > 0:
                 school_award_blurb+=' and '
             if merit_count > 0:
