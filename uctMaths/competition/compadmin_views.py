@@ -91,6 +91,11 @@ def handle_uploaded_file(inputf):
     #"ReferenceN [0]      ","ENG", "School; Pair / Paar X" , ... , [8] 75.0 (Score), ... ,[11] 208 (Rank), ...
     #NOTE: "ABSENT" can replace all scores
 
+    # TODO: clean this up. It depends on the field formatting in the output_PRN_files method
+    # in compadmin.py, which is slightly different for individuals and pairs.
+    # Also, the homemade CSV parser in the following row should use a standard library which would ignore the commas
+    # and semicolons inside a quoted field.
+    
     list_input = input_fstring.replace('\r', '').replace('"', '').replace(';',',').split('\n')#Split based on carriage returns
 
     dne_list = [] #Hold "list of errors" to be placed on template. Called "Does Not Exist (DNE) list"
@@ -105,14 +110,15 @@ def handle_uploaded_file(inputf):
             #Populate the relevant details 
             if 'ABSENT' in line:
                 score = 0
-                rank = None #TODO:Check that this is okay...
+                rank = None
             else:
                 if not pair_logic:
                     score = proc_line[8].strip()
                     rank = proc_line[11].strip()
                 else:
-                    score = proc_line[7].strip()
-                    rank = proc_line[10].strip()
+                    score = proc_line[6].strip()
+                    rank = proc_line[9].strip()
+
 
         #Search DB for that reference number:
             try:
