@@ -382,7 +382,6 @@ def upload_results(request, student_list):
     response = HttpResponseRedirect('../../../competition/admin/upload_results.html')
     return response
     
-#TODO
 def rank_schools(school_list):
     """ Ranks schools based on a sum of the top X scores. X is set via the 'Competition' form. """
     comp = Competition.objects.all() #Should only be one!
@@ -390,7 +389,7 @@ def rank_schools(school_list):
     if comp.count() == 1:
         top_score_candidates = comp[0].num_schoolcandidate_scores
     else:
-        num_schoolcandidate_scores = 0
+        top_score_candidates = 0
         
     all_schools = School.objects.all()
 
@@ -400,31 +399,15 @@ def rank_schools(school_list):
         #FIXME ?: These DB operations just wouldn't work with the distinct command. Using less efficient python-lists methods
         #candidates = SchoolStudent.objects.order_by('reference').distinct('reference')#.filter(school=school).exclude(score=None)
         #candidates = candidates.order_by('-score')
-        
-        candidatesQS = SchoolStudent.objects.filter(school=school).exclude(score=None).order_by('-score')
-        #Remove pairs (duplicate REF numbers)
-        candidates = []
-        
-        #Pretty sloppy way of doing it. Need to be able to remove a C from list without affecting DB record
-            #Couldn't find a method in QuerySet API
 
-        for c in candidatesQS:
-            #print c.firstname, c.surname, c.score
-            candidates.append(c)
-            
-        for c in candidates:
-            for index, p in enumerate(candidates):
-                if p.paired and c.paired and p.reference == c.reference: #Match is found
-                    candidates.pop(index)
+        candidates = SchoolStudent.objects.filter(school=school).exclude(score=None).order_by('-score')
 
         #Calculate schools' total scores
         total_score = 0
         #Sum candidates scores (already sorted in descending order)
         for i, c in enumerate(candidates):
-            #print i, c.firstname, c.surname, c.score
             if i < top_score_candidates:
                 total_score = total_score + c.score
-        #print school.name, total_score
         school.score = total_score
         school.save()
 
