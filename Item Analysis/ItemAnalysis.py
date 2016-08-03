@@ -13,21 +13,21 @@ class MultipleChoiceStats:
         self.questions = dict()
         with open(filename, 'rb') as csv_file:
             csv_reader = unicodecsv.reader(csv_file)
-            q = 0
+            q = 1
             for row in csv_reader:
-                q += 1
                 self.questions[q] = {
                     'correct': row[6],
-                    'choice1': row[7],
-                    'choice2': row[8],
-                    'choice3': row[9],
-                    'choice4': row[10],
-                    'choice5': row[11],
-                    'abstain': row[12]}
+                    'abstain': row[7],
+                    'choice1': row[8],
+                    'choice2': row[9],
+                    'choice3': row[10],
+                    'choice4': row[11],
+                    'choice5': row[12]}
+                q += 1
 
 def print_header():
-    print "Question  &            &  1   &  2   &  3   &  4   &  5   & Abstain\\cr"
-    print "          &            &      &      &      &      &      &        \\cr"
+    print "Question   &            &  1   &  2   &  3   &  4   &  5   & Abstain\\cr"
+    print "           &            &      &      &      &      &      &        \\cr"
 
 
 def print_question_output(question, individual_stats, pair_stats):
@@ -35,7 +35,7 @@ def print_question_output(question, individual_stats, pair_stats):
     Print the TEX output to this question. The first line is for individuals and the next for pairs:
     """
     iq = individual_stats.questions[question]
-    print '\\qquad %2d & Individual' % question,
+    print '\\qquad %2d & Individuals' % question,
     for c in range(1, 6):
         if c == int(iq['correct']):
             print '&[%2s] ' % iq['choice%s' % c],
@@ -44,7 +44,7 @@ def print_question_output(question, individual_stats, pair_stats):
     print '& %2s     \\cr' % iq['abstain']
 
     pq = pair_stats.questions[question]
-    print '          & Pair      ',
+    print '          & Pairs      ',
     for c in range(1, 6):
         if c == int(pq['correct']):
             print '&[%2s] ' % pq['choice%s' % c],
@@ -52,7 +52,7 @@ def print_question_output(question, individual_stats, pair_stats):
             print '& %2s  ' % pq['choice%s' % c],
     print '& %2s     \\cr' % pq['abstain']
 
-    print '          &            &      &      &      &      &      &        \\cr'
+    print '          &             &      &      &      &      &      &        \\cr'
 
 
 def main():
