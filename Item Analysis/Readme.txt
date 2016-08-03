@@ -12,7 +12,7 @@ This program consists of the following files:
 You should use the program RunMe.bat
 
 Input files: 
-  Place the files INDGR8.ITM, PRGR8.ITM, ... INDGR12.ITM, PRGR12.ITM in the same
+  Place the files INDGR8.ITM, PRSGR8.ITM, ... INDGR12.ITM, PRSGR12.ITM in the same
   directory as the program RunMe.bat and ItemAnalysis.exe.
 
 Output files:
