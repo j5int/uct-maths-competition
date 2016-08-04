@@ -6,27 +6,23 @@ For each grade, it combines the Individual and Pair item analysis files
 into a single table in a TEX file.
 
 This program consists of the following files:
- ItemAnalysis.exe     - performs the conversion for a single grade
- ItemAnalysis.C       - C program which was compiled to produce ItemAnalysis.exe
- RunMe.bat            - calls ItemAnalysis.exe with the correct parameters for each grade.
+ ItemAnalysis.py      - Python program to perform the conversion for a single grade
+ RunMe.bat            - Runs ItemAnalysis.py with the correct parameters for each grade.
 
 You should use the program RunMe.bat
 
 Input files: 
-  Place the files INDGR8.ITM, PRGR8.ITM, ... INDGR12.ITM, PRGR12.ITM in the same
+  Place the files INDGR8.ITM, PRSGR8.ITM, ... INDGR12.ITM, PRSGR12.ITM in the same
   directory as the program RunMe.bat and ItemAnalysis.exe.
 
 Output files:
-  The output will be placed in the files ALLGR8.ITM, ... ALLGR12.ITM
+  The output will be placed in the files ALLGR8.TEX, ... ALLGR12.TEX
 
-Alternatively you can edit the file RunMe.bat to change these default file names, 
-but this is not recommended.
+Alternatively you can edit the file RunMe.bat to change these default file names.
 
-By Ian Webb, January 2001
-Updated 2011
 
 ------------------
-SAMPLE INPUT DATA:
+SAMPLE INPUT DATA (individual data only; pairs file is similar):
 
 "","","20010325","",1,"1",1,0,67,7,10,4,11,0,0,0,0,1.0000,"",0,0,1,0,0,57,54,47,45,20,2,4,5,6,7,0,2,3,6,23,0,2,3,3,6,7,4,7,8,9
 "","","20010325","",2,"3",3,2,9,10,72,6,0,0,0,0,0,1.0000,"",0,0,0,2,5,0,4,2,6,19,0,2,6,13,13,66,58,53,38,22,0,2,5,8,6,0,0,0,1,0
