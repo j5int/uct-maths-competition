@@ -1,7 +1,7 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
-from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
+from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
 from django.http import HttpResponse, HttpResponseRedirect
@@ -83,21 +83,24 @@ def closingDate():
         return 'a date yet to be set by the admin'
 
 def gradeBucket(student_list):
-    """ Sort ("bucket") QuerySet (a list of students) into a dict with key based on (grade (integer), pairing status.
-    Simplifies sorting/accessor logic base on entity. ie. [student.grade, student.pair] or [venue.grade, venue.allocated_to_pairs] """
+    """
+    Sort ("bucket") the QuerySet list of students into a dict with key based on
+    grade (integer), pairing status (boolean), and location (string).
+    """
 
-    grade_bucket = { #(grade (integer), is_paired (boolean))
-                     (8, True) : [], (8, False) : [],
-                     (9, True) : [], (9, False) : [],
-                     (10, True) : [], (10, False) : [],
-                     (11, True) : [], (11, False) : [],
-                     (12, True) : [], (12, False) : []
-                    }
+    #The key is a tuple: (grade, is_paired, location)
+    grade_bucket = {}
+
+    for grade in range(6,10):
+        for is_paired in [True, False]:
+            for location in LOCATIONS:
+                grade_bucket[grade, is_paired, location[0]] = []
+
     try:
         for student in student_list:
-            grade_bucket[student.grade, student.paired].append(student)
-    #Empty QuerySet
+            grade_bucket[student.grade, student.paired, student.location].append(student)
     except IndexError:
+        # Empty QuerySet
         print 'Index Error'
 
     return grade_bucket
@@ -108,32 +111,30 @@ def auto_allocate(venue_list):
     venue_deallocate(venue_list)
     student_list = SchoolStudent.objects.all().filter(venue='').order_by('grade') #Order by grade (ASCENDING)
 
-    print len(student_list), ' students are unallocated' #TODO: Error message to user?
+    print len(student_list), ' students are unallocated'
     grade_bucket = gradeBucket(student_list)
 
     for venue in venue_list.order_by('-seats'): #Allocate from the largest venue first.
         #Each venue in QuerySet where grade!=None; while students exist in grade bucket 
         #See method 'grade_bucket' for bucket format (Key is a tuple!)
-        while venue.grade and grade_bucket[venue.grade, venue.allocated_to_pairs]:
+        while venue.grade and grade_bucket[venue.grade, venue.allocated_to_pairs, venue.location]:
             #Pair logic
             if venue.occupied_seats < venue.seats - 1 and venue.allocated_to_pairs:
-                studentp1 = grade_bucket[venue.grade, venue.allocated_to_pairs].pop()
-
-                #Update both students in the pair
-                studentp1.venue = venue.code
-                studentp1.save()
+                pair = grade_bucket[venue.grade, venue.allocated_to_pairs, venue.location].pop()
+                pair.venue = venue.code
+                pair.save()
 
                 #Update venue
-                venue.occupied_seats+=2
+                venue.occupied_seats += 2
                 venue.save()
 
             #Individual logic
             elif venue.occupied_seats < venue.seats and not venue.allocated_to_pairs:
-                student = grade_bucket[venue.grade, venue.allocated_to_pairs].pop()
+                student = grade_bucket[venue.grade, venue.allocated_to_pairs, venue.location].pop()
                 student.venue = venue.code
                 student.save()
 
-                venue.occupied_seats+=1
+                venue.occupied_seats += 1
                 venue.save()
 
             else:
@@ -144,7 +145,7 @@ def venue_deallocate(venue_list):
     student_list = SchoolStudent.objects.all().order_by('grade')
 
     for venue in venue_list:
-        venue.occupied_seats=0
+        venue.occupied_seats = 0
         venue.save()
 
         for student in student_list: #Edit student records to reflect deallocation
