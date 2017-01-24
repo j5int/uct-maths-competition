@@ -30,7 +30,7 @@ class StudentForm (ModelForm):
         model=SchoolStudent
         
 class StudentForm (forms.Form):
-        fields = ['firstname', 'surname', 'language', 'school','grade','venue']
+        fields = ['firstname', 'surname', 'language', 'school', 'grade', 'venue', 'location']
         firstname = forms.CharField()
         surname = forms.CharField()
         language = forms.CharField()
@@ -38,6 +38,7 @@ class StudentForm (forms.Form):
         grade = forms.IntegerField()
         pair = forms.BooleanField()
         award = forms.CharField()
+        location = forms.CharField()
 
 #**************************************
 #FORM TO ENTER A NEW SCHOOL
@@ -46,7 +47,7 @@ class SchoolForm (ModelForm):
         model=School
 
 class SchoolForm (forms.Form):
-        fields = ['name', 'language', 'address','phone','fax','contact','email','assigned_user']
+        fields = ['name', 'language', 'address', 'phone', 'fax', 'contact', 'email', 'assigned_user', 'location']
         name = forms.CharField()
         language = forms.CharField()
         address = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 100}))
@@ -54,7 +55,8 @@ class SchoolForm (forms.Form):
         fax = forms.CharField()
         contact = forms.CharField()
         email = forms.CharField()
-        assigned_user = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #user_name forreign key
+        assigned_user = forms.ModelChoiceField(required=False, queryset = User.objects.all()) #user_name foreign key
+        location = forms.CharField()
 
 #**************************************
 #SCHOOL SELECTION FORM
@@ -73,7 +75,8 @@ class InvigilatorForm (ModelForm):
         model=Invigilator
 
 class InvigilatorForm (forms.Form):
-        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt', 'email', 'notes', 'rt_name', 'rt_phone_primary']
+        fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt', 'email', 'notes',
+                  'rt_name', 'rt_phone_primary', 'location']
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
@@ -82,6 +85,7 @@ class InvigilatorForm (forms.Form):
         phone_alt = forms.CharField()
         email = forms.CharField()
         notes = forms.CharField()
+        location = forms.CharField()
 
 #*****************************************
 
