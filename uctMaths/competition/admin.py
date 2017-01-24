@@ -92,7 +92,11 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
 	    cursor = connection.cursor()
-	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`(`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Venue`, `Registered By`) select `First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`,  `Venue`, `Paired` FROM `competition_schoolstudent`")
+	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`("
+						"`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Venue`, `Paired`, 'Location') "
+						"select "
+						"`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`,  `Venue`, `Paired`, 'Location' "
+						"FROM `competition_schoolstudent`")
 	    cursor.execute("UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
 	    transaction.commit_unless_managed()
 
@@ -174,7 +178,11 @@ class InvigilatorAdmin(ImportExportModelAdmin):
     def archive_invigilator(modeladmin, request, queryset):
         cursor = connection.cursor()
         
-        cursor.execute ("INSERT INTO `competition_invigilatorarchive`( `School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`,  'Email', `Registered By`, `Notes`) select `School`, `First_name`, `Surname`, , `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By`, `Notes` FROM competition_invigilator ")
+        cursor.execute ("INSERT INTO `competition_invigilatorarchive`( "
+						"`School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By`, `Notes`, 'Location') "
+						"select "
+						"`School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By`, `Notes`, 'Location' "
+						"FROM competition_invigilator ")
 
         cursor.execute("UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
         transaction.commit_unless_managed()
