@@ -17,7 +17,7 @@ import StringIO as StrIO
 import cStringIO as StringIO
 from django.template.loader import get_template
 from django.template import loader, Context
-
+from models import LOCATIONS
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -95,10 +95,12 @@ def gradeBucket(student_list):
         for is_paired in [True, False]:
             for location in LOCATIONS:
                 grade_bucket[grade, is_paired, location[0]] = []
+            grade_bucket[grade, is_paired, 'ALL'] = []
 
     try:
         for student in student_list:
             grade_bucket[student.grade, student.paired, student.location].append(student)
+            grade_bucket[student.grade, student.paired, 'ALL'].append(student)
     except IndexError:
         # Empty QuerySet
         print 'Index Error'
@@ -182,11 +184,10 @@ def output_register(venue_list):
 
     #Generate summary sheet
     #----------------------
-    #Generate a list of unallocated invigilators and students
     summary_sheet = output_workbook.add_sheet('Venue_summary')
     summary_sheet.write(0,0,'Summary page')
 
-    venue_h = ['Venue', 'Building', 'Grade', 'Available seats', 'Occupied seats','Allocation']
+    venue_h = ['Location', 'Venue', 'Building', 'Grade', 'Available seats', 'Occupied seats', 'Allocation']
 
     for index, header in enumerate(venue_h):
         summary_sheet.write(1, index, header)
@@ -194,11 +195,12 @@ def output_register(venue_list):
     venue_list.order_by('grade')
 
     for v_index, venue in enumerate(venue_list):
-        summary_sheet.write(v_index+2,0,str(venue.code))
-        summary_sheet.write(v_index+2,1,venue.building)
-        summary_sheet.write(v_index+2,2,str(venue.grade))
-        summary_sheet.write(v_index+2,3,str(venue.seats))
-        summary_sheet.write(v_index+2,4,str(venue.occupied_seats))
+        summary_sheet.write(v_index+2,0,str(venue.location))
+        summary_sheet.write(v_index+2,1,str(venue.code))
+        summary_sheet.write(v_index+2,2,venue.building)
+        summary_sheet.write(v_index+2,3,str(venue.grade))
+        summary_sheet.write(v_index+2,4,str(venue.seats))
+        summary_sheet.write(v_index+2,5,str(venue.occupied_seats))
 
         if venue.allocated_to_pairs:
             summary_sheet.write(v_index+2,5,'Pairs')
@@ -219,7 +221,8 @@ def output_register(venue_list):
         if student_list: #If the list is not empty.
             venue_sheet = output_workbook.add_sheet(str(venue.code))
             venue_header = [ #Heading for each sheet. ie. what this sheet contains (for when it's printed)
-                            'Venue:', str(venue.code), 
+                            'Location:', str(venue.location),
+                            'Venue:', str(venue.code),
                             'Building: ', str(venue.building),
                             'Grade:', str(venue.grade),
                             'Occupancy:', str(venue.occupied_seats)+'/'+str(venue.seats),
@@ -257,43 +260,44 @@ def output_register(venue_list):
 #See http://scienceoss.com/write-excel-files-with-python-using-xlwt/
 
 def output_studentlists(student_list):
-    """Output 10 lists (SchoolStudent list QuerySet) as sheets on an xls (Paired, Individuals) for each grade"""
+    """Output Pair and Individual lists (SchoolStudent list QuerySet) for each grade and location as sheets on an xls"""
 
     grade_bucket = gradeBucket(student_list)
 
     output_workbook = xlwt.Workbook()
     student_header = ['School', 'Reference No.', 'First name(s)', 'Surname', 'Venue']
 
-    for grade in range(8, 13):
-    
-        #Process individual page
-        student_sheet = output_workbook.add_sheet('Grade ' + str(grade)+' individuals')
+    for location in LOCATIONS:
+        for grade in range(8, 13):
 
-        #Print title and header
-        student_sheet.write(0, 0, 'Grade ' + str(grade) + ' individuals')
-        for h_index, word in enumerate(student_header):
-            student_sheet.write(1,h_index,word)
-        #Print each student's details
-        for index, student in enumerate(grade_bucket[grade, False]):
-            student_sheet.write(index+2,0,unicode(student.school))
-            student_sheet.write(index+2,1,str(student.reference))
-            student_sheet.write(index+2,2,student.firstname)
-            student_sheet.write(index+2,3,student.surname)
-            student_sheet.write(index+2,4,student.venue)
+            #Process individual page
+            student_sheet = output_workbook.add_sheet(location[1] + ' Grade ' + str(grade)+' individuals')
 
-        #Process pairs page
-        student_sheet = output_workbook.add_sheet('Grade ' + str(grade)+' pairs')
-        #Print title and header
-        student_sheet.write(0, 0, 'Grade ' + str(grade) + ' pairs')
-        for h_index, word in enumerate(student_header):
-            student_sheet.write(1,h_index,word)
-        #Print each student's details
-        for index, student in enumerate(grade_bucket[grade, True]):
-            student_sheet.write(index+2,0,unicode(student.school))
-            student_sheet.write(index+2,1,str(student.reference))
-            student_sheet.write(index+2,2,student.firstname)
-            student_sheet.write(index+2,3,student.surname)
-            student_sheet.write(index+2,4,student.venue)
+            #Print title and header
+            student_sheet.write(0, 0, location[1] + ' Grade ' + str(grade) + ' individuals')
+            for h_index, word in enumerate(student_header):
+                student_sheet.write(1, h_index,word)
+            #Print each student's details
+            for index, student in enumerate(grade_bucket[grade, False, location[0]]):
+                student_sheet.write(index+2, 0, unicode(student.school))
+                student_sheet.write(index+2, 1, str(student.reference))
+                student_sheet.write(index+2, 2, student.firstname)
+                student_sheet.write(index+2, 3, student.surname)
+                student_sheet.write(index+2, 4, student.venue)
+
+            #Process pairs page
+            student_sheet = output_workbook.add_sheet(location[1] + ' Grade ' + str(grade)+' pairs')
+            #Print title and header
+            student_sheet.write(0, 0, location[1] + ' Grade ' + str(grade) + ' pairs')
+            for h_index, word in enumerate(student_header):
+                student_sheet.write(1,h_index,word)
+            #Print each student's details
+            for index, student in enumerate(grade_bucket[grade, True, location[0]]):
+                student_sheet.write(index+2, 0, unicode(student.school))
+                student_sheet.write(index+2, 1, str(student.reference))
+                student_sheet.write(index+2, 2, student.firstname)
+                student_sheet.write(index+2, 3, student.surname)
+                student_sheet.write(index+2, 4, student.venue)
 
     #Generate response and serve file (xls) to user
     response = HttpResponse()
@@ -303,7 +307,8 @@ def output_studentlists(student_list):
     return response
 
 def output_studenttags(student_list):
-    """Generate MailMerge lists for SchoolStudent QuerySet. Served to user as a .zip file with each (10 files) Paired/Grade list."""
+    """Generate individual and pair MailMerge lists for SchoolStudent QuerySet per location and grade.
+    Served to user as a .zip file containing all the lists."""
 
     grade_bucket = gradeBucket(student_list)
 
@@ -312,39 +317,41 @@ def output_studenttags(student_list):
     venue_list = Venue.objects.all()
     output_stringIO = StringIO.StringIO() #Used to write to files then zip
     
-    with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
-        for grade in range(8, 13):
-            output_string = StrIO.StringIO()
-            for student in grade_bucket[grade, False]:
-                venue_object = [venue for venue in venue_list if venue.code == student.venue]
-                s_line = u''
-                s_line += '\"' + student.reference + '\",'
-                s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
-                s_line += '\"' + unicode(student.school) + '\",'
-                s_line += str(student.grade) + ','
-                venue_str = venue_object[0] if len(venue_object) == 1 else 'Unallocated'
-                s_line += '\"' + unicode(venue_str) + '\"\n'
-                output_string.write(s_line)
+    with zipfile.ZipFile(output_stringIO, 'w') as zipf:
+        for location in LOCATIONS:
+            for grade in range(8, 13):
+                output_string = StrIO.StringIO()
+                for student in grade_bucket[grade, False, location[0]]: #Individuals in grade + location
+                    venue_object = [venue for venue in venue_list if venue.code == student.venue]
+                    s_line = u''
+                    s_line += '\"' + student.reference + '\",'
+                    s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
+                    s_line += '\"' + unicode(student.school) + '\",'
+                    s_line += str(student.grade) + ','
+                    venue_str = venue_object[0] if len(venue_object) == 1 else 'Unallocated'
+                    s_line += '\"' + unicode(venue_str) + '\"\n'
+                    output_string.write(s_line)
 
-            #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
-            zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
-            output_string.close()
+                #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
+                zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
+                output_string.close()
 
-            output_string = StrIO.StringIO()
-            for student in grade_bucket[grade, True]: #Paired students in [grade]
-                venue_object = [venue for venue in venue_list if venue.code == student.venue]
-                s_line = u''
-                s_line += '\"' + student.reference + '\",'
-                s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
-                s_line += '\"' + unicode(student.school) + '\",'
-                s_line += str(student.grade) + ','
-                venue_str = venue_object[0] if len(venue_object) == 1 else 'Unallocated'
-                s_line += '\"' + unicode(venue_str) + '\"\n'
-                output_string.write(s_line)
+                output_string = StrIO.StringIO()
+                for student in grade_bucket[grade, True, location[0]]: #Pairs in grade + location
+                    venue_object = [venue for venue in venue_list if venue.code == student.venue]
+                    s_line = u''
+                    s_line += '\"' + student.reference + '\",'
+                    s_line += '\"' + student.firstname + ' ' + student.surname + '\",'
+                    s_line += '\"' + unicode(student.school) + '\",'
+                    s_line += str(student.grade) + ','
+                    venue_str = venue_object[0] if len(venue_object) == 1 else 'Unallocated'
+                    s_line += '\"' + unicode(venue_str) + '\"\n'
+                    output_string.write(s_line)
 
-            #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
-            zipf.writestr('Mailmerge_GRD'+str(grade) +'_PAR.txt',output_string.getvalue().encode('utf-8'))
-            output_string.close()
+                #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
+                zipf.writestr('Mailmerge_' + location[0] + '_GRD' +str(grade) + '_PAR.txt',
+                              output_string.getvalue().encode('utf-8'))
+                output_string.close()
 
     #Generate response and serve file to the user
     response = HttpResponse(output_stringIO.getvalue())
@@ -859,7 +866,7 @@ def output_PRN_files(student_list):
             #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
             output_string = StrIO.StringIO()
 
-            for student in grade_bucket[grade, False]:#Individual students
+            for student in grade_bucket[grade, False, 'ALL']: #Individual students
                 s_line = u'%-10s %3s %s; %s, %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], student.surname, student.firstname[0])
                 output_string.write(s_line)
                 
@@ -867,7 +874,7 @@ def output_PRN_files(student_list):
             zipf.writestr('INDGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
             output_string.close()
             output_string = StrIO.StringIO()
-            for student in grade_bucket[grade, True]: #Paired students
+            for student in grade_bucket[grade, True, 'ALL']: #Paired students
                 s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', unicode(student.school)[0:10], 'Pair / Paar ', student.surname)  
                 #TODO: Seems like an error to me... But it's like this in the sample files.
                 output_string.write(s_line)
