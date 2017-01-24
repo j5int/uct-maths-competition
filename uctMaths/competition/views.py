@@ -317,8 +317,10 @@ def newstudents(request):
                         school = assigned_school
                         reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
                         paired = True
-                        query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                                school = school, grade = grade , paired = paired)
+                        location = assigned_school.location
+
+                        query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
+                                school=school, grade=grade, paired=paired, location=location)
                         query.save()
 
             #Add invigilator information
@@ -336,8 +338,9 @@ def newstudents(request):
                     iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
                     iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
                     inotes = form.getlist('inv_notes','')[j].strip()
+                    location = assigned_school.location
 
-                    query = Invigilator(school=school, firstname=ifirstname, surname=isurname,
+                    query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
                                        phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
                     query.save()
 
@@ -356,10 +359,10 @@ def newstudents(request):
                 grade = form.getlist('grade','')[i]
                 reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5+1).zfill(2))
                 paired = False
+                location = assigned_school.location
 
-                query = SchoolStudent(firstname = firstname , surname = surname, language = language,reference = reference,
-                        school = school, grade = grade , paired = paired)
-
+                query = SchoolStudent(firstname=firstname, surname=surname, language=language, reference=reference,
+                        school=school, grade=grade, paired=paired, location=location)
                 query.save()
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
