@@ -33,9 +33,9 @@ class School(models.Model):
     entered     = models.IntegerField(null=True, db_column='Entered') 
     score       = models.IntegerField(null=True, db_column='Score', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=True) 
-    assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForreignKey (gets assigned a single user)
-    #registered_by = models.CharField(max_length=255L, db_column='Registered By') #Changed to CharField
+    assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForeignKey (gets assigned a single user)
     rank = models.IntegerField(null=True, db_column='Rank', blank=True)
+    location = models.CharField(max_length=255L, db_column='Location')
 
     def __str__(self):
         return self.name
@@ -61,12 +61,11 @@ class SchoolStudent(models.Model):
         validators = [
             MaxValueValidator(12),
             MinValueValidator(8)
-        ])    
- #   sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
-    venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
-    #registered_by = models.ForeignKey(User, db_column='Registered By')
+        ])
+    venue       = models.CharField(max_length=40L, db_column='Venue', blank=True)
     paired = models.BooleanField(db_column='Paired')
     award = models.CharField(max_length=3L, db_column='Award', null=True, blank=True)
+    location = models.CharField(max_length=255L, db_column='Location')
 
     def __str__(self):
         return self.surname+', '+self.firstname
@@ -77,15 +76,15 @@ class SchoolStudent(models.Model):
         ordering = ['school', 'grade', 'surname', 'firstname','reference'] #defines the way the records are sorted.
 
 class Venue(models.Model):
-    '''Venues are locations for the event. Many SchoolStudents to one Venue.'''
+    '''Venues are the rooms where individuals or pairs from the same grade write the competition.
+    Many SchoolStudents to one Venue.'''
     code        = models.CharField(max_length=40L, db_column='Code', unique=True)
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
     grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
     allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS')
     occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True)
-    #individuals = models.IntegerField(db_column='Individuals')
-    #registered_by = models.ForeignKey(User, db_column='Registered By')
+    location = models.CharField(max_length=255L, db_column='Location')
 
     def __str__(self):
         return self.building+' '+self.code
@@ -96,7 +95,7 @@ class Venue(models.Model):
         
 
 class Invigilator(models.Model):
-    # Invigilators registered by SchoolUsers. Many Invigilator to one School. 
+    # Invigilators registered by SchoolUsers. Many Invigilators to one School.
     # Many Invigilators to one Venue.
 
     school      = models.ForeignKey('School', db_column='School') 
@@ -107,7 +106,7 @@ class Invigilator(models.Model):
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
     notes       = models.CharField(max_length=500L, db_column='Notes', blank=True)
-
+    location    = models.CharField(max_length=255L, db_column='Location')
 
 #REQUIREMENT: admin requests responsible teacher details when querying invigilators. 
 #             The following methods cater for this. Performing the lookup based on assigned school.
@@ -133,11 +132,7 @@ class Invigilator(models.Model):
             return 'Not specified' #This should not happen!
 
     def school_name(self):
-        #school_name = School.objects.filter(pk=self.school.id)
-        #if school_name:
         return self.school.name
-        #else:
-#            return 'Not specified' #This should not happen!
 
     rt_name.short_description = 'Resp. teach. name'
     rt_phone_primary.short_description = 'Resp. teach. phone'
@@ -161,7 +156,6 @@ class ResponsibleTeacher(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
-    #registered_by = models.ForeignKey(User, db_column='Registered By')
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
     def __unicode__(self):
@@ -191,10 +185,9 @@ class SchoolStudentArchive(models.Model):
             MaxValueValidator(12),
             MinValueValidator(8)
         ])
-   # sex         = models.CharField(max_length=1L, db_column='Sex', blank=True) 
-    venue       = models.CharField(max_length=40L, db_column='Venue', blank=True) 
-    #registered_by = models.ForeignKey(User, db_column='Registered By')
+    venue       = models.CharField(max_length=40L, db_column='Venue', blank=True)
     paired = models.BooleanField(db_column='Paired')
+    location = models.CharField(max_length=255L, db_column='Location')
 
     def __str__(self):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname+' ('+self.archived+')'
@@ -218,7 +211,7 @@ class InvigilatorArchive(models.Model):
     phone_alt   = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
     notes       = models.CharField(max_length=500L, db_column='Notes', blank=False)
-    #registered_by = models.ForeignKey(User, db_column='Registered By')
+    location    = models.CharField(max_length=255L, db_column='Location')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
     def __unicode__(self):
