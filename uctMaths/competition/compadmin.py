@@ -91,7 +91,7 @@ def gradeBucket(student_list):
     #The key is a tuple: (grade, is_paired, location)
     grade_bucket = {}
 
-    for grade in range(6,10):
+    for grade in range(8,13):
         for is_paired in [True, False]:
             for location in LOCATIONS:
                 grade_bucket[grade, is_paired, location[0]] = []
