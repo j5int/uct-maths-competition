@@ -6,8 +6,11 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 #Import_export models(https://django-import-export.readthedocs.org/en/latest/getting_started.html)
 from import_export import resources, fields
-from import_export.admin import ImportExportModelAdmin
-import tablib
+
+LOCATIONS = (
+    ('CPT', 'Cape Town'),
+    ('GEO', 'George')
+)
 
 class Competition(models.Model):
     newentries_Opendate = models.DateField(db_column='newentries_Opendate')
@@ -35,7 +38,7 @@ class School(models.Model):
     email       = models.CharField(max_length=50L, db_column='Email', blank=True) 
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForeignKey (gets assigned a single user)
     rank = models.IntegerField(null=True, db_column='Rank', blank=True)
-    location = models.CharField(max_length=255L, db_column='Location')
+    location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):
         return self.name
@@ -65,7 +68,7 @@ class SchoolStudent(models.Model):
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True)
     paired = models.BooleanField(db_column='Paired')
     award = models.CharField(max_length=3L, db_column='Award', null=True, blank=True)
-    location = models.CharField(max_length=255L, db_column='Location')
+    location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):
         return self.surname+', '+self.firstname
@@ -84,7 +87,7 @@ class Venue(models.Model):
     grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
     allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS')
     occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True)
-    location = models.CharField(max_length=255L, db_column='Location')
+    location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):
         return self.building+' '+self.code
@@ -106,7 +109,7 @@ class Invigilator(models.Model):
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
     notes       = models.CharField(max_length=500L, db_column='Notes', blank=True)
-    location    = models.CharField(max_length=255L, db_column='Location')
+    location    = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
 #REQUIREMENT: admin requests responsible teacher details when querying invigilators. 
 #             The following methods cater for this. Performing the lookup based on assigned school.
@@ -187,7 +190,7 @@ class SchoolStudentArchive(models.Model):
         ])
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True)
     paired = models.BooleanField(db_column='Paired')
-    location = models.CharField(max_length=255L, db_column='Location')
+    location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):
         return 'pair '+str(self.reference) if self.surname == '' else self.surname+', '+self.firstname+' ('+self.archived+')'
@@ -211,7 +214,7 @@ class InvigilatorArchive(models.Model):
     phone_alt   = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True) 
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
     notes       = models.CharField(max_length=500L, db_column='Notes', blank=False)
-    location    = models.CharField(max_length=255L, db_column='Location')
+    location    = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
     def __str__(self):
         return self.surname+', '+self.firstname+' ('+str(self.archived)+')'
     def __unicode__(self):
