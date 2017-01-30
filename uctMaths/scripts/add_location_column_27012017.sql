@@ -3,32 +3,32 @@
 DO $$
 	BEGIN
 		BEGIN
-			ALTER TABLE competition_school ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT '-';
+			ALTER TABLE competition_school ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT 'CPT';
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column Location already exists in competition_school.';
 		END;
 		BEGIN
-			ALTER TABLE competition_schoolstudent ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT '-';
+			ALTER TABLE competition_schoolstudent ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT 'CPT';
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column Location already exists in competition_schoolstudent.';
 		END;
 		BEGIN
-			ALTER TABLE competition_venue ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT '-';
+			ALTER TABLE competition_venue ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT 'CPT';
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column Location already exists in competition_venue.';
 		END;
 		BEGIN
-			ALTER TABLE competition_invigilator ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT '-';
+			ALTER TABLE competition_invigilator ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT 'CPT';
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column Location already exists in competition_invigilator.';
 		END;
 		BEGIN
-			ALTER TABLE competition_schoolstudentarchive ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT '-';
+			ALTER TABLE competition_schoolstudentarchive ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT 'CPT';
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column Location already exists in competition_schoolstudentarchive.';
 		END;
 		BEGIN
-			ALTER TABLE competition_invigilatorarchive ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT '-';
+			ALTER TABLE competition_invigilatorarchive ADD COLUMN  "Location" varchar(3) NOT NULL DEFAULT 'CPT';
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column Location already exists in competition_invigilatorarchive.';
 		END;
