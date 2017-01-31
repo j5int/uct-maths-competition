@@ -761,8 +761,8 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
             count_pairs = 0
 
             for i in range(8,13):
-                count_pairs = count_pairs + len(grade_summary[i,True])
-                count_individuals = count_individuals + len(grade_summary[i,False])
+                count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
+                count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
 
             cell_row_offset = cell_row_offset + 1
             wb_sheet.write(cell_row_offset,0,unicode(school_obj.name))
