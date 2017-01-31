@@ -50,13 +50,13 @@ def printer_entry_result(request, school_list=None):
         student_list = SchoolStudent.objects.filter(school = assigned_school)
         individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
             
-        grade_summary = compadmin.gradeBucket(student_list) #Bin into categories (Pairing, grade)
+        grade_summary = compadmin.gradeBucket(student_list) #Bin into categories (Grade, Is Paired, Location)
         count_individuals = 0
         count_pairs = 0
         
         for i in range(8,13):
-            count_pairs = count_pairs + len(grade_summary[i,True])
-            count_individuals = count_individuals + len(grade_summary[i,False])
+            count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
+            count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
         
         invigilator_list = Invigilator.objects.filter(school = assigned_school)
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
@@ -163,9 +163,9 @@ def submitted(request):
     count_pairs = 0
     
     for i in range(8,13):
-        school_summary_info.append('Grade %d: %d individuals and %d pairs'%(i, len(grade_summary[i,False]),len(grade_summary[i,True])))
-        count_pairs = count_pairs + len(grade_summary[i,True])
-        count_individuals = count_individuals + len(grade_summary[i,False])
+        school_summary_info.append('Grade %d: %d individuals and %d pairs'%(i, len(grade_summary[i,False,'ALL']),len(grade_summary[i,True,'ALL'])))
+        count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
+        count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
         
     school_summary_statistics = 'You have successfully registered %d students (%d individuals and %d pairs).'%(count_pairs*2+count_individuals, count_individuals, count_pairs)
 

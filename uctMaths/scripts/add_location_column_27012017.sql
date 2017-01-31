@@ -1,4 +1,4 @@
---$psql  <DBNAME> -a -f /<LOCATION>/add_location_column_27012017.sql
+--$psql  <DBNAME> -a -f /scripts/add_location_column_27012017.sql
 
 DO $$
 	BEGIN
