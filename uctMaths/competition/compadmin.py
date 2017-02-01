@@ -203,9 +203,9 @@ def output_register(venue_list):
         summary_sheet.write(v_index+2,5,str(venue.occupied_seats))
 
         if venue.allocated_to_pairs:
-            summary_sheet.write(v_index+2,5,'Pairs')
+            summary_sheet.write(v_index+2,6,'Pairs')
         else:
-            summary_sheet.write(v_index+2,5,'Individuals')
+            summary_sheet.write(v_index+2,6,'Individuals')
 
     #TODO?:Print out the unallocated students?
 
@@ -218,7 +218,7 @@ def output_register(venue_list):
         #TODO? Include invigilators in the sheet?
         #invigilator_list = Invigilator.objects.all().filter(venue=venue.code)
 
-        if student_list: #If the list is not empty.
+        if student_list:
             venue_sheet = output_workbook.add_sheet(str(venue.code))
             venue_header = [ #Heading for each sheet. ie. what this sheet contains (for when it's printed)
                             'Location:', str(venue.location),
@@ -230,26 +230,25 @@ def output_register(venue_list):
                             ]
 
             #Print venue_header to the sheet
-            for index in range(0,5):
+            for index in range(0,6):
                 venue_sheet.write(index,0, venue_header[index*2])
                 venue_sheet.write(index,1, venue_header[index*2+1])
 
-            #Print student header (name columns) to sheet
+            # Print student header (name columns) to sheet
             for h_index, word in enumerate(student_header):
-                venue_sheet.write(6,h_index,student_header[h_index])
+                venue_sheet.write(7,h_index,student_header[h_index])
 
-            #Print the students in that venue to sheet
+            # Print the students in that venue to sheet
             for s_index, student in enumerate(student_list):
-                venue_sheet.write(s_index+7,0,str(student.reference))
-                venue_sheet.write(s_index+7,2,student.firstname)
-                venue_sheet.write(s_index+7,3,student.surname)
-                venue_sheet.write(s_index+7,1,unicode(student.school))
+                venue_sheet.write(s_index+8,0,str(student.reference))
+                venue_sheet.write(s_index+8,2,student.firstname)
+                venue_sheet.write(s_index+8,3,student.surname)
+                venue_sheet.write(s_index+8,1,unicode(student.school))
 
         else:
-            pass #Venue is empty - no point making a sheet for it...
-            #print 'Empty venue!'
+            pass # Venue is empty - no point making a sheet for it...
 
-    #Generate response and serve file to the user
+    # Generate response and serve file to the user
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment; filename=venue_register(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
@@ -333,7 +332,7 @@ def output_studenttags(student_list):
                     output_string.write(s_line)
 
                 #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
-                zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
+                zipf.writestr('Mailmerge_' + location[0] + '_GRD' + str(grade) + '_IND.txt', output_string.getvalue().encode('utf-8'))
                 output_string.close()
 
                 output_string = StrIO.StringIO()

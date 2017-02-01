@@ -113,7 +113,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def write_studenttags(self, request, queryset):
 	    return compadmin.output_studenttags(queryset)
-	write_studenttags.short_description = 'Generate MailMerge student tags for all students (regardless of selection)'
+	write_studenttags.short_description = 'Generate MailMerge student tags for selected student(s)'
 
 	def upload_results(self, request, queryset):
 	    return compadmin.upload_results(request, queryset)
