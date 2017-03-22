@@ -28,7 +28,7 @@ class SchoolModelForm( forms.ModelForm ):
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered') ##Which columns should be kept here? 
+	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location') ##Which columns should be kept here?
 	search_fields = ['name']
 	resource_class = SchoolResource
 	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','school_certificate_list']
@@ -37,7 +37,7 @@ class SchoolAdmin(ImportExportModelAdmin):
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
     #Entries are on separate rows (separated by line break)
 	dataset = tablib.Dataset()
-	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank']
+	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'location']
 
 	def remove_user_associations(self, request, queryset):
 	    return compadmin.remove_user_assoc(queryset)
@@ -85,7 +85,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank', 'award')
+	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank', 'award', 'location')
 	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
@@ -113,7 +113,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 
 	def write_studenttags(self, request, queryset):
 	    return compadmin.output_studenttags(queryset)
-	write_studenttags.short_description = 'Generate MailMerge student tags for all students (regardless of selection)'
+	write_studenttags.short_description = 'Generate MailMerge student tags for selected student(s)'
 
 	def upload_results(self, request, queryset):
 	    return compadmin.upload_results(request, queryset)
@@ -138,7 +138,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
 	resource_class = VenueResource
-	list_display = ('building', 'code', 'seats', 'grade', 'allocated_to_pairs', 'occupied_seats')
+	list_display = ('building', 'code', 'seats', 'grade', 'allocated_to_pairs', 'occupied_seats', 'location')
 	search_fields = ['building', 'code']
 	list_filter = ('grade', 'allocated_to_pairs')
 	actions = ['auto_allocate', 'deallocate', 'write_venue_register']
@@ -166,7 +166,7 @@ class VenueAdmin(ImportExportModelAdmin):
 #Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(ImportExportModelAdmin):
     #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
-    list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name','rt_phone_primary','rt_email')
+    list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name','rt_phone_primary','rt_email', 'location')
     #actions = ['archive_invigilator']
     search_fields = ['firstname', 'surname']
 

@@ -203,9 +203,9 @@ def output_register(venue_list):
         summary_sheet.write(v_index+2,5,str(venue.occupied_seats))
 
         if venue.allocated_to_pairs:
-            summary_sheet.write(v_index+2,5,'Pairs')
+            summary_sheet.write(v_index+2,6,'Pairs')
         else:
-            summary_sheet.write(v_index+2,5,'Individuals')
+            summary_sheet.write(v_index+2,6,'Individuals')
 
     #TODO?:Print out the unallocated students?
 
@@ -218,7 +218,7 @@ def output_register(venue_list):
         #TODO? Include invigilators in the sheet?
         #invigilator_list = Invigilator.objects.all().filter(venue=venue.code)
 
-        if student_list: #If the list is not empty.
+        if student_list:
             venue_sheet = output_workbook.add_sheet(str(venue.code))
             venue_header = [ #Heading for each sheet. ie. what this sheet contains (for when it's printed)
                             'Location:', str(venue.location),
@@ -230,26 +230,25 @@ def output_register(venue_list):
                             ]
 
             #Print venue_header to the sheet
-            for index in range(0,5):
+            for index in range(0,6):
                 venue_sheet.write(index,0, venue_header[index*2])
                 venue_sheet.write(index,1, venue_header[index*2+1])
 
-            #Print student header (name columns) to sheet
+            # Print student header (name columns) to sheet
             for h_index, word in enumerate(student_header):
-                venue_sheet.write(6,h_index,student_header[h_index])
+                venue_sheet.write(7,h_index,student_header[h_index])
 
-            #Print the students in that venue to sheet
+            # Print the students in that venue to sheet
             for s_index, student in enumerate(student_list):
-                venue_sheet.write(s_index+7,0,str(student.reference))
-                venue_sheet.write(s_index+7,2,student.firstname)
-                venue_sheet.write(s_index+7,3,student.surname)
-                venue_sheet.write(s_index+7,1,unicode(student.school))
+                venue_sheet.write(s_index+8,0,str(student.reference))
+                venue_sheet.write(s_index+8,2,student.firstname)
+                venue_sheet.write(s_index+8,3,student.surname)
+                venue_sheet.write(s_index+8,1,unicode(student.school))
 
         else:
-            pass #Venue is empty - no point making a sheet for it...
-            #print 'Empty venue!'
+            pass # Venue is empty - no point making a sheet for it...
 
-    #Generate response and serve file to the user
+    # Generate response and serve file to the user
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment; filename=venue_register(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
@@ -333,7 +332,7 @@ def output_studenttags(student_list):
                     output_string.write(s_line)
 
                 #Generate file from StringIO and write to zip (ensure unicode UTF-* encoding is used)
-                zipf.writestr('Mailmerge_GRD'+str(grade) +'_IND.txt',output_string.getvalue().encode('utf-8'))
+                zipf.writestr('Mailmerge_' + location[0] + '_GRD' + str(grade) + '_IND.txt', output_string.getvalue().encode('utf-8'))
                 output_string.close()
 
                 output_string = StrIO.StringIO()
@@ -735,7 +734,7 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
-    header = ['School', 'Resp. Teach Name', 'Resp. Teach. Email', 'Resp. Teach. Phone', 'Resp. Teach. Alt Phone', 'Individuals', 'Pairs', 'Total']
+    header = ['School', 'Location', 'Resp. Teach Name', 'Resp. Teach. Email', 'Resp. Teach. Phone', 'Resp. Teach. Alt Phone', 'Individuals', 'Pairs', 'Total']
     if rank_extend:
         header.append('Rank')
         header.append('Score')
@@ -766,16 +765,17 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
 
             cell_row_offset = cell_row_offset + 1
             wb_sheet.write(cell_row_offset,0,unicode(school_obj.name))
-            wb_sheet.write(cell_row_offset,1,('%s %s')%(resp_teacher.firstname, resp_teacher.surname))
-            wb_sheet.write(cell_row_offset,2,resp_teacher.email)
-            wb_sheet.write(cell_row_offset,3,resp_teacher.phone_primary)
-            wb_sheet.write(cell_row_offset,4,resp_teacher.phone_alt)
-            wb_sheet.write(cell_row_offset,5,count_individuals)
-            wb_sheet.write(cell_row_offset,6,count_pairs)
-            wb_sheet.write(cell_row_offset,7,int(count_pairs*2 + count_individuals))
+            wb_sheet.write(cell_row_offset,1,unicode(school_obj.location))
+            wb_sheet.write(cell_row_offset,2,('%s %s')%(resp_teacher.firstname, resp_teacher.surname))
+            wb_sheet.write(cell_row_offset,3,resp_teacher.email)
+            wb_sheet.write(cell_row_offset,4,resp_teacher.phone_primary)
+            wb_sheet.write(cell_row_offset,5,resp_teacher.phone_alt)
+            wb_sheet.write(cell_row_offset,6,count_individuals)
+            wb_sheet.write(cell_row_offset,7,count_pairs)
+            wb_sheet.write(cell_row_offset,8,int(count_pairs*2 + count_individuals))
             if rank_extend:
-                wb_sheet.write(cell_row_offset,8,school_obj.rank)
-                wb_sheet.write(cell_row_offset,9,school_obj.score)
+                wb_sheet.write(cell_row_offset,9,school_obj.rank)
+                wb_sheet.write(cell_row_offset,10,school_obj.score)
 
             responsible_teacher_mailinglist.append(resp_teacher.email)
     
@@ -790,7 +790,7 @@ def archive_all_students(student_list, wb_sheet):
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
-    header = ['Reference', 'School' , 'Firstname', 'Surname', 'Grade', 'Score', 'Rank', 'Award','Language']
+    header = ['Reference', 'School', 'Location', 'Firstname', 'Surname', 'Grade', 'Score', 'Rank', 'Award','Language']
 
     cell_row_offset = 3
 
@@ -801,15 +801,16 @@ def archive_all_students(student_list, wb_sheet):
     student_lang = {'b':'Bilingual', 'a':'Afrikaans', 'e':'English'}
     
     for student in student_list:#print details for every student on the list
-        wb_sheet.write(cell_row_offset,1,unicode(student.school))
         wb_sheet.write(cell_row_offset,0, student.reference)
-        wb_sheet.write(cell_row_offset,2, student.firstname)
-        wb_sheet.write(cell_row_offset,3, student.surname)
-        wb_sheet.write(cell_row_offset,4, student.grade)
-        wb_sheet.write(cell_row_offset,5, student.score)
-        wb_sheet.write(cell_row_offset,6, student.rank)
-        wb_sheet.write(cell_row_offset,7, student.award)
-        wb_sheet.write(cell_row_offset,8, student_lang[student.language])
+        wb_sheet.write(cell_row_offset,1,unicode(student.school))
+        wb_sheet.write(cell_row_offset,2,unicode(student.location))
+        wb_sheet.write(cell_row_offset,3, student.firstname)
+        wb_sheet.write(cell_row_offset,4, student.surname)
+        wb_sheet.write(cell_row_offset,5, student.grade)
+        wb_sheet.write(cell_row_offset,6, student.score)
+        wb_sheet.write(cell_row_offset,7, student.rank)
+        wb_sheet.write(cell_row_offset,8, student.award)
+        wb_sheet.write(cell_row_offset,9, student_lang[student.language])
         cell_row_offset = cell_row_offset + 1
 
     return wb_sheet
@@ -820,7 +821,7 @@ def archive_all_invigilators(invigilator_list, wb_sheet):
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
-    header = ['School' , 'Firstname', 'Surname', 'Phone Primary', 'Alternate', 'Email']
+    header = ['School', 'Location', 'Firstname', 'Surname', 'Phone Primary', 'Alternate', 'Email']
     cell_row_offset = 3
 
     for index, h in enumerate(header):
@@ -830,12 +831,13 @@ def archive_all_invigilators(invigilator_list, wb_sheet):
     
     for invigilator in invigilator_list:#Print details for all invigilators on the list
         wb_sheet.write(cell_row_offset,0,unicode(invigilator.school))
-        wb_sheet.write(cell_row_offset,1, invigilator.firstname)
-        wb_sheet.write(cell_row_offset,2, invigilator.surname)
-        wb_sheet.write(cell_row_offset,3, invigilator.phone_primary)
-        wb_sheet.write(cell_row_offset,4, invigilator.phone_alt)
-        wb_sheet.write(cell_row_offset,5, invigilator.email)
-        wb_sheet.write(cell_row_offset,6, invigilator.notes)
+        wb_sheet.write(cell_row_offset,1,unicode(invigilator.location))
+        wb_sheet.write(cell_row_offset,2, invigilator.firstname)
+        wb_sheet.write(cell_row_offset,3, invigilator.surname)
+        wb_sheet.write(cell_row_offset,4, invigilator.phone_primary)
+        wb_sheet.write(cell_row_offset,5, invigilator.phone_alt)
+        wb_sheet.write(cell_row_offset,6, invigilator.email)
+        wb_sheet.write(cell_row_offset,7, invigilator.notes)
         cell_row_offset = cell_row_offset + 1
 
     return wb_sheet
