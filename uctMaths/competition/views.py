@@ -372,9 +372,9 @@ def newstudents(request):
                 try:
                     confirmation.send_confirmation(request, assigned_school,cc_admin=True)
                     return HttpResponseRedirect('../submitted.html')
-                except Exception:
+                except Exception as e:
                     logger = logging.getLogger(__name__)
-                    logger.exception()
+                    logger.exception(e)
                     return HttpResponseRedirect('../submitted_noemail.html')
             else:
                 print 'This should not happen'
