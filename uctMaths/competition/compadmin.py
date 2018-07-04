@@ -13,7 +13,9 @@ import views
 
 from django.core.context_processors import csrf
 import ho.pisa as pisa
+# StrIO can accept str and unicode values
 import StringIO as StrIO
+# CStringIO doesn't work well with unicode values. Only use it for UTF-8 encoded str.
 import cStringIO as StringIO
 from django.template.loader import get_template
 from django.template import loader, Context
@@ -369,12 +371,12 @@ def remove_user_assoc(school_list):
 def output_schooltaglists(school_list):
     """ Generate the tags for a School QuerySet. Served as a single text file in HttpResponse. """
 
-    output_stringio = StringIO.StringIO()
+    output_stringio = StrIO.StringIO()
 
     #Generate and format school entry (as in spec. sheet)
     for school in school_list:
         s_entry = '\"' + school.contact + '\",'
-        s_entry += '\"' + unicode(school.name) + '\",'
+        s_entry += '\"' + school.name + '\",'
         s_entry += '\"' + school.address + '\"\n'
         output_stringio.write(s_entry)
 
