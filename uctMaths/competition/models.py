@@ -81,7 +81,8 @@ class SchoolStudent(models.Model):
 class Venue(models.Model):
     '''Venues are the rooms where individuals or pairs from the same grade write the competition.
     Many SchoolStudents to one Venue.'''
-    code        = models.CharField(max_length=40L, db_column='Code', unique=True)
+    # code is used as an Excel worksheet name which can be no longer than 31 characters
+    code        = models.CharField(max_length=31L, db_column='Code', unique=True)
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
     grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
