@@ -202,7 +202,7 @@ def output_register(venue_list):
         summary_sheet.write(v_index+2,2,venue.building)
         summary_sheet.write(v_index+2,3,str(venue.grade))
         summary_sheet.write(v_index+2,4,str(venue.seats))
-        summary_sheet.write(v_index+2,5,str(venue.occupied_seats))
+        summary_sheet.write(v_index+2,5,str(venue.occupied_seats or 0))
 
         if venue.allocated_to_pairs:
             summary_sheet.write(v_index+2,6,'Pairs')
@@ -227,7 +227,7 @@ def output_register(venue_list):
                             'Venue:', str(venue.code),
                             'Building: ', str(venue.building),
                             'Grade:', str(venue.grade),
-                            'Occupancy:', str(venue.occupied_seats)+'/'+str(venue.seats),
+                            'Occupancy:', str(venue.occupied_seats or 0)+'/'+str(venue.seats),
                             'Allocation:', 'Pairs' if venue.allocated_to_pairs else 'Individuals'
                             ]
 

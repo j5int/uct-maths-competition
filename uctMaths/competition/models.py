@@ -86,7 +86,7 @@ class Venue(models.Model):
     seats       = models.IntegerField(db_column='Seats')
     grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
     allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS')
-    occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True)
+    occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True, null=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):
