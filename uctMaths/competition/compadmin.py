@@ -20,6 +20,7 @@ import cStringIO as StringIO
 from django.template.loader import get_template
 from django.template import loader, Context
 from models import LOCATIONS
+import reports
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -310,7 +311,6 @@ def output_studentlists(student_list):
 def output_studenttags(student_list):
     """Generate individual and pair MailMerge lists for SchoolStudent QuerySet per location and grade.
     Served to user as a .zip file containing all the lists."""
-
     grade_bucket = gradeBucket(student_list)
 
     #Generate individuals name tags 
@@ -902,6 +902,12 @@ def update_school_entry_status():
         except exceptions.ObjectDoesNotExist:
             school_obj.entered=0
             school_obj.save()
+
+def email_school_reports(request, school_list):
+     for ischool in school_list:
+            result=printer_school_report(request, [ischool])
+            rteacher = ResponsibleTeacher.objects.filter(school = ischool)[0]
+            reports.send_confirmation(request,result,rteacher,ischool.name)
 
 def print_school_reports(request, school_list):
     result = printer_school_report(request, school_list)
