@@ -85,7 +85,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email')
+	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'report_downloaded', 'answer_sheet_downloaded')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
@@ -192,7 +192,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress')
+    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date')
     actions = ['export_competition']
     
     def export_competition(self, request, queryset):

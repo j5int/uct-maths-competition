@@ -19,6 +19,7 @@ class Competition(models.Model):
     num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True)
     number_of_individuals = models.IntegerField(db_column='num_individuals')
     number_of_pairs = models.IntegerField(db_column='num_pairs')
+    prizegiving_date = models.DateField(db_column='prizegiving_date')
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
@@ -160,6 +161,8 @@ class ResponsibleTeacher(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
+    report_downloaded = models.DateField(db_column='Report_downloaded')
+    answer_sheet_downloaded = models.DateField(db_column='Answer_sheet_downloaded')
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
     def __unicode__(self):
