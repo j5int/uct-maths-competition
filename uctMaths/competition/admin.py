@@ -31,7 +31,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location') ##Which columns should be kept here?
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','school_certificate_list']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','school_certificate_list','generate_school_answer_sheets']
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -65,6 +65,9 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 	def school_certificate_list(self, request, queryset):
 	    return compadmin.certificate_list(request, queryset)
+	
+	def generate_school_answer_sheets(self, request, queryset):
+		return compadmin.generate_school_answer_sheets()
 
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
@@ -75,6 +78,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	generate_school_reports.short_description = 'Print selected school(s) reports (single .pdf)'
 	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
 	school_certificate_list.short_description = 'Download school certificate list'
+	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
 
 	list_filter=('entered','language') #Field filters (shown as bar on right)
 
@@ -86,7 +90,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank', 'award', 'location')
-	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards']
+	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards', 'generate_personalised_answer_sheets']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -134,6 +138,10 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	def assign_student_awards(self, request, queryset):
 	    return compadmin.assign_student_awards()
 	assign_student_awards.short_description = 'Assign student awards (regardless of selection)'
+
+	def generate_personalised_answer_sheets(self, request, queryset):
+		return compadmin.generate_personalised_answer_sheets(request, queryset)
+	generate_personalised_answer_sheets.short_description = "Download personalised answer sheets for selected student(s)."
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):

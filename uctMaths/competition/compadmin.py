@@ -4,11 +4,18 @@ from __future__ import unicode_literals
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
-from django.http import HttpResponse, HttpResponseRedirect
+import docx
+from PyPDF2 import PdfFileReader
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 import zipfile
 import datetime
 from django.core import exceptions 
 import views
+import pypandoc
+import pdfkit
+import shutil
+import codecs
+import os
 #A few administration constants and associated methods to be used around the website.
 
 from django.core.context_processors import csrf
@@ -20,6 +27,7 @@ import cStringIO as StringIO
 from django.template.loader import get_template
 from django.template import loader, Context
 from models import LOCATIONS
+import sys
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -1038,4 +1046,53 @@ def certificate_list(request, school_list):
     response['Content-Disposition'] = 'attachment; filename=certificate_list(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
+    return response
+
+
+def get_answer_sheet_name(name, school, grade):
+    return str(school.replace(" ", "_") + "_GR" + str(grade) + "_" + str(name.replace(" ", "_") + "_ANSWER_SHEET"))
+
+def generate_answer_sheet(name, school, grade, code, venue, isPair):
+    options = {
+        'page-size': 'A4',
+        'orientation': 'landscape',
+        'title': get_answer_sheet_name(name, school, grade)
+    }
+    # Get the answer sheet template
+    if isPair:
+        shutil.copyfile("competition/static/pair_answer_sheet_template.htm", "temp/template.htm")
+    else:
+        shutil.copyfile("competition/static/individual_answer_sheet_template.htm", "temp/template.htm")
+    editingFile = codecs.open("temp/template.htm", "a+", encoding="latin-1")
+    lines = editingFile.readlines()
+    for i in range(len(lines)):
+        lines[i] = lines[i].replace("TEMP_NAME", name)
+        lines[i] = lines[i].replace("TEMP_SCHOOL", school)
+        lines[i] = lines[i].replace("TEMP_GR", str(grade))
+        lines[i] = lines[i].replace("TEMP_CODE", str(code))
+        lines[i] = lines[i].replace("TEMP_VENUE", venue)
+    editingFile.truncate(0)
+    editingFile.writelines(lines)
+    editingFile.close()
+    pdf = pdfkit.from_file("temp/template.htm", False, options=options)#"temp/template.pdf", options=options)
+    return pdf
+
+def generate_school_answer_sheets():
+    pass
+
+def generate_personalised_answer_sheets(request, queryset):
+    print(request)
+    print(queryset)
+    response = HttpResponse()
+    with zipfile.ZipFile("temp/TEMP.zip", "ab") as zFile:
+        for student in queryset:
+            pdf = generate_answer_sheet(  student.firstname + " " + student.surname, 
+                                    student.school.name, student.grade, student.reference, 
+                                    str(student.venue), student.paired)
+            #tempFile = open("TEMP.pdf", "r")
+            zFile.writestr("file.pdf", pdf)
+   
+        response = FileResponse(zFile)
+        response['Content-Disposition'] = 'attachment; filename=answer_sheets.zip'
+        response['Content-Type'] = 'application/zip'
     return response
