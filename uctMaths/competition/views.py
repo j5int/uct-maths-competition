@@ -131,7 +131,6 @@ def profile(request):
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
         school_blurb += 'not associated with any school. Navigate to \'Entry Form\' to select your school.'
-    
     admin_contact = compadmin.admin_emailaddress()
 
     if compadmin.isOpen():
@@ -140,7 +139,10 @@ def profile(request):
         closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
     else:
         closingdate_blurb='Online entries are closed but you may still create and modify entries because you have admin rights.'
-    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact})
+    shown = False
+    if assigned_school:
+        shown = has_results(request)
+    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'shown':shown})
 
 
 # submitted thingszz
@@ -468,3 +470,29 @@ def school_select(request):
     c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error, 'admin_emailaddress':compadmin.admin_emailaddress()} 
     c.update(csrf(request))
     return render_to_response('school_select.html', c, context_instance=RequestContext(request))
+
+@login_required
+def school_results(request):
+    assigned_school = School.objects.get(assigned_to=request.user)
+    if has_results(request):
+        return compadmin.print_school_reports(request,[assigned_school])
+    return HttpResponse("Results will be available soon.")
+
+'''
+@login_required
+def has_results(request):
+    assigned_school = School.objects.get(assigned_to=request.user)
+    for istudent in SchoolStudent.objects.filter(school = assigned_school):
+        if istudent.score > 0:
+            return True
+    return False
+'''
+@login_required
+def has_results(request):
+    comp = compadmin.Competition.objects.all()
+    if comp.count() == 1:
+        pg_date = comp[0].prizegiving_date
+        if datetime.now().date() > pg_date:
+            return True
+
+    return False

@@ -907,7 +907,7 @@ def email_school_reports(request, school_list):
      for ischool in school_list:
             result=printer_school_report(request, [ischool])
             rteacher = ResponsibleTeacher.objects.filter(school = ischool)[0]
-            reports.send_confirmation(request,result,rteacher,ischool.name)
+            reports.send_confirmation(request,result,rteacher,ischool.name,True)
 
 def print_school_reports(request, school_list):
     result = printer_school_report(request, school_list)
@@ -920,14 +920,11 @@ def printer_school_report(request, school_list=None):
     """ Generate the school report for each school in the query set"""
 
     html = '' #Will hold rendered templates
-
     for assigned_school in school_list:
         student_list = SchoolStudent.objects.filter(school = assigned_school)
-
         grade_bucket = {8:[], 9:[], 10:[], 11:[], 12:[]}
         for igrade in range(8, 13):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
-
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M'))
         gold_count = student_list.filter(award='G').count()
@@ -948,7 +945,6 @@ def printer_school_report(request, school_list=None):
                 school_award_blurb+='%d Merit award%s'%(merit_count, 's' if merit_count>1 else '')
         else:
             school_award_blurb = ''
-
         year = str(datetime.datetime.now().strftime('%Y'))
 
         if responsible_teacher:
@@ -969,7 +965,6 @@ def printer_school_report(request, school_list=None):
             html += template.render(context) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
-
     #Generate the pdf doc
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:

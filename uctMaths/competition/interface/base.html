@@ -18,7 +18,10 @@ used on all the pages once you're logged in
                 <h2><a href="/accounts/profile/">Profile</a></h2>
             </div>
             <ul class="style1">
-                <li><a href="/competition/register/entry_review/">Entry form</a></li>
+				<li><a href="/competition/register/entry_review/">Entry form</a></li>
+				{% if shown%}
+					<li><a href="/competition/register/school_results/" target="_blank" >Download Report</a></li>
+				{%endif%}
                 {% if admin%}
                     <li><a href="/competition/register/schools/">Schools</a></li>
                     <li><a href="/competition/register/venues/">Venues</a></li>
