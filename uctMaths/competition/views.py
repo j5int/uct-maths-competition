@@ -495,7 +495,7 @@ def has_results(request):
     comp = compadmin.Competition.objects.all()
     if comp.count() == 1:
         pg_date = comp[0].prizegiving_date
-        if datetime.now().date() >= pg_date and datetime.now().time() > time(21,0,0):
+        if datetime.now().date() > pg_date or (datetime.now().date() == pg_date and datetime.now().time() > time(21,0,0)):
             return True
 
     return False
