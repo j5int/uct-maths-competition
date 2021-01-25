@@ -10,9 +10,11 @@ import datetime
 from django.core import exceptions 
 import views
 import pdfkit
+from PyPDF2 import PdfFileMerger, PdfFileReader
 import shutil
 import codecs
 import os
+from io import BytesIO
 #A few administration constants and associated methods to be used around the website.
 
 from django.core.context_processors import csrf
@@ -1076,30 +1078,51 @@ def generate_answer_sheet(name, school, grade, code, venue, isPair):
     pdf = pdfkit.from_file("temp/template.htm", False, options=options)
     return pdf
 
-def generate_zipped_answer_sheets(students):
-    
+def generate_zipped_answer_sheets(students, combined_pdf_name=None):
+    merger = PdfFileMerger()
     if not os.path.exists("temp"):
         os.makedirs("temp")
     with zipfile.ZipFile("temp/TEMP.zip", "w") as zFile:
         for student in students:
+            print(student)
             pdf = generate_answer_sheet(  student.firstname + " " + student.surname, 
                                     student.school.name, student.grade, student.reference, 
                                     str(student.venue), student.paired)
             zFile.writestr(get_student_answer_sheet_name(student) + ".pdf", pdf)
         
+        if combined_pdf_name:
+            fileNames = zFile.namelist()
+            print("FILE NAMES", fileNames)
+            for f in fileNames:
+                print(f)
+                merger.append(PdfFileReader(BytesIO(zFile.read(f, "r"))))
+            merger.write("temp/COMBINED.pdf")
+            merger.close()
+            zFile.write("temp/COMBINED.pdf", arcname=combined_pdf_name + ".pdf")
+
         return zFile.filename
+
+def generate_zipped_school_answer_sheets(school):
+    student_list = SchoolStudent.objects.all() #Regardless of admin UI selection
+    students = student_list.filter(school=school)
+    zipPath = generate_zipped_answer_sheets(students, school.name.replace(" ", "_") + "_COMBINED_ANSWER_SHEETS")
+    return zipPath
 
 def generate_school_answer_sheets(request, school_list):
     print(school_list)
-    student_list = SchoolStudent.objects.all() #Regardless of admin UI selection
+    returnPath = ""
+    if not os.path.exists("temp"):
+        os.makedirs("temp")
+    with zipfile.ZipFile("temp/TEMP_SCHOOLS.zip", "w") as zFile:
+        returnPath = zFile.filename
+        for school in school_list:
+            zipPath = generate_zipped_school_answer_sheets(school)
+            returnFile = open(zipPath, "rb")
+            zFile.writestr(school.name.replace(" ", "_") + '_ANSWER_SHEETS.zip', returnFile.read())
 
-    for school in school_list:
-        students = student_list.filter(school=school)
-        zipPath = generate_zipped_answer_sheets(students)
-        returnFile = open(zipPath, "rb")
-
+    returnFile = open(returnPath, "rb")
     response = HttpResponse(returnFile, content_type="application/zip")
-    response['Content-Disposition'] = 'attachment; filename=' + school.name.replace(" ", "_") + '_ANSWER_SHEETS.zip'
+    response['Content-Disposition'] = 'attachment; filename=SCHOOL_ANSWER_SHEETS.zip'
     return response
 
 
