@@ -1059,6 +1059,7 @@ def generate_answer_sheet(name, school, grade, code, venue, isPair):
         'orientation': 'landscape',
         'title': get_answer_sheet_name(name, school, grade)
     }
+    print("Generating answer sheet: " + options["title"])
     # Get the answer sheet template
     if isPair:
         shutil.copyfile("competition/static/pair_answer_sheet_template.htm", "temp/template.htm")
@@ -1084,17 +1085,15 @@ def generate_zipped_answer_sheets(students, combined_pdf_name=None):
         os.makedirs("temp")
     with zipfile.ZipFile("temp/TEMP.zip", "w") as zFile:
         for student in students:
-            print(student)
             pdf = generate_answer_sheet(  student.firstname + " " + student.surname, 
                                     student.school.name, student.grade, student.reference, 
                                     str(student.venue), student.paired)
             zFile.writestr(get_student_answer_sheet_name(student) + ".pdf", pdf)
         
         if combined_pdf_name:
+            print("Combining PDFs")
             fileNames = zFile.namelist()
-            print("FILE NAMES", fileNames)
             for f in fileNames:
-                print(f)
                 merger.append(PdfFileReader(BytesIO(zFile.read(f, "r"))))
             merger.write("temp/COMBINED.pdf")
             merger.close()
@@ -1109,7 +1108,6 @@ def generate_zipped_school_answer_sheets(school):
     return zipPath
 
 def generate_school_answer_sheets(request, school_list):
-    print(school_list)
     returnPath = ""
     if not os.path.exists("temp"):
         os.makedirs("temp")
