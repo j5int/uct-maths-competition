@@ -67,7 +67,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	    return compadmin.certificate_list(request, queryset)
 	
 	def generate_school_answer_sheets(self, request, queryset):
-		return compadmin.generate_school_answer_sheets()
+		return compadmin.generate_school_answer_sheets(request, queryset)
 
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'

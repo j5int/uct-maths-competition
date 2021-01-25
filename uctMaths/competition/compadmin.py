@@ -1045,6 +1045,8 @@ def certificate_list(request, school_list):
     output_workbook.save(response)
     return response
 
+def get_student_answer_sheet_name(student):
+    return get_answer_sheet_name( student.firstname + " " + student.surname, student.school.name, student.grade)
 
 def get_answer_sheet_name(name, school, grade):
     return str(school.replace(" ", "_") + "_GR" + str(grade) + "_" + str(name.replace(" ", "_") + "_ANSWER_SHEET"))
@@ -1071,25 +1073,40 @@ def generate_answer_sheet(name, school, grade, code, venue, isPair):
     editingFile.truncate(0)
     editingFile.writelines(lines)
     editingFile.close()
-    pdf = pdfkit.from_file("temp/template.htm", False, options=options)#"temp/template.pdf", options=options)
+    pdf = pdfkit.from_file("temp/template.htm", False, options=options)
     return pdf
 
-def generate_school_answer_sheets():
-    pass
-
-def generate_personalised_answer_sheets(request, queryset):
-    print(request)
-    print(queryset)
-    response = HttpResponse()
-    with zipfile.ZipFile("temp/TEMP.zip", "ab") as zFile:
-        for student in queryset:
+def generate_zipped_answer_sheets(students):
+    
+    if not os.path.exists("temp"):
+        os.makedirs("temp")
+    with zipfile.ZipFile("temp/TEMP.zip", "w") as zFile:
+        for student in students:
             pdf = generate_answer_sheet(  student.firstname + " " + student.surname, 
                                     student.school.name, student.grade, student.reference, 
                                     str(student.venue), student.paired)
-            #tempFile = open("TEMP.pdf", "r")
-            zFile.writestr("file.pdf", pdf)
-   
-        response = FileResponse(zFile)
-        response['Content-Disposition'] = 'attachment; filename=answer_sheets.zip'
-        response['Content-Type'] = 'application/zip'
+            zFile.writestr(get_student_answer_sheet_name(student) + ".pdf", pdf)
+        
+        return zFile.filename
+
+def generate_school_answer_sheets(request, school_list):
+    print(school_list)
+    student_list = SchoolStudent.objects.all() #Regardless of admin UI selection
+
+    for school in school_list:
+        students = student_list.filter(school=school)
+        zipPath = generate_zipped_answer_sheets(students)
+        returnFile = open(zipPath, "rb")
+
+    response = HttpResponse(returnFile, content_type="application/zip")
+    response['Content-Disposition'] = 'attachment; filename=' + school.name.replace(" ", "_") + '_ANSWER_SHEETS.zip'
+    return response
+
+
+def generate_personalised_answer_sheets(request, student_list):
+    zipPath = generate_zipped_answer_sheets(student_list)
+    returnFile = open(zipPath, "rb")
+
+    response = HttpResponse(returnFile, content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=answer_sheets.zip'
     return response
