@@ -904,7 +904,15 @@ def update_school_entry_status():
             school_obj.save()
 
 def email_school_reports(request, school_list):
-     for ischool in school_list:
+    if not views.has_results(request):
+        comp = Competition.objects.all()
+        if comp.count() == 1:
+            pg_date = comp[0].prizegiving_date
+            msg = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + " is before prizegiving date: " + str(pg_date) + " 21:00" 
+            msg += "<br>"+"Please wait until after the prize giving before sending out the results" 
+            msg += " or change the date at: "+"<a href=\"/admin/competition/competition/\">Competition</a>"
+            return HttpResponse(msg)
+    for ischool in school_list:
             result=printer_school_report(request, [ischool])
             rteacher = ResponsibleTeacher.objects.filter(school = ischool)[0]
             reports.send_confirmation(request,result,rteacher,ischool.name,True)
