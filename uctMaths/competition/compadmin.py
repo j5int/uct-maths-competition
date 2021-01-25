@@ -4,14 +4,11 @@ from __future__ import unicode_literals
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
-import docx
-from PyPDF2 import PdfFileReader
-from django.http import HttpResponse, HttpResponseRedirect, FileResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import zipfile
 import datetime
 from django.core import exceptions 
 import views
-import pypandoc
 import pdfkit
 import shutil
 import codecs
