@@ -17,7 +17,7 @@ import logging
 import ho.pisa as pisa
 import cStringIO as StringIO
 from django.template.loader import get_template
-from datetime import datetime
+from datetime import datetime,time
 
 def auth(request):
     if not request.user.is_authenticated():
@@ -379,7 +379,7 @@ def newstudents(request):
                     logger.exception(e)
                     return HttpResponseRedirect('../submitted_noemail.html')
             else:
-                print 'This should not happen'
+                print('This should not happen')
 
         except Exception as e:
             error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
@@ -475,6 +475,9 @@ def school_select(request):
 def school_results(request):
     assigned_school = School.objects.get(assigned_to=request.user)
     if has_results(request):
+        report = ResponsibleTeacher.objects.get(school = assigned_school)
+        report.report_downloaded = datetime.now().date()
+        report.save()
         return compadmin.print_school_reports(request,[assigned_school])
     return HttpResponse("Results will be available soon.")
 
@@ -492,7 +495,7 @@ def has_results(request):
     comp = compadmin.Competition.objects.all()
     if comp.count() == 1:
         pg_date = comp[0].prizegiving_date
-        if datetime.now().date() > pg_date:
+        if datetime.now().date() >= pg_date and datetime.now().time() > time(21,0,0):
             return True
 
     return False
