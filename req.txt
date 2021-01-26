@@ -17,3 +17,4 @@ wsgiref==0.1.2
 xlwt==0.7.5
 pdfkit==0.6.1
 pypdf2==1.26.0
+django-background-tasks==1.2.5
