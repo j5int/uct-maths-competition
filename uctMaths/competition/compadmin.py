@@ -1079,8 +1079,7 @@ def printer_answer_sheet(request, assigned_school=None):
     html = '' #Will hold rendered templates
 
     student_list = SchoolStudent.objects.filter(school = assigned_school)
-    for istudent in student_list[0:5]:
-            print(istudent.firstname)
+    for istudent in student_list:
             c = {
                 'name':istudent.firstname + " " + istudent.surname,
                 'school':istudent.school.name,
