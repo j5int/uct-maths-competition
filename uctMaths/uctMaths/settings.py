@@ -1,6 +1,8 @@
 # Django settings for uctMaths project.
 from ConfigParser import RawConfigParser
 
+import background_task
+
 config = RawConfigParser()
 config.read('uctMaths/settings.ini')
 
@@ -175,8 +177,12 @@ INSTALLED_APPS = (
 
     #Import-export functionality
     'import_export', #(https://django-import-export.readthedocs.org/en/latest/configuration.html)
+
+    # Background process handling
+    'background_task'
 )
 
+BACKGROUND_TASK_RUN_ASYNC = True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

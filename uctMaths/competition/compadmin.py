@@ -28,6 +28,8 @@ from django.template import loader, Context
 from models import LOCATIONS
 import sys
 
+from background_task import background
+
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
     comp = Competition.objects.all() #Should only be one!
@@ -1131,3 +1133,13 @@ def generate_personalised_answer_sheets(request, student_list):
     response = HttpResponse(returnFile, content_type='application/zip')
     response['Content-Disposition'] = 'attachment; filename=answer_sheets.zip'
     return response
+
+
+def email_school_answer_sheets(request, school_list):
+    for school in school_list:
+        print(school)
+        process(school.name)
+
+@background(schedule=5,queue="AS-generation-queue")
+def process(school):
+    print(school + " HELLO!")
