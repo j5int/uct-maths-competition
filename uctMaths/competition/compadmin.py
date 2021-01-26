@@ -30,7 +30,7 @@ import sys
 
 from background_task import background
 sys.path.append("../")
-from uctMaths.background_tasks import process
+from uctMaths.background_tasks import bg_generate_school_answer_sheets
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -1111,6 +1111,11 @@ def generate_zipped_school_answer_sheets(school):
     zipPath = generate_zipped_answer_sheets(students, school.name.replace(" ", "_") + "_COMBINED_ANSWER_SHEETS")
     return zipPath
 
+def generate_zipped_school_answer_sheets_from_id(schoolID):
+    school = School.objects.all().filter(id=schoolID)[0]
+    return school.name
+    return generate_zipped_school_answer_sheets(school)
+
 def generate_school_answer_sheets(request, school_list):
     returnPath = ""
     if not os.path.exists("temp"):
@@ -1139,6 +1144,6 @@ def generate_personalised_answer_sheets(request, student_list):
 
 def email_school_answer_sheets(request, school_list):
     for school in school_list:
-        print(school)
-        process(school.name)
+        #print(school)
+        bg_generate_school_answer_sheets(school.id)
 
