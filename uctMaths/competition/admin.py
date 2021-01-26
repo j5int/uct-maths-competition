@@ -31,7 +31,9 @@ class SchoolAdmin(ImportExportModelAdmin):
 	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location') ##Which columns should be kept here?
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','school_certificate_list','generate_school_answer_sheets']
+
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list','generate_school_answer_sheets']
+
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -60,6 +62,9 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def generate_school_reports(self, request, queryset):
 	    return compadmin.print_school_reports(request, queryset)
 
+	def email_school_reports(self, request, queryset):
+	    return compadmin.email_school_reports(request, queryset)
+
 	def generate_multi_school_reports(self, request, queryset):
 	    return compadmin.multi_reportgen(request, queryset)
 
@@ -78,14 +83,18 @@ class SchoolAdmin(ImportExportModelAdmin):
 	generate_school_reports.short_description = 'Print selected school(s) reports (single .pdf)'
 	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
 	school_certificate_list.short_description = 'Download school certificate list'
+
+	email_school_reports.short_description = 'Email selected school(s) reports (single .pdf) to school(s)'
+
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
+
 
 	list_filter=('entered','language') #Field filters (shown as bar on right)
 
 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email')
+	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'report_downloaded', 'answer_sheet_downloaded')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
@@ -196,7 +205,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress')
+    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date')
     actions = ['export_competition']
     
     def export_competition(self, request, queryset):

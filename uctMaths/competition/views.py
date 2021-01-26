@@ -17,7 +17,7 @@ import logging
 import ho.pisa as pisa
 import cStringIO as StringIO
 from django.template.loader import get_template
-from datetime import datetime
+from datetime import datetime,time
 
 def auth(request):
     if not request.user.is_authenticated():
@@ -123,6 +123,7 @@ def printer_entry(request, queryset=None):
 @login_required
 def profile(request):
     # auth(request)
+    assigned_school=None
     school_blurb = 'Welcome. This profile is currently '
     try:
         #Attempt to find user's chosen school
@@ -131,7 +132,6 @@ def profile(request):
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
         school_blurb += 'not associated with any school. Navigate to \'Entry Form\' to select your school.'
-    
     admin_contact = compadmin.admin_emailaddress()
 
     if compadmin.isOpen():
@@ -140,7 +140,10 @@ def profile(request):
         closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
     else:
         closingdate_blurb='Online entries are closed but you may still create and modify entries because you have admin rights.'
-    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact})
+    shown = False
+    if assigned_school:
+        shown = has_results(request)
+    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'shown':shown})
 
 
 # submitted thingszz
@@ -377,7 +380,7 @@ def newstudents(request):
                     logger.exception(e)
                     return HttpResponseRedirect('../submitted_noemail.html')
             else:
-                print 'This should not happen'
+                print('This should not happen')
 
         except Exception as e:
             error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
@@ -468,3 +471,25 @@ def school_select(request):
     c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error, 'admin_emailaddress':compadmin.admin_emailaddress()} 
     c.update(csrf(request))
     return render_to_response('school_select.html', c, context_instance=RequestContext(request))
+
+@login_required
+def school_results(request):
+    assigned_school = School.objects.get(assigned_to=request.user)
+    if has_results(request):
+        report = ResponsibleTeacher.objects.get(school = assigned_school)
+        report.report_downloaded = datetime.now()
+        report.save()
+        return compadmin.print_school_reports(request,[assigned_school])
+    return HttpResponse("Results will be available soon.")
+
+@login_required
+def has_results(request):
+    assigned_school = School.objects.get(assigned_to=request.user)
+    rteacher = ResponsibleTeacher.objects.filter(school = assigned_school).count()>0
+    comp = compadmin.Competition.objects.all()
+    if comp.count() == 1:
+        pg_date = comp[0].prizegiving_date
+        if datetime.now().date() > pg_date or (datetime.now().date() == pg_date and datetime.now().time() > time(21,0,0)):
+            return rteacher
+
+    return False
