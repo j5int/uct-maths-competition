@@ -1080,7 +1080,6 @@ def printer_answer_sheet(request, assigned_school=None):
 
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     for istudent in student_list:
-            print(istudent.firstname)
             c = {
                 'name':istudent.firstname + " " + istudent.surname,
                 'school':istudent.school.name,
