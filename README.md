@@ -18,6 +18,7 @@ Clone UCT Maths repository
 
 Setup your virtualenv
 
+Linux:
 ```
 ~/work$ sudo pip install virtualenv
 ~/work$ mkdir venv
@@ -27,6 +28,16 @@ Setup your virtualenv
 ~/work/venv/uctmaths_venv$ source bin/activate
 ```
 
+Windows:
+```
+~/work$ pip install virtualenv
+~/work$ mkdir venv
+~/work$ cd work/venv
+~/work/venv$ virtualenv uctmaths_venv
+~/work/venv$ cd work/venv/uctmaths_venv
+~/work/venv/uctmaths_venv$ Scripts/activate
+```
+
 Install requirements for uct-maths-competition (Django 1.6 and other libraries)
 
 ```
@@ -34,9 +45,16 @@ Install requirements for uct-maths-competition (Django 1.6 and other libraries)
 (uctmaths_venv)~/work/uct-maths-competition$ pip install -r req.txt 
 ```
 
-Create uctmaths database and user 
 
-Update settings.ini
+Create uctmaths database and user on postgres
+
+Update settings.ini using example in \uctMaths\uctMaths\EXAMPLE_settings.ini
+
+Database settings refer to your postgres database settings.
+The secret key can be set manually but should be something difficult to crack as it is used for encryption
+Template dir is the directory for uctMaths\competition\interface
+Mail settings can be configured with Mailhog
+
 
 Sync database (create tables based on your Django models) and create superuser
 

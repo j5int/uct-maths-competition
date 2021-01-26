@@ -26,6 +26,9 @@ import cStringIO as StringIO
 from django.template.loader import get_template
 from django.template import loader, Context
 from models import LOCATIONS
+
+import reports
+
 import sys
 
 from background_task import background
@@ -321,7 +324,6 @@ def output_studentlists(student_list):
 def output_studenttags(student_list):
     """Generate individual and pair MailMerge lists for SchoolStudent QuerySet per location and grade.
     Served to user as a .zip file containing all the lists."""
-
     grade_bucket = gradeBucket(student_list)
 
     #Generate individuals name tags 
@@ -914,6 +916,22 @@ def update_school_entry_status():
             school_obj.entered=0
             school_obj.save()
 
+def email_school_reports(request, school_list):
+    if not views.has_results(request):
+        comp = Competition.objects.all()
+        if comp.count() == 1:
+            pg_date = comp[0].prizegiving_date
+            msg = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + " is before prizegiving date: " + str(pg_date) + " 21:00" 
+            msg += "<br>"+"Please wait until after the prize giving before sending out the results" 
+            msg += " or change the date at: "+"<a href=\"/admin/competition/competition/\">Competition</a>"
+            return HttpResponse(msg)
+    for ischool in school_list:
+            result=printer_school_report(request, [ischool])
+            rteachers = ResponsibleTeacher.objects.filter(school = ischool)
+            for rteacher in rteachers:
+                reports.send_confirmation(request,result,rteacher.email,ischool.name,True)
+                return
+
 def print_school_reports(request, school_list):
     result = printer_school_report(request, school_list)
     response = HttpResponse(result.getvalue())
@@ -925,14 +943,11 @@ def printer_school_report(request, school_list=None):
     """ Generate the school report for each school in the query set"""
 
     html = '' #Will hold rendered templates
-
     for assigned_school in school_list:
         student_list = SchoolStudent.objects.filter(school = assigned_school)
-
         grade_bucket = {8:[], 9:[], 10:[], 11:[], 12:[]}
         for igrade in range(8, 13):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
-
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M'))
         gold_count = student_list.filter(award='G').count()
@@ -953,7 +968,6 @@ def printer_school_report(request, school_list=None):
                 school_award_blurb+='%d Merit award%s'%(merit_count, 's' if merit_count>1 else '')
         else:
             school_award_blurb = ''
-
         year = str(datetime.datetime.now().strftime('%Y'))
 
         if responsible_teacher:
@@ -974,7 +988,6 @@ def printer_school_report(request, school_list=None):
             html += template.render(context) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
-
     #Generate the pdf doc
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
