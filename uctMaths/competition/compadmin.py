@@ -1113,7 +1113,7 @@ def generate_zipped_school_answer_sheets(school):
 
 def generate_zipped_school_answer_sheets_from_id(schoolID):
     school = School.objects.all().filter(id=schoolID)[0]
-    return school.name
+    print( school.name)
     return generate_zipped_school_answer_sheets(school)
 
 def generate_school_answer_sheets(request, school_list):
