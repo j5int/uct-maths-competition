@@ -19,6 +19,7 @@ class SchoolModelForm( forms.ModelForm ):
 	address = forms.CharField( widget=forms.Textarea )
 	class Meta:
 		model=School
+		fields = "__all__"
 
 #Displays different fields for SchoolUsers
 #class SchoolUserAdmin(admin.ModelAdmin):

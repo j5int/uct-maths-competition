@@ -29,6 +29,8 @@ from models import LOCATIONS
 import sys
 
 from background_task import background
+sys.path.append("../")
+from uctMaths.background_tasks import process
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -1140,6 +1142,3 @@ def email_school_answer_sheets(request, school_list):
         print(school)
         process(school.name)
 
-@background(schedule=5,queue="AS-generation-queue")
-def process(school):
-    print(school + " HELLO!")
