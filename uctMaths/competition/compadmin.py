@@ -9,6 +9,12 @@ import zipfile
 import datetime
 from django.core import exceptions 
 import views
+import pdfkit
+from PyPDF2 import PdfFileMerger, PdfFileReader
+import shutil
+import codecs
+import os
+from io import BytesIO
 #A few administration constants and associated methods to be used around the website.
 
 from django.core.context_processors import csrf
@@ -20,6 +26,7 @@ import cStringIO as StringIO
 from django.template.loader import get_template
 from django.template import loader, Context
 from models import LOCATIONS
+import sys
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -1038,4 +1045,89 @@ def certificate_list(request, school_list):
     response['Content-Disposition'] = 'attachment; filename=certificate_list(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
+    return response
+
+def get_student_answer_sheet_name(student):
+    return get_answer_sheet_name( student.firstname + " " + student.surname, student.school.name, student.grade)
+
+def get_answer_sheet_name(name, school, grade):
+    return str(school.replace(" ", "_") + "_GR" + str(grade) + "_" + str(name.replace(" ", "_") + "_ANSWER_SHEET"))
+
+def generate_answer_sheet(name, school, grade, code, venue, isPair):
+    options = {
+        'page-size': 'A4',
+        'orientation': 'landscape',
+        'title': get_answer_sheet_name(name, school, grade)
+    }
+    print("Generating answer sheet: " + options["title"])
+    # Get the answer sheet template
+    if isPair:
+        shutil.copyfile("competition/static/pair_answer_sheet_template.htm", "temp/template.htm")
+    else:
+        shutil.copyfile("competition/static/individual_answer_sheet_template.htm", "temp/template.htm")
+    editingFile = codecs.open("temp/template.htm", "a+", encoding="latin-1")
+    lines = editingFile.readlines()
+    for i in range(len(lines)):
+        lines[i] = lines[i].replace("TEMP_NAME", name)
+        lines[i] = lines[i].replace("TEMP_SCHOOL", school)
+        lines[i] = lines[i].replace("TEMP_GR", str(grade))
+        lines[i] = lines[i].replace("TEMP_CODE", str(code))
+        lines[i] = lines[i].replace("TEMP_VENUE", venue)
+    editingFile.truncate(0)
+    editingFile.writelines(lines)
+    editingFile.close()
+    pdf = pdfkit.from_file("temp/template.htm", False, options=options)
+    return pdf
+
+def generate_zipped_answer_sheets(students, combined_pdf_name=None):
+    merger = PdfFileMerger()
+    if not os.path.exists("temp"):
+        os.makedirs("temp")
+    with zipfile.ZipFile("temp/TEMP.zip", "w") as zFile:
+        for student in students:
+            pdf = generate_answer_sheet(  student.firstname + " " + student.surname, 
+                                    student.school.name, student.grade, student.reference, 
+                                    str(student.venue), student.paired)
+            zFile.writestr(get_student_answer_sheet_name(student) + ".pdf", pdf)
+        
+        if combined_pdf_name:
+            print("Combining PDFs")
+            fileNames = zFile.namelist()
+            for f in fileNames:
+                merger.append(PdfFileReader(BytesIO(zFile.read(f, "r"))))
+            merger.write("temp/COMBINED.pdf")
+            merger.close()
+            zFile.write("temp/COMBINED.pdf", arcname=combined_pdf_name + ".pdf")
+
+        return zFile.filename
+
+def generate_zipped_school_answer_sheets(school):
+    student_list = SchoolStudent.objects.all() #Regardless of admin UI selection
+    students = student_list.filter(school=school)
+    zipPath = generate_zipped_answer_sheets(students, school.name.replace(" ", "_") + "_COMBINED_ANSWER_SHEETS")
+    return zipPath
+
+def generate_school_answer_sheets(request, school_list):
+    returnPath = ""
+    if not os.path.exists("temp"):
+        os.makedirs("temp")
+    with zipfile.ZipFile("temp/TEMP_SCHOOLS.zip", "w") as zFile:
+        returnPath = zFile.filename
+        for school in school_list:
+            zipPath = generate_zipped_school_answer_sheets(school)
+            returnFile = open(zipPath, "rb")
+            zFile.writestr(school.name.replace(" ", "_") + '_ANSWER_SHEETS.zip', returnFile.read())
+
+    returnFile = open(returnPath, "rb")
+    response = HttpResponse(returnFile, content_type="application/zip")
+    response['Content-Disposition'] = 'attachment; filename=SCHOOL_ANSWER_SHEETS.zip'
+    return response
+
+
+def generate_personalised_answer_sheets(request, student_list):
+    zipPath = generate_zipped_answer_sheets(student_list)
+    returnFile = open(zipPath, "rb")
+
+    response = HttpResponse(returnFile, content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=answer_sheets.zip'
     return response
