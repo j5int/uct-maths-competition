@@ -123,6 +123,7 @@ def printer_entry(request, queryset=None):
 @login_required
 def profile(request):
     # auth(request)
+    assigned_school=None
     school_blurb = 'Welcome. This profile is currently '
     try:
         #Attempt to find user's chosen school
@@ -476,26 +477,19 @@ def school_results(request):
     assigned_school = School.objects.get(assigned_to=request.user)
     if has_results(request):
         report = ResponsibleTeacher.objects.get(school = assigned_school)
-        report.report_downloaded = datetime.now().date()
+        report.report_downloaded = datetime.now()
         report.save()
         return compadmin.print_school_reports(request,[assigned_school])
     return HttpResponse("Results will be available soon.")
 
-'''
 @login_required
 def has_results(request):
     assigned_school = School.objects.get(assigned_to=request.user)
-    for istudent in SchoolStudent.objects.filter(school = assigned_school):
-        if istudent.score > 0:
-            return True
-    return False
-'''
-@login_required
-def has_results(request):
+    rteacher = ResponsibleTeacher.objects.filter(school = assigned_school).count()>0
     comp = compadmin.Competition.objects.all()
     if comp.count() == 1:
         pg_date = comp[0].prizegiving_date
         if datetime.now().date() > pg_date or (datetime.now().date() == pg_date and datetime.now().time() > time(21,0,0)):
-            return True
+            return rteacher
 
     return False

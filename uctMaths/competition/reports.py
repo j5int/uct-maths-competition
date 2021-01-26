@@ -11,7 +11,7 @@ import views
 # See info in settings.py for SMTP server emulation and set-up
 
 @login_required
-def send_confirmation(request,result,rteacher,in_school='UNDEFINED',cc_admin=False):
+def send_confirmation(request,result,rteacher_email,in_school='UNDEFINED',cc_admin=False):
     """ Formats student information for the particular user and sends it via. smtp"""
 
     if request.user.first_name not in ['', None] and request.user.last_name  not in ['', None]:
@@ -30,7 +30,7 @@ def send_confirmation(request,result,rteacher,in_school='UNDEFINED',cc_admin=Fal
     output_string += 'Results letter for %s\nRequested by %s\n%s\n'%(in_school, name, UMC_datetime())
 
 
-    recipient_list = [rteacher.email]
+    recipient_list = [rteacher_email]
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
 

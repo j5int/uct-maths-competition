@@ -914,8 +914,10 @@ def email_school_reports(request, school_list):
             return HttpResponse(msg)
     for ischool in school_list:
             result=printer_school_report(request, [ischool])
-            rteacher = ResponsibleTeacher.objects.filter(school = ischool)[0]
-            reports.send_confirmation(request,result,rteacher,ischool.name,True)
+            rteachers = ResponsibleTeacher.objects.filter(school = ischool)
+            for rteacher in rteachers:
+                reports.send_confirmation(request,result,rteacher.email,ischool.name,True)
+                return
 
 def print_school_reports(request, school_list):
     result = printer_school_report(request, school_list)

@@ -161,8 +161,8 @@ class ResponsibleTeacher(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
-    report_downloaded = models.DateField(db_column='Report_downloaded')
-    answer_sheet_downloaded = models.DateField(db_column='Answer_sheet_downloaded')
+    report_downloaded = models.DateTimeField(db_column='Report_downloaded', blank=True)
+    answer_sheet_downloaded = models.DateTimeField(db_column='Answer_sheet_downloaded', blank=True)
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
     def __unicode__(self):
