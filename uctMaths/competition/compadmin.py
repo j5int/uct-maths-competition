@@ -9,8 +9,6 @@ import zipfile
 import datetime
 from django.core import exceptions 
 import views
-import pdfkit
-from PyPDF2 import PdfFileMerger, PdfFileReader
 import shutil
 import codecs
 import os
@@ -1064,99 +1062,65 @@ def certificate_list(request, school_list):
     output_workbook.save(response)
     return response
 
-def get_student_answer_sheet_name(student):
-    return get_answer_sheet_name( student.firstname + " " + student.surname, student.school.name, student.grade)
-
-def get_answer_sheet_name(name, school, grade):
-    return str(school.replace(" ", "_") + "_GR" + str(grade) + "_" + str(name.replace(" ", "_") + "_ANSWER_SHEET"))
-
-def generate_answer_sheet(name, school, grade, code, venue, isPair):
-    options = {
-        'page-size': 'A4',
-        'orientation': 'landscape',
-        'title': get_answer_sheet_name(name, school, grade)
-    }
-    print("Generating answer sheet: " + options["title"])
-    # Get the answer sheet template
-    if isPair:
-        shutil.copyfile("competition/static/pair_answer_sheet_template.htm", "temp/template.htm")
-    else:
-        shutil.copyfile("competition/static/individual_answer_sheet_template.htm", "temp/template.htm")
-    editingFile = codecs.open("temp/template.htm", "a+", encoding="latin-1")
-    lines = editingFile.readlines()
-    for i in range(len(lines)):
-        lines[i] = lines[i].replace("TEMP_NAME", name)
-        lines[i] = lines[i].replace("TEMP_SCHOOL", school)
-        lines[i] = lines[i].replace("TEMP_GR", str(grade))
-        lines[i] = lines[i].replace("TEMP_CODE", str(code))
-        lines[i] = lines[i].replace("TEMP_VENUE", venue)
-    editingFile.truncate(0)
-    editingFile.writelines(lines)
-    editingFile.close()
-    pdf = pdfkit.from_file("temp/template.htm", False, options=options)
-    return pdf
-
-def generate_zipped_answer_sheets(students, combined_pdf_name=None):
-    merger = PdfFileMerger()
-    if not os.path.exists("temp"):
-        os.makedirs("temp")
-    with zipfile.ZipFile("temp/TEMP.zip", "w") as zFile:
-        for student in students:
-            pdf = generate_answer_sheet(  student.firstname + " " + student.surname, 
-                                    student.school.name, student.grade, student.reference, 
-                                    str(student.venue), student.paired)
-            zFile.writestr(get_student_answer_sheet_name(student) + ".pdf", pdf)
-        
-        if combined_pdf_name:
-            print("Combining PDFs")
-            fileNames = zFile.namelist()
-            for f in fileNames:
-                merger.append(PdfFileReader(BytesIO(zFile.read(f, "r"))))
-            merger.write("temp/COMBINED.pdf")
-            merger.close()
-            zFile.write("temp/COMBINED.pdf", arcname=combined_pdf_name + ".pdf")
-
-        return zFile.filename
-
-def generate_zipped_school_answer_sheets(school):
-    student_list = SchoolStudent.objects.all() #Regardless of admin UI selection
-    students = student_list.filter(school=school)
-    zipPath = generate_zipped_answer_sheets(students, school.name.replace(" ", "_") + "_COMBINED_ANSWER_SHEETS")
-    return zipPath
-
-def generate_zipped_school_answer_sheets_from_id(schoolID):
-    school = School.objects.all().filter(id=schoolID)[0]
-    print( school.name)
-    return generate_zipped_school_answer_sheets(school)
-
 def generate_school_answer_sheets(request, school_list):
-    returnPath = ""
-    if not os.path.exists("temp"):
-        os.makedirs("temp")
-    with zipfile.ZipFile("temp/TEMP_SCHOOLS.zip", "w") as zFile:
-        returnPath = zFile.filename
-        for school in school_list:
-            zipPath = generate_zipped_school_answer_sheets(school)
-            returnFile = open(zipPath, "rb")
-            zFile.writestr(school.name.replace(" ", "_") + '_ANSWER_SHEETS.zip', returnFile.read())
+    output_stringIO = StringIO.StringIO() #Used to write to files then zip
 
-    returnFile = open(returnPath, "rb")
-    response = HttpResponse(returnFile, content_type="application/zip")
-    response['Content-Disposition'] = 'attachment; filename=SCHOOL_ANSWER_SHEETS.zip'
+    with zipfile.ZipFile(output_stringIO, 'w') as zipf:
+        for ischool in school_list:
+            output_string=printer_answer_sheet(request, ischool)
+            zipf.writestr('%s UCT Maths Answer Sheets.pdf'%(ischool.name.strip()), output_string.getvalue())
+    
+    if len(school_list) == 1:
+        response = HttpResponse(output_stringIO.getvalue())
+        response['Content-Disposition'] = 'attachment; filename=%s UCT Maths Answer Sheets.pdf'%(school_list[0].name.strip())
+        response['Content-Type'] = 'application/pdf'
+    else:
+        response = HttpResponse(output_stringIO.getvalue())
+        response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).zip'%(timestamp_now())
+        response['Content-Type'] = 'application/x-zip-compressed'
     return response
 
+def printer_answer_sheet(request, assigned_school=None):
+    """ Generate the school report for each school in the query set"""
 
-def generate_personalised_answer_sheets(request, student_list):
-    zipPath = generate_zipped_answer_sheets(student_list)
-    returnFile = open(zipPath, "rb")
+    html = '' #Will hold rendered templates
 
-    response = HttpResponse(returnFile, content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=answer_sheets.zip'
-    return response
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    for istudent in student_list:
+            c = {
+                'name':istudent.firstname + " " + istudent.surname,
+                'school':istudent.school.name,
+                'grade':str(istudent.grade),
+                'code':str(istudent.reference),
+                'venue':str(istudent.venue),
+            }
 
+            if istudent.paired:
+                template = get_template('pair_answer_sheet_template.htm')
+            else:
+                template = get_template('individual_answer_sheet_template.htm')
 
-def email_school_answer_sheets(request, school_list):
-    for school in school_list:
-        #print(school)
-        bg_generate_school_answer_sheets(school.id)
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
 
+    result = StringIO.StringIO()
+            #Generate the pdf doc
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    if not pdf.err:
+        return result
+    else:
+        pass #Error handling?
+
+def student_answer_sheet_ready(student):
+    # Check that the student has a venue allocated
+    if len(student.venue) == 0:
+        return False 
+    return True
+
+def school_answer_sheet_ready(school):
+    students = SchoolStudent.objects.filter(school=school.id)
+    for student in students:
+        if not student_answer_sheet_ready(student):
+            return False 
+    return True

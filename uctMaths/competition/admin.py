@@ -103,7 +103,7 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank', 'award', 'location')
-	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards', 'generate_personalised_answer_sheets']
+	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
 
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
@@ -151,10 +151,6 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	def assign_student_awards(self, request, queryset):
 	    return compadmin.assign_student_awards()
 	assign_student_awards.short_description = 'Assign student awards (regardless of selection)'
-
-	def generate_personalised_answer_sheets(self, request, queryset):
-		return compadmin.generate_personalised_answer_sheets(request, queryset)
-	generate_personalised_answer_sheets.short_description = "Download personalised answer sheets for selected student(s)."
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
