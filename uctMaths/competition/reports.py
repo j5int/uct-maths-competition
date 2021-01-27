@@ -34,14 +34,20 @@ def send_confirmation(request,result,rteacher_email,in_school='UNDEFINED',cc_adm
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
 
+    sendEmail(
+                '(Do not reply) UCT Mathematics Competition %s Competition Results'%(in_school),#Subject line
+                output_string, #Body
+                'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
+                [{"name": '%s_results.pdf'%(unicode(in_school)), "value": result.getvalue(), "type": "application/pdf"}],
+                recipient_list
+    )
+
+def sendEmail(subject, body, sender, attachments, recipient_list):
     email = EmailMessage(
-                        '(Do not reply) UCT Mathematics Competition %s Competition Results'%(in_school),#Subject line
-                        output_string, #Body
-                        'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
-                        recipient_list,
-                        )
-    #result = response
-    email.attach('%s_results.pdf'%(unicode(in_school)),result.getvalue(), mimetype='application/pdf')
+                        subject, body, sender, recipient_list,
+    )
+    for item in attachments:
+        email.attach(item["name"], item["value"], mimetype=item["type"])
     email.send()
 
 def UMC_header(width=40):

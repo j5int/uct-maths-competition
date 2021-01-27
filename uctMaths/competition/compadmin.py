@@ -29,6 +29,9 @@ import reports
 
 import sys
 
+from background_task import background
+sys.path.append("../")
+from uctMaths.background_tasks import bg_generate_school_answer_sheets
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""

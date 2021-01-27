@@ -1,7 +1,8 @@
-Django==1.6.1
+Django==1.7.0
 diff-match-patch==20121119
 django-allauth==0.15.0
 django-import-export==0.1.5
+django-background-tasks==1.0.15
 docutils==0.11
 html5lib==1.0b3
 oauthlib==0.6.0
@@ -11,7 +12,7 @@ python-openid==2.2.5
 reportlab==2.7
 requests==2.2.0
 requests-oauthlib==0.4.0
-six==1.5.2
+six==1.15.0
 tablib==0.9.11
 wsgiref==0.1.2
 xlwt==0.7.5

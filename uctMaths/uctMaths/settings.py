@@ -1,6 +1,8 @@
 # Django settings for uctMaths project.
 from ConfigParser import RawConfigParser
 
+import background_task
+
 config = RawConfigParser()
 config.read('uctMaths/settings.ini')
 
@@ -131,7 +133,7 @@ ROOT_URLCONF = 'uctMaths.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'uctMaths.wsgi.application'
 
-TEMPLATE_DIRS = (
+TEMPLATE_DIRS = tuple(
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -175,8 +177,12 @@ INSTALLED_APPS = (
 
     #Import-export functionality
     'import_export', #(https://django-import-export.readthedocs.org/en/latest/configuration.html)
+
+    # Background process handling
+    'background_task'
 )
 
+BACKGROUND_TASK_RUN_ASYNC = True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
