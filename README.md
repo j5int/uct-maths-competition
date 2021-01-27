@@ -1,6 +1,6 @@
 # UCT Maths Competition
 
-This is what the website `https://uctmaths.j5int.com/` is based from. It allows teachers to sign-up their school and students for the upcoming UCT Mathematics Competition. Once that is done, the admins are able to allocate all students to venues for the competition and then record their scores and prizes afterwards.
+This is what the website [https://uctmaths.j5int.com/](https://uctmaths.j5int.com/) is based from. It allows teachers to sign-up their school and students for the upcoming UCT Mathematics Competition. Once that is done, the admins are able to allocate all students to venues for the competition and then record their scores and prizes afterwards.
 
 ## Getting Started
 
