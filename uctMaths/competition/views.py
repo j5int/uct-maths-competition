@@ -140,10 +140,10 @@ def profile(request):
         closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
     else:
         closingdate_blurb='Online entries are closed but you may still create and modify entries because you have admin rights.'
-    shown = False
+    show_results_download = False
     if assigned_school:
-        shown = has_results(request)
-    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'shown':shown})
+        show_results_download = has_results(request)
+    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download})
 
 
 # submitted thingszz
