@@ -58,7 +58,7 @@ Template dir is the directory for `uctMaths\competition\interface`.
 Mail settings can be configured with Mailhog.
 
 
-* Sync database (create tables based on your Django models) and create superuser (`syncdb` is deprecated in Django 1.8, use migrations for Django 1.7 onwards)
+* Sync database (create tables based on your Django models) and create superuser (`syncdb` is deprecated from Django 1.8, use migrations for Django 1.7 onwards)
 
 ```
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py syncdb
