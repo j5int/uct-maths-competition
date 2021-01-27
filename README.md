@@ -45,12 +45,12 @@ Windows:
 (uctmaths_venv)~/work/uct-maths-competition$ pip install -r req.txt 
 ```
 
-Note: most of the libraries are extremely out of date. Updating any of them should be done with care. Many features used in Django 1.6 were deprecated soon thereafter.
+*Note: most of the libraries are extremely out of date. Updating any of them should be done with care. Many features used in Django 1.6 were deprecated soon thereafter.*
 
 
 * Create a "uctmaths" database and user on postgres
 
-* Create a file `settings.ini` based off of the example `\uctMaths\uctMaths\EXAMPLE_settings.ini`
+* Create a file `uctMaths/settings.ini` based off of the example [uctMaths/uctMaths/EXAMPLE_settings.ini](uctMaths/uctMaths/EXAMPLE_settings.ini)
 
 Database settings refer to your postgres database settings.
 The secret key can be set manually but should be something difficult to crack as it is used for encryption
@@ -58,7 +58,7 @@ Template dir is the directory for `uctMaths\competition\interface`.
 Mail settings can be configured with Mailhog.
 
 
-* Sync database (create tables based on your Django models) and create superuser (deprecated in Django 1.8, use migrations for Django 1.7 onwards)
+* Sync database (create tables based on your Django models) and create superuser (`syncdb` is deprecated in Django 1.8, use migrations for Django 1.7 onwards)
 
 ```
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py syncdb
@@ -70,7 +70,15 @@ Mail settings can be configured with Mailhog.
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py runserver
 ```
 
-If you open `localhost:8000` in your browser you should be able to access the website as users would see it. Open `localhost:8000/admin` to perform admin duties. You need to add yourself as a superuser in order to use this. Following the steps outlined here, you will have a clean DB. You should ask one of the admins of the official website to provide a copy of the live database. When using a copy of the live database, make sure that you are not sending out emails to the teachers with registered email addresses. 
+If you open [localhost:8000](localhost:8000) in your browser you should be able to access the website as users would see it. Open [localhost:8000/admin](localhost:8000/admin) to perform admin duties. You need to add yourself as a superuser in order to use this. 
+
+Following the steps outlined here, you will have a clean DB. You should ask one of the admins of the official website to provide a copy of the live database. When using a copy of the live database, make sure that you are not sending out emails to the teachers with registered email addresses. 
+
+If you are given the database as a `.sql.gz` file, you should open it with an archiver utility such as WinRAR/7zip and extract the contained `.sql` file somewhere convenient. Using the terminal, navigate to the directory where the SQL file was saved. You can now import the database by running
+```
+psql -U postgres uctmaths < (filename).sql
+```
+where you can replace "postgres" with the name of your user.
 
 
 ## Where to look
