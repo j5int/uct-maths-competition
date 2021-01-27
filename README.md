@@ -9,7 +9,6 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installation and set-up
 
 A step by step series of instructions on how to get a development env running
-
 * Clone UCT Maths repository
 
 ```
@@ -19,6 +18,7 @@ A step by step series of instructions on how to get a development env running
 * Setup your virtualenv
 
 Linux:
+
 ```
 ~/work$ sudo pip install virtualenv
 ~/work$ mkdir venv
@@ -29,6 +29,7 @@ Linux:
 ```
 
 Windows:
+
 ```
 ~/work$ pip install virtualenv
 ~/work$ mkdir venv
@@ -47,16 +48,13 @@ Windows:
 
 *Note: most of the libraries are extremely out of date. Updating any of them should be done with care. Many features used in Django 1.6 were deprecated soon thereafter.*
 
-
 * Create a "uctmaths" database and user on postgres
 
-* Create a file `uctMaths/uctMaths/settings.ini` based off of the example [uctMaths/uctMaths/EXAMPLE_settings.ini](uctMaths/uctMaths/EXAMPLE_settings.ini)
-
-Database settings refer to your postgres database settings.
-    - The secret key can be set manually but should be something difficult to crack as it is used for encryption
-    - TEMPLATE_DIR should be the absolute path to `uctMaths/competition/interface` in your filesystem.
-    - Mail settings can be configured with Mailhog.
-
+* Create a file `uctMaths/uctMaths/settings.ini` based off of the example [uctMaths/uctMaths/EXAMPLE_settings.ini](uctMaths/uctMaths/EXAMPLE_settings.ini).
+    * Database settings refer to your postgres database settings.
+    * The secret key can be set manually but should be something difficult to crack as it is used for encryption
+    * TEMPLATE_DIR should be the absolute path to `uctMaths/competition/interface` in your filesystem.
+    * Mail settings can be configured with Mailhog.
 
 * Sync database (create tables based on your Django models) and create superuser (`syncdb` is deprecated from Django 1.8, use migrations for Django 1.7 onwards)
 
@@ -65,7 +63,6 @@ Database settings refer to your postgres database settings.
 ```
 
 * Start Django server
-
 ```
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py runserver
 ```
