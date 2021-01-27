@@ -1064,8 +1064,9 @@ def generate_school_answer_sheets(request, school_list):
 
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
-            output_string=printer_answer_sheet(request, ischool)
-            zipf.writestr('%s UCT Maths Answer Sheets.pdf'%(ischool.name.strip()), output_string.getvalue())
+            if ischool.assigned_to != None:
+                output_string=printer_answer_sheet(request, ischool)
+                zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(ischool.name), output_string.getvalue())
     
     if len(school_list) == 1:
         response = HttpResponse(output_stringIO.getvalue())
@@ -1075,35 +1076,42 @@ def generate_school_answer_sheets(request, school_list):
         response = HttpResponse(output_stringIO.getvalue())
         response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).zip'%(timestamp_now())
         response['Content-Type'] = 'application/x-zip-compressed'
+
     return response
 
 def printer_answer_sheet(request, assigned_school=None):
-    """ Generate the school report for each school in the query set"""
+    """ Generate the school answer sheet for each school in the query set"""
 
     html = '' #Will hold rendered templates
 
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     for istudent in student_list:
+            path = os.path.dirname(__file__)+('/static/individuals.jpg')
+            headerpath = path.replace(".jpg","_header.jpg")
+            footerpath = path.replace(".jpg","_footer.jpg")
+            if istudent.paired:
+                headerpath = headerpath.replace("individuals","pairs")
+                footerpath = footerpath.replace("individuals","pairs")
             c = {
                 'name':istudent.firstname + " " + istudent.surname,
                 'school':istudent.school.name,
                 'grade':str(istudent.grade),
                 'code':str(istudent.reference),
                 'venue':str(istudent.venue),
+                'headerpath':headerpath,
+                'footerpath':footerpath,
             }
-
             if istudent.paired:
-                template = get_template('pair_answer_sheet_template.htm')
+                template = get_template('pair_as_template.html')
             else:
-                template = get_template('individual_answer_sheet_template.htm')
-
+                template = get_template('individual_as_template.html')
             c.update(csrf(request))
             context = Context(c)
             html += template.render(context) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
             #Generate the pdf doc
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    pdf = pisa.CreatePDF(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
         return result
     else:
