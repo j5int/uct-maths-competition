@@ -1065,7 +1065,7 @@ def generate_school_answer_sheets(request, school_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
             output_string=printer_answer_sheet(request, ischool)
-            zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(unicode(ischool.name.strip().replace(" ", "_"))), 
+            zipf.writestr('%s UCT Maths Answer Sheets.pdf'%(unicode(ischool.name.strip())), 
             output_string.getvalue())
     
         if len(school_list) == 1:
