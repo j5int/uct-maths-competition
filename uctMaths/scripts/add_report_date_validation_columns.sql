@@ -3,7 +3,7 @@
 DO $$
 	BEGIN
 		BEGIN
-			ALTER TABLE competition_competition ADD COLUMN  "prizegiving_date" TIMESTAMP NOT NULL DEFAULT '9999-12-31';
+			ALTER TABLE competition_competition ADD COLUMN  "prizegiving_date" DATE NOT NULL DEFAULT '9999-12-31';
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column prizegiving_date already exists in competition_competition.';
 		END;
