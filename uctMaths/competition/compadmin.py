@@ -1065,16 +1065,17 @@ def generate_school_answer_sheets(request, school_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
             output_string=printer_answer_sheet(request, ischool)
-            zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(ischool.name), output_string.getvalue())
+            zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(unicode(ischool.name.strip().replace(" ", "_"))), 
+            output_string.getvalue())
     
-    if len(school_list) == 1:
-        response = HttpResponse(output_stringIO.getvalue())
-        response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).pdf'%(timestamp_now())
-        response['Content-Type'] = 'application/pdf'
-    else:
-        response = HttpResponse(output_stringIO.getvalue())
-        response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).zip'%(timestamp_now())
-        response['Content-Type'] = 'application/x-zip-compressed'
+        if len(school_list) == 1:
+            response = HttpResponse(output_stringIO.getvalue())
+            response['Content-Disposition'] = 'attachment; filename=%s' % (zipf.namelist()[0])
+            response['Content-Type'] = 'application/pdf'
+        else:
+            response = HttpResponse(output_stringIO.getvalue())
+            response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).zip'%(timestamp_now())
+            response['Content-Type'] = 'application/x-zip-compressed'
     return response
 
 def printer_answer_sheet(request, assigned_school=None):
