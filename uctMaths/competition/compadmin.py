@@ -9,8 +9,6 @@ import zipfile
 import datetime
 from django.core import exceptions 
 import views
-import pdfkit
-from PyPDF2 import PdfFileMerger, PdfFileReader
 import shutil
 import codecs
 import os
