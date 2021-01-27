@@ -493,3 +493,13 @@ def has_results(request):
             return rteacher
 
     return False
+
+@login_required 
+def answer_sheets(request):
+    assigned_school = School.objects.get(assigned_to=request.user)
+    if compadmin.school_answer_sheet_ready(assigned_school):
+        teacher = ResponsibleTeacher.objects.get(school=assigned_school)
+        teacher.answer_sheet_downloaded = datetime.now()
+        return compadmin.generate_school_answer_sheets(request, [assigned_school])
+    else:
+        return HttpResponse("Your school's answer sheets cannot be generated at this time.")
