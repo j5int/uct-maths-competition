@@ -9,8 +9,6 @@ import zipfile
 import datetime
 from django.core import exceptions 
 import views
-import pdfkit
-from PyPDF2 import PdfFileMerger, PdfFileReader
 import shutil
 import codecs
 import os
@@ -1069,9 +1067,16 @@ def generate_school_answer_sheets(request, school_list):
             if ischool.assigned_to != None:
                 output_string=printer_answer_sheet(request, ischool)
                 zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(ischool.name), output_string.getvalue())
-    response = HttpResponse(output_stringIO.getvalue())
-    response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).zip'%(timestamp_now())
-    response['Content-Type'] = 'application/x-zip-compressed'
+    
+    if len(school_list) == 1:
+        response = HttpResponse(output_stringIO.getvalue())
+        response['Content-Disposition'] = 'attachment; filename=%s UCT Maths Answer Sheets.pdf'%(school_list[0].name.strip())
+        response['Content-Type'] = 'application/pdf'
+    else:
+        response = HttpResponse(output_stringIO.getvalue())
+        response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).zip'%(timestamp_now())
+        response['Content-Type'] = 'application/x-zip-compressed'
+
     return response
 
 def printer_answer_sheet(request, assigned_school=None):
@@ -1111,3 +1116,16 @@ def printer_answer_sheet(request, assigned_school=None):
         return result
     else:
         pass #Error handling?
+
+def student_answer_sheet_ready(student):
+    # Check that the student has a venue allocated
+    if len(student.venue) == 0:
+        return False 
+    return True
+
+def school_answer_sheet_ready(school):
+    students = SchoolStudent.objects.filter(school=school.id)
+    for student in students:
+        if not student_answer_sheet_ready(student):
+            return False 
+    return True

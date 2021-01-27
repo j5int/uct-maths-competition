@@ -140,10 +140,13 @@ def profile(request):
         closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
     else:
         closingdate_blurb='Online entries are closed but you may still create and modify entries because you have admin rights.'
-    shown = False
+    show_results_download = False
     if assigned_school:
-        shown = has_results(request)
-    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'shown':shown})
+        show_results_download = has_results(request)
+    show_answer_sheets_download = False
+    if assigned_school:
+        show_answer_sheets_download = compadmin.school_answer_sheet_ready(assigned_school)
+    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
 
 
 # submitted thingszz
@@ -222,7 +225,8 @@ def entry_review(request):
         'error':error,
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
-        'ierror':error}
+        'ierror':error,
+        "only_back":True}
 
     if request.method == 'POST' and 'edit_entry' in request.POST and (compadmin.isOpen() or request.user.is_staff):  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
@@ -493,3 +497,14 @@ def has_results(request):
             return rteacher
 
     return False
+
+@login_required 
+def answer_sheets(request):
+    assigned_school = School.objects.get(assigned_to=request.user)
+    if compadmin.school_answer_sheet_ready(assigned_school):
+        teacher = ResponsibleTeacher.objects.get(school=assigned_school)
+        teacher.answer_sheet_downloaded = datetime.now()
+        teacher.save()
+        return compadmin.generate_school_answer_sheets(request, [assigned_school])
+    else:
+        return HttpResponse("Your school's answer sheets cannot be generated at this time.")

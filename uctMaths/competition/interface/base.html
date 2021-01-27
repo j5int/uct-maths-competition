@@ -18,14 +18,22 @@ used on all the pages once you're logged in
                 <h2><a href="/accounts/profile/">Profile</a></h2>
             </div>
             <ul class="style1">
-				<li><a href="/competition/register/entry_review/">Entry form</a></li>
-				{% if shown%}
-					<li><a href="/competition/register/school_results/" target="_blank" >School Results</a></li>
+				{% if only_back%}
+					<li><a href="/accounts/profile/">Back</a></li>
 				{%endif%}
-                {% if admin%}
-                    <li><a href="/competition/register/schools/">Schools</a></li>
-                    <li><a href="/competition/register/venues/">Venues</a></li>
-                {%endif%}
+				{% if not only_back%}
+					<li><a href="/competition/register/entry_review/">Entry form</a></li>
+					{% if show_answer_sheets_download%}
+						<li><a href="/competition/register/answer_sheets/" target="_blank" >Answer Sheets</a></li>
+					{%endif%}
+					{% if show_results_download%}
+						<li><a href="/competition/register/school_results/" target="_blank" >School Results</a></li>
+					{%endif%}
+					{% if admin%}
+						<li><a href="/competition/register/schools/">Schools</a></li>
+						<li><a href="/competition/register/venues/">Venues</a></li>
+					{%endif%}
+				{%endif%}
             </ul>
         </div>
 
