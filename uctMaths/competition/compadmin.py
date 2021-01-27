@@ -1111,7 +1111,6 @@ def printer_answer_sheet(request, assigned_school=None):
 
 def student_answer_sheet_ready(student):
     # Check that the student has a venue allocated
-    print(student.firstname, student.surname, student.school, student.venue, student.reference, student.grade)
     if len(student.venue) == 0:
         return False 
     return True
