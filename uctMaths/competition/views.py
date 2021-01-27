@@ -225,7 +225,8 @@ def entry_review(request):
         'error':error,
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
-        'ierror':error}
+        'ierror':error,
+        "only_back":True}
 
     if request.method == 'POST' and 'edit_entry' in request.POST and (compadmin.isOpen() or request.user.is_staff):  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
