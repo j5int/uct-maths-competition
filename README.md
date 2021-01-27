@@ -79,4 +79,4 @@ where you can replace "postgres" with the name of your user.
 
 
 ## Where to look
-
+TODO: Explain where certain changes should take place.
