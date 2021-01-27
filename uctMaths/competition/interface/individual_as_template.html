@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <style>
+        table,td {
+          border: 1px solid black;
+          border-collapse: collapse;
+          
+        }
+        @page {
+            size: a4 landscape;
+            }
+        </style>
+        </head>
+<body>
+
+    <td><img src="{{headerpath}}" width=100% align="center"/></td>
+
+    <table width = 85% height = 7% align="center">
+        <tr style="text-align:center; font-size:11pt; font-family:'Calibri',sans-serif; padding: 10%;">
+          <td width=8% ><b>CODE</b><br>{{code}}</td>
+          <td width=28% ><b>NAME</b><br>{{name}}</td>
+          <td width=28% ><b>SCHOOL</b><br>{{school}}</td>
+          <td width=8% ><b>GRADE</b><br>{{grade}}</td>
+          <td width=28% ><b>VENUE</b><br>{{venue}}</td>
+        </tr>
+      </table>
+
+    <td><img src="{{footerpath}}" width=100% align="center"/></td>
+
+<pdf:nextpage />
+</body>
+</html>
+
