@@ -54,7 +54,7 @@ Windows:
 
 Database settings refer to your postgres database settings.
   * The secret key can be set manually but should be something difficult to crack as it is used for encryption
-  * TEMPLATE_DIR should be the absolute path to `uctMaths\competition\interface`.
+  * TEMPLATE_DIR should be the absolute path to `uctMaths/competition/interface` in your filesystem.
   * Mail settings can be configured with Mailhog.
 
 
