@@ -70,7 +70,7 @@ Mail settings can be configured with Mailhog.
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py runserver
 ```
 
-If you open [localhost:8000](localhost:8000) in your browser you should be able to access the website as users would see it. Open [localhost:8000/admin](localhost:8000/admin) to perform admin duties. You need to add yourself as a superuser in order to use this. 
+If you open [localhost:8000](http://localhost:8000) in your browser you should be able to access the website as users would see it. Open [localhost:8000/admin](http://localhost:8000/admin) to perform admin duties. You need to add yourself as a superuser in order to use this. 
 
 Following the steps outlined here, you will have a clean DB. You should ask one of the admins of the official website to provide a copy of the live database. When using a copy of the live database, make sure that you are not sending out emails to the teachers with registered email addresses. 
 
