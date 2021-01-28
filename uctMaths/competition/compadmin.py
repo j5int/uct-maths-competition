@@ -1090,20 +1090,12 @@ def printer_answer_sheet(request, assigned_school=None):
 
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     for istudent in student_list:
-            path = os.path.dirname(__file__)+('/static/individuals.jpg')
-            headerpath = path.replace(".jpg","_header.jpg")
-            footerpath = path.replace(".jpg","_footer.jpg")
-            if istudent.paired:
-                headerpath = headerpath.replace("individuals","pairs")
-                footerpath = footerpath.replace("individuals","pairs")
             c = {
                 'name':istudent.firstname + " " + istudent.surname,
                 'school':istudent.school.name,
                 'grade':str(istudent.grade),
                 'code':str(istudent.reference),
                 'venue':str(istudent.venue),
-                'headerpath':headerpath,
-                'footerpath':footerpath,
             }
             if istudent.paired:
                 template = get_template('pair_as_template.html')
