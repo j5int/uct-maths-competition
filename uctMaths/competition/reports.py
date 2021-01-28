@@ -10,39 +10,34 @@ import views
 # Methods for very simple formatting of data entered by a certain user (filter)
 # See info in settings.py for SMTP server emulation and set-up
 
-@login_required
-def send_confirmation(request,result,rteacher_email,in_school='UNDEFINED',cc_admin=False):
+def send_confirmation(in_school, result, cc_admin=False):
     """ Formats student information for the particular user and sends it via. smtp"""
-
-    if request.user.first_name not in ['', None] and request.user.last_name  not in ['', None]:
-        name = request.user.first_name + " " + request.user.last_name
-    else:
-        name = request.user.username
-    #rteacher = ResponsibleTeacher.objects.filter(school = in_school)[0]
+    rteacher = ResponsibleTeacher.objects.filter(school=in_school.id)[0]
+    name = rteacher.firstname + " " + rteacher.surname
     #Header
     output_string = 'Dear %s, \n\n' \
                     'This email contains results for %s from the UCT Mathematics Competition. ' \
                     'Attached you will find a printer-friendly .pdf file that contains your school\'s ' \
                     'results. \n\n' \
                     'Regards,\n\n' \
-                    'The UCT Mathematics Competition team'%(name, in_school)
+                    'The UCT Mathematics Competition team'%(name, in_school.name)
     output_string += UMC_header("Results")
-    output_string += 'Results letter for %s\nRequested by %s\n%s\n'%(in_school, name, UMC_datetime())
+    output_string += 'Results letter for %s\nRequested by %s\n%s\n'%(in_school.name, name, UMC_datetime())
 
 
-    recipient_list = [rteacher_email]
+    recipient_list = [rteacher.email]
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
 
     send_email(
-                '(Do not reply) UCT Mathematics Competition %s Competition Results'%(in_school),#Subject line
+                '(Do not reply) UCT Mathematics Competition %s Competition Results'%(in_school.name),#Subject line
                 output_string, #Body
                 'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
-                [{"name": '%s_results.pdf'%(unicode(in_school)), "value": result.getvalue(), "type": "application/pdf"}],
+                [{"name": '%s_results.pdf'%(unicode(in_school.name)), "value": result.getvalue(), "type": "application/pdf"}],
                 recipient_list
     )
 
-def send_answer_sheets(school, answer_sheet):
+def send_answer_sheets(school, answer_sheet, cc_admin=False):
     rteacher = ResponsibleTeacher.objects.filter(school=school.id)[0]
     #Header
     output_string = 'Dear %s, \n\n' \
@@ -53,12 +48,16 @@ def send_answer_sheets(school, answer_sheet):
                     'The UCT Mathematics Competition team'%(rteacher.firstname + " " + rteacher.surname, school.name)
     output_string += UMC_header("Answer Sheets")
     output_string += 'Answer sheets for %s\n%s\n'%(school.name, UMC_datetime())
+    recipient_list = [rteacher.email]
+    if cc_admin:
+        recipient_list.append(compadmin.admin_emailaddress())
+
     send_email(
         "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
         output_string,
         "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
         [{"name": "%s Answer Sheets.pdf" % (unicode(school.name)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
-        [rteacher.email]
+        recipient_list
     )
 
 def send_email(subject, body, sender, attachments, recipient_list):

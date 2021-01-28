@@ -31,7 +31,7 @@ import sys
 
 from background_task import background
 sys.path.append("../")
-from uctMaths.background_tasks import bg_generate_school_answer_sheets
+from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -924,11 +924,7 @@ def email_school_reports(request, school_list):
             msg += " or change the date at: "+"<a href=\"/admin/competition/competition/\">Competition</a>"
             return HttpResponse(msg)
     for ischool in school_list:
-            result=printer_school_report(request, [ischool])
-            rteachers = ResponsibleTeacher.objects.filter(school = ischool)
-            for rteacher in rteachers:
-                reports.send_confirmation(request,result,rteacher.email,ischool.name,True)
-                return
+            bg_email_results(ischool.id)
 
 def print_school_reports(request, school_list):
     result = printer_school_report(request, school_list)
