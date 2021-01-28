@@ -145,7 +145,7 @@ def profile(request):
         show_results_download = has_results(request)
     show_answer_sheets_download = False
     if assigned_school:
-        show_answer_sheets_download = compadmin.school_answer_sheet_ready(assigned_school)
+        show_answer_sheets_download = compadmin.school_students_venue_assigned(assigned_school)
     return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
 
 
