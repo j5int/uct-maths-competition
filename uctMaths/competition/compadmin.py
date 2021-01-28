@@ -1134,14 +1134,22 @@ def school_answer_sheet_ready(school):
     return True
 
 def email_school_answer_sheets(request, schools):
-    # First check that answer sheets can be generated for all selected schools
+    # Check that all schools have an assigned teacher
+    not_assigned = []
+    for school in schools:
+        if not school.assigned_to:
+            not_assigned.append(school.name)
+    if not_assigned:
+        return HttpResponse("Emails not sent. There are no responsible teachers assigned to " 
+        + ", ".join(not_assigned) + ".")
+    # Check that answer sheets can be generated for all selected schools
     not_ready = []
     for school in schools:
         if not school_answer_sheet_ready(school):
             not_ready.append(school.name)
-    if len(not_ready) > 0:
+    if not_ready:
         return HttpResponse("Emails not sent. Unable to generate answer sheets for school" 
-                        + ("" if len(not_ready) == 1 else "s") + ": " + ", ".join(not_ready))
+                        + ("" if len(not_ready) == 1 else "s") + ": " + ", ".join(not_ready) +".")
     
     # If everything is fine, register a background task to send an email for each school
     for school in schools:
