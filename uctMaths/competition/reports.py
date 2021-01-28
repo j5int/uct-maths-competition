@@ -26,7 +26,7 @@ def send_confirmation(request,result,rteacher_email,in_school='UNDEFINED',cc_adm
                     'results. \n\n' \
                     'Regards,\n\n' \
                     'The UCT Mathematics Competition team'%(name, in_school)
-    output_string += UMC_header()
+    output_string += UMC_header("Results")
     output_string += 'Results letter for %s\nRequested by %s\n%s\n'%(in_school, name, UMC_datetime())
 
 
@@ -34,7 +34,7 @@ def send_confirmation(request,result,rteacher_email,in_school='UNDEFINED',cc_adm
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
 
-    sendEmail(
+    send_email(
                 '(Do not reply) UCT Mathematics Competition %s Competition Results'%(in_school),#Subject line
                 output_string, #Body
                 'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
@@ -42,7 +42,26 @@ def send_confirmation(request,result,rteacher_email,in_school='UNDEFINED',cc_adm
                 recipient_list
     )
 
-def sendEmail(subject, body, sender, attachments, recipient_list):
+def send_answer_sheets(school, answer_sheet):
+    rteacher = ResponsibleTeacher.objects.filter(school=school.id)[0]
+    #Header
+    output_string = 'Dear %s, \n\n' \
+                    'This email contains answer sheets for %s for the upcoming UCT Mathematics Competition. ' \
+                    'Attached you will find a printer-friendly .pdf file that contains the answer sheets that ' \
+                    'your students will write on. \n\n' \
+                    'Regards,\n\n' \
+                    'The UCT Mathematics Competition team'%(rteacher.firstname + " " + rteacher.surname, school.name)
+    output_string += UMC_header("Answer Sheets")
+    output_string += 'Answer sheets for %s\n%s\n'%(school.name, UMC_datetime())
+    send_email(
+        "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
+        output_string,
+        "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
+        [{"name": "%s Answer Sheets.pdf" % (unicode(school.name)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
+        [rteacher.email]
+    )
+
+def send_email(subject, body, sender, attachments, recipient_list):
     email = EmailMessage(
                         subject, body, sender, recipient_list,
     )
@@ -50,9 +69,9 @@ def sendEmail(subject, body, sender, attachments, recipient_list):
         email.attach(item["name"], item["value"], mimetype=item["type"])
     email.send()
 
-def UMC_header(width=40):
+def UMC_header(content, width=40):
     """ Text header for email """
-    to_return = '\n\n%20s\n\n%20s\n\n'%('~'*10, 'UCT Mathematics Competition Results')
+    to_return = '\n\n%20s\n\n%20s\n\n'%('~'*10, 'UCT Mathematics Competition ' + content)
     return to_return
 
 
