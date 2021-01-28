@@ -28,4 +28,4 @@ def bg_generate_school_answer_sheets(school_id):
         return
     
     send_answer_sheets(school, pdf)
-    print("Finished.")
+    print("Finished school:", school.name)
