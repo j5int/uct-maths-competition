@@ -19,6 +19,7 @@ class SchoolModelForm( forms.ModelForm ):
 	address = forms.CharField( widget=forms.Textarea )
 	class Meta:
 		model=School
+		fields = "__all__"
 
 #Displays different fields for SchoolUsers
 #class SchoolUserAdmin(admin.ModelAdmin):
@@ -32,7 +33,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	search_fields = ['name']
 	resource_class = SchoolResource
 
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list','generate_school_answer_sheets']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','email_school_reports','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list','generate_school_answer_sheets','email_school_answer_sheets']
 
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
@@ -73,6 +74,9 @@ class SchoolAdmin(ImportExportModelAdmin):
 	
 	def generate_school_answer_sheets(self, request, queryset):
 		return compadmin.generate_school_answer_sheets(request, queryset)
+	
+	def email_school_answer_sheets(self, request, queryset):
+		return compadmin.email_school_answer_sheets(request, queryset)
 
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'

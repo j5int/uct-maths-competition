@@ -67,7 +67,7 @@ class SchoolStudent(models.Model):
             MinValueValidator(8)
         ])
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True)
-    paired = models.BooleanField(db_column='Paired')
+    paired = models.BooleanField(db_column='Paired', default=False)
     award = models.CharField(max_length=3L, db_column='Award', null=True, blank=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
@@ -87,7 +87,7 @@ class Venue(models.Model):
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
     grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
-    allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS')
+    allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS', default=False)
     occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True, null=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
@@ -193,7 +193,7 @@ class SchoolStudentArchive(models.Model):
             MinValueValidator(8)
         ])
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True)
-    paired = models.BooleanField(db_column='Paired')
+    paired = models.BooleanField(db_column='Paired', default=False)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):
