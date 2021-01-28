@@ -1061,12 +1061,11 @@ def certificate_list(request, school_list):
 
 def generate_school_answer_sheets(request, school_list):
     output_stringIO = StringIO.StringIO() #Used to write to files then zip
-
+    start = datetime.datetime.now()
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
-            if ischool.assigned_to != None:
-                output_string=printer_answer_sheet(request, ischool)
-                zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(ischool.name), output_string.getvalue())
+            output_string=printer_answer_sheet(request, ischool)
+            zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(ischool.name), output_string.getvalue())
     
     if len(school_list) == 1:
         response = HttpResponse(output_stringIO.getvalue())
@@ -1076,13 +1075,18 @@ def generate_school_answer_sheets(request, school_list):
         response = HttpResponse(output_stringIO.getvalue())
         response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).zip'%(timestamp_now())
         response['Content-Type'] = 'application/x-zip-compressed'
-
+    diff = datetime.datetime.now() - start
+    print(str(diff))
     return response
 
 def printer_answer_sheet(request, assigned_school=None):
     """ Generate the school answer sheet for each school in the query set"""
-
-    html = '' #Will hold rendered templates
+    path = os.path.dirname(__file__)+('/static/default.jpg')
+    c = {'path': path}
+    template = get_template('default_as_template.html')
+    c.update(csrf(request))
+    context = Context(c)
+    html = template.render(context) #Will hold rendered templates
 
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     for istudent in student_list:
@@ -1111,7 +1115,7 @@ def printer_answer_sheet(request, assigned_school=None):
 
     result = StringIO.StringIO()
             #Generate the pdf doc
-    pdf = pisa.CreatePDF(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
         return result
     else:
