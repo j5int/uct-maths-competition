@@ -79,4 +79,8 @@ where you can replace "postgres" with the name of the user owning the database.
 
 
 ## Where to look
-TODO: Explain where certain changes should take place.
+There are some good docs in [docs/userdoc](docs/userdoc) and [docs/readme](docs/readme]. These were written in 2014, so are quite out of date.
+
+[uctMaths/manage.py](uctMaths/manage.py) is the main file which you will typically run with `python manage.py runserver`.
+
+[uctMaths/uctMaths](uctMaths/uctMaths) mainly contains configuration and settings for the server. Most of the useful files are in [uctMaths/competition](uctMaths/competition).
