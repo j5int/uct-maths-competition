@@ -69,6 +69,12 @@ Windows:
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py runserver
 ```
 
+* For certain features, you need to open another terminal tab at the same time and run
+```
+(uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py process_tasks
+```
+This handles background tasks that would be too slow for the server to handle. For example, generating all answer sheets and sending emails to all schools.
+
 If you open [localhost:8000](http://localhost:8000) in your browser you should be able to access the website as users would see it. Open [localhost:8000/admin](http://localhost:8000/admin) to perform admin duties. You need to add yourself as a superuser in order to log in here. 
 
 Following the steps outlined here, you will have a clean DB. You should ask one of the admins of the official website to provide a copy of the live database. When using a copy of the live database, make sure that you are not sending out emails to the teachers with registered email addresses. 
