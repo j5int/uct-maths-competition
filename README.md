@@ -46,7 +46,7 @@ Windows:
 (uctmaths_venv)~/work/uct-maths-competition$ pip install -r req.txt 
 ```
 
-*Note: most of the libraries are extremely out of date. Updating any of them should be done with care. Many features used in Django 1.6 were deprecated soon thereafter.*
+*Note: most of the libraries are extremely out of date. Updating any of them should be done with care. Many features used in Django 1.6 were deprecated soon thereafter. We updated from 1.6 to 1.7 in January 2021, so there might still be a few bugs latent from 1.6.*
 
 * Create a "uctmaths" database and user on postgres
 
@@ -56,9 +56,11 @@ Windows:
     * TEMPLATE_DIR should be the absolute path to `uctMaths/competition/interface` in your filesystem.
     * Mail settings can be configured with Mailhog.
 
-* Sync database (create tables based on your Django models) and create superuser (`syncdb` is deprecated from Django 1.8, use migrations for Django 1.7 onwards)
+* Sync database (create tables based on your Django models) and create superuser (`syncdb` is deprecated from Django 1.8, only use migrations for Django 1.7 onwards)
 
 ```
+(uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py makemigrations
+(uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py migrate
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py syncdb
 ```
 
