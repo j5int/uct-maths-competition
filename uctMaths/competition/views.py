@@ -501,7 +501,7 @@ def has_results(request):
 @login_required 
 def answer_sheets(request):
     assigned_school = School.objects.get(assigned_to=request.user)
-    if compadmin.school_answer_sheet_ready(assigned_school):
+    if compadmin.school_students_venue_assigned(assigned_school):
         teacher = ResponsibleTeacher.objects.get(school=assigned_school)
         teacher.answer_sheet_downloaded = datetime.now()
         teacher.save()
