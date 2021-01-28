@@ -1063,6 +1063,12 @@ def certificate_list(request, school_list):
     return response
 
 def generate_school_answer_sheets(request, school_list):
+    not_ready = []
+    for school in school_list:
+        if not school_students_venue_assigned(school):
+            not_ready.append(school.name)
+    if not_ready:
+        return HttpResponse("Unable to download answer sheets because students at " + ", ".join(not_ready) + " have not been assigned venues.")
     output_stringIO = StringIO.StringIO() #Used to write to files then zip
     start = datetime.datetime.now()
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
@@ -1116,16 +1122,14 @@ def printer_answer_sheet(request, assigned_school=None):
     else:
         pass #Error handling?
 
-def student_answer_sheet_ready(student):
+def venue_assigned(student):
     # Check that the student has a venue allocated
-    if len(student.venue) == 0:
-        return False 
-    return True
+    return len(student.venue) > 0
 
-def school_answer_sheet_ready(school):
+def school_students_venue_assigned(school):
     students = SchoolStudent.objects.filter(school=school.id)
     for student in students:
-        if not student_answer_sheet_ready(student):
+        if not venue_assigned(student):
             return False 
     return True
 
@@ -1141,11 +1145,11 @@ def email_school_answer_sheets(request, schools):
     # Check that answer sheets can be generated for all selected schools
     not_ready = []
     for school in schools:
-        if not school_answer_sheet_ready(school):
+        if not school_students_venue_assigned(school):
             not_ready.append(school.name)
     if not_ready:
         return HttpResponse("Emails not sent. Unable to generate answer sheets for school" 
-                        + ("" if len(not_ready) == 1 else "s") + ": " + ", ".join(not_ready) +".")
+                        + ("" if len(not_ready) == 1 else "s") + ": " + ", ".join(not_ready) +" because students have unassigned venues.")
     
     # If everything is fine, register a background task to send an email for each school
     for school in schools:
