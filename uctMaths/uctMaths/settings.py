@@ -221,5 +221,9 @@ LOGGING = {
             'handlers': ['applogfile',],
             'level': 'DEBUG',
         },
+        'ho.pisa': {
+            'handlers': ['applogfile'],
+            'level': 'ERROR'
+       },
     }
 }
