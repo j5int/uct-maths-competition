@@ -5,6 +5,8 @@
 from __future__ import unicode_literals
 from competition.models import *
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
+
 from django.db import connection, transaction
 from django import forms
 import time, datetime
@@ -29,7 +31,7 @@ class SchoolModelForm( forms.ModelForm ):
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location') ##Which columns should be kept here?
+	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location', 'answer_sheets_emailed') ##Which columns should be kept here?
 	search_fields = ['name']
 	resource_class = SchoolResource
 
@@ -92,8 +94,38 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
 
+	class AnswerSheetEmailSentFilter(SimpleListFilter):
+		title = "Answer sheets emailed"
 
-	list_filter=('entered','language') #Field filters (shown as bar on right)
+		parameter_name = "answer_sheets_emailed"
+		
+		def lookups(self, request, model_admin):
+			"""
+			Returns a list of tuples. The first element in each
+			tuple is the coded value for the option that will
+			appear in the URL query. The second element is the
+			human-readable name for the option that will appear
+			in the right sidebar.
+			"""
+			return (
+				('sent', 'sent'),
+				('unsent', 'unsent'),
+			)
+		def queryset(self, request, queryset):
+			"""
+			Returns the filtered queryset based on the value
+			provided in the query string and retrievable via
+			`self.value()`.
+			"""
+			# Compare the requested value (either '80s' or '90s')
+			# to decide how to filter the queryset.
+			if self.value() == 'sent':
+				return queryset.filter(answer_sheets_emailed__isnull=False)
+			if self.value() == 'unsent':
+				return queryset.filter(answer_sheets_emailed__isnull=True)
+
+	list_filter=('entered','language',AnswerSheetEmailSentFilter) #Field filters (shown as bar on right)
+
 
 
 

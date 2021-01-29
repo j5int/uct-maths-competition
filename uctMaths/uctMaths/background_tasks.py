@@ -44,6 +44,6 @@ def bg_generate_school_answer_sheets(school_id):
         return
     
     send_answer_sheets(school, pdf, True)
-    school.answer_sheet_emailed = datetime.now()
+    school.answer_sheets_emailed = datetime.now()
     school.save()
     print("Finished sending answer sheet email for school:", school.name)
