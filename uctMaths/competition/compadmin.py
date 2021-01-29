@@ -9,10 +9,6 @@ import zipfile
 import datetime
 from django.core import exceptions 
 import views
-import shutil
-import codecs
-import os
-from io import BytesIO
 #A few administration constants and associated methods to be used around the website.
 
 from django.core.context_processors import csrf
