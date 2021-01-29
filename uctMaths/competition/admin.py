@@ -105,9 +105,13 @@ class SchoolAdmin(ImportExportModelAdmin):
 			)
 		def queryset(self, request, queryset):
 			if self.value() == 'sent':
-				return queryset.filter(answer_sheets_emailed__isnull=False)
+				return queryset.filter(models.Q(answer_sheets_emailed__gte=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0))
+					& models.Q(entered__gt=0) )
 			if self.value() == 'unsent':
-				return queryset.filter(answer_sheets_emailed__isnull=True,entered=1)
+				print(datetime.date.today().year)
+				return queryset.filter((models.Q(answer_sheets_emailed__isnull=True)
+					| models.Q(answer_sheets_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
+					& models.Q(entered__gt=0) )
 
 	list_filter=('entered','language',AnswerSheetEmailSentFilter) #Field filters (shown as bar on right)
 
