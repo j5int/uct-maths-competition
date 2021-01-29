@@ -1073,12 +1073,12 @@ def get_answer_sheet_name(school):
     return "UCTMaths_Answer_Sheets_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
 
 def generate_school_answer_sheets(request, school_list):
-    not_ready = []
+    no_venue = []
     for school in school_list:
         if not school_students_venue_assigned(school):
-            not_ready.append(school.name)
-    if not_ready:
-        return HttpResponse("Unable to download answer sheets because students at " + ", ".join(not_ready) + " have not been assigned venues.")
+            no_venue.append(school.name)
+    if no_venue:
+        return HttpResponse("Unable to download answer sheets because students at " + ", ".join(no_venue) + " have not been assigned venues.")
     
     output_stringIO = StringIO.StringIO() #Used to write to files then zip
     start = datetime.datetime.now()
@@ -1144,25 +1144,38 @@ def school_students_venue_assigned(school):
     return True
 
 def email_school_answer_sheets(request, schools):
+    response = None
     # Check that all schools have an assigned teacher
     not_assigned = []
     for school in schools:
         if not school.assigned_to:
             not_assigned.append(school.name)
-    if not_assigned:
-        return HttpResponse("Emails not sent. There are no responsible teachers assigned to " 
-        + ", ".join(not_assigned) + ".")
+    
     # Check that answer sheets can be generated for all selected schools
-    not_ready = []
+    no_venue = []
     for school in schools:
         if not school_students_venue_assigned(school):
-            not_ready.append(school.name)
-    if not_ready:
-        return HttpResponse("Emails not sent. Unable to generate answer sheets for school" 
-                        + ("" if len(not_ready) == 1 else "s") + ": " + ", ".join(not_ready) +" because students have unassigned venues.")
+            no_venue.append(school.name)
+        
+    if no_venue or not_assigned:
+        text = "Emails will not be sent for the following schools with given reason: \n"
+        for school in schools:
+            if school.name in no_venue or school.name in not_assigned:
+                school_text = school.name + ":\n"
+                if school.name in not_assigned:
+                    school_text += "\t- no responsible teacher assigned.\n"
+                if school.name in no_venue:
+                    school_text += "\t- not all students have been assigned venues.\n"
+                text += school_text
     
-    # If everything is fine, register a background task to send an email for each school
+        response = HttpResponse(text)
+        response['Content-Disposition'] = 'attachment; filename=AnswerSheetEmailErrors(%s).txt' % (timestamp_now())
+        response['Content-Type'] = 'application/txt'
+    
+    # register a background task to send an email for each school which has venues and a teacher assigned
     for school in schools:
+        if school.name in no_venue or school.name in not_assigned:
+            continue
         print("Creating background task for %s with ID %d." % (school.name, school.id))
         bg_generate_school_answer_sheets(school.id)
-    return 
+    return response
