@@ -1062,6 +1062,10 @@ def certificate_list(request, school_list):
     output_workbook.save(response)
     return response
 
+
+def get_answer_sheet_name(school):
+    return "UCTMaths_Answer_Sheets_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
+
 def generate_school_answer_sheets(request, school_list):
     not_ready = []
     for school in school_list:
@@ -1075,11 +1079,11 @@ def generate_school_answer_sheets(request, school_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
             output_string=printer_answer_sheet(request, ischool)
-            zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(ischool.name), output_string.getvalue())
+            zipf.writestr(get_answer_sheet_name(ischool), output_string.getvalue())
     
     response = HttpResponse(output_stringIO.getvalue())
     if len(school_list) == 1:
-        response['Content-Disposition'] = 'attachment; filename=%s UCT Maths Answer Sheets.pdf'%(school_list[0].name.strip())
+        response['Content-Disposition'] = 'attachment; filename=%s'%(get_answer_sheet_name(school_list[0]))
         response['Content-Type'] = 'application/pdf'
     else:
         response['Content-Disposition'] = 'attachment; filename=Answer Sheets(%s).zip' % (timestamp_now())

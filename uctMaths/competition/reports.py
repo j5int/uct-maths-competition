@@ -56,7 +56,7 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
         "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
         output_string,
         "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
-        [{"name": "%s Answer Sheets.pdf" % (unicode(school.name)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
+        [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
         recipient_list
     )
 
