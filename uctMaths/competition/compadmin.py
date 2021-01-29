@@ -1163,6 +1163,6 @@ def email_school_answer_sheets(request, schools):
     
     # If everything is fine, register a background task to send an email for each school
     for school in schools:
-        print("Handling school: " + school.name, school.id)
+        print("Creating background task for %s with ID %d." % (school.name, school.id))
         bg_generate_school_answer_sheets(school.id)
     return 

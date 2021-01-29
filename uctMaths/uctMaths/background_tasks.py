@@ -2,6 +2,7 @@ from background_task import background
 
 import ho.pisa as pisa
 import sys
+from datetime import datetime
 sys.path.append("../")
 
 from competition.models import School, ResponsibleTeacher
@@ -31,7 +32,9 @@ def bg_generate_school_answer_sheets(school_id):
     print("Emailing answer sheets for school with ID: " + str(school_id))
     from competition.compadmin import printer_answer_sheet
     from competition.reports import send_answer_sheets
+
     school = School.objects.filter(id=school_id)[0]
+    
     if not school.assigned_to:
         print("Cannot send an email to a school with no assigned responsible teacher!")
         return
@@ -41,4 +44,6 @@ def bg_generate_school_answer_sheets(school_id):
         return
     
     send_answer_sheets(school, pdf, True)
+    school.answer_sheet_emailed = datetime.now()
+    school.save()
     print("Finished sending answer sheet email for school:", school.name)

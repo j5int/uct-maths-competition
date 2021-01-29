@@ -40,6 +40,7 @@ class School(models.Model):
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForeignKey (gets assigned a single user)
     rank = models.IntegerField(null=True, db_column='Rank', blank=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
+    answer_sheet_emailed = models.DateTimeField(db_column="answer_sheet_emailed", blank=True)
 
     def __str__(self):
         return self.name
