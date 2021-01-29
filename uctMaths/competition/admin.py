@@ -96,33 +96,18 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 	class AnswerSheetEmailSentFilter(SimpleListFilter):
 		title = "Answer sheets emailed"
-
 		parameter_name = "answer_sheets_emailed"
 		
 		def lookups(self, request, model_admin):
-			"""
-			Returns a list of tuples. The first element in each
-			tuple is the coded value for the option that will
-			appear in the URL query. The second element is the
-			human-readable name for the option that will appear
-			in the right sidebar.
-			"""
 			return (
 				('sent', 'sent'),
-				('unsent', 'unsent'),
+				('unsent', 'entered and unsent'),
 			)
 		def queryset(self, request, queryset):
-			"""
-			Returns the filtered queryset based on the value
-			provided in the query string and retrievable via
-			`self.value()`.
-			"""
-			# Compare the requested value (either '80s' or '90s')
-			# to decide how to filter the queryset.
 			if self.value() == 'sent':
 				return queryset.filter(answer_sheets_emailed__isnull=False)
 			if self.value() == 'unsent':
-				return queryset.filter(answer_sheets_emailed__isnull=True)
+				return queryset.filter(answer_sheets_emailed__isnull=True,entered=1)
 
 	list_filter=('entered','language',AnswerSheetEmailSentFilter) #Field filters (shown as bar on right)
 
