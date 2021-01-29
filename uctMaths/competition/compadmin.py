@@ -1078,7 +1078,10 @@ def generate_school_answer_sheets(request, school_list):
         if not school_students_venue_assigned(school):
             no_venue.append(school.name)
     if no_venue:
-        return HttpResponse("Unable to download answer sheets because students at " + ", ".join(no_venue) + " have not been assigned venues.")
+        response = HttpResponse("Unable to download answer sheets because students at " + ", ".join(no_venue) + " have not been assigned venues.")
+        response['Content-Disposition'] = 'attachment; filename=AnswerSheetDownloadErrors(%s).txt'%(timestamp_now())
+        response['Content-Type'] = 'application/txt'
+        return response
     
     output_stringIO = StringIO.StringIO() #Used to write to files then zip
     start = datetime.datetime.now()
@@ -1161,7 +1164,7 @@ def email_school_answer_sheets(request, schools):
         text = "Emails will not be sent for the following schools with given reason: \n"
         for school in schools:
             if school.name in no_venue or school.name in not_assigned:
-                school_text = school.name + ":\n"
+                school_text = "Key %s) %s:\n" % (str(school.key), school.name)
                 if school.name in not_assigned:
                     school_text += "\t- no responsible teacher assigned.\n"
                 if school.name in no_venue:
@@ -1169,8 +1172,10 @@ def email_school_answer_sheets(request, schools):
                 text += school_text
     
         response = HttpResponse(text)
-        response['Content-Disposition'] = 'attachment; filename=AnswerSheetEmailErrors(%s).txt' % (timestamp_now())
+        filename = 'AnswerSheetEmailErrors(%s).txt' % (timestamp_now())
+        response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
         response['Content-Type'] = 'application/txt'
+        print("Unable to send emails to some schools. See details in %s." % (filename))
     
     # register a background task to send an email for each school which has venues and a teacher assigned
     for school in schools:
