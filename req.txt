@@ -16,3 +16,4 @@ six==1.15.0
 tablib==0.9.11
 wsgiref==0.1.2
 xlwt==0.7.5
+pytz==2020.5

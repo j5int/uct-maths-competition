@@ -920,8 +920,10 @@ def email_school_reports(request, school_list):
             msg += "<br>"+"Please wait until after the prize giving before sending out the results" 
             msg += " or change the date at: "+"<a href=\"/admin/competition/competition/\">Competition</a>"
             return HttpResponse(msg)
+    cnt = 0
     for ischool in school_list:
-            bg_email_results(ischool.id)
+        cnt += 1
+        bg_email_results(ischool.id, schedule=cnt)
 
 def get_school_report_name(school):
     return "UCTMaths_School_Report_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
@@ -1137,6 +1139,7 @@ def venue_assigned(student):
     return len(student.venue) > 0
 
 def school_students_venue_assigned(school):
+    # Check that the venue is assigned for all students in this school
     students = SchoolStudent.objects.filter(school=school.id)
     for student in students:
         if not venue_assigned(student):
@@ -1145,39 +1148,40 @@ def school_students_venue_assigned(school):
 
 def email_school_answer_sheets(request, schools):
     response = None
-    # Check that all schools have an assigned teacher
-    no_teacher = []
-    for school in schools:
-        if len(ResponsibleTeacher.objects.filter(school=school.id)) == 0:
-            no_teacher.append(school.name)
-    
-    # Check that answer sheets can be generated for all selected schools
-    no_venue = []
-    for school in schools:
-        if not school_students_venue_assigned(school):
-            no_venue.append(school.name)
-        
-    if no_venue or no_teacher:
-        text = "Emails will not be sent for the following schools with given reason: \n"
-        for school in schools:
-            if school.name in no_venue or school.name in no_teacher:
-                school_text = "Key %s) %s:\n" % (str(school.key), school.name)
-                if school.name in no_teacher:
-                    school_text += "\t- no responsible teacher assigned.\n"
-                if school.name in no_venue:
-                    school_text += "\t- not all students have been assigned venues.\n"
-                text += school_text
-    
-        response = HttpResponse(text)
-        filename = 'AnswerSheetEmailErrors(%s).txt' % (timestamp_now())
-        response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
-        response['Content-Type'] = 'application/txt'
-        print("Unable to send emails to some schools. See details in %s." % (filename))
-    
+
+
+    successes = []
+    errors = []
+
     # register a background task to send an email for each school which has venues and a teacher assigned
+    cnt = 0
     for school in schools:
-        if school.name in no_venue or school.name in no_teacher:
-            continue
-        print("Creating background task for %s with ID %d." % (school.name, school.id))
-        bg_generate_school_answer_sheets(school.id)
+        venues_assigned = school_students_venue_assigned(school)
+        teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
+
+        if (not venues_assigned) or (not teacher_assigned):
+            txt = "(Key %s) %s: \n" % (str(school.key), school.name.strip())
+            if not teacher_assigned:
+                txt += "\t- no responsible teacher assigned.\n"
+            if not venues_assigned:
+                txt += "\t- not all students have been assigned venues.\n"
+            errors.append(txt)
+        else:
+            cnt += 1
+            print("Creating background task for %s with ID %d." % (school.name, school.id))
+            bg_generate_school_answer_sheets(school.id, schedule=cnt)
+            successes.append(school.name.strip())
+    
+    
+    text = ""
+    if len(successes) > 0:
+        text += "Attempting to send emails to the following schools: " + ", ".join(successes) + "\n\n"
+    if len(errors) > 0:
+        text += "Emails will not be sent to the following schools with given reason: \n" + "".join(errors)
+
+    response = HttpResponse(text)
+    filename = 'AnswerSheetEmailStatus(%s).txt' % (timestamp_now())
+    response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
+    response['Content-Type'] = 'application/txt'
+    
     return response

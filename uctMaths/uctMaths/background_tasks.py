@@ -2,7 +2,8 @@ from background_task import background
 
 import ho.pisa as pisa
 import sys
-from datetime import datetime
+from django.utils import timezone
+import pytz
 sys.path.append("../")
 
 from competition.models import School, ResponsibleTeacher
@@ -20,11 +21,11 @@ def bg_email_results(school_id):
     from competition.reports import send_confirmation
 
     school = School.objects.filter(id=school_id)[0]
-    rteacher = ResponsibleTeacher.objects.filter(school=school)[0]
+    rteacher = ResponsibleTeacher.objects.filter(school=school.id)[0]
     
     result = printer_school_report(None, [school])
     send_confirmation(school, result, True)
-    print("Finished sending report email for:", school.name)
+    print("Finished sending answer sheet email for %s." % (school.name))
 
 # Ideally this function would be in competition/compadmin.py
 @background(queue="AS-generation-queue")
@@ -35,7 +36,7 @@ def bg_generate_school_answer_sheets(school_id):
 
     school = School.objects.filter(id=school_id)[0]
     
-    if not school.assigned_to:
+    if len(ResponsibleTeacher.objects.filter(school=school.id)) == 0:
         print("Cannot send an email to a school with no assigned responsible teacher!")
         return
     pdf = printer_answer_sheet(None, school)
@@ -44,6 +45,6 @@ def bg_generate_school_answer_sheets(school_id):
         return
     
     send_answer_sheets(school, pdf, True)
-    school.answer_sheets_emailed = datetime.now()
+    school.answer_sheets_emailed = timezone.now()
     school.save()
-    print("Finished sending answer sheet email for school:", school.name)
+    print("Finished sending answer sheet email for %s." % (school.name))

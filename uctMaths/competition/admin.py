@@ -91,7 +91,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	school_certificate_list.short_description = 'Download school certificate list'
 
 	email_school_reports.short_description = 'Email selected school(s) reports (single .pdf) to school(s)'
-
+	email_school_answer_sheets.short_description = "Email selected school(s) answer sheets"
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
 
 	class AnswerSheetEmailSentFilter(SimpleListFilter):
