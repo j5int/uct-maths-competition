@@ -926,10 +926,16 @@ def email_school_reports(request, school_list):
     for ischool in school_list:
             bg_email_results(ischool.id)
 
+def get_school_report_name(school):
+    return "UCTMaths_School_Report_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
+
 def print_school_reports(request, school_list):
     result = printer_school_report(request, school_list)
     response = HttpResponse(result.getvalue())
-    response['Content-Disposition'] = 'attachment; filename=SchoolsReport(%s).pdf'%(timestamp_now())
+    if len(school_list) > 1:
+        response['Content-Disposition'] = 'attachment; filename=SchoolsReport(%s).pdf'%(timestamp_now())
+    else:
+        response['Content-Disposition'] = 'attachment; filename=%s' % (get_school_report_name(school_list[0]))
     response['Content-Type'] = 'application/pdf'
     return response
 
@@ -999,7 +1005,7 @@ def multi_reportgen(request, school_list):
 
     response = HttpResponse(output_stringIO.getvalue())
     if len(school_list) == 1:
-        response['Content-Disposition'] = 'attachment; filename=UCTMaths_Report_%s.pdf'%(ischool.name)
+        response['Content-Disposition'] = 'attachment; filename=%s' % (get_school_report_name(ischool))
         response['Content-Type'] = 'application/pdf'
     else:
         response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
@@ -1086,7 +1092,7 @@ def generate_school_answer_sheets(request, school_list):
         response['Content-Disposition'] = 'attachment; filename=%s'%(get_answer_sheet_name(school_list[0]))
         response['Content-Type'] = 'application/pdf'
     else:
-        response['Content-Disposition'] = 'attachment; filename=Answer Sheets(%s).zip' % (timestamp_now())
+        response['Content-Disposition'] = 'attachment; filename=Answer_Sheets(%s).zip' % (timestamp_now())
         response['Content-Type'] = 'application/x-zip-compressed'
     diff = datetime.datetime.now() - start
     print(str(diff))

@@ -33,7 +33,7 @@ def send_confirmation(in_school, result, cc_admin=False):
                 '(Do not reply) UCT Mathematics Competition %s Competition Results'%(in_school.name),#Subject line
                 output_string, #Body
                 'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
-                [{"name": '%s_results.pdf'%(unicode(in_school.name)), "value": result.getvalue(), "type": "application/pdf"}],
+                [{"name": '%s' % (compadmin.get_school_report_name(in_school)), "value": result.getvalue(), "type": "application/pdf"}],
                 recipient_list
     )
 
