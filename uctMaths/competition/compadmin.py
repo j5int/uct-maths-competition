@@ -1065,6 +1065,7 @@ def generate_school_answer_sheets(request, school_list):
             not_ready.append(school.name)
     if not_ready:
         return HttpResponse("Unable to download answer sheets because students at " + ", ".join(not_ready) + " have not been assigned venues.")
+    
     output_stringIO = StringIO.StringIO() #Used to write to files then zip
     start = datetime.datetime.now()
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
@@ -1072,13 +1073,12 @@ def generate_school_answer_sheets(request, school_list):
             output_string=printer_answer_sheet(request, ischool)
             zipf.writestr('UCTMaths_Answer_Sheets_%s.pdf'%(ischool.name), output_string.getvalue())
     
+    response = HttpResponse(output_stringIO.getvalue())
     if len(school_list) == 1:
-        response = HttpResponse(output_stringIO.getvalue())
         response['Content-Disposition'] = 'attachment; filename=%s UCT Maths Answer Sheets.pdf'%(school_list[0].name.strip())
         response['Content-Type'] = 'application/pdf'
     else:
-        response = HttpResponse(output_stringIO.getvalue())
-        response['Content-Disposition'] = 'attachment; filename=AnswerSheets(%s).zip'%(timestamp_now())
+        response['Content-Disposition'] = 'attachment; filename=Answer Sheets(%s).zip' % (timestamp_now())
         response['Content-Type'] = 'application/x-zip-compressed'
     diff = datetime.datetime.now() - start
     print(str(diff))
