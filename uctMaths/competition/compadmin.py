@@ -998,8 +998,12 @@ def multi_reportgen(request, school_list):
             zipf.writestr('UCTMaths_Report_%s.pdf'%(ischool.name), output_string.getvalue())
 
     response = HttpResponse(output_stringIO.getvalue())
-    response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
-    response['Content-Type'] = 'application/x-zip-compressed'
+    if len(school_list) == 1:
+        response['Content-Disposition'] = 'attachment; filename=UCTMaths_Report_%s.pdf'%(ischool.name)
+        response['Content-Type'] = 'application/pdf'
+    else:
+        response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
+        response['Content-Type'] = 'application/x-zip-compressed'
     return response
 
 
