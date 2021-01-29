@@ -219,5 +219,3 @@ pip-log.txt
 .mr.developer.cfg
 
 *.json
-MailHog_windows_amd64.exe
-uctMaths/temp/*
