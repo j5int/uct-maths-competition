@@ -118,7 +118,9 @@ def printer_entry_result(request, school_list=None):
 def printer_entry(request, queryset=None):
     """ Method bound to printer_entry.html """
     result = printer_entry_result(request, queryset)
-    return HttpResponse(result.getvalue(), mimetype='application/pdf')
+    response = HttpResponse(result.getvalue())
+    response["Content-Type"] = "application/pdf"
+    return response
 
 @login_required
 def profile(request):
