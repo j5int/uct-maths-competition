@@ -38,7 +38,11 @@ def send_confirmation(in_school, result, cc_admin=False):
     )
 
 def send_answer_sheets(school, answer_sheet, cc_admin=False):
-    rteacher = ResponsibleTeacher.objects.filter(school=school.id)[0]
+    rteachers = ResponsibleTeacher.objects.filter(school=school.id)
+    if not rteachers:
+        print("No responsible teacher for school!")
+        return
+    rteacher = rteachers[0]
     #Header
     output_string = 'Dear %s, \n\n' \
                     'This email contains answer sheets for %s for the upcoming UCT Mathematics Competition. ' \
