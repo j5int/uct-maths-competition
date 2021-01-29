@@ -1149,10 +1149,10 @@ def school_students_venue_assigned(school):
 def email_school_answer_sheets(request, schools):
     response = None
     # Check that all schools have an assigned teacher
-    not_assigned = []
+    no_teacher = []
     for school in schools:
-        if not school.assigned_to:
-            not_assigned.append(school.name)
+        if len(ResponsibleTeacher.objects.filter(school=school.id)) == 0:
+            no_teacher.append(school.name)
     
     # Check that answer sheets can be generated for all selected schools
     no_venue = []
@@ -1160,12 +1160,12 @@ def email_school_answer_sheets(request, schools):
         if not school_students_venue_assigned(school):
             no_venue.append(school.name)
         
-    if no_venue or not_assigned:
+    if no_venue or no_teacher:
         text = "Emails will not be sent for the following schools with given reason: \n"
         for school in schools:
-            if school.name in no_venue or school.name in not_assigned:
+            if school.name in no_venue or school.name in no_teacher:
                 school_text = "Key %s) %s:\n" % (str(school.key), school.name)
-                if school.name in not_assigned:
+                if school.name in no_teacher:
                     school_text += "\t- no responsible teacher assigned.\n"
                 if school.name in no_venue:
                     school_text += "\t- not all students have been assigned venues.\n"
@@ -1179,7 +1179,7 @@ def email_school_answer_sheets(request, schools):
     
     # register a background task to send an email for each school which has venues and a teacher assigned
     for school in schools:
-        if school.name in no_venue or school.name in not_assigned:
+        if school.name in no_venue or school.name in no_teacher:
             continue
         print("Creating background task for %s with ID %d." % (school.name, school.id))
         bg_generate_school_answer_sheets(school.id)
