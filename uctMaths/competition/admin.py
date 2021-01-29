@@ -108,7 +108,6 @@ class SchoolAdmin(ImportExportModelAdmin):
 				return queryset.filter(models.Q(answer_sheets_emailed__gte=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0))
 					& models.Q(entered__gt=0) )
 			if self.value() == 'unsent':
-				print(datetime.date.today().year)
 				return queryset.filter((models.Q(answer_sheets_emailed__isnull=True)
 					| models.Q(answer_sheets_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
 					& models.Q(entered__gt=0) )
