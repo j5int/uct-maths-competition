@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, url
 from django.views.generic.base import TemplateView
 from competition import views, compadmin_views
-import compadmin
 
 urlpatterns = patterns('',
 
