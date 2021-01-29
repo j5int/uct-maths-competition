@@ -24,9 +24,9 @@ from models import LOCATIONS
 import reports
 
 import sys
+sys.path.append("../")
 
 from background_task import background
-sys.path.append("../")
 from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results
 
 def admin_emailaddress():
