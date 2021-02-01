@@ -924,10 +924,8 @@ def email_school_reports(request, school_list):
             msg+="Competition hasn't been set at "+"<a href=\"/admin/competition/competition/\">Competition</a>"
         return HttpResponse(msg)
     else:
-        cnt = 0
         for ischool in school_list:
             if views.has_results(request, ischool):
-                cnt += 1
                 bg_email_results(ischool.id)
 
 def get_school_report_name(school):
@@ -1159,7 +1157,6 @@ def email_school_answer_sheets(request, schools):
     errors = []
 
     # register a background task to send an email for each school which has venues and a teacher assigned
-    cnt = 0
     for school in schools:
         venues_assigned = school_students_venue_assigned(school)
         teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
@@ -1172,7 +1169,6 @@ def email_school_answer_sheets(request, schools):
                 txt += "\t- not all students have been assigned venues.\n"
             errors.append(txt)
         else:
-            cnt += 1
             print("Creating background task for %s with ID %d." % (school.name, school.id))
             bg_generate_school_answer_sheets(school.id)
             successes.append(school.name.strip())

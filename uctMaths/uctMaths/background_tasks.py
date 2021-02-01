@@ -14,10 +14,14 @@ from competition.models import School, ResponsibleTeacher
 # All processes which could cause the server to hang due to run-time or volume should
 # be background tasks
 
+def current_time():
+    t = timezone.now()
+    return "%d-%d-%d %d:%d:%d" % (t.year, t.month, t.day, t.hour, t.minute, t.second)
+
 @background(queue="report-email-queue")
 def bg_email_results(school_id):
-    print("Emailing results for school with ID: " + str(school_id))
-    from competition.compadmin import printer_school_report
+    print("%s: Emailing results for school with ID: %s" %(current_time(), str(school_id)) )
+    from competition.compadmin import printer_school_report, timestamp_now
     from competition.reports import send_confirmation
 
     school = School.objects.filter(id=school_id)[0]
@@ -25,26 +29,26 @@ def bg_email_results(school_id):
     
     result = printer_school_report(None, [school])
     send_confirmation(school, result, True)
-    print("Finished sending answer sheet email for %s." % (school.name))
+    print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
 
 # Ideally this function would be in competition/compadmin.py
 @background(queue="AS-generation-queue")
 def bg_generate_school_answer_sheets(school_id):
-    print("Emailing answer sheets for school with ID: " + str(school_id))
-    from competition.compadmin import printer_answer_sheet
+    from competition.compadmin import printer_answer_sheet, timestamp_now
     from competition.reports import send_answer_sheets
+    print("%s: Emailing answer sheets for school with ID: %s" %(current_time(), str(school_id)) )
 
     school = School.objects.filter(id=school_id)[0]
     
     if len(ResponsibleTeacher.objects.filter(school=school.id)) == 0:
-        print("Cannot send an email to a school with no assigned responsible teacher!")
+        print("%s: Cannot send an email to a school with no assigned responsible teacher!" % (current_time()))
         return
     pdf = printer_answer_sheet(None, school)
     if not pdf:
-        print("Unable to get answer sheets!")
+        print("%s: Unable to get answer sheets!" % (current_time()))
         return
     
     send_answer_sheets(school, pdf, True)
     school.answer_sheets_emailed = timezone.now()
     school.save()
-    print("Finished sending answer sheet email for %s." % (school.name))
+    print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
