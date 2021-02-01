@@ -22,13 +22,13 @@ def current_time():
 def bg_email_results(school_id):
     print("%s: Emailing results for school with ID: %s" %(current_time(), str(school_id)) )
     from competition.compadmin import printer_school_report, timestamp_now
-    from competition.reports import send_confirmation
+    from competition.reports import send_results
 
     school = School.objects.filter(id=school_id)[0]
     rteacher = ResponsibleTeacher.objects.filter(school=school.id)[0]
     
     result = printer_school_report(None, [school])
-    send_confirmation(school, result, True)
+    send_results(school, result, True)
     print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
 
 # Ideally this function would be in competition/compadmin.py
