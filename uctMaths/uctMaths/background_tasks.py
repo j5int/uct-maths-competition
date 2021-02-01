@@ -4,6 +4,7 @@ import ho.pisa as pisa
 import sys
 from django.utils import timezone
 import pytz
+import settings
 sys.path.append("../")
 
 from competition.models import School, ResponsibleTeacher
@@ -23,9 +24,13 @@ def bg_email_results(school_id):
     print("%s: Emailing results for school with ID: %s" %(current_time(), str(school_id)) )
     from competition.compadmin import printer_school_report, timestamp_now
     from competition.reports import send_confirmation
-
     school = School.objects.filter(id=school_id)[0]
-    rteacher = ResponsibleTeacher.objects.filter(school=school.id)[0]
+    rteachers = ResponsibleTeacher.objects.filter(school=school.id)
+    if len(rteachers) == 0:
+        print("%s has not been allocated a responsible teacher!" % (school.name))
+        return
+
+    rteacher = rteachers[0]
     
     result = printer_school_report(None, [school])
     send_confirmation(school, result, True)
