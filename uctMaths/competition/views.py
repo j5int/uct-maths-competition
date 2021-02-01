@@ -144,7 +144,7 @@ def profile(request):
         closingdate_blurb='Online entries are closed but you may still create and modify entries because you have admin rights.'
     show_results_download = False
     if assigned_school:
-        show_results_download = has_results(request, assigned_school)
+        show_results_download = has_results(request, assigned_school) and after_pg(request)
     show_answer_sheets_download = False
     if assigned_school:
         show_answer_sheets_download = compadmin.school_students_venue_assigned(assigned_school)

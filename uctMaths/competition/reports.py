@@ -10,7 +10,7 @@ import views
 # Methods for very simple formatting of data entered by a certain user (filter)
 # See info in settings.py for SMTP server emulation and set-up
 
-def send_confirmation(in_school, result, cc_admin=False):
+def send_results(in_school, result, cc_admin=False):
     """ Formats student information for the particular user and sends it via. smtp"""
     rteacher = ResponsibleTeacher.objects.filter(school=in_school.id)[0]
     name = rteacher.firstname + " " + rteacher.surname
