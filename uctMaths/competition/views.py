@@ -144,7 +144,7 @@ def profile(request):
         closingdate_blurb='Online entries are closed but you may still create and modify entries because you have admin rights.'
     show_results_download = False
     if assigned_school:
-        show_results_download = has_results(request)
+        show_results_download = has_results(request, assigned_school)
     show_answer_sheets_download = False
     if assigned_school:
         show_answer_sheets_download = compadmin.school_students_venue_assigned(assigned_school)
@@ -481,7 +481,7 @@ def school_select(request):
 @login_required
 def school_results(request):
     assigned_school = School.objects.get(assigned_to=request.user)
-    if has_results(request):
+    if has_results(request, assigned_school):
         report = ResponsibleTeacher.objects.get(school = assigned_school)
         report.report_downloaded = datetime.now()
         report.save()
@@ -489,19 +489,23 @@ def school_results(request):
     return HttpResponse("Results will be available soon.")
 
 @login_required
-def has_results(request):
-    assigned_school = School.objects.get(assigned_to=request.user)
-    rteacher = ResponsibleTeacher.objects.filter(school = assigned_school).count()>0
+def after_pg(request):
     comp = compadmin.Competition.objects.all()
-    if comp.count() == 1:
-        pg_date = comp[0].prizegiving_date
-        if datetime.now().date() > pg_date or (datetime.now().date() == pg_date and datetime.now().time() > time(21,0,0)):
-            return rteacher
+    pg_date = comp[0].prizegiving_date
+    return (datetime.now().date() > pg_date or (datetime.now().date() == pg_date and datetime.now().time() > time(21,0,0)))
 
-    return False
+@login_required
+def has_results(request, assigned_school = None):
+    if ResponsibleTeacher.objects.filter(school = assigned_school).count()==0:
+        return False
+    student_list = SchoolStudent.objects.filter(school=assigned_school)
+    for istudent in student_list:
+        if istudent.score:
+            return True
+    return False    
 
 @login_required 
-def answer_sheets(request):
+def answer_sheets(request, assigned_school = None):
     assigned_school = School.objects.get(assigned_to=request.user)
     if compadmin.school_students_venue_assigned(assigned_school):
         teacher = ResponsibleTeacher.objects.get(school=assigned_school)
