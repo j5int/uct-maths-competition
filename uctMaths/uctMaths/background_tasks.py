@@ -30,7 +30,7 @@ def bg_email_results(school_id):
     print(school.name)
     rteachers = ResponsibleTeacher.objects.filter(school=school.id)
     if len(rteachers) == 0:
-        print("%s has not been allocated a responsible teacher!" % (school.name))
+        print("%s: %s has not been allocated a responsible teacher!" % (current_time(), school.name))
         return
     
     result = printer_school_report(None, [school])
