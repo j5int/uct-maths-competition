@@ -923,7 +923,7 @@ def email_school_reports(request, school_list):
     cnt = 0
     for ischool in school_list:
         cnt += 1
-        bg_email_results(ischool.id, schedule=cnt)
+        bg_email_results(ischool.id)
 
 def get_school_report_name(school):
     return "UCTMaths_School_Report_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
@@ -1169,7 +1169,7 @@ def email_school_answer_sheets(request, schools):
         else:
             cnt += 1
             print("Creating background task for %s with ID %d." % (school.name, school.id))
-            bg_generate_school_answer_sheets(school.id, schedule=cnt)
+            bg_generate_school_answer_sheets(school.id)
             successes.append(school.name.strip())
     
     

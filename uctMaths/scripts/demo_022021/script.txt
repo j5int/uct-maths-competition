@@ -1,0 +1,10 @@
+* Start with a blank system
+* Create a new with competition with no entries
+* Register all of the schools
+* Register all students
+* Competition entries close
+* Assign venues to all students
+* Teachers can download their answer sheets
+* Answer sheets can be emailed to all schools as well
+* Once the prize giving date has passed, school reports can be downloaded by teachers 
+* School reports can also be emailed to all teachers
