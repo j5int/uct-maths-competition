@@ -4,6 +4,7 @@ import ho.pisa as pisa
 import sys
 from django.utils import timezone
 import pytz
+import settings
 sys.path.append("../")
 
 from competition.models import School, ResponsibleTeacher
@@ -25,7 +26,12 @@ def bg_email_results(school_id):
     from competition.reports import send_results
 
     school = School.objects.filter(id=school_id)[0]
-    rteacher = ResponsibleTeacher.objects.filter(school=school.id)[0]
+    rteachers = ResponsibleTeacher.objects.filter(school=school.id)
+    if len(rteachers) == 0:
+        print("%s has not been allocated a responsible teacher!" % (school.name))
+        return
+
+    rteacher = rteachers[0]
     
     result = printer_school_report(None, [school])
     send_results(school, result, True)
