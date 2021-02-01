@@ -22,5 +22,10 @@ DO $$
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column answer_sheets_emailed already exists in competition_school';
 		END;
+		BEGIN
+			ALTER TABLE competition_school ADD COLUMN "reports_emailed" TIMESTAMP;
+		EXCEPTION
+			WHEN duplicate_column THEN RAISE NOTICE 'column reports_emailed already exists in competition_school';
+		END;
 	END;
 $$

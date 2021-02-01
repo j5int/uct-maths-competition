@@ -1,5 +1,6 @@
 * Start with a blank system
 * Create a new with competition with no entries
+* Teacher can create an account and register their school
 * Register all of the schools
 * Register all students
 * Competition entries close
