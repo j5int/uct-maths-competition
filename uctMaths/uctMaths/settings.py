@@ -183,6 +183,7 @@ INSTALLED_APPS = (
 )
 
 BACKGROUND_TASK_RUN_ASYNC = False
+MAX_ATTEMPTS = 9
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
