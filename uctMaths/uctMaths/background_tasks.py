@@ -27,7 +27,6 @@ def bg_email_results(school_id):
     from competition.reports import send_results
 
     school = School.objects.filter(id=school_id)[0]
-    print(school.name)
     rteachers = ResponsibleTeacher.objects.filter(school=school.id)
     if len(rteachers) == 0:
         print("%s: %s has not been allocated a responsible teacher!" % (current_time(), school.name))
