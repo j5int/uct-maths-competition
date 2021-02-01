@@ -499,10 +499,7 @@ def has_results(request, assigned_school = None):
     if ResponsibleTeacher.objects.filter(school = assigned_school).count()==0:
         return False
     student_list = SchoolStudent.objects.filter(school=assigned_school)
-    for istudent in student_list:
-        if istudent.score:
-            return True
-    return False    
+    return True if student_list else False
 
 @login_required 
 def answer_sheets(request, assigned_school = None):
