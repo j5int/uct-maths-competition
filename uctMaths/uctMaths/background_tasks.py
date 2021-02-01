@@ -21,21 +21,23 @@ def current_time():
 
 @background(queue="report-email-queue")
 def bg_email_results(school_id):
+    
     print("%s: Emailing results for school with ID: %s" %(current_time(), str(school_id)) )
     from competition.compadmin import printer_school_report, timestamp_now
     from competition.reports import send_results
 
     school = School.objects.filter(id=school_id)[0]
+    print(school.name)
     rteachers = ResponsibleTeacher.objects.filter(school=school.id)
     if len(rteachers) == 0:
         print("%s has not been allocated a responsible teacher!" % (school.name))
         return
-
-    rteacher = rteachers[0]
     
     result = printer_school_report(None, [school])
     send_results(school, result, True)
-    print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
+    school.report_emailed = timezone.now()
+    school.save()
+    print("%s: Finished sending report email for %s." % (current_time(), school.name))
 
 # Ideally this function would be in competition/compadmin.py
 @background(queue="AS-generation-queue")

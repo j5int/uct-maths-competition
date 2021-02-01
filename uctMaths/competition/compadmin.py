@@ -924,9 +924,26 @@ def email_school_reports(request, school_list):
             msg+="Competition hasn't been set at "+"<a href=\"/admin/competition/competition/\">Competition</a>"
         return HttpResponse(msg)
     else:
+        text = ""
+        successes = []
+        errors = []
         for ischool in school_list:
+            txt = "(Key %s) %s \n" % (str(ischool.key), ischool.name.strip())
             if views.has_results(request, ischool):
                 bg_email_results(ischool.id)
+                successes.append(ischool.name.strip())
+            else:
+                errors.append(txt)
+        if len(successes) > 0:
+            text += "Attempting to send emails to the following schools: " + ", ".join(successes) + "\n\n"
+        if len(errors) > 0:
+            text += "Emails will not be sent to the following schools: \n" + "".join(errors)
+        response = HttpResponse(text)
+        filename = 'ReportEmailStatus(%s).txt' % (timestamp_now())
+        response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
+        response['Content-Type'] = 'application/txt'
+        return response
+
 
 def get_school_report_name(school):
     return "UCTMaths_School_Report_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
@@ -1162,7 +1179,7 @@ def email_school_answer_sheets(request, schools):
         teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
 
         if (not venues_assigned) or (not teacher_assigned):
-            txt = "(Key %s) %s: \n" % (str(school.key), school.name.strip())
+            txt = "(Key %s) %s: \n" % (str(school.key), school.name.strip())#
             if not teacher_assigned:
                 txt += "\t- no responsible teacher assigned.\n"
             if not venues_assigned:

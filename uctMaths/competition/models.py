@@ -41,6 +41,7 @@ class School(models.Model):
     rank = models.IntegerField(null=True, db_column='Rank', blank=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
     answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", blank=True)
+    report_emailed = models.DateTimeField(db_column="report_emailed", blank=True)
 
     def __str__(self):
         return self.name
