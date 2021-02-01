@@ -182,7 +182,7 @@ INSTALLED_APPS = (
     'background_task'
 )
 
-BACKGROUND_TASK_RUN_ASYNC = True
+BACKGROUND_TASK_RUN_ASYNC = False
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
