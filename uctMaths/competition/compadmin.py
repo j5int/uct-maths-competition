@@ -912,18 +912,23 @@ def update_school_entry_status():
             school_obj.save()
 
 def email_school_reports(request, school_list):
-    if not views.has_results(request):
+    if not views.after_pg(request):
         comp = Competition.objects.all()
+        msg = ""
         if comp.count() == 1:
             pg_date = comp[0].prizegiving_date
             msg = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + " is before prizegiving date: " + str(pg_date) + " 21:00" 
             msg += "<br>"+"Please wait until after the prize giving before sending out the results" 
             msg += " or change the date at: "+"<a href=\"/admin/competition/competition/\">Competition</a>"
-            return HttpResponse(msg)
-    cnt = 0
-    for ischool in school_list:
-        cnt += 1
-        bg_email_results(ischool.id)
+        else:
+            msg+="Competition hasn't been set at "+"<a href=\"/admin/competition/competition/\">Competition</a>"
+        return HttpResponse(msg)
+    else:
+        cnt = 0
+        for ischool in school_list:
+            if views.has_results(request, ischool):
+                cnt += 1
+                bg_email_results(ischool.id)
 
 def get_school_report_name(school):
     return "UCTMaths_School_Report_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
