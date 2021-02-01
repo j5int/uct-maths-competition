@@ -111,8 +111,26 @@ class SchoolAdmin(ImportExportModelAdmin):
 				return queryset.filter((models.Q(answer_sheets_emailed__isnull=True)
 					| models.Q(answer_sheets_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
 					& models.Q(entered__gt=0) )
+	class ReportEmailSentFilter(SimpleListFilter):
+		title = "Report emailed"
+		parameter_name = "report_emailed"
+		
+		def lookups(self, request, model_admin):
+			return (
+				('sent', 'sent'),
+				('unsent', 'entered and unsent'),
+			)
+		def queryset(self, request, queryset):
+			if self.value() == 'sent':
+				return queryset.filter(models.Q(report_emailed__gte=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0))
+					& models.Q(entered__gt=0) )
+			if self.value() == 'unsent':
+				return queryset.filter((models.Q(report_emailed__isnull=True)
+					| models.Q(report_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
+					& models.Q(entered__gt=0) )
 
-	list_filter=('entered','language',AnswerSheetEmailSentFilter) #Field filters (shown as bar on right)
+	list_filter=('entered','language',AnswerSheetEmailSentFilter,ReportEmailSentFilter) #Field filters (shown as bar on right)
+
 
 
 
