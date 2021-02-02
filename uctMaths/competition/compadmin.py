@@ -1170,7 +1170,7 @@ def school_students_venue_assigned(school):
     for student in students:
         if not venue_assigned(student):
             return False 
-    return True
+    return len(students)>0
 
 def email_school_answer_sheets(request, schools):
     response = None
