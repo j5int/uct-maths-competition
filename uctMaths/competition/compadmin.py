@@ -1099,11 +1099,20 @@ def get_answer_sheet_name(school):
 
 def generate_school_answer_sheets(request, school_list):
     no_venue = []
+    no_students = []
     for school in school_list:
-        if not school_students_venue_assigned(school):
+        if len(SchoolStudent.objects.filter(school = school)) == 0:
+            no_students.append(school.name.strip())
+        elif not school_students_venue_assigned(school):
             no_venue.append(school.name.strip())
-    if no_venue:
-        response = HttpResponse("Unable to download answer sheets because students at " + ", ".join(no_venue) + " have not been assigned venues.")
+    print(no_venue,no_students)
+    if no_venue or no_students:
+        text = "Unable to download answer sheets because:\n\n"
+        if no_venue:
+            text+="-students at " + ", ".join(no_venue) + " have not been assigned venues.\n"
+        if no_students:
+            text+="-no students have been registered at "+ ", ".join(no_students)
+        response = HttpResponse(text)
         response['Content-Disposition'] = 'attachment; filename=AnswerSheetDownloadErrors(%s).txt'%(timestamp_now())
         response['Content-Type'] = 'application/txt'
         return response
