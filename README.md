@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installation and set-up
 
-A step by step series of instructions on how to get a development env running
+A step by step series of instructions on how to get a development env running. This project runs on Python 2.7.
 * Clone UCT Maths repository
 
 ```
