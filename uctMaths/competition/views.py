@@ -146,7 +146,7 @@ def profile(request):
     if assigned_school:
         show_results_download = has_results(request, assigned_school) and after_pg(request)
     show_answer_sheets_download = False
-    if assigned_school:
+    if assigned_school and ResponsibleTeacher.objects.filter(school=assigned_school.id).count() > 0:
         show_answer_sheets_download = compadmin.school_students_venue_assigned(assigned_school)
     return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
 
@@ -504,10 +504,13 @@ def has_results(request, assigned_school = None):
 @login_required 
 def answer_sheets(request, assigned_school = None):
     assigned_school = School.objects.get(assigned_to=request.user)
-    if compadmin.school_students_venue_assigned(assigned_school):
-        teacher = ResponsibleTeacher.objects.get(school=assigned_school)
+    rteachers = ResponsibleTeacher.objects.filter(school=assigned_school.id)
+    if rteachers and compadmin.school_students_venue_assigned(assigned_school):
+        teacher = rteachers[0]
         teacher.answer_sheet_downloaded = datetime.now()
         teacher.save()
         return compadmin.generate_school_answer_sheets(request, [assigned_school])
+    elif not rteachers:
+        return HttpResponse("A responsible teacher has not been provided for your school yet.")
     else:
         return HttpResponse("Your school's answer sheets cannot be generated at this time.")
