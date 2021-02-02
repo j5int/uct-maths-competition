@@ -928,16 +928,22 @@ def email_school_reports(request, school_list):
         successes = []
         errors = []
         for ischool in school_list:
-            txt = "(Key %s) %s \n" % (str(ischool.key), ischool.name.strip())
+            txt = "(Key %s) %s: \n" % (str(ischool.key), ischool.name.strip())
             if views.has_results(request, ischool):
                 bg_email_results(ischool.id)
                 successes.append(ischool.name.strip())
             else:
+                has_scores = views.has_results(request, ischool)
+                teacher_assigned = len(ResponsibleTeacher.objects.filter(school=ischool.id)) > 0
+                if not teacher_assigned:
+                    txt += "\t- no responsible teacher assigned.\n"
+                elif not has_scores:
+                    txt += "\t- not all students have been assigned scores.\n"
                 errors.append(txt)
         if len(successes) > 0:
             text += "Attempting to send emails to the following schools: " + ", ".join(successes) + "\n\n"
         if len(errors) > 0:
-            text += "Emails will not be sent to the following schools: \n" + "".join(errors)
+            text += "Emails will not be sent to the following schools with given reason: \n" + "".join(errors)
         response = HttpResponse(text)
         filename = 'ReportEmailStatus(%s).txt' % (timestamp_now())
         response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
@@ -1179,7 +1185,7 @@ def email_school_answer_sheets(request, schools):
         teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
 
         if (not venues_assigned) or (not teacher_assigned):
-            txt = "(Key %s) %s: \n" % (str(school.key), school.name.strip())#
+            txt = "(Key %s) %s: \n" % (str(school.key), school.name.strip())
             if not teacher_assigned:
                 txt += "\t- no responsible teacher assigned.\n"
             if not venues_assigned:
