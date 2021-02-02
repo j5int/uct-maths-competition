@@ -938,7 +938,7 @@ def email_school_reports(request, school_list):
                 if not teacher_assigned:
                     txt += "\t- no responsible teacher assigned.\n"
                 elif not has_scores:
-                    txt += "\t- not all students have been assigned scores.\n"
+                    txt += "\t- no students assigned.\n"
                 errors.append(txt)
         if len(successes) > 0:
             text += "Attempting to send emails to the following schools: " + ", ".join(successes) + "\n\n"
