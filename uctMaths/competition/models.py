@@ -19,6 +19,7 @@ class Competition(models.Model):
     num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True)
     number_of_individuals = models.IntegerField(db_column='num_individuals')
     number_of_pairs = models.IntegerField(db_column='num_pairs')
+    prizegiving_date = models.DateField(db_column='prizegiving_date')
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
@@ -39,6 +40,8 @@ class School(models.Model):
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForeignKey (gets assigned a single user)
     rank = models.IntegerField(null=True, db_column='Rank', blank=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
+    answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", blank=True)
+    report_emailed = models.DateTimeField(db_column="report_emailed", blank=True)
 
     def __str__(self):
         return self.name
@@ -66,7 +69,7 @@ class SchoolStudent(models.Model):
             MinValueValidator(8)
         ])
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True)
-    paired = models.BooleanField(db_column='Paired')
+    paired = models.BooleanField(db_column='Paired', default=False)
     award = models.CharField(max_length=3L, db_column='Award', null=True, blank=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
@@ -86,7 +89,7 @@ class Venue(models.Model):
     building    = models.CharField(max_length=40L, db_column='Building') 
     seats       = models.IntegerField(db_column='Seats')
     grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
-    allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS')
+    allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS', default=False)
     occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True, null=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
@@ -160,6 +163,8 @@ class ResponsibleTeacher(models.Model):
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
+    report_downloaded = models.DateTimeField(db_column='Report_downloaded', blank=True)
+    answer_sheet_downloaded = models.DateTimeField(db_column='Answer_sheet_downloaded', blank=True)
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
     def __unicode__(self):
@@ -190,7 +195,7 @@ class SchoolStudentArchive(models.Model):
             MinValueValidator(8)
         ])
     venue       = models.CharField(max_length=40L, db_column='Venue', blank=True)
-    paired = models.BooleanField(db_column='Paired')
+    paired = models.BooleanField(db_column='Paired', default=False)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):

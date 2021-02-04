@@ -5,6 +5,8 @@
 from __future__ import unicode_literals
 from competition.models import *
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
+
 from django.db import connection, transaction
 from django import forms
 import time, datetime
@@ -19,6 +21,7 @@ class SchoolModelForm( forms.ModelForm ):
 	address = forms.CharField( widget=forms.Textarea )
 	class Meta:
 		model=School
+		fields = "__all__"
 
 #Displays different fields for SchoolUsers
 #class SchoolUserAdmin(admin.ModelAdmin):
@@ -28,10 +31,12 @@ class SchoolModelForm( forms.ModelForm ):
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
 	form = SchoolModelForm
-	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location') ##Which columns should be kept here?
+	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location', 'answer_sheets_emailed', 'report_emailed') ##Which columns should be kept here?
 	search_fields = ['name']
 	resource_class = SchoolResource
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','school_certificate_list']
+
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list','generate_school_answer_sheets','email_school_answer_sheets']
+
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -60,11 +65,20 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def generate_school_reports(self, request, queryset):
 	    return compadmin.print_school_reports(request, queryset)
 
+	def email_school_reports(self, request, queryset):
+	    return compadmin.email_school_reports(request, queryset)
+
 	def generate_multi_school_reports(self, request, queryset):
 	    return compadmin.multi_reportgen(request, queryset)
 
 	def school_certificate_list(self, request, queryset):
 	    return compadmin.certificate_list(request, queryset)
+	
+	def generate_school_answer_sheets(self, request, queryset):
+		return compadmin.generate_school_answer_sheets(request, queryset)
+	
+	def email_school_answer_sheets(self, request, queryset):
+		return compadmin.email_school_answer_sheets(request, queryset)
 
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
@@ -76,12 +90,53 @@ class SchoolAdmin(ImportExportModelAdmin):
 	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
 	school_certificate_list.short_description = 'Download school certificate list'
 
-	list_filter=('entered','language') #Field filters (shown as bar on right)
+	email_school_reports.short_description = 'Email selected school(s) reports (single .pdf) to school(s)'
+	email_school_answer_sheets.short_description = "Email selected school(s) answer sheets"
+	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
+
+	class AnswerSheetEmailSentFilter(SimpleListFilter):
+		title = "Answer sheets emailed"
+		parameter_name = "answer_sheets_emailed"
+		
+		def lookups(self, request, model_admin):
+			return (
+				('sent', 'sent'),
+				('unsent', 'entered and unsent'),
+			)
+		def queryset(self, request, queryset):
+			if self.value() == 'sent':
+				return queryset.filter(models.Q(answer_sheets_emailed__gte=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0))
+					& models.Q(entered__gt=0) )
+			if self.value() == 'unsent':
+				return queryset.filter((models.Q(answer_sheets_emailed__isnull=True)
+					| models.Q(answer_sheets_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
+					& models.Q(entered__gt=0) )
+	class ReportEmailSentFilter(SimpleListFilter):
+		title = "Report emailed"
+		parameter_name = "report_emailed"
+		
+		def lookups(self, request, model_admin):
+			return (
+				('sent', 'sent'),
+				('unsent', 'entered and unsent'),
+			)
+		def queryset(self, request, queryset):
+			if self.value() == 'sent':
+				return queryset.filter(models.Q(report_emailed__gte=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0))
+					& models.Q(entered__gt=0) )
+			if self.value() == 'unsent':
+				return queryset.filter((models.Q(report_emailed__isnull=True)
+					| models.Q(report_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
+					& models.Q(entered__gt=0) )
+
+	list_filter=('entered','language',AnswerSheetEmailSentFilter,ReportEmailSentFilter) #Field filters (shown as bar on right)
+
+
 
 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
-	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email')
+	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'report_downloaded', 'answer_sheet_downloaded')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
@@ -188,7 +243,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress')
+    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date')
     actions = ['export_competition']
     
     def export_competition(self, request, queryset):

@@ -21,6 +21,15 @@ from django.template.loader import get_template
 from django.template import loader, Context
 from models import LOCATIONS
 
+import reports
+
+import os
+import sys
+sys.path.append("../")
+
+from background_task import background
+from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results
+
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
     comp = Competition.objects.all() #Should only be one!
@@ -310,7 +319,6 @@ def output_studentlists(student_list):
 def output_studenttags(student_list):
     """Generate individual and pair MailMerge lists for SchoolStudent QuerySet per location and grade.
     Served to user as a .zip file containing all the lists."""
-
     grade_bucket = gradeBucket(student_list)
 
     #Generate individuals name tags 
@@ -417,6 +425,7 @@ def rank_schools(school_list):
         for i, c in enumerate(candidates):
             if i < top_score_candidates:
                 total_score = total_score + c.score
+        school.report_emailed = None
         school.score = total_score
         school.save()
 
@@ -901,12 +910,59 @@ def update_school_entry_status():
             school_obj.save()
         except exceptions.ObjectDoesNotExist:
             school_obj.entered=0
+            school_obj.answer_sheets_emailed = None
             school_obj.save()
+
+def email_school_reports(request, school_list):
+    if not views.after_pg(request):
+        comp = Competition.objects.all()
+        msg = ""
+        if comp.count() == 1:
+            pg_date = comp[0].prizegiving_date
+            msg = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + " is before prizegiving date: " + str(pg_date) + " 21:00" 
+            msg += "<br>"+"Please wait until after the prize giving before sending out the results" 
+            msg += " or change the date at: "+"<a href=\"/admin/competition/competition/\">Competition</a>"
+        else:
+            msg+="Competition hasn't been set at "+"<a href=\"/admin/competition/competition/\">Competition</a>"
+        return HttpResponse(msg)
+    else:
+        text = ""
+        successes = []
+        errors = []
+        for ischool in school_list:
+            txt = "(Key %s) %s: \n" % (str(ischool.key), ischool.name.strip())
+            if views.has_results(request, ischool):
+                bg_email_results(ischool.id)
+                successes.append(ischool.name.strip())
+            else:
+                has_scores = views.has_results(request, ischool)
+                teacher_assigned = len(ResponsibleTeacher.objects.filter(school=ischool.id)) > 0
+                if not teacher_assigned:
+                    txt += "\t- no responsible teacher assigned.\n"
+                elif not has_scores:
+                    txt += "\t- no students assigned.\n"
+                errors.append(txt)
+        if len(successes) > 0:
+            text += "Attempting to send emails to the following schools: " + ", ".join(successes) + "\n\n"
+        if len(errors) > 0:
+            text += "Emails will not be sent to the following schools with given reason: \n" + "".join(errors)
+        response = HttpResponse(text)
+        filename = 'ReportEmailStatus(%s).txt' % (timestamp_now())
+        response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
+        response['Content-Type'] = 'application/txt'
+        return response
+
+
+def get_school_report_name(school):
+    return "UCTMaths_School_Report_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
 
 def print_school_reports(request, school_list):
     result = printer_school_report(request, school_list)
     response = HttpResponse(result.getvalue())
-    response['Content-Disposition'] = 'attachment; filename=SchoolsReport(%s).pdf'%(timestamp_now())
+    if len(school_list) > 1:
+        response['Content-Disposition'] = 'attachment; filename=SchoolsReport(%s).pdf'%(timestamp_now())
+    else:
+        response['Content-Disposition'] = 'attachment; filename=%s' % (get_school_report_name(school_list[0]))
     response['Content-Type'] = 'application/pdf'
     return response
 
@@ -914,14 +970,11 @@ def printer_school_report(request, school_list=None):
     """ Generate the school report for each school in the query set"""
 
     html = '' #Will hold rendered templates
-
     for assigned_school in school_list:
         student_list = SchoolStudent.objects.filter(school = assigned_school)
-
         grade_bucket = {8:[], 9:[], 10:[], 11:[], 12:[]}
         for igrade in range(8, 13):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
-
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M'))
         gold_count = student_list.filter(award='G').count()
@@ -942,7 +995,6 @@ def printer_school_report(request, school_list=None):
                 school_award_blurb+='%d Merit award%s'%(merit_count, 's' if merit_count>1 else '')
         else:
             school_award_blurb = ''
-
         year = str(datetime.datetime.now().strftime('%Y'))
 
         if responsible_teacher:
@@ -963,7 +1015,6 @@ def printer_school_report(request, school_list=None):
             html += template.render(context) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
-
     #Generate the pdf doc
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
@@ -980,8 +1031,12 @@ def multi_reportgen(request, school_list):
             zipf.writestr('UCTMaths_Report_%s.pdf'%(ischool.name), output_string.getvalue())
 
     response = HttpResponse(output_stringIO.getvalue())
-    response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
-    response['Content-Type'] = 'application/x-zip-compressed'
+    if len(school_list) == 1:
+        response['Content-Disposition'] = 'attachment; filename=%s' % (get_school_report_name(ischool))
+        response['Content-Type'] = 'application/pdf'
+    else:
+        response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
+        response['Content-Type'] = 'application/x-zip-compressed'
     return response
 
 
@@ -1038,4 +1093,126 @@ def certificate_list(request, school_list):
     response['Content-Disposition'] = 'attachment; filename=certificate_list(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
+    return response
+
+
+def get_answer_sheet_name(school):
+    return "UCTMaths_Answer_Sheets_%s.pdf" % (unicode(school.name).strip().replace(" ", "_"))
+
+def generate_school_answer_sheets(request, school_list):
+    no_venue = []
+    no_students = []
+    for school in school_list:
+        if len(SchoolStudent.objects.filter(school = school)) == 0:
+            no_students.append(school.name.strip())
+        elif not school_students_venue_assigned(school):
+            no_venue.append(school.name.strip())
+    print(no_venue,no_students)
+    if no_venue or no_students:
+        text = "Unable to download answer sheets because:\n\n"
+        if no_venue:
+            text+="-students at " + ", ".join(no_venue) + " have not been assigned venues.\n"
+        if no_students:
+            text+="-no students have been registered at "+ ", ".join(no_students)
+        response = HttpResponse(text)
+        response['Content-Disposition'] = 'attachment; filename=AnswerSheetDownloadErrors(%s).txt'%(timestamp_now())
+        response['Content-Type'] = 'application/txt'
+        return response
+    
+    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+    start = datetime.datetime.now()
+    with zipfile.ZipFile(output_stringIO, 'w') as zipf:
+        for ischool in school_list:
+            output_string=printer_answer_sheet(request, ischool)
+            zipf.writestr(get_answer_sheet_name(ischool), output_string.getvalue())
+    
+    response = HttpResponse(output_stringIO.getvalue())
+    if len(school_list) == 1:
+        response['Content-Disposition'] = 'attachment; filename=%s'%(get_answer_sheet_name(school_list[0]))
+        response['Content-Type'] = 'application/pdf'
+    else:
+        response['Content-Disposition'] = 'attachment; filename=Answer_Sheets(%s).zip' % (timestamp_now())
+        response['Content-Type'] = 'application/x-zip-compressed'
+    diff = datetime.datetime.now() - start
+    print(str(diff))
+    return response
+
+def printer_answer_sheet(request, assigned_school=None):
+    """ Generate the school answer sheet for each school in the query set"""
+
+    html = '' #Will hold rendered templates
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    for istudent in student_list:
+            venue = Venue.objects.filter(code = istudent.venue)[0]
+            c = {
+                'name':istudent.firstname + " " + istudent.surname,
+                'school':istudent.school.name,
+                'grade':str(istudent.grade),
+                'code':str(istudent.reference),
+                'venue':str(venue.building)+ ' - '+ str(venue.code),
+            }
+            if istudent.paired:
+                template = get_template('pair_as_template.html')
+            else:
+                template = get_template('individual_as_template.html')
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
+
+    result = StringIO.StringIO()
+            #Generate the pdf doc
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    if not pdf.err:
+        return result
+    else:
+        pass #Error handling?
+
+def venue_assigned(student):
+    # Check that the student has a venue allocated
+    return len(student.venue) > 0
+
+def school_students_venue_assigned(school):
+    # Check that the venue is assigned for all students in this school
+    students = SchoolStudent.objects.filter(school=school.id)
+    for student in students:
+        if not venue_assigned(student):
+            return False 
+    return len(students)>0
+
+def email_school_answer_sheets(request, schools):
+    response = None
+
+
+    successes = []
+    errors = []
+
+    # register a background task to send an email for each school which has venues and a teacher assigned
+    for school in schools:
+        venues_assigned = school_students_venue_assigned(school)
+        teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
+
+        if (not venues_assigned) or (not teacher_assigned):
+            txt = "(Key %s) %s: \n" % (str(school.key), school.name.strip())
+            if not teacher_assigned:
+                txt += "\t- no responsible teacher assigned.\n"
+            if not venues_assigned:
+                txt += "\t- not all students have been assigned venues.\n"
+            errors.append(txt)
+        else:
+            print("Creating background task for %s with ID %d." % (school.name, school.id))
+            bg_generate_school_answer_sheets(school.id)
+            successes.append(school.name.strip())
+    
+    
+    text = ""
+    if len(successes) > 0:
+        text += "Attempting to send emails to the following schools: " + ", ".join(successes) + "\n\n"
+    if len(errors) > 0:
+        text += "Emails will not be sent to the following schools with given reason: \n" + "".join(errors)
+
+    response = HttpResponse(text)
+    filename = 'AnswerSheetEmailStatus(%s).txt' % (timestamp_now())
+    response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
+    response['Content-Type'] = 'application/txt'
+    
     return response

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.pyc
 *.*~
 =======
@@ -220,4 +219,3 @@ pip-log.txt
 .mr.developer.cfg
 
 *.json
->>>>>>> 3d8ba14293560392ff5d5ab4763f5f7b6b0b2536

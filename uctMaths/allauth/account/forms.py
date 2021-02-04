@@ -19,6 +19,7 @@ from .utils import perform_login, send_email_confirmation, setup_user_email
 from .app_settings import AuthenticationMethod
 from . import app_settings
 from .adapter import get_adapter
+import collections
 
 User = get_user_model()
 
@@ -75,7 +76,7 @@ class LoginForm(forms.Form):
             login_field = forms.CharField(label=pgettext("field label", "Login"),
                                           widget=login_widget)
         self.fields["login"] = login_field
-        self.fields.keyOrder = ["login", "password", "remember"]
+        self.fields = collections.OrderedDict(sorted(self.fields.items())) #this only works because the fields happen to be in alphabetical order, beware of adding new fields
     
     def user_credentials(self):
         """
@@ -178,9 +179,6 @@ class BaseSignupForm(_base_signup_form_class()):
         super(BaseSignupForm, self).__init__(*args, **kwargs)
         # field order may contain additional fields from our base class,
         # so take proper care when reordering...
-        field_order = ['email', 'username']
-        other_field_order = [ f for f in self.fields.keyOrder
-                              if f not in field_order ]
         if email_required:
             self.fields["email"].label = ugettext("E-mail")
             self.fields["email"].required = True
@@ -189,7 +187,6 @@ class BaseSignupForm(_base_signup_form_class()):
             self.fields["email"].required = False
             if app_settings.USERNAME_REQUIRED:
                 field_order = ['username', 'email']
-        self.fields.keyOrder = field_order + other_field_order
         if not app_settings.USERNAME_REQUIRED:
             del self.fields["username"]
 

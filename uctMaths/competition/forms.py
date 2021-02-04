@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 class CompetitionForm (ModelForm):
     class Meta:
         model=Competition
+        fields = "__all__"
         
 class CompetitionForm (forms.Form): #THERE MUST ONLY BE ONE OF THESE!
         fields = ['newentries_Opendate', 'newentries_Closedate']
@@ -28,6 +29,7 @@ class CompetitionForm (forms.Form): #THERE MUST ONLY BE ONE OF THESE!
 class StudentForm (ModelForm):
     class Meta:
         model=SchoolStudent
+        fields = "__all__"
         
 class StudentForm (forms.Form):
         fields = ['firstname', 'surname', 'language', 'school', 'grade', 'venue', 'location']
@@ -45,6 +47,7 @@ class StudentForm (forms.Form):
 class SchoolForm (ModelForm):
     class Meta:
         model=School
+        fields = "__all__"
 
 class SchoolForm (forms.Form):
         fields = ['name', 'language', 'address', 'phone', 'fax', 'contact', 'email', 'assigned_user', 'location']
@@ -63,6 +66,7 @@ class SchoolForm (forms.Form):
 class SchoolSelectForm (ModelForm):
     class Meta:
         model=School
+        fields = "__all__"
 
 class SchoolSelectForm (forms.Form):
         fields = ['school_name']
@@ -73,6 +77,7 @@ class SchoolSelectForm (forms.Form):
 class InvigilatorForm (ModelForm):
     class Meta:
         model=Invigilator
+        fields = "__all__"
 
 class InvigilatorForm (forms.Form):
         fields = ['school', 'firstname','surname', 'invig_reg','phone_primary','phone_alt', 'email', 'notes',
@@ -94,6 +99,7 @@ class InvigilatorForm (forms.Form):
 class ResponsibleTeacherForm (ModelForm):
     class Meta:
         model=ResponsibleTeacher
+        fields = "__all__"
 
 class ResponsibleTeacherForm(forms.Form):
         fields = ['school', 'firstname','surname', 'phone_primary','phone_alt', 'email']
