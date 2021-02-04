@@ -425,6 +425,7 @@ def rank_schools(school_list):
         for i, c in enumerate(candidates):
             if i < top_score_candidates:
                 total_score = total_score + c.score
+        school.report_emailed = None
         school.score = total_score
         school.save()
 
@@ -909,6 +910,7 @@ def update_school_entry_status():
             school_obj.save()
         except exceptions.ObjectDoesNotExist:
             school_obj.entered=0
+            school_obj.answer_sheets_emailed = None
             school_obj.save()
 
 def email_school_reports(request, school_list):
@@ -1137,21 +1139,17 @@ def generate_school_answer_sheets(request, school_list):
 
 def printer_answer_sheet(request, assigned_school=None):
     """ Generate the school answer sheet for each school in the query set"""
-    path = os.path.dirname(__file__)+('/static/default.jpg')
-    c = {'path': path}
-    template = get_template('default_as_template.html')
-    c.update(csrf(request))
-    context = Context(c)
-    html = template.render(context) #Will hold rendered templates
 
+    html = '' #Will hold rendered templates
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     for istudent in student_list:
+            venue = Venue.objects.filter(code = istudent.venue)[0]
             c = {
                 'name':istudent.firstname + " " + istudent.surname,
                 'school':istudent.school.name,
                 'grade':str(istudent.grade),
                 'code':str(istudent.reference),
-                'venue':str(istudent.venue),
+                'venue':str(venue.building)+ ' - '+ str(venue.code),
             }
             if istudent.paired:
                 template = get_template('pair_as_template.html')
