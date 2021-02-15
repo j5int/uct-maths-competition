@@ -415,7 +415,9 @@ def newstudents(request):
         #Therefore - redirect to entry_review page
         pass #HttpResponseRedirect('../entry_review.html')
     invigilators = compadmin.has_invigilator()
-    full = assigned_school.address.split(',')
+    full = []
+    if assigned_school.entered == 1:
+        full = assigned_school.address.split(',')
     full += ['']*(2-len(full))
     address = full[0]
     code = full[1].strip()
