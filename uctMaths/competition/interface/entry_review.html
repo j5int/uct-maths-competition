@@ -78,14 +78,16 @@
     <div>
         <!-- <form action="." method="post"> -->
         <h2>Grade {{grade}}</h2>
-        <div>
-            <h3>Pairs:</h3>
-                {%for key, p in pair_list.items%}
-                    {% if grade == key %}
-                    <p> {{p}} pairs (teams of 2) have been registered for grade {{grade}}. </p>
-                    {%endif%}
-                 {%endfor%}
-        </div> 
+        {% if max_num_pairs > 0%}
+            <div>
+                <h3>Pairs:</h3>
+                    {%for key, p in pair_list.items%}
+                        {% if grade == key %}
+                        <p> {{p}} pairs (teams of 2) have been registered for grade {{grade}}. </p>
+                        {%endif%}
+                    {%endfor%}
+            </div> 
+        {% endif%}
 
         <h3>Individuals:</h3>
         <table>
