@@ -171,11 +171,17 @@ def submitted(request):
     count_pairs = 0
     
     for i in range(8,13):
-        school_summary_info.append('Grade %d: %d individuals and %d pairs'%(i, len(grade_summary[i,False,'ALL']),len(grade_summary[i,True,'ALL'])))
+        grade_summary_text = 'Grade %d: %d individuals' % (i, len(grade_summary[i,False,'ALL']))
+        if compadmin.admin_number_of_pairs() > 0:
+            grade_summary_text += " and %d pairs" % (len(grade_summary[i,True,'ALL']))
+        school_summary_info.append(grade_summary_text)
         count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
         count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
         
-    school_summary_statistics = 'You have successfully registered %d students (%d individuals and %d pairs).'%(count_pairs*2+count_individuals, count_individuals, count_pairs)
+    school_summary_statistics = 'You have successfully registered %d students' % (count_pairs*2+count_individuals)
+    
+    if compadmin.admin_number_of_pairs() > 0:
+        school_summary_statistics += '(%d individuals and %d pairs).' % (count_individuals, count_pairs)
 
     c = {
         'school_summary_blurb':school_summary_blurb,
@@ -316,21 +322,25 @@ def newstudents(request):
 
             #Registering per grade
             for grade in range (8,13):
-                  #Registering the different pairs
-                  #Information is set to null, only school name is given and reference
-                  #Reference if the ID of the first person in the pair
-                  for p in range(int(form.getlist("pairs",'')[grade-8])):
-                        firstname = 'Pair/Paar'
-                        surname = str(grade)+chr(65+p)
-                        language = form.getlist('language','')[0]
-                        school = assigned_school
-                        reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
-                        paired = True
-                        location = assigned_school.location
+                #Registering the different pairs
+                #Information is set to null, only school name is given and reference
+                #Reference if the ID of the first person in the pair
 
-                        query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
-                                school=school, grade=grade, paired=paired, location=location)
-                        query.save()
+                if compadmin.admin_number_of_pairs() == 0:
+                    break
+
+                for p in range(int(form.getlist("pairs",'')[grade-8])):
+                    firstname = 'Pair/Paar'
+                    surname = str(grade)+chr(65+p)
+                    language = form.getlist('language','')[0]
+                    school = assigned_school
+                    reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
+                    paired = True
+                    location = assigned_school.location
+
+                    query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
+                            school=school, grade=grade, paired=paired, location=location)
+                    query.save()
 
             #Add invigilator information
             for invigilator in invigilator_list:
