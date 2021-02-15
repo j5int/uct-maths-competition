@@ -11,7 +11,8 @@
     {% else %}
         <p>Not working.</p>
     {% endif %}
-
+    <p>Physical address of the school for delivery by courier.</p>
+    <textarea readonly style = "width: 24em; resize: none" rows ="5" type ="text">{{schooln.address}}</textarea>
     <!-- register responsible teacher from here --->
     <div>
         <h1>Responsible Teacher</h1>
@@ -72,7 +73,7 @@
 
     </div>
     {% endif %}
-    
+
     <h1>Registered Participants</h1>
     {%for grade in grades%}
     <div>

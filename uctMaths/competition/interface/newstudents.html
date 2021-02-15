@@ -27,7 +27,8 @@
 		{%if lang == "b"%}<option value="b">Bilingual</option>{%endif%}
 		{%endfor%}
     </select>
-
+    <p>Physical address of the school for delivery by courier. Please do not use a PO Box number.</p>
+    <textarea style = "width: 24em; resize: none" rows ="5" type ="text" class="physical_address" name="physical_address" required value="" >{{schooln.address}}</textarea>
     <!-- register responsible teacher from here --->
     <div>
         <h1>Register Responsible Teacher</h1>

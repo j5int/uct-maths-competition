@@ -298,6 +298,7 @@ def newstudents(request):
         #Delete all previously stored information
 
         try:
+            assigned_school.address = form.getlist('physical_address','')[0]
             assigned_school.language = form.getlist('language','')[0]
             assigned_school.save()
 
@@ -330,7 +331,7 @@ def newstudents(request):
 
                   if compadmin.admin_number_of_pairs() == 0:
                     break
-                
+
                   for p in range(int(form.getlist("pairs",'')[grade-8])):
                         firstname = 'Pair/Paar'
                         surname = str(grade)+chr(65 + p)   # Maps 0, 1, 2, 3... to A, B, C...

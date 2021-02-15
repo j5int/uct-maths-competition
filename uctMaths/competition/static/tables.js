@@ -45,6 +45,20 @@ function validateForm(doc)
   //prevent submission of empty forms
   if (blankForm())
 	{return false;}
+/*---------------------------------------------
+    Validate address field
+    ----------------------------------------------*/
+    var physical_address = document.getElementsByClassName('physical_address')[0];
+    physical_address.style.background = 'White';
+    
+    if(physical_address.value.trim()===""){
+
+        window.scrollTo(100,0);
+        physical_address.style.background = 'Yellow';
+        return false;
+    }	
+        
+
 /**********************
 *** EMAIL VALIDATION***
 ***********************/
