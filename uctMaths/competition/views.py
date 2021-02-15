@@ -228,7 +228,8 @@ def entry_review(request):
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
         'ierror':error,
-        "only_back":True}
+        "only_back":True,
+        'invigilators':compadmin.has_invigilator()}
 
     if request.method == 'POST' and 'edit_entry' in request.POST and (compadmin.isOpen() or request.user.is_staff):  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
@@ -321,10 +322,11 @@ def newstudents(request):
                   #Reference if the ID of the first person in the pair
                   for p in range(int(form.getlist("pairs",'')[grade-8])):
                         firstname = 'Pair/Paar'
-                        surname = str(grade)+chr(65+p)
+                        surname = str(grade)+chr(65 + p)   # Maps 0, 1, 2, 3... to A, B, C...
+                        pair_number = 51 + p
                         language = form.getlist('language','')[0]
                         school = assigned_school
-                        reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
+                        reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
                         paired = True
                         location = assigned_school.location
 
@@ -335,23 +337,23 @@ def newstudents(request):
             #Add invigilator information
             for invigilator in invigilator_list:
                 invigilator.delete()
+            if compadmin.has_invigilator():
+                for j in range(10):
+                    if form.getlist('inv_firstname','')[j] == u'':
+                        ierror = "Invigilator information incomplete"
+                    else:
+                        school = assigned_school
+                        ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
+                        isurname = correctCapitals(form.getlist('inv_surname','')[j])
+                        iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
+                        iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
+                        iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
+                        inotes = form.getlist('inv_notes','')[j].strip()
+                        location = assigned_school.location
 
-            for j in range(10):
-                if form.getlist('inv_firstname','')[j] == u'':
-                    ierror = "Invigilator information incomplete"
-                else:
-                    school = assigned_school
-                    ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
-                    isurname = correctCapitals(form.getlist('inv_surname','')[j])
-                    iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
-                    iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
-                    iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
-                    inotes = form.getlist('inv_notes','')[j].strip()
-                    location = assigned_school.location
-
-                    query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
-                                       phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
-                    query.save()
+                        query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
+                                        phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
+                        query.save()
 
             #Registering students, maximum number of students 25
             #Returns an error if information entered incorrectly
@@ -363,10 +365,11 @@ def newstudents(request):
                 if form.getlist('firstname','')[i] == u'': continue
                 firstname =  correctCapitals(form.getlist('firstname','')[i])
                 surname =  correctCapitals(form.getlist('surname','')[i])
+                ind_nr = (i % compadmin.admin_number_of_individuals()) + 1
                 language =  form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
-                reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5+1).zfill(2))
+                reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(ind_nr).zfill(2))
                 paired = False
                 location = assigned_school.location
 
@@ -399,7 +402,7 @@ def newstudents(request):
         #If not null, then the form has been filled out.
         #Therefore - redirect to entry_review page
         pass #HttpResponseRedirect('../entry_review.html')
-
+    invigilators = compadmin.has_invigilator()
     c = {'type':'Students',
         'schooln':assigned_school,
         'language_options':language_selection,
@@ -415,7 +418,8 @@ def newstudents(request):
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
         'editEntry':editEntry,
-        'ierror':error}
+        'ierror':error,
+        'invigilators':invigilators}
 
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)

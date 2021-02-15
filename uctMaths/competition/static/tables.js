@@ -92,32 +92,32 @@ function validateForm(doc)
 	var invig_phone_alt = document.getElementsByClassName('invig_phone_alt');
 	
 	var num_invigilators =0;
-	
-	for(var i = 0; i < 10; ++i)
-	{
-	validity = validate_invigilator(invig_firstname[i].value, invig_surname[i].value, invig_phone_primary[i].value, invig_phone_alt[i].value, invig_mail[i].value);
-	
-		invig_firstname[i].style.background = 'White'; 
-		invig_surname[i].style.background = 'White'; 
-		invig_phone_primary[i].style.background = 'White'; 
-		invig_phone_alt[i].style.background = 'White';
-		invig_mail[i].style.background = 'White'; 
-	
-	    if (validity > 0) //Any error condition
-	    {
-	    	window.scrollTo(100,500);
-		    switch(validity){
-		        case 1:invig_firstname[i].style.background = 'Yellow'; break;
-		        case 2:invig_surname[i].style.background = 'Yellow'; break;
-		        case 3:invig_phone_primary[i].style.background = 'Yellow'; break;
-		        case 4:invig_phone_alt[i].style.background = 'Yellow'; break;
-		        case 5:invig_mail[i].style.background = 'Yellow'; break;
-		    }
-			return false;
-	    }
-	    else if (validity==0) num_invigilators+=1; //else full and valid field
-	}
-	
+	if(invig_firstname){
+        for(var i = 0; i < 10; ++i)
+        {
+        validity = validate_invigilator(invig_firstname[i].value, invig_surname[i].value, invig_phone_primary[i].value, invig_phone_alt[i].value, invig_mail[i].value);
+        
+            invig_firstname[i].style.background = 'White'; 
+            invig_surname[i].style.background = 'White'; 
+            invig_phone_primary[i].style.background = 'White'; 
+            invig_phone_alt[i].style.background = 'White';
+            invig_mail[i].style.background = 'White'; 
+        
+            if (validity > 0) //Any error condition
+            {
+                window.scrollTo(100,500);
+                switch(validity){
+                    case 1:invig_firstname[i].style.background = 'Yellow'; break;
+                    case 2:invig_surname[i].style.background = 'Yellow'; break;
+                    case 3:invig_phone_primary[i].style.background = 'Yellow'; break;
+                    case 4:invig_phone_alt[i].style.background = 'Yellow'; break;
+                    case 5:invig_mail[i].style.background = 'Yellow'; break;
+                }
+                return false;
+            }
+            else if (validity==0) num_invigilators+=1; //else full and valid field
+        }
+    }
     /*---------------------------------------------
     Validate students
     ----------------------------------------------*/
@@ -150,8 +150,8 @@ function validateForm(doc)
 	
 	for (var k=0; k<pairs.length; k++)
 	{
-	 if (pairs[k].options[pairs[k].selectedIndex].value > 5){
-	    alert("Please ensure that the number of pairs for each grade is between 0 and 5 (inclusive.)");
+	 if (pairs[k].options[pairs[k].selectedIndex].value > 10){
+	    alert("Please ensure that the number of pairs for each grade is between 0 and 10 (inclusive.)");
 	    window.scrollTo(100,500);
         return false;
         }
@@ -245,7 +245,6 @@ function validate_student(firstname, surname){
 
 function validate_invigilator(firstname, surname, phone_primary, phone_alt, email){
     //alert("Invigilator:"+firstname+", "+surname+"; "+phone_primary+"; " + email);
-    
     if (firstname.length > 254)
         {
             alert("Firstname is too long");

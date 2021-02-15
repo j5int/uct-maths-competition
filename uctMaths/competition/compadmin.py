@@ -1216,3 +1216,7 @@ def email_school_answer_sheets(request, schools):
     response['Content-Type'] = 'application/txt'
     
     return response
+
+
+def has_invigilator():
+    return Competition.objects.all()[0].invigilators
