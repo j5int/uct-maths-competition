@@ -227,6 +227,7 @@ def entry_review(request):
         'responsible_teacher':responsible_teacher[0],
         'student_list':individual_list,
         'pair_list':pair_list,
+        'max_num_pairs': compadmin.admin_number_of_pairs(),
         'entries_open':compadmin.isOpen() or request.user.is_staff,
         'invigilator_list': invigilator_list,
         'grades':range(8,13), 
