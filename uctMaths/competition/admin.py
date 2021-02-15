@@ -128,8 +128,24 @@ class SchoolAdmin(ImportExportModelAdmin):
 				return queryset.filter((models.Q(report_emailed__isnull=True)
 					| models.Q(report_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
 					& models.Q(entered__gt=0) )
+	
+	class EnteredFilter(SimpleListFilter):
+		title = "school entered"
+		parameter_name = "entered"
 
-	list_filter=('entered','language',AnswerSheetEmailSentFilter,ReportEmailSentFilter) #Field filters (shown as bar on right)
+		def lookups(self, request, model_admin):
+			return (
+				("entered", "entered"),
+				("not-entered", "not entered")
+			)
+		
+		def queryset(self, request, queryset):
+			if self.value() == "entered":
+				return queryset.filter(models.Q(entered__gte=1))
+			if self.value() == "not-entered":
+				return queryset.filter(models.Q(entered__lte=0))
+
+	list_filter=(EnteredFilter,'language',AnswerSheetEmailSentFilter,ReportEmailSentFilter) #Field filters (shown as bar on right)
 
 
 
