@@ -420,7 +420,6 @@ def newstudents(request):
     address = full[0]
     code = full[1].strip()
     
-    print(address)
     c = {'type':'Students',
         'schooln':assigned_school,
         'language_options':language_selection,
