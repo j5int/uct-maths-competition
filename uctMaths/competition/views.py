@@ -407,6 +407,7 @@ def newstudents(request):
         'student_list':individual_list,
         'pairs_per_grade':pairs_per_grade,
         'pair_range':pairs_per_grade,
+        'max_num_pairs': compadmin.admin_number_of_pairs(),
         'entries_per_grade':entries_per_grade,
         'invigilator_list': invigilator_list,
         'entries_open':compadmin.isOpen() or request.user.is_staff,
