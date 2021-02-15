@@ -49,12 +49,19 @@ function validateForm(doc)
     Validate address field
     ----------------------------------------------*/
     var physical_address = document.getElementsByClassName('physical_address')[0];
+    var code = document.getElementsByClassName('code')[0];
     physical_address.style.background = 'White';
     
     if(physical_address.value.trim()===""){
 
         window.scrollTo(100,0);
         physical_address.style.background = 'Yellow';
+        return false;
+    }	
+    if(code.value.trim()===""){
+
+        window.scrollTo(100,0);
+        code.style.background = 'Yellow';
         return false;
     }	
         

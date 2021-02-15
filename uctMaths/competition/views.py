@@ -298,7 +298,7 @@ def newstudents(request):
         #Delete all previously stored information
 
         try:
-            assigned_school.address = form.getlist('physical_address','')[0]
+            assigned_school.address = form.getlist('physical_address','')[0] + ', ' + form.getlist('code','')[0]
             assigned_school.language = form.getlist('language','')[0]
             assigned_school.save()
 
@@ -415,6 +415,12 @@ def newstudents(request):
         #Therefore - redirect to entry_review page
         pass #HttpResponseRedirect('../entry_review.html')
     invigilators = compadmin.has_invigilator()
+    full = assigned_school.address.split(',')
+    full += ['']*(2-len(full))
+    address = full[0]
+    code = full[1].strip()
+    
+    print(address)
     c = {'type':'Students',
         'schooln':assigned_school,
         'language_options':language_selection,
@@ -432,7 +438,9 @@ def newstudents(request):
         'igrades':range(8,13),
         'editEntry':editEntry,
         'ierror':error,
-        'invigilators':invigilators}
+        'invigilators':invigilators,
+        'address':address,
+        'code':code}
 
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
