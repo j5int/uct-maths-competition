@@ -103,6 +103,7 @@ There are some good docs in [docs/userdoc](docs/userdoc) and [docs/readme](docs/
 Some of the important files:
 * [uctMaths/competition/models.py](uctMaths/competition/models.py): all of the classes which are used for turning database entities into objects in Python. The class attributes should match the columns in the database tables.
 * [uctMaths/competition/admin.py](uctMaths/competition/admin.py): this is where the admin operations get defined. Each class represents the admin import-export model where you can select entries and apply actions. To add new actions (items in the drop-down menu), add a new string to the `actions` attribute, then add a method with this same name and assign it a short description to show in the drop-down.
+Action buttons can be created for actions that are independent of the selected items. Add a URL for the button's method, and then add a button to the HTML file referenced in the `change_list_template` field.
 * [uctMaths/competition/compadmin.py](uctMaths/competition/compadmin.py): the methods in [admin.py](uctMaths/competition/admin.py) call functions in this file. This is where the actions get performed.
 * [uctMaths/competition/urls.py](uctMaths/competition/urls.py): mapping URLs to functions. If you want to add new buttons and pages, this is likely where you will do it.
 * [uctMaths/competition/views.py](uctMaths/competition/views.py): the URLs map to functions here. These functions return HTML pages that have been formatted. You can replace fields in the HTML pages here to allow pages to be dynamic.
