@@ -91,6 +91,8 @@ The Django workflow is that changes to database models should only be done in a 
 
 Before making changes to models, check that you have an initial migration which is up-to-date with the database. If there is not an initial migration, Django will think that the next migration is the initial one, and if a table already exists, it will not make changes since the initial changes are typically for creating tables.
 
+Check if there are migrations that need to be made every time you pull.
+
 ## Where to look
 There are some good docs in [docs/userdoc](docs/userdoc) and [docs/readme](docs/readme). These were written in 2014, so are quite out of date.
 
