@@ -712,22 +712,52 @@ def school_summary(request):
     output_workbook.save(response)
     return response
 
-#add error messages, headings and styling 
 def export_courier_address(request, school_list):
     """ Return for DL a list of school courier addresses"""
     output_workbook = xlwt.Workbook()
+    errorSheet = False
     wb_sheet = output_workbook.add_sheet('School Addresses')
-    cell_row_offset = 1
+    header = ['Company Name','Email','Address','City','Postal/Zip Code','Province/Region','Country','Contact Name','Tel. No.']
+    cell_row_offset = 0
+    for index, h in enumerate(header):
+        wb_sheet.write(cell_row_offset,index,'%s'%(h))
+    
+    cell_row_offset+=1
+    error_sheet = None
+    error_row = 0
     for ischool in school_list:
+        errors = []
         resp_teacher = ResponsibleTeacher.objects.filter(school = ischool)
+        full = ischool.address.split(',')
+        full+=['']*(3-len(full))
+        
+        
+
         if(not resp_teacher):
+            errors.append("responsible teacher")
+        if(not full[0]):
+            errors.append("address")
+            if(not full[1]):
+                errors.append("city")
+                if(not full[2]):
+                    errors.append("postal code") 
+        if(not ischool.phone):
+            errors.append("phone number")
+        errorMessage ='No %s assigned to school' % ((', ').join(errors))
+        if(errors):
+            if(not errorSheet):
+                error_sheet = output_workbook.add_sheet('Errors')
+                error_sheet.write(error_row,0,"School")
+                error_sheet.write(error_row,1,"Error")
+            error_row+=1
+            error_sheet.write(error_row,0,ischool.name)
+            error_sheet.write(error_row,1,errorMessage)
+            errorSheet = True
             continue 
         resp_teacher = resp_teacher[0]
         cell_row_offset = cell_row_offset + 1
         wb_sheet.write(cell_row_offset,0,unicode(ischool.name))
         wb_sheet.write(cell_row_offset,1,resp_teacher.email)
-        full = ischool.address.split(',')
-        full+=['']*(3-len(full))
         wb_sheet.write(cell_row_offset,2,full[0])
         wb_sheet.write(cell_row_offset,3,full[2])
         wb_sheet.write(cell_row_offset,4,full[1])
