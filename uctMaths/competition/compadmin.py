@@ -1316,9 +1316,9 @@ def generate_grade_pdfs(request, schools):
         bg_generate_as_grade_distinction(grade, False)
     
     response = HttpResponse("""Attempting to generate answer sheets for all students, distinguished by grade. 
-    This will take some time if many students have been allocated. 
-    Emails with the answer sheets by grade will be sent to the competition admin's email address in the next hour.
-    """)
+This will take some time if many students have been entered. 
+Emails with the answer sheets by grade will be sent to the competition admin's email address(%s) in the next hour.
+""" % (admin_emailaddress()))
     response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationStatus(%s).txt'%(timestamp_now())
     response['Content-Type'] = 'application/txt'
     return response
