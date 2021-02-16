@@ -70,8 +70,8 @@ def send_grade_answer_sheets_to_organiser(pdf_attachment_filename):
     print("Emailing " + os.path.basename(pdf_attachment_filename) + " to organiser.")
     f = open(pdf_attachment_filename, "rb")
     output_string = """Dear admin,
-    
-    This email contains part of the collection of answer sheets for all students, separated by grade. This is being sent because of the request to generate all answer sheets. 
+
+This email contains part of the collection of answer sheets for all students, separated by grade. This is being sent because of the request to generate all answer sheets. 
     """
     send_email(
         "(Do not reply) " + os.path.basename(pdf_attachment_filename),
