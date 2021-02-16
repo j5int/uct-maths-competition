@@ -1223,7 +1223,6 @@ def email_school_answer_sheets(request, schools):
     return response
 
 def generate_grade_pdfs(request, schools):
-    print("GENERATING!")
     all_students = SchoolStudent.objects.filter()
     no_venue_assigned = []
     for student in all_students:
@@ -1232,5 +1231,7 @@ def generate_grade_pdfs(request, schools):
     if no_venue_assigned:
         return HttpResponse("Unable to generate answer sheets for the following students because no venues were assigned: " + ", ".join(no_venue_assigned))
 
-    bg_generate_as_grade_distinction(True)
-    bg_generate_as_grade_distinction(False)
+    for grade in range(8, 12 + 1):
+        print("Creating background task for AS generation for grade %d." % grade)
+        bg_generate_as_grade_distinction(grade, True)
+        bg_generate_as_grade_distinction(grade, False)

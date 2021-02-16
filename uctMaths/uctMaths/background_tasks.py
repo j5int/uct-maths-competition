@@ -62,7 +62,7 @@ def bg_generate_school_answer_sheets(school_id):
     print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
 
 @background(queue="AS-generation-queue")
-def bg_generate_as_grade_distinction(paired):
+def bg_generate_as_grade_distinction(grade, paired):
     from competition.compadmin import get_student_answer_sheet
     import StringIO
     import datetime
@@ -70,25 +70,23 @@ def bg_generate_as_grade_distinction(paired):
 
     BATCH_SIZE = 2000
     
-    for grade in range(8, 12 + 1):
-        startTime = datetime.datetime.now()
-        students = SchoolStudent.objects.filter(grade=grade, paired=paired)
-        if len(students) == 0:
-            # Nothing to generate
-            continue
-        batches = [students[i : i + BATCH_SIZE] for i in range(0, len(students), BATCH_SIZE)]
-        for batch_no, batch in enumerate(batches):
-            html = ""
-            for pos, student in enumerate(batch):
-                html += get_student_answer_sheet(None, student)
+    startTime = datetime.datetime.now()
+    students = SchoolStudent.objects.filter(grade=grade, paired=paired)
+    if len(students) == 0:
+        # Nothing to generate
+        continue
+    batches = [students[i : i + BATCH_SIZE] for i in range(0, len(students), BATCH_SIZE)]
+    for batch_no, batch in enumerate(batches):
+        html = ""
+        for pos, student in enumerate(batch):
+            html += get_student_answer_sheet(None, student)
 
-            filename = "%s answer sheets - grade %d - %d of %d .pdf" % ("Pair" if paired else "Individual",
-                                                                        grade, batch_no + 1, len(batches))
-            grade_result = open(filename, "w+b")
-            print("Creating PDF for %s grade %d, batch %d of %d. Started at %s" % ("pairs" if paired else "individuals", grade, batch_no + 1, len(batches), str(startTime)))
-            pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), grade_result, encoding="UTF-8")
-            grade_result.close()
-            send_grade_answer_sheets_to_organiser(filename)
-            diff = datetime.datetime.now() - startTime 
-            print("Completed. Time taken: %s" % str(diff))
-    print("DONE!")
+        filename = "%s answer sheets - grade %d - %d of %d .pdf" % ("Pair" if paired else "Individual",
+                                                                    grade, batch_no + 1, len(batches))
+        grade_result = open(filename, "w+b")
+        print("Creating PDF for %s grade %d, batch %d of %d. Started at %s" % ("pairs" if paired else "individuals", grade, batch_no + 1, len(batches), str(startTime)))
+        pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), grade_result, encoding="UTF-8")
+        grade_result.close()
+        send_grade_answer_sheets_to_organiser(filename)
+        diff = datetime.datetime.now() - startTime 
+        print("Completed. Time taken: %s" % str(diff))
