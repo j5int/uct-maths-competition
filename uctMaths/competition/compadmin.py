@@ -405,7 +405,7 @@ def output_schooltaglists(school_list):
 def upload_results():
     """Facilitate upload of .RES (the results) files. Redirects to custom Admin page (upload_results.html), the logic contained in compadmin_views.py."""
     #Return response of redirect page
-    response = HttpResponseRedirect('../../../competition/admin/upload_results.html')
+    response = HttpResponseRedirect('../../../../competition/admin/upload_results.html')
     return response
     
 def rank_schools():
