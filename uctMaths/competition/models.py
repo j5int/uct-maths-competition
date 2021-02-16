@@ -13,15 +13,17 @@ LOCATIONS = (
 )
 
 class Competition(models.Model):
-    newentries_Opendate = models.DateField(db_column='newentries_Opendate')
-    newentries_Closedate = models.DateField(db_column='newentries_Closedate')
-    admin_emailaddress = models.CharField(max_length=30L)
-    num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True)
-    number_of_individuals = models.IntegerField(db_column='num_individuals')
-    number_of_pairs = models.IntegerField(db_column='num_pairs')
-    prizegiving_date = models.DateField(db_column='prizegiving_date')
-    invigilators = models.BooleanField(db_column='invigilators')
-    answer_sheet_download_enabled = models.BooleanField(db_column='answer_sheet_download_enabled')
+    newentries_Opendate = models.DateField(db_column='newentries_Opendate', verbose_name="Opening date for entries")
+    newentries_Closedate = models.DateField(db_column='newentries_Closedate', verbose_name="Closing date for entries")
+    admin_emailaddress = models.CharField(max_length=30L, verbose_name="Admin email address")
+    num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True, verbose_name="Number of school candidate scores")
+    number_of_individuals = models.IntegerField(db_column='num_individuals', verbose_name="Maximum individual entries per grade per school")
+    number_of_pairs = models.IntegerField(db_column='num_pairs', verbose_name="Maximum pair entries per grade per school")
+    prizegiving_date = models.DateField(db_column='prizegiving_date', verbose_name="Prize-giving date")
+    invigilators = models.BooleanField(db_column='invigilators', default=False,
+                                        verbose_name="Require schools to provide invigilators")
+    answer_sheet_download_enabled = models.BooleanField(db_column='answer_sheet_download_enabled', default=False,
+                                                        verbose_name="Allow teachers to download answer sheets")
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
