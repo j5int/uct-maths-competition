@@ -20,8 +20,8 @@ class Competition(models.Model):
     number_of_individuals = models.IntegerField(db_column='num_individuals')
     number_of_pairs = models.IntegerField(db_column='num_pairs')
     prizegiving_date = models.DateField(db_column='prizegiving_date')
-    invigilators = models.BooleanField(db_column='invigilators')
-    answer_sheet_download_enabled = models.BooleanField(db_column='answer_sheet_download_enabled')
+    invigilators = models.BooleanField(db_column='invigilators', default=False)
+    answer_sheet_download_enabled = models.BooleanField(db_column='answer_sheet_download_enabled', default=False)
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
