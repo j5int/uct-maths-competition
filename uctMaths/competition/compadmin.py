@@ -402,7 +402,7 @@ def output_schooltaglists(school_list):
     response['Content-Disposition'] = 'attachment; filename=schooltags(%s).txt'%(timestamp_now())
     return response
 
-def upload_results(request, student_list):
+def upload_results():
     """Facilitate upload of .RES (the results) files. Redirects to custom Admin page (upload_results.html), the logic contained in compadmin_views.py."""
     #Return response of redirect page
     response = HttpResponseRedirect('../../../competition/admin/upload_results.html')
@@ -470,7 +470,7 @@ def rank_schools():
             school.save()
 
 
-def rank_students(student_list):
+def rank_students():
     """Rank students on their uploaded score. Used if a score has been changed and the remaining students need to be re-classified"""
 
     #Rank students
@@ -520,7 +520,7 @@ def score_studentlist(student_list):
             student.save()
 
 
-def export_awards(request, student_list):
+def export_awards(request):
     """ Assign awards to participants (QuerySet is list of students) to students based on their rank. Serves an excel workbook with the awards for each student."""
     output_workbook = xlwt.Workbook()
     #Ranked gold for each grade (pairs, individuals separated) (alphabetical by surname)
@@ -938,7 +938,7 @@ def timestamp_now():
     to_return = '%s:%s-%s%s%s'%(str(now.hour).zfill(2), str(now.minute).zfill(2), str(now.day).zfill(2), str(now.month).zfill(2), str(now.year).zfill(4))
     return to_return
     
-def output_PRN_files(student_list):
+def output_PRN_files():
     """Generate PRN files lists for all students, regardless of selection at admin UI. Served to user as a .zip file with each (10 files) Paired/Grade list."""
 
     student_list = SchoolStudent.objects.all()
