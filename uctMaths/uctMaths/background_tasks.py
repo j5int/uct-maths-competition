@@ -9,6 +9,7 @@ from PyPDF2 import PdfFileMerger
 sys.path.append("../")
 
 from competition.models import School, ResponsibleTeacher, SchoolStudent
+import os
 
 # It seems that this file needs to be in the uctMaths folder and not competition. 
 # Finding a workaround would make the code cleaner.
@@ -83,6 +84,8 @@ def bg_generate_as_grade_distinction(grade, paired):
 
         filename = "generated_grade_answer_sheets/%s answer sheets - grade %d - %d of %d .pdf" % ("Pair" if paired else "Individual",
                                                                     grade, batch_no + 1, len(batches))
+        if not os.path.exists("generated_grade_answer_sheets"):
+            os.mkdir("generated_grade_answer_sheets")
         grade_result = open(filename, "w+b")
         print("Creating PDF for %s grade %d, batch %d of %d. Started at %s" % ("pairs" if paired else "individuals", grade, batch_no + 1, len(batches), str(startTime)))
         pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), grade_result, encoding="UTF-8")
