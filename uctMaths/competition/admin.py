@@ -210,8 +210,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	    return compadmin.export_awards(request)
 
 	def output_PRN_files(self, request):
-		compadmin.output_PRN_files()
-		return HttpResponseRedirect("../")
+		return compadmin.output_PRN_files()
 		
 	def assign_student_awards(self, request):
 		compadmin.assign_student_awards()
