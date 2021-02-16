@@ -185,9 +185,37 @@ class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank', 'award', 'location')
-	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards']
+	actions = ['write_studentlist','write_studenttags']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
+	# Single action button functions (don't require selection)
+	change_list_template = "admin/student_changelist.html"
+	def get_urls(self):
+		urls = super(SchoolStudentAdmin, self).get_urls()
+		my_urls = [
+			url("^upload_results/", self.upload_results),
+			url("^rank_students/", self.rank_students),
+			url("^output_assign_awards/", self.output_assign_awards),
+			url("^output_PRN_files/", self.output_PRN_files),
+			url("^assign_student_awards/", self.assign_student_awards),
+		]
+		return my_urls + urls
+	def upload_results(self, request):
+	    return compadmin.upload_results()
 
+	def rank_students(self, request):
+		compadmin.rank_students()
+		return HttpResponseRedirect("../")
+
+	def output_assign_awards(self, request):
+	    return compadmin.export_awards(request)
+
+	def output_PRN_files(self, request):
+		compadmin.output_PRN_files()
+		return HttpResponseRedirect("../")
+		
+	def assign_student_awards(self, request):
+		compadmin.assign_student_awards()
+		return HttpResponseRedirect("../")
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
 	    cursor = connection.cursor()
@@ -214,25 +242,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	    return compadmin.output_studenttags(queryset)
 	write_studenttags.short_description = 'Generate MailMerge student tags for selected student(s)'
 
-	def upload_results(self, request, queryset):
-	    return compadmin.upload_results(request, queryset)
-	upload_results.short_description = 'Upload students\' results (.RES file required)'
-
-	def rank_students(self, request, queryset):
-	    return compadmin.rank_students(queryset)
-	rank_students.short_description = 'Re-rank students. (regardless of selection)'
-
-	def output_assign_awards(self, request, queryset):
-	    return compadmin.export_awards(request, queryset)
-	output_assign_awards.short_description = 'Export (.xls) document (regardless of selection)'
-
-	def output_PRN_files(self, request, queryset):
-	    return compadmin.output_PRN_files(queryset)
-	output_PRN_files.short_description = 'Generate PRN files for all students (regardless of selection)'
-
-	def assign_student_awards(self, request, queryset):
-	    return compadmin.assign_student_awards()
-	assign_student_awards.short_description = 'Assign student awards (regardless of selection)'
+	
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
