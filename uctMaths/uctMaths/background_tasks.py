@@ -69,19 +69,19 @@ def bg_generate_as_grade_distinction(grade, paired):
     from competition.reports import send_grade_answer_sheets_to_organiser
 
     BATCH_SIZE = 2000
-    
+
     startTime = datetime.datetime.now()
     students = SchoolStudent.objects.filter(grade=grade, paired=paired)
     if len(students) == 0:
         # Nothing to generate
-        continue
+        return
     batches = [students[i : i + BATCH_SIZE] for i in range(0, len(students), BATCH_SIZE)]
     for batch_no, batch in enumerate(batches):
         html = ""
         for pos, student in enumerate(batch):
             html += get_student_answer_sheet(None, student)
 
-        filename = "%s answer sheets - grade %d - %d of %d .pdf" % ("Pair" if paired else "Individual",
+        filename = "generated_grade_answer_sheets/%s answer sheets - grade %d - %d of %d .pdf" % ("Pair" if paired else "Individual",
                                                                     grade, batch_no + 1, len(batches))
         grade_result = open(filename, "w+b")
         print("Creating PDF for %s grade %d, batch %d of %d. Started at %s" % ("pairs" if paired else "individuals", grade, batch_no + 1, len(batches), str(startTime)))
