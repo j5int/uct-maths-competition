@@ -6,6 +6,16 @@ DO $$
 			WHEN duplicate_column THEN RAISE NOTICE 'column prizegiving_date already exists in competition_competition.';
 		END;
 		BEGIN
+			ALTER TABLE competition_competition ADD COLUMN  "invigilators" BOOLEAN DEFAULT FALSE;
+		EXCEPTION
+			WHEN duplicate_column THEN RAISE NOTICE 'column invigilators already exists in competition_competition.';
+		END;
+		BEGIN
+			ALTER TABLE competition_competition ADD COLUMN  "answer_sheet_download_enabled" BOOLEAN DEFAULT FALSE;
+		EXCEPTION
+			WHEN duplicate_column THEN RAISE NOTICE 'column answer_sheet_download_enabled already exists in competition_competition.';
+		END;
+		BEGIN
 			ALTER TABLE competition_responsibleteacher ADD COLUMN  "Report_downloaded" TIMESTAMP;
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column Report_downloaded already exists in competition_responsibleteacher.';
