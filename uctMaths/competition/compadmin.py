@@ -1299,7 +1299,7 @@ def can_download_answer_sheets():
     return Competition.objects.all()[0].answer_sheet_download_enabled
     
 def generate_grade_pdfs(request, schools):
-    all_students = SchoolStudent.objects.filter()
+    all_students = SchoolStudent.objects.filter().order_by('school')
     no_venue_assigned = []
     for student in all_students:
         if not venue_assigned(student):
