@@ -26,9 +26,10 @@ import reports
 import os
 import sys
 sys.path.append("../")
+sys.setrecursionlimit(10000)
 
 from background_task import background
-from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results
+from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results, bg_generate_as_grade_distinction
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -1137,30 +1138,34 @@ def generate_school_answer_sheets(request, school_list):
     print(str(diff))
     return response
 
+def get_student_answer_sheet(request, student):
+    # Get the text for a single student's answer sheet
+    venue = Venue.objects.filter(code = student.venue)[0]
+    c = {
+        'name':student.firstname + " " + student.surname,
+        'school':student.school.name,
+        'grade':str(student.grade),
+        'code':str(student.reference),
+        'venue':str(venue.building)+ ' - '+ str(venue.code),
+    }
+    if student.paired:
+        template = get_template('pair_as_template.html')
+    else:
+        template = get_template('individual_as_template.html')
+    c.update(csrf(request))
+    context = Context(c)
+    return template.render(context)
+
 def printer_answer_sheet(request, assigned_school=None):
     """ Generate the school answer sheet for each school in the query set"""
 
     html = '' #Will hold rendered templates
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     for istudent in student_list:
-            venue = Venue.objects.filter(code = istudent.venue)[0]
-            c = {
-                'name':istudent.firstname + " " + istudent.surname,
-                'school':istudent.school.name,
-                'grade':str(istudent.grade),
-                'code':str(istudent.reference),
-                'venue':str(venue.building)+ ' - '+ str(venue.code),
-            }
-            if istudent.paired:
-                template = get_template('pair_as_template.html')
-            else:
-                template = get_template('individual_as_template.html')
-            c.update(csrf(request))
-            context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
+        html += get_student_answer_sheet(request, istudent) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
-            #Generate the pdf doc
+    #Generate the pdf doc
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
         return result
@@ -1216,3 +1221,16 @@ def email_school_answer_sheets(request, schools):
     response['Content-Type'] = 'application/txt'
     
     return response
+
+def generate_grade_pdfs(request, schools):
+    print("GENERATING!")
+    all_students = SchoolStudent.objects.filter()
+    no_venue_assigned = []
+    for student in all_students:
+        if not venue_assigned(student):
+            no_venue_assigned.append("%s(%s)" % (student.firstname + " " + student.surname, student.school.name))
+    if no_venue_assigned:
+        return HttpResponse("Unable to generate answer sheets for the following students because no venues were assigned: " + ", ".join(no_venue_assigned))
+
+    bg_generate_as_grade_distinction(True)
+    bg_generate_as_grade_distinction(False)

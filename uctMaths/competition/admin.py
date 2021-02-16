@@ -35,7 +35,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	search_fields = ['name']
 	resource_class = SchoolResource
 
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list','generate_school_answer_sheets','email_school_answer_sheets']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list','generate_school_answer_sheets','email_school_answer_sheets','generate_grade_pdfs']
 
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
@@ -80,6 +80,9 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def email_school_answer_sheets(self, request, queryset):
 		return compadmin.email_school_answer_sheets(request, queryset)
 
+	def generate_grade_pdfs(self, request, queryset):
+		return compadmin.generate_grade_pdfs(request, queryset)
+
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
@@ -93,7 +96,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	email_school_reports.short_description = 'Email selected school(s) reports (single .pdf) to school(s)'
 	email_school_answer_sheets.short_description = "Email selected school(s) answer sheets"
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
-
+	generate_grade_pdfs.short_description = "Generate PDFs for entered students for each grade"
 	class AnswerSheetEmailSentFilter(SimpleListFilter):
 		title = "Answer sheets emailed"
 		parameter_name = "answer_sheets_emailed"
