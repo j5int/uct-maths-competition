@@ -1273,9 +1273,20 @@ def generate_grade_pdfs(request, schools):
         if not venue_assigned(student):
             no_venue_assigned.append("%s(%s)" % (student.firstname + " " + student.surname, student.school.name))
     if no_venue_assigned:
-        return HttpResponse("Unable to generate answer sheets for the following students because no venues were assigned: " + ", ".join(no_venue_assigned))
+        response = HttpResponse("Unable to generate answer sheets for the following students because no venues were assigned: " + ", ".join(no_venue_assigned))
+        response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationErrors(%s).txt'%(timestamp_now())
+        response['Content-Type'] = 'application/txt'
+        return response
 
     for grade in range(8, 12 + 1):
         print("Creating background task for AS generation for grade %d." % grade)
         bg_generate_as_grade_distinction(grade, True)
         bg_generate_as_grade_distinction(grade, False)
+    
+    response = HttpResponse("""Attempting to generate answer sheets for all students, distinguished by grade. 
+    This will take some time if many students have been allocated. 
+    Emails with the answer sheets by grade will be sent to the competition admin's email address in the next hour.
+    """)
+    response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationStatus(%s).txt'%(timestamp_now())
+    response['Content-Type'] = 'application/txt'
+    return response
