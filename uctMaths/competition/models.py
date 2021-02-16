@@ -21,6 +21,7 @@ class Competition(models.Model):
     number_of_pairs = models.IntegerField(db_column='num_pairs')
     prizegiving_date = models.DateField(db_column='prizegiving_date')
     invigilators = models.BooleanField(db_column='invigilators')
+    answer_sheet_download_enabled = models.BooleanField(db_column='answer_sheet_download_enabled')
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.

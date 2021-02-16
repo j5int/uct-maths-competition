@@ -50,6 +50,8 @@ function validateForm(doc)
     ----------------------------------------------*/
     var physical_address = document.getElementsByClassName('physical_address')[0];
     var code = document.getElementsByClassName('code')[0];
+    var city = document.getElementsByClassName('city')[0];
+    var school_number = document.getElementsByClassName('school_number')[0];
     physical_address.style.background = 'White';
     
     if(physical_address.value.trim()===""){
@@ -64,6 +66,17 @@ function validateForm(doc)
         code.style.background = 'Yellow';
         return false;
     }	
+    if(city.value.trim()===""){
+
+        window.scrollTo(100,0);
+        city.style.background = 'Yellow';
+        return false;
+    }
+    if(validate_phonenumber(school_number.value) !== 0){
+        window.scrollTo(100,0);
+        school_number.style.background = 'Yellow';
+        return false;
+    }
         
 
 /**********************

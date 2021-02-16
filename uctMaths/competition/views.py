@@ -146,7 +146,7 @@ def profile(request):
     if assigned_school:
         show_results_download = has_results(request, assigned_school) and after_pg(request)
     show_answer_sheets_download = False
-    if assigned_school and ResponsibleTeacher.objects.filter(school=assigned_school.id).count() > 0:
+    if assigned_school and ResponsibleTeacher.objects.filter(school=assigned_school.id).count() > 0 and compadmin.can_download_answer_sheets():
         show_answer_sheets_download = compadmin.school_students_venue_assigned(assigned_school)
     return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
 
@@ -236,7 +236,8 @@ def entry_review(request):
         'igrades':range(8,13),
         'ierror':error,
         "only_back":True,
-        'invigilators':compadmin.has_invigilator()}
+        'invigilators':compadmin.has_invigilator(),
+        'address':assigned_school.address.replace(', ','\n')}
 
     if request.method == 'POST' and 'edit_entry' in request.POST and (compadmin.isOpen() or request.user.is_staff):  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
@@ -298,8 +299,9 @@ def newstudents(request):
         #Delete all previously stored information
 
         try:
-            assigned_school.address = form.getlist('physical_address','')[0] + ', ' + form.getlist('code','')[0]
+            assigned_school.address ='%s, %s, %s' % (form.getlist('physical_address','')[0], form.getlist('code','')[0], form.getlist('city','')[0])
             assigned_school.language = form.getlist('language','')[0]
+            assigned_school.phone = form.getlist('school_number','')[0]
             assigned_school.save()
 
             #Register a single responsible teacher (assigned to that school)
@@ -418,10 +420,11 @@ def newstudents(request):
     full = []
     if assigned_school.entered == 1:
         full = assigned_school.address.split(',')
-    full += ['']*(2-len(full))
-    address = full[0]
+    full += ['']*(3-len(full))
+    address = full[0].strip()
     code = full[1].strip()
-    
+    city = full[2].strip()
+
     c = {'type':'Students',
         'schooln':assigned_school,
         'language_options':language_selection,
@@ -441,7 +444,8 @@ def newstudents(request):
         'ierror':error,
         'invigilators':invigilators,
         'address':address,
-        'code':code}
+        'code':code,
+        'city':city}
 
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)

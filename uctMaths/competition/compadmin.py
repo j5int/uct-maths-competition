@@ -375,6 +375,13 @@ def remove_user_assoc(school_list):
         school.assigned_to = None
         school.save()
 
+def remove_emails_addresses(school_list):
+    """ Remove all addresses and school phone numbers from the database """
+    for school in school_list:
+        school.address = ""
+        school.phone = ""
+        school.save()
+
 #Called by admin to generate formatted 'tag list' for selected schools
 def output_schooltaglists(school_list):
     """ Generate the tags for a School QuerySet. Served as a single text file in HttpResponse. """
@@ -701,6 +708,37 @@ def school_summary(request):
     #Return the response with attached content to the user
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment; filename=school_summary(%s).xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
+
+#add error messages, headings and styling 
+def export_courier_address(request, school_list):
+    """ Return for DL a list of school courier addresses"""
+    output_workbook = xlwt.Workbook()
+    wb_sheet = output_workbook.add_sheet('School Addresses')
+    cell_row_offset = 1
+    for ischool in school_list:
+        resp_teacher = ResponsibleTeacher.objects.filter(school = ischool)
+        if(not resp_teacher):
+            continue 
+        resp_teacher = resp_teacher[0]
+        cell_row_offset = cell_row_offset + 1
+        wb_sheet.write(cell_row_offset,0,unicode(ischool.name))
+        wb_sheet.write(cell_row_offset,1,resp_teacher.email)
+        full = ischool.address.split(',')
+        full+=['']*(3-len(full))
+        wb_sheet.write(cell_row_offset,2,full[0])
+        wb_sheet.write(cell_row_offset,3,full[2])
+        wb_sheet.write(cell_row_offset,4,full[1])
+        wb_sheet.write(cell_row_offset,5,"Western Cape")
+        wb_sheet.write(cell_row_offset,6,"South Africa")
+        wb_sheet.write(cell_row_offset,7,resp_teacher.firstname + " " + resp_teacher.surname)
+        wb_sheet.write(cell_row_offset,8,ischool.phone)
+
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=school_addresses(%s).xls'%(timestamp_now())
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
@@ -1220,3 +1258,6 @@ def email_school_answer_sheets(request, schools):
 
 def has_invigilator():
     return Competition.objects.all()[0].invigilators
+
+def can_download_answer_sheets():
+    return Competition.objects.all()[0].answer_sheet_download_enabled

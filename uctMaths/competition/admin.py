@@ -35,7 +35,9 @@ class SchoolAdmin(ImportExportModelAdmin):
 	search_fields = ['name']
 	resource_class = SchoolResource
 
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list','generate_school_answer_sheets','email_school_answer_sheets']
+	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 
+	'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list',
+	'generate_school_answer_sheets','email_school_answer_sheets','export_courier_address','clear_emails_addresses']
 
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
@@ -80,6 +82,12 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def email_school_answer_sheets(self, request, queryset):
 		return compadmin.email_school_answer_sheets(request, queryset)
 
+	def export_courier_address(self, request, queryset):
+		return compadmin.export_courier_address(request, queryset)
+
+	def clear_emails_addresses(self, request, queryset):
+		return compadmin.remove_emails_addresses(queryset)
+
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
@@ -89,11 +97,11 @@ class SchoolAdmin(ImportExportModelAdmin):
 	generate_school_reports.short_description = 'Print selected school(s) reports (single .pdf)'
 	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
 	school_certificate_list.short_description = 'Download school certificate list'
-
 	email_school_reports.short_description = 'Email selected school(s) reports (single .pdf) to school(s)'
 	email_school_answer_sheets.short_description = "Email selected school(s) answer sheets"
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
-
+	export_courier_address.short_description = 'Export courier addresses (.xls) for selected school(s)'
+	clear_emails_addresses.short_description = 'Clear phone numbers and addresses for selected school(s)'
 	class AnswerSheetEmailSentFilter(SimpleListFilter):
 		title = "Answer sheets emailed"
 		parameter_name = "answer_sheets_emailed"
@@ -243,7 +251,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date', 'invigilators')
+    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date', 'invigilators', 'answer_sheet_download_enabled')
     actions = ['export_competition']
     
     def export_competition(self, request, queryset):
