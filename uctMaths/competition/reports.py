@@ -74,7 +74,7 @@ def send_grade_answer_sheets_to_organiser(pdf_attachment_filename):
     This email contains part of the collection of answer sheets for all students, separated by grade. This is being sent because of the request to generate all answer sheets. 
     """
     send_email(
-        "(Do not reply) " + pdf_attachment_filename,
+        "(Do not reply) " + os.path.basename(pdf_attachment_filename),
         output_string,
         "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
         [

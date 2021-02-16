@@ -1,11 +1,19 @@
---$psql  <DBNAME> -a -f /scripts/add_location_column_27012017.sql
-
 DO $$
 	BEGIN
 		BEGIN
 			ALTER TABLE competition_competition ADD COLUMN  "prizegiving_date" DATE DEFAULT '9999-12-31';
 		EXCEPTION
 			WHEN duplicate_column THEN RAISE NOTICE 'column prizegiving_date already exists in competition_competition.';
+		END;
+		BEGIN
+			ALTER TABLE competition_competition ADD COLUMN  "invigilators" BOOLEAN DEFAULT FALSE;
+		EXCEPTION
+			WHEN duplicate_column THEN RAISE NOTICE 'column invigilators already exists in competition_competition.';
+		END;
+		BEGIN
+			ALTER TABLE competition_competition ADD COLUMN  "answer_sheet_download_enabled" BOOLEAN DEFAULT FALSE;
+		EXCEPTION
+			WHEN duplicate_column THEN RAISE NOTICE 'column answer_sheet_download_enabled already exists in competition_competition.';
 		END;
 		BEGIN
 			ALTER TABLE competition_responsibleteacher ADD COLUMN  "Report_downloaded" TIMESTAMP;

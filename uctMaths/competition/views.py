@@ -251,7 +251,7 @@ def entry_review(request):
 
 #*****************************************
 # Register Students   
-#User can register 5 students per grade and 5 pairs per grade 
+# Up to <competition.number_of_individuals> individuals and <competition.number_of_pairs> pairs per grade 
 @login_required
 def newstudents(request):
     error = " "

@@ -5,7 +5,6 @@ import sys
 from django.utils import timezone
 import pytz
 import settings
-from PyPDF2 import PdfFileMerger
 sys.path.append("../")
 
 from competition.models import School, ResponsibleTeacher, SchoolStudent

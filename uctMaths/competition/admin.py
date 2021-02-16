@@ -106,7 +106,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
 	export_courier_address.short_description = 'Export courier addresses (.xls) for selected school(s)'
 	clear_emails_addresses.short_description = 'Clear phone numbers and addresses for selected school(s)'
-	generate_grade_pdfs.short_description = "Generate PDFs for entered students for each grade"
+	generate_grade_pdfs.short_description = "Generate answer sheets for entered students separated by grade"
 	class AnswerSheetEmailSentFilter(SimpleListFilter):
 		title = "Answer sheets emailed"
 		parameter_name = "answer_sheets_emailed"
