@@ -746,6 +746,8 @@ def export_courier_address(request, school_list):
             errors.append("phone number")
         errorMessage ='No %s assigned to school' % ((', ').join(errors))
         if(errors):
+            if(ischool.entered == 0):
+                errorMessage = "Not entered"
             if(not errorSheet):
                 error_sheet = output_workbook.add_sheet('Errors')
                 error_sheet.write(error_row,0,"School")
