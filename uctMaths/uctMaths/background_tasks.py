@@ -91,4 +91,5 @@ def bg_generate_as_grade_distinction(grade, paired):
         grade_result.close()
         send_grade_answer_sheets_to_organiser(filename)
         diff = datetime.datetime.now() - startTime 
-        print("Completed. Time taken: %s" % str(diff))
+        print("Batch completed. Time taken: %s" % str(diff))
+    print("Task completed.")

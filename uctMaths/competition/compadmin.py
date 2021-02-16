@@ -407,7 +407,7 @@ def upload_results(request, student_list):
     response = HttpResponseRedirect('../../../competition/admin/upload_results.html')
     return response
     
-def rank_schools(school_list):
+def rank_schools():
     """ Ranks schools based on a sum of the top X scores. X is set via the 'Competition' form. """
     comp = Competition.objects.all() #Should only be one!
     
@@ -1111,7 +1111,7 @@ def multi_reportgen(request, school_list):
     return response
 
 
-def certificate_list(request, school_list):
+def certificate_list(request):
     #Calculate number of gold, merit and participation certificates per school
     output_workbook = xlwt.Workbook()
 
@@ -1298,7 +1298,7 @@ def has_invigilator():
 def can_download_answer_sheets():
     return Competition.objects.all()[0].answer_sheet_download_enabled
     
-def generate_grade_pdfs(request, schools):
+def generate_grade_answer_sheets(request):
     all_students = SchoolStudent.objects.filter().order_by('school')
     no_venue_assigned = []
     for student in all_students:

@@ -6,7 +6,9 @@ from __future__ import unicode_literals
 from competition.models import *
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
+from django.conf.urls import url
 
+from django.http import HttpResponseRedirect
 from django.db import connection, transaction
 from django import forms
 import time, datetime
@@ -35,10 +37,47 @@ class SchoolAdmin(ImportExportModelAdmin):
 	search_fields = ['name']
 	resource_class = SchoolResource
 
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 
-	'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list',
-	'generate_school_answer_sheets','email_school_answer_sheets','export_courier_address','clear_emails_addresses','generate_grade_pdfs']
+	# Single action button functions (don't require selection)
+	change_list_template = "admin/school_changelist.html"
+	def get_urls(self):
+		urls = super(SchoolAdmin, self).get_urls()
+		my_urls = [
+			url("^assign_school_ranks/", self.assign_school_ranks),
+			url("^school_summary/", self.school_summary),
+			url("^update_school_entry_status/", self.update_school_entry_status),
+			url("^school_certificate_list/", self.school_certificate_list),
+			url("^clear_email_addresses/", self.clear_email_addresses),
+			url("^generate_grade_answer_sheets/", self.generate_grade_answer_sheets)
+		]
+		return my_urls + urls
 
+	def assign_school_ranks(self, request):
+		compadmin.rank_schools()
+		return HttpResponseRedirect("../")
+	    
+	def school_summary(self, request):
+	    return compadmin.school_summary(request)
+
+	def update_school_entry_status(self, request):
+		compadmin.update_school_entry_status()
+		return HttpResponseRedirect("../")
+
+	def school_certificate_list(self, request):
+	    return compadmin.certificate_list(request)
+	
+	def clear_email_addresses(self, request):
+		compadmin.remove_emails_addresses()
+		return HttpResponseRedirect("../")
+
+	def generate_grade_answer_sheets(self, request):
+		return compadmin.generate_grade_answer_sheets(request)
+
+	# Action items (require selections)
+	actions = [	
+				'remove_user_associations', 'output_schooltaglist','print_school_confirmations','generate_school_reports',
+				'generate_multi_school_reports','email_school_reports','generate_school_answer_sheets',
+				'email_school_answer_sheets','export_courier_address'
+			]
 
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
@@ -53,17 +92,8 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def output_schooltaglist(self, request, queryset):
 	    return compadmin.output_schooltaglists(queryset)
 
-	def assign_school_ranks(self, request, queryset):
-	    return compadmin.rank_schools(queryset)
-	    
-	def school_summary(self, request, queryset):
-	    return compadmin.school_summary(request)
-	    
 	def print_school_confirmations(self, request, queryset):
 	    return compadmin.print_school_confirmations(request, queryset)
-
-	def update_school_entry_status(self, request, queryset):
-	    return compadmin.update_school_entry_status()
 
 	def generate_school_reports(self, request, queryset):
 	    return compadmin.print_school_reports(request, queryset)
@@ -73,9 +103,6 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 	def generate_multi_school_reports(self, request, queryset):
 	    return compadmin.multi_reportgen(request, queryset)
-
-	def school_certificate_list(self, request, queryset):
-	    return compadmin.certificate_list(request, queryset)
 	
 	def generate_school_answer_sheets(self, request, queryset):
 		return compadmin.generate_school_answer_sheets(request, queryset)
@@ -86,27 +113,15 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def export_courier_address(self, request, queryset):
 		return compadmin.export_courier_address(request, queryset)
 
-	def clear_emails_addresses(self, request, queryset):
-		return compadmin.remove_emails_addresses(queryset)
-
-	def generate_grade_pdfs(self, request, queryset):
-		return compadmin.generate_grade_pdfs(request, queryset)
-
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
-	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
-	school_summary.short_description = 'Schools summary (.xls) (only schools with entries, regardless of selection)'
-	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)'
 	print_school_confirmations.short_description = 'Print selected school(s) confirmation (single .pdf)'
 	generate_school_reports.short_description = 'Print selected school(s) reports (single .pdf)'
 	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
-	school_certificate_list.short_description = 'Download school certificate list'
 	email_school_reports.short_description = 'Email selected school(s) reports (single .pdf) to school(s)'
 	email_school_answer_sheets.short_description = "Email selected school(s) answer sheets"
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
 	export_courier_address.short_description = 'Export courier addresses (.xls) for selected school(s)'
-	clear_emails_addresses.short_description = 'Clear phone numbers and addresses for selected school(s)'
-	generate_grade_pdfs.short_description = "Generate answer sheets for entered students separated by grade"
 	class AnswerSheetEmailSentFilter(SimpleListFilter):
 		title = "Answer sheets emailed"
 		parameter_name = "answer_sheets_emailed"

@@ -1,0 +1,32 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <div>
+        <form action="assign_school_ranks/" method="POST">
+            {% csrf_token %}
+                <button type="submit">Assign rank based on score to schools</button>
+        </form>
+        <form action="school_summary/" method="POST">
+            {% csrf_token %}
+                <button type="submit">Schools summary (.xls)</button>
+        </form>
+        <form action="update_school_entry_status/" method="POST">
+            {% csrf_token %}
+                <button type="submit">Update/Refresh schools' entry status</button>
+        </form>
+        <form action="school_certificate_list/" method="POST">
+            {% csrf_token %}
+                <button type="submit">Download school certificate list</button>
+        </form>
+        <form action="clear_email_addresses/" method="POST">
+            {% csrf_token %}
+                <button type="submit">Clear phone numbers and addresses for selected school(s)</button>
+        </form>
+        <form action="generate_grade_answer_sheets/" method="POST">
+            {% csrf_token %}
+                <button type="submit">Generate answer sheets for entered students separated by grade</button>
+        </form>
+    </div>
+    <br />
+    {{ block.super }}
+{% endblock %}
