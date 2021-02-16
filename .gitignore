@@ -220,3 +220,4 @@ pip-log.txt
 
 *.json
 uctMaths/generated_grade_answer_sheets/
+uctMaths/competition/migrations
