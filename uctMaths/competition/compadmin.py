@@ -376,7 +376,7 @@ def remove_user_assoc(school_list):
         school.assigned_to = None
         school.save()
 
-def remove_emails_addresses(school_list):
+def remove_emails_addresses():
     """ Remove all addresses and school phone numbers from the database """
     school_list = School.objects.all()
     for school in school_list:
