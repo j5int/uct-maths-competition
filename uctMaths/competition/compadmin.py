@@ -408,7 +408,7 @@ def upload_results(request, student_list):
     response = HttpResponseRedirect('../../../competition/admin/upload_results.html')
     return response
     
-def rank_schools(school_list):
+def rank_schools():
     """ Ranks schools based on a sum of the top X scores. X is set via the 'Competition' form. """
     comp = Competition.objects.all() #Should only be one!
     
@@ -1112,7 +1112,7 @@ def multi_reportgen(request, school_list):
     return response
 
 
-def certificate_list(request, school_list):
+def certificate_list(request):
     #Calculate number of gold, merit and participation certificates per school
     output_workbook = xlwt.Workbook()
 
@@ -1299,16 +1299,27 @@ def has_invigilator():
 def can_download_answer_sheets():
     return Competition.objects.all()[0].answer_sheet_download_enabled
     
-def generate_grade_pdfs(request, schools):
+def generate_grade_answer_sheets(request):
     all_students = SchoolStudent.objects.filter().order_by('school')
     no_venue_assigned = []
     for student in all_students:
         if not venue_assigned(student):
             no_venue_assigned.append("%s(%s)" % (student.firstname + " " + student.surname, student.school.name))
     if no_venue_assigned:
-        return HttpResponse("Unable to generate answer sheets for the following students because no venues were assigned: " + ", ".join(no_venue_assigned))
+        response = HttpResponse("Unable to generate answer sheets for the following students because no venues were assigned: " + ", ".join(no_venue_assigned))
+        response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationErrors(%s).txt'%(timestamp_now())
+        response['Content-Type'] = 'application/txt'
+        return response
 
     for grade in range(8, 12 + 1):
         print("Creating background task for AS generation for grade %d." % grade)
         bg_generate_as_grade_distinction(grade, True)
         bg_generate_as_grade_distinction(grade, False)
+    
+    response = HttpResponse("""Attempting to generate answer sheets for all students, distinguished by grade. 
+This will take some time if many students have been entered. 
+Emails with the answer sheets by grade will be sent to the competition admin's email address(%s) as soon as they are ready.
+""" % (admin_emailaddress()))
+    response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationStatus(%s).txt'%(timestamp_now())
+    response['Content-Type'] = 'application/txt'
+    return response

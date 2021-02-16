@@ -84,7 +84,7 @@ def send_grade_answer_sheets_to_organiser(pdf_attachment_filename):
                 "type": "application/pdf"
             }
         ],
-        [Competition.objects.filter()[0].admin_emailaddress]
+        [compadmin.admin_emailaddress()]
     )
     f.close()
 

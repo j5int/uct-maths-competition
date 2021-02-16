@@ -81,7 +81,7 @@ def bg_generate_as_grade_distinction(grade, paired):
         for pos, student in enumerate(batch):
             html += get_student_answer_sheet(None, student)
 
-        filename = "generated_grade_answer_sheets/%s answer sheets - grade %d - %d of %d .pdf" % ("Pair" if paired else "Individual",
+        filename = "generated_grade_answer_sheets/%s answer sheets - grade %d - %d of %d.pdf" % ("Pair" if paired else "Individual",
                                                                     grade, batch_no + 1, len(batches))
         if not os.path.exists("generated_grade_answer_sheets"):
             os.mkdir("generated_grade_answer_sheets")
@@ -91,4 +91,5 @@ def bg_generate_as_grade_distinction(grade, paired):
         grade_result.close()
         send_grade_answer_sheets_to_organiser(filename)
         diff = datetime.datetime.now() - startTime 
-        print("Completed. Time taken: %s" % str(diff))
+        print("Batch completed. Time taken: %s" % str(diff))
+    print("Task completed.")
