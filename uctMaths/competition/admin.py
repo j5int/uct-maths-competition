@@ -37,7 +37,8 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 
 	'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list',
-	'generate_school_answer_sheets','email_school_answer_sheets','export_courier_address','clear_emails_addresses']
+	'generate_school_answer_sheets','email_school_answer_sheets','export_courier_address','clear_emails_addresses','generate_grade_pdfs']
+
 
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
@@ -88,6 +89,9 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def clear_emails_addresses(self, request, queryset):
 		return compadmin.remove_emails_addresses(queryset)
 
+	def generate_grade_pdfs(self, request, queryset):
+		return compadmin.generate_grade_pdfs(request, queryset)
+
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
 	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
@@ -102,6 +106,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
 	export_courier_address.short_description = 'Export courier addresses (.xls) for selected school(s)'
 	clear_emails_addresses.short_description = 'Clear phone numbers and addresses for selected school(s)'
+	generate_grade_pdfs.short_description = "Generate PDFs for entered students for each grade"
 	class AnswerSheetEmailSentFilter(SimpleListFilter):
 		title = "Answer sheets emailed"
 		parameter_name = "answer_sheets_emailed"
@@ -136,8 +141,24 @@ class SchoolAdmin(ImportExportModelAdmin):
 				return queryset.filter((models.Q(report_emailed__isnull=True)
 					| models.Q(report_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
 					& models.Q(entered__gt=0) )
+	
+	class EnteredFilter(SimpleListFilter):
+		title = "school entered"
+		parameter_name = "entered"
 
-	list_filter=('entered','language',AnswerSheetEmailSentFilter,ReportEmailSentFilter) #Field filters (shown as bar on right)
+		def lookups(self, request, model_admin):
+			return (
+				("entered", "entered"),
+				("not-entered", "not entered")
+			)
+		
+		def queryset(self, request, queryset):
+			if self.value() == "entered":
+				return queryset.filter(models.Q(entered__gte=1))
+			if self.value() == "not-entered":
+				return queryset.filter(models.Q(entered__lte=0))
+
+	list_filter=(EnteredFilter,'language',AnswerSheetEmailSentFilter,ReportEmailSentFilter) #Field filters (shown as bar on right)
 
 
 

@@ -5,9 +5,11 @@ import sys
 from django.utils import timezone
 import pytz
 import settings
+from PyPDF2 import PdfFileMerger
 sys.path.append("../")
 
-from competition.models import School, ResponsibleTeacher
+from competition.models import School, ResponsibleTeacher, SchoolStudent
+import os
 
 # It seems that this file needs to be in the uctMaths folder and not competition. 
 # Finding a workaround would make the code cleaner.
@@ -59,3 +61,35 @@ def bg_generate_school_answer_sheets(school_id):
     school.answer_sheets_emailed = timezone.now()
     school.save()
     print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
+
+@background(queue="AS-generation-queue")
+def bg_generate_as_grade_distinction(grade, paired):
+    from competition.compadmin import get_student_answer_sheet
+    import StringIO
+    import datetime
+    from competition.reports import send_grade_answer_sheets_to_organiser
+
+    BATCH_SIZE = 2000
+
+    startTime = datetime.datetime.now()
+    students = SchoolStudent.objects.filter(grade=grade, paired=paired)
+    if len(students) == 0:
+        # Nothing to generate
+        return
+    batches = [students[i : i + BATCH_SIZE] for i in range(0, len(students), BATCH_SIZE)]
+    for batch_no, batch in enumerate(batches):
+        html = ""
+        for pos, student in enumerate(batch):
+            html += get_student_answer_sheet(None, student)
+
+        filename = "generated_grade_answer_sheets/%s answer sheets - grade %d - %d of %d .pdf" % ("Pair" if paired else "Individual",
+                                                                    grade, batch_no + 1, len(batches))
+        if not os.path.exists("generated_grade_answer_sheets"):
+            os.mkdir("generated_grade_answer_sheets")
+        grade_result = open(filename, "w+b")
+        print("Creating PDF for %s grade %d, batch %d of %d. Started at %s" % ("pairs" if paired else "individuals", grade, batch_no + 1, len(batches), str(startTime)))
+        pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), grade_result, encoding="UTF-8")
+        grade_result.close()
+        send_grade_answer_sheets_to_organiser(filename)
+        diff = datetime.datetime.now() - startTime 
+        print("Completed. Time taken: %s" % str(diff))
