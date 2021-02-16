@@ -87,7 +87,7 @@ where you can replace "postgres" with the name of the user owning the database.
 
 
 ## Modifying database models
-The Django workflow is that changes to database models should only be done in a `model.py` file in a Django app. For example: [uctMaths/competition/model.py](uctMaths/competition/model.py). After you have changed the model, rerun `python manage.py makemigrations` and `python manage.py migrate`, and then check that the changes have been reflected in the database (use pgadmin). When you make your changes live, you will have to perform the migrations again. If you add columns manually, Django will become confused and you will have to write and run SQL scripts manually to reflect the changes. 
+The Django workflow is that changes to database models should only be done in a `model.py` file in a Django app. For example: [uctMaths/competition/model.py](uctMaths/competition/model.py). After you have changed the model, rerun `python manage.py makemigrations` and `python manage.py migrate`, and then check that the changes have been reflected in the database (use pgadmin). When you make your changes live, you will have to perform the migrations again. If you add columns manually, Django will become confused and you will have to write and run SQL scripts manually to reflect the changes. See [uctMaths/scripts/add_new_columns_022021.sql](uctMaths/scripts/add_new_columns_022021.sql) as an example of this.
 
 ## Where to look
 There are some good docs in [docs/userdoc](docs/userdoc) and [docs/readme](docs/readme). These were written in 2014, so are quite out of date.
