@@ -1317,7 +1317,7 @@ def generate_grade_pdfs(request, schools):
     
     response = HttpResponse("""Attempting to generate answer sheets for all students, distinguished by grade. 
 This will take some time if many students have been entered. 
-Emails with the answer sheets by grade will be sent to the competition admin's email address(%s) in the next hour.
+Emails with the answer sheets by grade will be sent to the competition admin's email address(%s) as soon as they are ready.
 """ % (admin_emailaddress()))
     response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationStatus(%s).txt'%(timestamp_now())
     response['Content-Type'] = 'application/txt'
