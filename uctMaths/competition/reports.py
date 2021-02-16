@@ -67,7 +67,7 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     )
 
 def send_grade_answer_sheets_to_organiser(pdf_attachment_filename):
-    print("Emailing " + pdf_attachment_filename + " to organiser.")
+    print("Emailing " + os.path.basename(pdf_attachment_filename) + " to organiser.")
     f = open(pdf_attachment_filename, "rb")
     output_string = """Dear admin,
     
