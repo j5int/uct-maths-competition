@@ -53,30 +53,21 @@ function validateForm(doc)
     var city = document.getElementsByClassName('city')[0];
     var school_number = document.getElementsByClassName('school_number')[0];
     physical_address.style.background = 'White';
+    code.style.background = 'White';
+    city.style.background = 'White';
+    school_number.style.background = 'White';
     
-    if(physical_address.value.trim()===""){
-
-        window.scrollTo(100,0);
-        physical_address.style.background = 'Yellow';
-        return false;
-    }	
-    if(code.value.trim()===""){
-
-        window.scrollTo(100,0);
-        code.style.background = 'Yellow';
-        return false;
-    }	
-    if(city.value.trim()===""){
-
-        window.scrollTo(100,0);
-        city.style.background = 'Yellow';
-        return false;
-    }
-    if(validate_phonenumber(school_number.value) !== 0){
-        window.scrollTo(100,0);
-        school_number.style.background = 'Yellow';
-        return false;
-    }
+    validity = validate_address(physical_address.value, city.value, code.value, school_number.value)
+    if (validity!=0) {
+	    window.scrollTo(100,0);
+	    switch(validity){
+        case -1:code.style.background = 'Yellow'; break;
+        case 1:physical_address.style.background = 'Yellow'; break;
+        case 2:city.style.background = 'Yellow'; break;
+        case 3:school_number.style.background = 'Yellow'; break;
+	    }
+	    return false; //Error
+	}
         
 
 /**********************
@@ -370,6 +361,42 @@ function validate_phonenumber(phone_number){
 
       //  alert("Valid phone number");
         return 0; //Valid
+}
+
+function validate_address(address,city,code,phone){
+    if(address.length > 255)
+    {
+        alert("Address is too long")
+        return 1
+    }
+    if(city.length > 255)
+    {
+        alert("City name is too long")
+        return 2
+    }
+    if(code.length != 4)
+    {
+        alert("Postal code must consist of 4 digits")
+        return -1
+    }
+
+    if (isNaN(parseInt(code)))
+    { 
+    alert("Invalid character in postal code. Please only use numbers in your entry.");
+    return -1;
+    }
+    if(address=="" || city == "" || code == "" || phone == ""){
+        alert("Invalid entry. Field missing");
+        if (address=="") return 1;
+        else if (city=="") return 2;
+        else if (code=="") return -1;
+        else if (phone=="") return 3;
+            
+    }
+    return validate_phonenumber(phone)
+    
+
+
 }
 
 
