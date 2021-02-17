@@ -30,16 +30,18 @@
                         {%endfor%}
                         {%endfor%}
                     </tr>
-                    <tr>
-                        <th width="80" align="left">Pairs:</th>
-                        {%for grd in grades%}
-                        {%for key, p in pair_list.items%}
-                        {% if grd == key %}
-                        <td align="center">{{p}}</td>
-                        {%endif%}
-                        {%endfor%}
-                        {%endfor%}
-                    </tr>
+                    {% if max_num_pairs > 0%}
+                        <tr>
+                            <th width="80" align="left">Pairs:</th>
+                            {%for grd in grades%}
+                                {%for key, p in pair_list.items%}
+                                    {% if grd == key %}
+                                    <td align="center">{{p}}</td>
+                                    {%endif%}
+                                {%endfor%}
+                            {%endfor%}
+                        </tr>
+                    {% endif%}
                 </table>
             </td>
             </tr>
