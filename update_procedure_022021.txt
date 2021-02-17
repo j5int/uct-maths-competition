@@ -5,7 +5,7 @@ of the current state of the database before the incoming changes.
 `python manage.py makemigrations`
 `python manage.py migrate`
 
-2. All changes make will have been merged into the master branch of the source repo.
+2. All changes made will have been merged into the master branch of the source repo.
 `git pull upstream master`
 
 3. Since the database might not have been set up properly at the time of the previous, partial update,
