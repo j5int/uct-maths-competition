@@ -296,13 +296,15 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date', 'invigilators', 'answer_sheet_download_enabled')
-    actions = ['export_competition']
-    
-    def export_competition(self, request, queryset):
-        return compadmin.export_competition(request)
+	change_form_template = "admin/extend_changeform.html"
 
-    export_competition.short_description = 'Export competition database (regardless of selection)'
+	list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date', 'invigilators', 'answer_sheet_download_enabled')
+	actions = ['export_competition']
+
+	def export_competition(self, request, queryset):
+		return compadmin.export_competition(request)
+
+	export_competition.short_description = 'Export competition database (regardless of selection)'
 
 #admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)
