@@ -140,13 +140,13 @@
     <div>
         <h1>Register Participants</h1>
     </div>
+    {% if max_num_pairs > 0%}
+        <p> For each grade, please select the number of pair entrants, and enter the names of the individual entrants.</p>
+    {% else%}
+        <p> For each grade, please enter the names of the individual entrants.</p>
+    {% endif%}
     {%for grade in grades%}
     <div>
-        {% if max_num_pairs > 0%}
-            <p> For each grade, please select the number of pair entrants, and enter the names of the individual entrants.</p>
-        {% else%}
-            <p> For each grade, please enter the names of the individual entrants.</p>
-        {% endif%}
         <!-- <form action="." method="post"> -->
         <h2>Grade {{grade}}</h2>
         {% if max_num_pairs > 0%}
