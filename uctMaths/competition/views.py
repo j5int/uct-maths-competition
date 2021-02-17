@@ -237,7 +237,8 @@ def entry_review(request):
         'ierror':error,
         "only_back":True,
         'invigilators':compadmin.has_invigilator(),
-        'address':assigned_school.address.replace(', ','\n')}
+        'address':assigned_school.address.replace(', ','\n'),
+        'maxEntries':compadmin.get_max_entries()}
 
     if request.method == 'POST' and 'edit_entry' in request.POST and (compadmin.isOpen() or request.user.is_staff):  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
@@ -445,7 +446,8 @@ def newstudents(request):
         'invigilators':invigilators,
         'address':address,
         'code':code,
-        'city':city}
+        'city':city,
+        'maxEntries':compadmin.get_max_entries()}
 
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
