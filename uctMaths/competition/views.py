@@ -74,6 +74,7 @@ def printer_entry_result(request, school_list=None):
                 'responsible_teacher':responsible_teacher[0],
                 'student_list':individual_list,
                 'pair_list':pair_list,
+                'max_num_pairs':compadmin.admin_number_of_pairs(),
                 'entries_open':compadmin.isOpen() or request.user.is_staff,
                 'invigilator_list': invigilator_list,
                 'grades':range(8,13),
@@ -81,7 +82,8 @@ def printer_entry_result(request, school_list=None):
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13),
                 'total_num':int(count_pairs*2+count_individuals),
-                'year':year}
+                'year':year,
+                'invigilators_required':compadmin.competition_has_invigilator()}
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
             c.update(csrf(request))
@@ -95,7 +97,9 @@ def printer_entry_result(request, school_list=None):
                 'grade_left':range(8,11),
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13),
-                'total_num':'No students entered for this school'}
+                'max_num_pairs':compadmin.admin_number_of_pairs(),
+                'total_num':'No students entered for this school',
+                'invigilators_required':compadmin.competition_has_invigilator()}
 
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
@@ -236,7 +240,7 @@ def entry_review(request):
         'igrades':range(8,13),
         'ierror':error,
         "only_back":True,
-        'invigilators':compadmin.has_invigilator(),
+        'invigilators':compadmin.competition_has_invigilator(),
         'address':assigned_school.address.replace(', ','\n'),
         'maxEntries':compadmin.get_max_entries()}
 
@@ -352,7 +356,7 @@ def newstudents(request):
             #Add invigilator information
             for invigilator in invigilator_list:
                 invigilator.delete()
-            if compadmin.has_invigilator():
+            if compadmin.competition_has_invigilator():
                 for j in range(10):
                     if form.getlist('inv_firstname','')[j] == u'':
                         ierror = "Invigilator information incomplete"
@@ -417,7 +421,7 @@ def newstudents(request):
         #If not null, then the form has been filled out.
         #Therefore - redirect to entry_review page
         pass #HttpResponseRedirect('../entry_review.html')
-    invigilators = compadmin.has_invigilator()
+    invigilators = compadmin.competition_has_invigilator()
     full = []
     if assigned_school.entered == 1:
         full = assigned_school.address.split(',')

@@ -1078,7 +1078,8 @@ def printer_school_report(request, school_list=None):
                 'entries_open':isOpen(),
                 'school_award_blurb':school_award_blurb,
                 'grade_range':range(8,13),
-                'year':year}
+                'year':year,
+                'has_phone_alt': len(responsible_teacher[0].phone_alt) > 0}
             #Render the template with the context (from above)
 
             template = get_template('school_report.html')
@@ -1293,7 +1294,7 @@ def email_school_answer_sheets(request, schools):
     
     return response
 
-def has_invigilator():
+def competition_has_invigilator():
     return Competition.objects.all()[0].invigilators
 
 def can_download_answer_sheets():
