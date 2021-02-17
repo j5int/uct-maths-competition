@@ -1,0 +1,23 @@
+This document gives the steps required to update the live version of the UCT Maths Competition project.
+
+1. Before pulling changes from master, make sure to run the migrations again, so that Postgres is aware
+of the current state of the database before the incoming changes.
+`python manage.py makemigrations`
+`python manage.py migrate`
+
+2. All changes make will have been merged into the master branch of the source repo.
+`git pull upstream master`
+
+3. Since the database might not have been set up properly at the time of the previous, partial update,
+run the script in uctMaths/scripts/add_new_columns_022021.sql
+This was done in testing with
+`psql -U postgres uctmaths < add_new_columns_022021.sql`
+where "postgres" should be replaced with the appropriate user, and "uctmaths" with the name of the live database.
+
+4. Now run the migrations again so that Postgres can take into account the incoming changes.
+`python manage.py makemigrations`
+`python manage.py migrate`
+
+5. The project should hopefully be ready to run now. The following two processes must be run simultaneously:
+`python manage.py runserver`
+`python manage.py process_tasks`
