@@ -77,23 +77,23 @@
             </tr>
         </table>
     </div>
-    <!-- register invigilators from here -->
-    <div>
-        <br>
-        <h2>Registered Invigilators</h2>
-        <p>Note that 2 invigilators are compulsory if 75 students have been registered.</p>
-        <p> {{ ierror }} </p>
-        {% csrf_token %}
-        <table width="500">
-            <tr>
-                <th align="left">First Name</th>
-                <th align="left">Surname</th>
-                <th align="left">Phone </th>
-                <th align="left">Phone (Alternative)</th>
-                <th align="left">Email </th>
-                <th align="left">Notes </th>
-            </tr>
-            {% if invigilators_required %}
+    {% if invigilators_required%}
+        <!-- register invigilators from here -->
+        <div>
+            <br>
+            <h2>Registered Invigilators</h2>
+            <p>Note that 2 invigilators are compulsory if 75 students have been registered.</p>
+            <p> {{ ierror }} </p>
+            {% csrf_token %}
+            <table width="500">
+                <tr>
+                    <th align="left">First Name</th>
+                    <th align="left">Surname</th>
+                    <th align="left">Phone </th>
+                    <th align="left">Phone (Alternative)</th>
+                    <th align="left">Email </th>
+                    <th align="left">Notes </th>
+                </tr>
                 <!-- Populates the list with previously registered invigilators -->
                 {%for invigilator in invigilator_list%}
                     <tr>
@@ -105,10 +105,10 @@
                         <td>{{invigilator.notes}}</td>
                     </tr>
                 {%endfor%}
-            {% endif%}
-        </table>
+            </table>
 
-    </div>
+        </div>
+    {% endif%}
     <!-- <h3>Registered Participants</h3> -->
     
     <table>
