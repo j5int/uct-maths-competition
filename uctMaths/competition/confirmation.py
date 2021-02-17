@@ -33,7 +33,8 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):
     output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(in_school, name, UMC_datetime())
 
     output_string += print_responsibleTeacher(rteacher)
-    output_string += print_invigilators(invigilator_list)
+    if compadmin.competition_has_invigilator():
+        output_string += print_invigilators(invigilator_list)
     output_string += print_students(student_list)
     ### Debugging - output to file ###
     #temp_output = open('confirmation.txt', 'w')

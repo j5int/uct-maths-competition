@@ -1293,7 +1293,7 @@ def email_school_answer_sheets(request, schools):
     
     return response
 
-def has_invigilator():
+def competition_has_invigilator():
     return Competition.objects.all()[0].invigilators
 
 def can_download_answer_sheets():

@@ -93,17 +93,19 @@
                 <th align="left">Email </th>
                 <th align="left">Notes </th>
             </tr>
-            <!-- Populates the list with previously registered invigilators -->
-            {%for invigilator in invigilator_list%}
-                <tr>
-                    <td>{{invigilator.firstname}}</td>
-                    <td>{{invigilator.surname}}</td>
-                    <td>{{invigilator.phone_primary}}</td>
-                    <td>{{invigilator.phone_alt}}</td>
-                    <td>{{invigilator.email}}</td>
-                    <td>{{invigilator.notes}}</td>
-                </tr>
-            {%endfor%}
+            {% if invigilators_required %}
+                <!-- Populates the list with previously registered invigilators -->
+                {%for invigilator in invigilator_list%}
+                    <tr>
+                        <td>{{invigilator.firstname}}</td>
+                        <td>{{invigilator.surname}}</td>
+                        <td>{{invigilator.phone_primary}}</td>
+                        <td>{{invigilator.phone_alt}}</td>
+                        <td>{{invigilator.email}}</td>
+                        <td>{{invigilator.notes}}</td>
+                    </tr>
+                {%endfor%}
+            {% endif%}
         </table>
 
     </div>
