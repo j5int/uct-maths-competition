@@ -44,7 +44,7 @@
     {% if invigilators %}
     <div>
         <h1>Registered Invigilators</h1>
-        <p>Please note that every school must send at least 1 invigilator; 2 invigilators are required if 75 entries are to be submitted. If the responsible teacher is going to invigilate kindly add his/her name to the list of invigilators.</p>
+        <p>Please note that every school must send at least 1 invigilator; 2 invigilators are required if {{maxEntries}} entries are to be submitted. If the responsible teacher is going to invigilate kindly add his/her name to the list of invigilators.</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 

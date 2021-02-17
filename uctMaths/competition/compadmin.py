@@ -1323,3 +1323,6 @@ Emails with the answer sheets by grade will be sent to the competition admin's e
     response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationStatus(%s).txt'%(timestamp_now())
     response['Content-Type'] = 'application/txt'
     return response
+
+def get_max_entries():
+    return (Competition.objects.all()[0].number_of_individuals + Competition.objects.all()[0].number_of_pairs*2)*5
