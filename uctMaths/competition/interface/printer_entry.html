@@ -1,195 +1,194 @@
 <table width="550">
 
-<tr>
-<td>
-    <div>
-        <table>
-            <tr>
-            <td>
-            <h1>UCT Mathematics Competition {{year}}</h1>
-            <h2>Entry confirmation for <u>{{schooln}}</u></h2>
-            </td>
-            
-            <td>
-                <table width="165">
+    <tr>
+        <td>
+            <div>
+                <table>
                     <tr>
-                        <th align="left" valign="center">Grade:</th>
-                        <th align="center"><b>8</b></th>
-                        <th align="center"><b>9</b></th>
-                        <th align="center"><b>10</b></th>
-                        <th align="center"><b>11</b></th>
-                        <th align="center"><b>12</b></th>
+                        <td>
+                            <h1>UCT Mathematics Competition {{year}}</h1>
+                            <h2>Entry confirmation for <u>{{schooln}}</u></h2>
+                        </td>
+                        <td>
+                            <table width="165">
+                                <tr>
+                                    <th align="left" valign="center">Grade:</th>
+                                    <th align="center"><b>8</b></th>
+                                    <th align="center"><b>9</b></th>
+                                    <th align="center"><b>10</b></th>
+                                    <th align="center"><b>11</b></th>
+                                    <th align="center"><b>12</b></th>
+                                </tr>
+                                <tr>
+                                    <th width="80" align="left">Individuals:</th>
+                                        {%for grd in grades%}
+                                            {%for key, s in student_list.items%}
+                                                {% if grd == key %}
+                                                    <td align="center">{{s|length}}</td>
+                                                {%endif%}
+                                            {%endfor%}
+                                        {%endfor%}
+                                </tr>
+                                {% if max_num_pairs > 0%}
+                                    <tr>
+                                        <th width="80" align="left">Pairs:</th>
+                                        {%for grd in grades%}
+                                            {%for key, p in pair_list.items%}
+                                                {% if grd == key %}
+                                                <td align="center">{{p}}</td>
+                                                {%endif%}
+                                            {%endfor%}
+                                        {%endfor%}
+                                    </tr>
+                                {% endif%}
+                            </table>
+                        </td>
                     </tr>
                     <tr>
-                        <th width="80" align="left">Individuals:</th>
-                        {%for grd in grades%}
-                        {%for key, s in student_list.items%}
-                        {% if grd == key %}
-                        <td align="center">{{s|length}}</td>
-                        {%endif%}
-                        {%endfor%}
-                        {%endfor%}
+                        <td>
+                            <br>
+                            <b>Generated: {{timestamp}}</b>
+                        </td>
+                        <td>
+                            <br>
+                            <b>Total number of students: {{total_num}}</b> 
+                        </td>
                     </tr>
-                    {% if max_num_pairs > 0%}
+                </table>
+                <!-- register responsible teacher from here --->
+            </div>
+
+            <div>
+                <h2>Responsible Teacher</h2>
+                {% csrf_token %}
+                <table width="500">
+                    <tr>
+                        <th align="left">First Name</th>
+                        <th align="left">Surname</th>
+                        <th align="left">Phone </th>
+                        <th align="left">Phone (Alternative)</th>
+                        <th align="left">Email </th>
+                    </tr>
+                    <tr>
+                        <td>{{responsible_teacher.firstname}}</td>
+                        <td>{{responsible_teacher.surname}}</td>
+                        <td>{{responsible_teacher.phone_primary}}</td>
+                        <td>{{responsible_teacher.phone_alt}}</td>
+                        <td>{{responsible_teacher.email}}</td>
+                    </tr>
+                </table>
+            </div>
+            {% if invigilators_required%}
+                <!-- register invigilators from here -->
+                <div>
+                    <br>
+                    <h2>Registered Invigilators</h2>
+                    <p>Note that 2 invigilators are compulsory if 75 students have been registered.</p>
+                    <p> {{ ierror }} </p>
+                    {% csrf_token %}
+                    <table width="500">
                         <tr>
-                            <th width="80" align="left">Pairs:</th>
-                            {%for grd in grades%}
-                                {%for key, p in pair_list.items%}
-                                    {% if grd == key %}
-                                    <td align="center">{{p}}</td>
+                            <th align="left">First Name</th>
+                            <th align="left">Surname</th>
+                            <th align="left">Phone </th>
+                            <th align="left">Phone (Alternative)</th>
+                            <th align="left">Email </th>
+                            <th align="left">Notes </th>
+                        </tr>
+                        <!-- Populates the list with previously registered invigilators -->
+                        {%for invigilator in invigilator_list%}
+                            <tr>
+                                <td>{{invigilator.firstname}}</td>
+                                <td>{{invigilator.surname}}</td>
+                                <td>{{invigilator.phone_primary}}</td>
+                                <td>{{invigilator.phone_alt}}</td>
+                                <td>{{invigilator.email}}</td>
+                                <td>{{invigilator.notes}}</td>
+                            </tr>
+                        {%endfor%}
+                    </table>
+
+                </div>
+            {% endif%}
+            <!-- <h3>Registered Participants</h3> -->
+            
+            <table>
+                {% for grade in grade_left %}
+                <tr>
+                    <td>
+                        <div>
+                        <br>
+                        <p><b>Registered Grade {{grade}} participants:</b></p>
+                        <table width="160">
+                            <tr>
+                                <th align="left">First Name</th>
+                                <th align="left">Surname</th>
+                            </tr>
+                            <!-- Populates the list with previously registered students -->
+                            {%for key, student_l in student_list.items%}
+                                {% if grade == key %} <!-- only for the current grade -->
+                                    {%for student in student_l%}
+                                        <tr>
+                                            <td>{{student.firstname}}</td>
+                                            <td>{{student.surname}}</td>
+                                        </tr>
+                                    {%endfor%}
+                                {%endif%}
+                            {%endfor%}
+                        </table>        
+                        {% if max_num_pairs > 0%}
+                            <div>
+                            {%for key, p in pair_list.items%}
+                                {% if grade == key %}
+                                    <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade}}.</b> </p>
+                                {%endif%}
+                            {%endfor%}
+                            </div>
+                        {% endif%} 
+                        </div>
+                    </td>
+                    
+                    {% if grade|add:3 < 13 %}
+                    <td>
+                        <div>
+                            <br>
+                            <p><b>Registered Grade {{grade|add:3}} participants:</b></p>
+                            <table width="160">
+                                <tr>
+                                    <th align="left">First Name</th>
+                                    <th align="left">Surname</th>
+                                </tr>
+                                <!-- Populates the list with previously registered students -->
+                                {%for key, student_l in student_list.items%}
+                                    {% if grade|add:3 == key %} <!-- only for the current grade -->
+                                        {%for student in student_l%}
+                                            <tr>
+                                                <td>{{student.firstname}}</td>
+                                                <td>{{student.surname}}</td>
+                                            </tr>
+                                        {%endfor%}
                                     {%endif%}
                                 {%endfor%}
-                            {%endfor%}
-                        </tr>
-                    {% endif%}
-                </table>
-            </td>
-            </tr>
-            <tr>
-                <td>
-                <br>
-                <b>Generated: {{timestamp}}</b>
-                </td>
-                <td>
-                <br>
-                <b>Total number of students: {{total_num}}</b> 
-                </td>
-            </tr>
-        </table>
-        <!-- register responsible teacher from here --->
-    </div>
-
-    <div>
-        <h2>Responsible Teacher</h2>
-        {% csrf_token %}
-        <table width="500">
-            <tr>
-                <th align="left">First Name</th>
-                <th align="left">Surname</th>
-                <th align="left">Phone </th>
-                <th align="left">Phone (Alternative)</th>
-                <th align="left">Email </th>
-            </tr>
-            <tr>
-                <td>{{responsible_teacher.firstname}}</td>
-                <td>{{responsible_teacher.surname}}</td>
-                <td>{{responsible_teacher.phone_primary}}</td>
-                <td>{{responsible_teacher.phone_alt}}</td>
-                <td>{{responsible_teacher.email}}</td>
-            </tr>
-        </table>
-    </div>
-    {% if invigilators_required%}
-        <!-- register invigilators from here -->
-        <div>
-            <br>
-            <h2>Registered Invigilators</h2>
-            <p>Note that 2 invigilators are compulsory if 75 students have been registered.</p>
-            <p> {{ ierror }} </p>
-            {% csrf_token %}
-            <table width="500">
-                <tr>
-                    <th align="left">First Name</th>
-                    <th align="left">Surname</th>
-                    <th align="left">Phone </th>
-                    <th align="left">Phone (Alternative)</th>
-                    <th align="left">Email </th>
-                    <th align="left">Notes </th>
+                            </table>        
+                            {% if max_num_pairs > 0%}
+                                <div>
+                                    {%for key, p in pair_list.items%}
+                                        {% if grade|add:3 == key %}
+                                            <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade|add:3}}.</b> </p>
+                                        {%endif%}
+                                    {%endfor%}
+                                </div>
+                            {% endif%} 
+                        </div>
+                    </td>
+                    {% endif %}
                 </tr>
-                <!-- Populates the list with previously registered invigilators -->
-                {%for invigilator in invigilator_list%}
-                    <tr>
-                        <td>{{invigilator.firstname}}</td>
-                        <td>{{invigilator.surname}}</td>
-                        <td>{{invigilator.phone_primary}}</td>
-                        <td>{{invigilator.phone_alt}}</td>
-                        <td>{{invigilator.email}}</td>
-                        <td>{{invigilator.notes}}</td>
-                    </tr>
-                {%endfor%}
+
+            {%endfor%} <!-- endfor grade -->
             </table>
-
-        </div>
-    {% endif%}
-    <!-- <h3>Registered Participants</h3> -->
-    
-    <table>
-        {% for grade in grade_left %}
-        <tr>
-            <td>
-                <div>
-                <br>
-                <p><b>Registered Grade {{grade}} participants:</b></p>
-                <table width="160">
-                <tr>
-                <th align="left">First Name</th>
-                <th align="left">Surname</th>
-                </tr>
-                <!-- Populates the list with previously registered students -->
-                {%for key, student_l in student_list.items%}
-                {% if grade == key %} <!-- only for the current grade -->
-                {%for student in student_l%}
-                <tr>
-                <td>{{student.firstname}}</td>
-                <td>{{student.surname}}</td>
-                </tr>
-                {%endfor%}
-                {%endif%}
-                {%endfor%}
-                </table>        
-                {% if max_num_pairs > 0%}
-                    <div>
-                    {%for key, p in pair_list.items%}
-                    {% if grade == key %}
-                    <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade}}.</b> </p>
-                    {%endif%}
-                    {%endfor%}
-                    </div>
-                {% endif%} 
-                </div>
-            </td>
-            
-            {% if grade|add:3 < 13 %}
-            <td>
-                <div>
-                <br>
-                <p><b>Registered Grade {{grade|add:3}} participants:</b></p>
-                <table width="160">
-                <tr>
-                <th align="left">First Name</th>
-                <th align="left">Surname</th>
-                </tr>
-                <!-- Populates the list with previously registered students -->
-                {%for key, student_l in student_list.items%}
-                {% if grade|add:3 == key %} <!-- only for the current grade -->
-                {%for student in student_l%}
-                <tr>
-                <td>{{student.firstname}}</td>
-                <td>{{student.surname}}</td>
-                </tr>
-                {%endfor%}
-                {%endif%}
-                {%endfor%}
-                </table>        
-                {% if max_num_pairs > 0%}
-                    <div>
-                    {%for key, p in pair_list.items%}
-                    {% if grade|add:3 == key %}
-                    <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade|add:3}}.</b> </p>
-                    {%endif%}
-                    {%endfor%}
-                    </div>
-                {% endif%} 
-                </div>
-            </td>
-            {% endif %}
-        </tr>
-
-    {%endfor%} <!-- endfor grade -->
-    </table>
-    <p>Please remember that it is your responsibility to ensure that accurate information has been entered. You will be able to edit your school's entry up until the closing date for new entries to the competition. </p>
-    </form>
-    </td>
+        <p>Please remember that it is your responsibility to ensure that accurate information has been entered. You will be able to edit your school's entry up until the closing date for new entries to the competition. </p>
+        </form>
+        </td>
     </tr>
-    </table>
-    <br><br><br><br>
+</table>
+<br><br><br><br>
