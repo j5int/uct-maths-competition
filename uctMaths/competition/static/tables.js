@@ -184,7 +184,8 @@ function validateForm(doc)
 	 }
 	
 	// prompt user to add invigilator
-	if (count == 75 && num_invigilators < 2)
+    maxStudents = (pairs[0].length-1)*10 + st_firstname.length;
+	if (count == maxStudents && num_invigilators < 2)
 	{
 	invig_firstname[1].style.background = 'Yellow';
     invig_surname[1].style.background = 'Yellow';
