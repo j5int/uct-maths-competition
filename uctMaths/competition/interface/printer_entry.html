@@ -133,13 +133,15 @@
                 {%endif%}
                 {%endfor%}
                 </table>        
-                <div>
-                {%for key, p in pair_list.items%}
-                {% if grade == key %}
-                <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade}}.</b> </p>
-                {%endif%}
-                {%endfor%}
-                </div> 
+                {% if max_num_pairs > 0%}
+                    <div>
+                    {%for key, p in pair_list.items%}
+                    {% if grade == key %}
+                    <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade}}.</b> </p>
+                    {%endif%}
+                    {%endfor%}
+                    </div>
+                {% endif%} 
                 </div>
             </td>
             
@@ -165,13 +167,15 @@
                 {%endif%}
                 {%endfor%}
                 </table>        
-                <div>
-                {%for key, p in pair_list.items%}
-                {% if grade|add:3 == key %}
-                <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade|add:3}}.</b> </p>
-                {%endif%}
-                {%endfor%}
-                </div> 
+                {% if max_num_pairs > 0%}
+                    <div>
+                    {%for key, p in pair_list.items%}
+                    {% if grade|add:3 == key %}
+                    <p><b> {{p}} pairs </b> (teams of 2) have been registered for <b>grade {{grade|add:3}}.</b> </p>
+                    {%endif%}
+                    {%endfor%}
+                    </div>
+                {% endif%} 
                 </div>
             </td>
             {% endif %}

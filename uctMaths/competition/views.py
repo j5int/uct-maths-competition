@@ -74,6 +74,7 @@ def printer_entry_result(request, school_list=None):
                 'responsible_teacher':responsible_teacher[0],
                 'student_list':individual_list,
                 'pair_list':pair_list,
+                'max_num_pairs':compadmin.admin_number_of_pairs(),
                 'entries_open':compadmin.isOpen() or request.user.is_staff,
                 'invigilator_list': invigilator_list,
                 'grades':range(8,13),
@@ -95,6 +96,7 @@ def printer_entry_result(request, school_list=None):
                 'grade_left':range(8,11),
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13),
+                'max_num_pairs':compadmin.admin_number_of_pairs(),
                 'total_num':'No students entered for this school'}
 
             #Render the template with the context (from above)
