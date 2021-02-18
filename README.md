@@ -1,6 +1,6 @@
 # UCT Maths Competition
 
-The website [https://portal.uctmathscompetition.org.za/](https://uctmaths.j5int.com/) is the live version of this project. The system allows teachers to sign-up their school and students for the upcoming UCT Mathematics Competition. Once that is done, the admins are able to allocate all students to venues for the competition and then record their scores and allocate prizes afterwards. It provides the admins with extra features to make distribution of answer sheets and results easier.
+The website [https://portal.uctmathscompetition.org.za/](https://portal.uctmathscompetition.org.za/) is the live version of this project. The system allows teachers to sign-up their school and students for the upcoming UCT Mathematics Competition. Once that is done, the admins are able to allocate all students to venues for the competition and then record their scores and allocate prizes afterwards. It provides the admins with extra features to make distribution of answer sheets and results easier.
 
 ## Getting Started
 
