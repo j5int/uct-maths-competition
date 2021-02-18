@@ -32,6 +32,7 @@ class SchoolModelForm( forms.ModelForm ):
 
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
+	change_form_template = "admin/rt_changeform.html"
 	form = SchoolModelForm
 	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location', 'answer_sheets_emailed', 'report_emailed') ##Which columns should be kept here?
 	search_fields = ['name']
@@ -180,6 +181,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
+	change_form_template = "admin/rt_changeform.html"
 	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'report_downloaded', 'answer_sheet_downloaded')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
@@ -296,7 +298,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-	change_form_template = "admin/extend_changeform.html"
+	change_form_template = "admin/competition_changeform.html"
 
 	list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date', 'invigilators', 'answer_sheet_download_enabled')
 	actions = ['export_competition']
