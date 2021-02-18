@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
-from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
+from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
 from django.core.mail import EmailMessage
 import datetime
 
 import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
                  # report email.
 import views
+import StringIO
+import os
 
 # Methods for very simple formatting of data entered by a certain user (filter)
 # See info in settings.py for SMTP server emulation and set-up
@@ -63,6 +65,28 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
         [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
         recipient_list
     )
+
+def send_grade_answer_sheets_to_organiser(pdf_attachment_filename):
+    print("Emailing " + os.path.basename(pdf_attachment_filename) + " to organiser.")
+    f = open(pdf_attachment_filename, "rb")
+    output_string = """Dear admin,
+
+This email contains part of the collection of answer sheets for all students, separated by grade. This is being sent because of the request to generate all answer sheets. 
+    """
+    send_email(
+        "(Do not reply) " + os.path.basename(pdf_attachment_filename),
+        output_string,
+        "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
+        [
+            {
+                "name": os.path.basename(pdf_attachment_filename), 
+                "value": StringIO.StringIO(f.read()).getvalue(), 
+                "type": "application/pdf"
+            }
+        ],
+        [compadmin.admin_emailaddress()]
+    )
+    f.close()
 
 def send_email(subject, body, sender, attachments, recipient_list):
     email = EmailMessage(

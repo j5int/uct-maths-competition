@@ -45,6 +45,31 @@ function validateForm(doc)
   //prevent submission of empty forms
   if (blankForm())
 	{return false;}
+/*---------------------------------------------
+    Validate address field
+    ----------------------------------------------*/
+    var physical_address = document.getElementsByClassName('physical_address')[0];
+    var code = document.getElementsByClassName('code')[0];
+    var city = document.getElementsByClassName('city')[0];
+    var school_number = document.getElementsByClassName('school_number')[0];
+    physical_address.style.background = 'White';
+    code.style.background = 'White';
+    city.style.background = 'White';
+    school_number.style.background = 'White';
+    
+    validity = validate_address(physical_address.value, city.value, code.value, school_number.value)
+    if (validity!=0) {
+	    window.scrollTo(100,0);
+	    switch(validity){
+        case -1:code.style.background = 'Yellow'; break;
+        case 1:physical_address.style.background = 'Yellow'; break;
+        case 2:city.style.background = 'Yellow'; break;
+        case 3:school_number.style.background = 'Yellow'; break;
+	    }
+	    return false; //Error
+	}
+        
+
 /**********************
 *** EMAIL VALIDATION***
 ***********************/
@@ -92,32 +117,32 @@ function validateForm(doc)
 	var invig_phone_alt = document.getElementsByClassName('invig_phone_alt');
 	
 	var num_invigilators =0;
-	
-	for(var i = 0; i < 10; ++i)
-	{
-	validity = validate_invigilator(invig_firstname[i].value, invig_surname[i].value, invig_phone_primary[i].value, invig_phone_alt[i].value, invig_mail[i].value);
-	
-		invig_firstname[i].style.background = 'White'; 
-		invig_surname[i].style.background = 'White'; 
-		invig_phone_primary[i].style.background = 'White'; 
-		invig_phone_alt[i].style.background = 'White';
-		invig_mail[i].style.background = 'White'; 
-	
-	    if (validity > 0) //Any error condition
-	    {
-	    	window.scrollTo(100,500);
-		    switch(validity){
-		        case 1:invig_firstname[i].style.background = 'Yellow'; break;
-		        case 2:invig_surname[i].style.background = 'Yellow'; break;
-		        case 3:invig_phone_primary[i].style.background = 'Yellow'; break;
-		        case 4:invig_phone_alt[i].style.background = 'Yellow'; break;
-		        case 5:invig_mail[i].style.background = 'Yellow'; break;
-		    }
-			return false;
-	    }
-	    else if (validity==0) num_invigilators+=1; //else full and valid field
-	}
-	
+	if(invig_firstname){
+        for(var i = 0; i < 10; ++i)
+        {
+        validity = validate_invigilator(invig_firstname[i].value, invig_surname[i].value, invig_phone_primary[i].value, invig_phone_alt[i].value, invig_mail[i].value);
+        
+            invig_firstname[i].style.background = 'White'; 
+            invig_surname[i].style.background = 'White'; 
+            invig_phone_primary[i].style.background = 'White'; 
+            invig_phone_alt[i].style.background = 'White';
+            invig_mail[i].style.background = 'White'; 
+        
+            if (validity > 0) //Any error condition
+            {
+                window.scrollTo(100,500);
+                switch(validity){
+                    case 1:invig_firstname[i].style.background = 'Yellow'; break;
+                    case 2:invig_surname[i].style.background = 'Yellow'; break;
+                    case 3:invig_phone_primary[i].style.background = 'Yellow'; break;
+                    case 4:invig_phone_alt[i].style.background = 'Yellow'; break;
+                    case 5:invig_mail[i].style.background = 'Yellow'; break;
+                }
+                return false;
+            }
+            else if (validity==0) num_invigilators+=1; //else full and valid field
+        }
+    }
     /*---------------------------------------------
     Validate students
     ----------------------------------------------*/
@@ -150,8 +175,8 @@ function validateForm(doc)
 	
 	for (var k=0; k<pairs.length; k++)
 	{
-	 if (pairs[k].options[pairs[k].selectedIndex].value > 5){
-	    alert("Please ensure that the number of pairs for each grade is between 0 and 5 (inclusive.)");
+	 if (pairs[k].options[pairs[k].selectedIndex].value > 10){
+	    alert("Please ensure that the number of pairs for each grade is between 0 and 10 (inclusive.)");
 	    window.scrollTo(100,500);
         return false;
         }
@@ -159,7 +184,8 @@ function validateForm(doc)
 	 }
 	
 	// prompt user to add invigilator
-	if (count == 75 && num_invigilators < 2)
+    maxStudents = (pairs[0].length-1)*10 + st_firstname.length;
+	if (count == maxStudents && num_invigilators < 2)
 	{
 	invig_firstname[1].style.background = 'Yellow';
     invig_surname[1].style.background = 'Yellow';
@@ -245,7 +271,6 @@ function validate_student(firstname, surname){
 
 function validate_invigilator(firstname, surname, phone_primary, phone_alt, email){
     //alert("Invigilator:"+firstname+", "+surname+"; "+phone_primary+"; " + email);
-    
     if (firstname.length > 254)
         {
             alert("Firstname is too long");
@@ -337,6 +362,42 @@ function validate_phonenumber(phone_number){
 
       //  alert("Valid phone number");
         return 0; //Valid
+}
+
+function validate_address(address,city,code,phone){
+    if(address.length > 255)
+    {
+        alert("Address is too long")
+        return 1
+    }
+    if(city.length > 255)
+    {
+        alert("City name is too long")
+        return 2
+    }
+    if(code.length != 4)
+    {
+        alert("Postal code must consist of 4 digits")
+        return -1
+    }
+
+    if (isNaN(parseInt(code)))
+    { 
+    alert("Invalid character in postal code. Please only use numbers in your entry.");
+    return -1;
+    }
+    if(address=="" || city == "" || code == "" || phone == ""){
+        alert("Invalid entry. Field missing");
+        if (address=="") return 1;
+        else if (city=="") return 2;
+        else if (code=="") return -1;
+        else if (phone=="") return 3;
+            
+    }
+    return validate_phonenumber(phone)
+    
+
+
 }
 
 

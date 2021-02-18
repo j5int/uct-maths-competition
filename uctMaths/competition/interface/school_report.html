@@ -27,7 +27,7 @@
                     </tr>
                     <tr>
                         <th width="80" align="left">Phone:</th>
-                        <td align="left"> {{responsible_teacher.phone_primary}} / {{responsible_teacher.phone_alt}} </td>
+                        <td align="left"> {{responsible_teacher.phone_primary}} {% if has_phone_alt%} / {{responsible_teacher.phone_alt}} {% endif%}</td>
                     </tr>
                     <tr>
                         <th width="80" align="left">Email:</th>

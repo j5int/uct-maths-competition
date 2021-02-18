@@ -27,7 +27,11 @@
 		{%if lang == "b"%}<option value="b">Bilingual</option>{%endif%}
 		{%endfor%}
     </select>
-
+    <p>Physical address of the school for delivery by courier. Please do not use a PO Box number.</p>
+    <td>Address<br><textarea style = "width: 24em; resize: none" rows ="5" type ="text" class="physical_address" name="physical_address" required value="" >{{address}}</textarea></td>
+    <br><td>Postal/Zip Code<br><input type="text" class="code" name="code" required value="{{code}}"></td>
+    <br><td>City<br><input type="text" class="city" name="city" required value="{{city}}"></td>
+    <br><td>Phone Number for Delivery<br><input type="text" class="school_number" name="school_number" required value="{{schooln.phone}}"></td>
     <!-- register responsible teacher from here --->
     <div>
         <h1>Register Responsible Teacher</h1>
@@ -57,9 +61,10 @@
 
 
     <!-- register invigilators from here -->
+    {% if invigilators %}
     <div>
         <h1>Register Invigilators</h1>
-        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Schools which send a full entry of 75 participants must send at least two invigilators.
+        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Schools which send a full entry of {{maxEntries}} participants must send at least two invigilators.
  <br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
@@ -130,29 +135,35 @@
 
 
     </div>
-
+    {% endif %}
 
     <div>
         <h1>Register Participants</h1>
     </div>
+    {% if max_num_pairs > 0%}
+        <p> For each grade, please select the number of pair entrants, and enter the names of the individual entrants.</p>
+    {% else%}
+        <p> For each grade, please enter the names of the individual entrants.</p>
+    {% endif%}
     {%for grade in grades%}
     <div>
-        <p> For each grade, please select the number of pair entrants, and enter the names of the individual entrants.</p>
         <!-- <form action="." method="post"> -->
         <h2>Grade {{grade}}</h2>
-        <div>
-            <h3>Number of pairs:
-            <select name = "pairs" class='pairs'>
-                  {%for key, pair_list in pairs_per_grade.items%}
-                    {% if grade == key %}
-                        {%for p in pair_list%}
-                        <option value='{{p}}'>{{p}}</option>
-                        {%endfor%}
-                    {%endif%}
-                 {%endfor%}
-            </select>
-            </h3>
-        </div> 
+        {% if max_num_pairs > 0%}
+            <div>
+                <h3>Number of pairs:
+                <select name = "pairs" class='pairs'>
+                    {%for key, pair_list in pairs_per_grade.items%}
+                        {% if grade == key %}
+                            {%for p in pair_list%}
+                            <option value='{{p}}'>{{p}}</option>
+                            {%endfor%}
+                        {%endif%}
+                    {%endfor%}
+                </select>
+                </h3>
+            </div> 
+        {% endif%}
 
         <h3>Individuals:</h3>
         <table>

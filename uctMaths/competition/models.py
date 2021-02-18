@@ -13,17 +13,21 @@ LOCATIONS = (
 )
 
 class Competition(models.Model):
-    newentries_Opendate = models.DateField(db_column='newentries_Opendate')
-    newentries_Closedate = models.DateField(db_column='newentries_Closedate')
-    admin_emailaddress = models.CharField(max_length=30L)
-    num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True)
-    number_of_individuals = models.IntegerField(db_column='num_individuals')
-    number_of_pairs = models.IntegerField(db_column='num_pairs')
-    prizegiving_date = models.DateField(db_column='prizegiving_date')
+    newentries_Opendate = models.DateField(db_column='newentries_Opendate', verbose_name="Opening date for entries")
+    newentries_Closedate = models.DateField(db_column='newentries_Closedate', verbose_name="Closing date for entries")
+    admin_emailaddress = models.CharField(max_length=30L, verbose_name="Admin email address")
+    num_schoolcandidate_scores = models.IntegerField(db_column='num_schoolcandidate_scores', null=True, verbose_name="Number of school candidate scores")
+    number_of_individuals = models.IntegerField(db_column='num_individuals', verbose_name="Maximum individual entries per grade per school")
+    number_of_pairs = models.IntegerField(db_column='num_pairs', verbose_name="Maximum pair entries per grade per school")
+    prizegiving_date = models.DateField(db_column='prizegiving_date', verbose_name="Prize-giving date")
+    invigilators = models.BooleanField(db_column='invigilators', default=False,
+                                        verbose_name="Require schools to provide invigilators")
+    answer_sheet_download_enabled = models.BooleanField(db_column='answer_sheet_download_enabled', default=False,
+                                                        verbose_name="Allow teachers to download answer sheets")
 
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
-    name        = models.CharField(max_length=255L, db_column='Name')
+    name        = models.CharField(max_length=255L, db_column='Name', verbose_name="School name")
     key         = models.CharField(max_length=3L, db_column='Key', unique=True) 
     language    = models.CharField(max_length=1L, choices=( 
     ('e', 'English'), 
@@ -40,8 +44,8 @@ class School(models.Model):
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True) #ForeignKey (gets assigned a single user)
     rank = models.IntegerField(null=True, db_column='Rank', blank=True)
     location = models.CharField(max_length=3L, choices=LOCATIONS, db_column='Location')
-    answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", blank=True)
-    report_emailed = models.DateTimeField(db_column="report_emailed", blank=True)
+    answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", blank=True, verbose_name="Answer sheets emailed to teacher")
+    report_emailed = models.DateTimeField(db_column="report_emailed", blank=True, verbose_name="Results report emailed to teacher")
 
     def __str__(self):
         return self.name
@@ -52,7 +56,7 @@ class School(models.Model):
 
 class SchoolStudent(models.Model):
     # A single student. Not a User. Score and Rank will added/updated by the admin so they can be null.
-    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    firstname   = models.CharField(max_length=255L, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
         ('e', 'English'), 
@@ -106,7 +110,7 @@ class Invigilator(models.Model):
     # Many Invigilators to one Venue.
 
     school      = models.ForeignKey('School', db_column='School') 
-    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    firstname   = models.CharField(max_length=255L, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255L, db_column='Surname')
     venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) #Admin feature, implement later
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
@@ -158,13 +162,13 @@ class ResponsibleTeacher(models.Model):
     # One ResponsibleTeacher to one school
 
     school      = models.ForeignKey('School', db_column='School') 
-    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    firstname   = models.CharField(max_length=255L, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255L, db_column='Surname')
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
-    report_downloaded = models.DateTimeField(db_column='Report_downloaded', blank=True)
-    answer_sheet_downloaded = models.DateTimeField(db_column='Answer_sheet_downloaded', blank=True)
+    report_downloaded = models.DateTimeField(db_column='Report_downloaded', blank=True, verbose_name="Results report downloaded manually by teacher")
+    answer_sheet_downloaded = models.DateTimeField(db_column='Answer_sheet_downloaded', blank=True, verbose_name="Answer sheets downloaded manually by teacher")
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
     def __unicode__(self):
@@ -178,7 +182,7 @@ class SchoolStudentArchive(models.Model):
     # Duplicate of the SchoolStudent model with extra date field - 'archived'. Used for saving old data. 
     # Generated from the admin page 
     archived    = models.DateField(null=True, blank=True, db_column='Date Archived')
-    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    firstname   = models.CharField(max_length=255L, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255L, db_column='Surname')
     language    = models.CharField(max_length=1L, choices=(
         ('e', 'English'), 
@@ -211,9 +215,9 @@ class InvigilatorArchive(models.Model):
     # duplicate of the Invigilator model with extra date field - 'archived'. Used for saving old data. 
     # Generated from the admin page     
 
-    archived    = models.DateField(null=True, blank=True, db_column='Date_Archived')
+    archived    = models.DateField(null=True, blank=True, db_column='Date_Archived', verbose_name="Date Archived")
     school      = models.ForeignKey('School', db_column='School') 
-    firstname   = models.CharField(max_length=255L, db_column='First_name')
+    firstname   = models.CharField(max_length=255L, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255L, db_column='Surname')
     venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True) 
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)

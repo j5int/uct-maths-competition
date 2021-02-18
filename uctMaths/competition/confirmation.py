@@ -33,7 +33,8 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):
     output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(in_school, name, UMC_datetime())
 
     output_string += print_responsibleTeacher(rteacher)
-    output_string += print_invigilators(invigilator_list)
+    if compadmin.competition_has_invigilator():
+        output_string += print_invigilators(invigilator_list)
     output_string += print_students(student_list)
     ### Debugging - output to file ###
     #temp_output = open('confirmation.txt', 'w')
@@ -76,14 +77,15 @@ def print_students(student_list,width=40):
         pass #Report empty list to render?
 
     # Print out formatted lists for pairs and single participants
-    for grade in range(8, 13):	
+    for grade in range(8, 12 + 1):	
         grade_string = '\nGrade %d students (%d registered):\n'%(grade, len(single_list[grade]) + pair_list[grade]*2)
         #grade_string += '\n%-15s %-15s \n%s\n'%('First Name', 'Surname', '- '*int(width/2))
 
         for single in single_list[grade]:
             grade_string+= '%s, %s\n'%(single[1], single[0])#str(single[2].upper()))
 
-        grade_string += '\n%d pair(s) registered for grade %d\n'%(pair_list[grade], grade) 
+        if compadmin.admin_number_of_pairs() > 0:
+            grade_string += '\n%d pair(s) registered for grade %d\n'%(pair_list[grade], grade) 
 
         #for pair_register in range(1, pair_list[grade]/2+1):
         #    grade_string += 'Group %d: \n\n'%(pair_register)

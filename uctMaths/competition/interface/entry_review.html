@@ -11,7 +11,8 @@
     {% else %}
         <p>Not working.</p>
     {% endif %}
-
+    <p>Physical address of the school for delivery by courier.</p>
+    <textarea readonly style = "width: 24em; resize: none" rows ="5" type ="text">{{address}}&#13;&#10;{{schooln.phone}}</textarea>
     <!-- register responsible teacher from here --->
     <div>
         <h1>Responsible Teacher</h1>
@@ -40,9 +41,10 @@
 
 
     <!-- register invigilators from here -->
+    {% if invigilators %}
     <div>
         <h1>Registered Invigilators</h1>
-        <p>Please note that every school must send at least 1 invigilator; 2 invigilators are required if 75 entries are to be submitted. If the responsible teacher is going to invigilate kindly add his/her name to the list of invigilators.</p>
+        <p>Please note that every school must send at least 1 invigilator; 2 invigilators are required if {{maxEntries}} entries are to be submitted. If the responsible teacher is going to invigilate kindly add his/her name to the list of invigilators.</p>
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -70,20 +72,23 @@
 
 
     </div>
-    
+    {% endif %}
+
     <h1>Registered Participants</h1>
     {%for grade in grades%}
     <div>
         <!-- <form action="." method="post"> -->
         <h2>Grade {{grade}}</h2>
-        <div>
-            <h3>Pairs:</h3>
-                {%for key, p in pair_list.items%}
-                    {% if grade == key %}
-                    <p> {{p}} pairs (teams of 2) have been registered for grade {{grade}}. </p>
-                    {%endif%}
-                 {%endfor%}
-        </div> 
+        {% if max_num_pairs > 0%}
+            <div>
+                <h3>Pairs:</h3>
+                    {%for key, p in pair_list.items%}
+                        {% if grade == key %}
+                        <p> {{p}} pairs (teams of 2) have been registered for grade {{grade}}. </p>
+                        {%endif%}
+                    {%endfor%}
+            </div> 
+        {% endif%}
 
         <h3>Individuals:</h3>
         <table>

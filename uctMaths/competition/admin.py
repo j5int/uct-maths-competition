@@ -6,7 +6,9 @@ from __future__ import unicode_literals
 from competition.models import *
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
+from django.conf.urls import url
 
+from django.http import HttpResponseRedirect
 from django.db import connection, transaction
 from django import forms
 import time, datetime
@@ -30,12 +32,53 @@ class SchoolModelForm( forms.ModelForm ):
 
 #Displays different fields for School
 class SchoolAdmin(ImportExportModelAdmin):
+	change_form_template = "admin/rt_changeform.html"
 	form = SchoolModelForm
 	list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location', 'answer_sheets_emailed', 'report_emailed') ##Which columns should be kept here?
 	search_fields = ['name']
 	resource_class = SchoolResource
 
-	actions = ['remove_user_associations', 'output_schooltaglist', 'assign_school_ranks', 'school_summary','print_school_confirmations', 'update_school_entry_status','generate_school_reports','generate_multi_school_reports','email_school_reports','school_certificate_list','generate_school_answer_sheets','email_school_answer_sheets']
+	# Single action button functions (don't require selection)
+	change_list_template = "admin/school_changelist.html"
+	def get_urls(self):
+		urls = super(SchoolAdmin, self).get_urls()
+		my_urls = [
+			url("^assign_school_ranks/", self.assign_school_ranks),
+			url("^school_summary/", self.school_summary),
+			url("^update_school_entry_status/", self.update_school_entry_status),
+			url("^school_certificate_list/", self.school_certificate_list),
+			url("^clear_email_addresses/", self.clear_email_addresses),
+			url("^generate_grade_answer_sheets/", self.generate_grade_answer_sheets)
+		]
+		return my_urls + urls
+
+	def assign_school_ranks(self, request):
+		compadmin.rank_schools()
+		return HttpResponseRedirect("../")
+	    
+	def school_summary(self, request):
+	    return compadmin.school_summary(request)
+
+	def update_school_entry_status(self, request):
+		compadmin.update_school_entry_status()
+		return HttpResponseRedirect("../")
+
+	def school_certificate_list(self, request):
+	    return compadmin.certificate_list(request)
+	
+	def clear_email_addresses(self, request):
+		compadmin.remove_emails_addresses()
+		return HttpResponseRedirect("../")
+
+	def generate_grade_answer_sheets(self, request):
+		return compadmin.generate_grade_answer_sheets(request)
+
+	# Action items (require selections)
+	actions = [	
+				'remove_user_associations', 'output_schooltaglist','print_school_confirmations','generate_school_reports',
+				'generate_multi_school_reports','email_school_reports','generate_school_answer_sheets',
+				'email_school_answer_sheets','export_courier_address'
+			]
 
     #import school dataset
 	#Expects csv (comma-separated) file with the first line being:
@@ -50,17 +93,8 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def output_schooltaglist(self, request, queryset):
 	    return compadmin.output_schooltaglists(queryset)
 
-	def assign_school_ranks(self, request, queryset):
-	    return compadmin.rank_schools(queryset)
-	    
-	def school_summary(self, request, queryset):
-	    return compadmin.school_summary(request)
-	    
 	def print_school_confirmations(self, request, queryset):
 	    return compadmin.print_school_confirmations(request, queryset)
-
-	def update_school_entry_status(self, request, queryset):
-	    return compadmin.update_school_entry_status()
 
 	def generate_school_reports(self, request, queryset):
 	    return compadmin.print_school_reports(request, queryset)
@@ -70,9 +104,6 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 	def generate_multi_school_reports(self, request, queryset):
 	    return compadmin.multi_reportgen(request, queryset)
-
-	def school_certificate_list(self, request, queryset):
-	    return compadmin.certificate_list(request, queryset)
 	
 	def generate_school_answer_sheets(self, request, queryset):
 		return compadmin.generate_school_answer_sheets(request, queryset)
@@ -80,20 +111,18 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def email_school_answer_sheets(self, request, queryset):
 		return compadmin.email_school_answer_sheets(request, queryset)
 
+	def export_courier_address(self, request, queryset):
+		return compadmin.export_courier_address(request, queryset)
+
 	output_schooltaglist.short_description = 'Download school tags for selected school(s)'
 	remove_user_associations.short_description = 'Remove associated users to selected school(s)'
-	assign_school_ranks.short_description = 'Assign rank based on score to schools (regardless of selection)'
-	school_summary.short_description = 'Schools summary (.xls) (only schools with entries, regardless of selection)'
-	update_school_entry_status.short_description = 'Update/Refresh schools\' entry status (regardless of selection)'
 	print_school_confirmations.short_description = 'Print selected school(s) confirmation (single .pdf)'
 	generate_school_reports.short_description = 'Print selected school(s) reports (single .pdf)'
 	generate_multi_school_reports.short_description = 'Download selected school(s) (separate) reports (.zip/.pdf)'
-	school_certificate_list.short_description = 'Download school certificate list'
-
 	email_school_reports.short_description = 'Email selected school(s) reports (single .pdf) to school(s)'
 	email_school_answer_sheets.short_description = "Email selected school(s) answer sheets"
 	generate_school_answer_sheets.short_description = 'Download answer sheets for selected school(s)'
-
+	export_courier_address.short_description = 'Export courier addresses (.xls) for selected school(s)'
 	class AnswerSheetEmailSentFilter(SimpleListFilter):
 		title = "Answer sheets emailed"
 		parameter_name = "answer_sheets_emailed"
@@ -128,22 +157,66 @@ class SchoolAdmin(ImportExportModelAdmin):
 				return queryset.filter((models.Q(report_emailed__isnull=True)
 					| models.Q(report_emailed__lt=datetime.datetime(datetime.date.today().year, 1, 1, 0, 0, 0)) )
 					& models.Q(entered__gt=0) )
+	
+	class EnteredFilter(SimpleListFilter):
+		title = "school entered"
+		parameter_name = "entered"
 
-	list_filter=('entered','language',AnswerSheetEmailSentFilter,ReportEmailSentFilter) #Field filters (shown as bar on right)
+		def lookups(self, request, model_admin):
+			return (
+				("entered", "entered"),
+				("not-entered", "not entered")
+			)
+		
+		def queryset(self, request, queryset):
+			if self.value() == "entered":
+				return queryset.filter(models.Q(entered__gte=1))
+			if self.value() == "not-entered":
+				return queryset.filter(models.Q(entered__lte=0))
+
+	list_filter=(EnteredFilter,'language',AnswerSheetEmailSentFilter,ReportEmailSentFilter) #Field filters (shown as bar on right)
 
 
 
 
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
+	change_form_template = "admin/rt_changeform.html"
 	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'report_downloaded', 'answer_sheet_downloaded')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):
 	list_display = ('school', 'firstname', 'surname', 'grade', 'reference', 'venue', 'paired', 'score', 'rank', 'award', 'location')
-	actions = ['write_studentlist','write_studenttags', 'upload_results', 'output_assign_awards', 'output_PRN_files','rank_students', 'assign_student_awards']
+	actions = ['write_studentlist','write_studenttags']
 	search_fields = ['firstname', 'surname', 'reference', 'venue']
+	# Single action button functions (don't require selection)
+	change_list_template = "admin/student_changelist.html"
+	def get_urls(self):
+		urls = super(SchoolStudentAdmin, self).get_urls()
+		my_urls = [
+			url("^upload_results/", self.upload_results),
+			url("^rank_students/", self.rank_students),
+			url("^output_assign_awards/", self.output_assign_awards),
+			url("^output_PRN_files/", self.output_PRN_files),
+			url("^assign_student_awards/", self.assign_student_awards),
+		]
+		return my_urls + urls
+	def upload_results(self, request):
+	    return compadmin.upload_results()
 
+	def rank_students(self, request):
+		compadmin.rank_students()
+		return HttpResponseRedirect("../")
+
+	def output_assign_awards(self, request):
+	    return compadmin.export_awards(request)
+
+	def output_PRN_files(self, request):
+		return compadmin.output_PRN_files()
+		
+	def assign_student_awards(self, request):
+		compadmin.assign_student_awards()
+		return HttpResponseRedirect("../")
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
 	    cursor = connection.cursor()
@@ -170,25 +243,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	    return compadmin.output_studenttags(queryset)
 	write_studenttags.short_description = 'Generate MailMerge student tags for selected student(s)'
 
-	def upload_results(self, request, queryset):
-	    return compadmin.upload_results(request, queryset)
-	upload_results.short_description = 'Upload students\' results (.RES file required)'
-
-	def rank_students(self, request, queryset):
-	    return compadmin.rank_students(queryset)
-	rank_students.short_description = 'Re-rank students. (regardless of selection)'
-
-	def output_assign_awards(self, request, queryset):
-	    return compadmin.export_awards(request, queryset)
-	output_assign_awards.short_description = 'Export (.xls) document (regardless of selection)'
-
-	def output_PRN_files(self, request, queryset):
-	    return compadmin.output_PRN_files(queryset)
-	output_PRN_files.short_description = 'Generate PRN files for all students (regardless of selection)'
-
-	def assign_student_awards(self, request, queryset):
-	    return compadmin.assign_student_awards()
-	assign_student_awards.short_description = 'Assign student awards (regardless of selection)'
+	
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
@@ -243,13 +298,15 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-    list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date')
-    actions = ['export_competition']
-    
-    def export_competition(self, request, queryset):
-        return compadmin.export_competition(request)
+	change_form_template = "admin/competition_changeform.html"
 
-    export_competition.short_description = 'Export competition database (regardless of selection)'
+	list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date', 'invigilators', 'answer_sheet_download_enabled')
+	actions = ['export_competition']
+
+	def export_competition(self, request, queryset):
+		return compadmin.export_competition(request)
+
+	export_competition.short_description = 'Export competition database (regardless of selection)'
 
 #admin.site.register(SchoolUser, SchoolUserAdmin)
 admin.site.register(Venue, VenueAdmin)

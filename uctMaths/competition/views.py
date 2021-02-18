@@ -74,6 +74,7 @@ def printer_entry_result(request, school_list=None):
                 'responsible_teacher':responsible_teacher[0],
                 'student_list':individual_list,
                 'pair_list':pair_list,
+                'max_num_pairs':compadmin.admin_number_of_pairs(),
                 'entries_open':compadmin.isOpen() or request.user.is_staff,
                 'invigilator_list': invigilator_list,
                 'grades':range(8,13),
@@ -81,7 +82,8 @@ def printer_entry_result(request, school_list=None):
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13),
                 'total_num':int(count_pairs*2+count_individuals),
-                'year':year}
+                'year':year,
+                'invigilators_required':compadmin.competition_has_invigilator()}
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
             c.update(csrf(request))
@@ -95,7 +97,9 @@ def printer_entry_result(request, school_list=None):
                 'grade_left':range(8,11),
                 'invigilator_range':range(10-len(invigilator_list)), 
                 'igrades':range(8,13),
-                'total_num':'No students entered for this school'}
+                'max_num_pairs':compadmin.admin_number_of_pairs(),
+                'total_num':'No students entered for this school',
+                'invigilators_required':compadmin.competition_has_invigilator()}
 
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
@@ -146,7 +150,7 @@ def profile(request):
     if assigned_school:
         show_results_download = has_results(request, assigned_school) and after_pg(request)
     show_answer_sheets_download = False
-    if assigned_school and ResponsibleTeacher.objects.filter(school=assigned_school.id).count() > 0:
+    if assigned_school and ResponsibleTeacher.objects.filter(school=assigned_school.id).count() > 0 and compadmin.can_download_answer_sheets():
         show_answer_sheets_download = compadmin.school_students_venue_assigned(assigned_school)
     return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
 
@@ -171,11 +175,17 @@ def submitted(request):
     count_pairs = 0
     
     for i in range(8,13):
-        school_summary_info.append('Grade %d: %d individuals and %d pairs'%(i, len(grade_summary[i,False,'ALL']),len(grade_summary[i,True,'ALL'])))
+        grade_summary_text = 'Grade %d: %d individuals' % (i, len(grade_summary[i,False,'ALL']))
+        if compadmin.admin_number_of_pairs() > 0:
+            grade_summary_text += " and %d pairs" % (len(grade_summary[i,True,'ALL']))
+        school_summary_info.append(grade_summary_text)
         count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
         count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
         
-    school_summary_statistics = 'You have successfully registered %d students (%d individuals and %d pairs).'%(count_pairs*2+count_individuals, count_individuals, count_pairs)
+    school_summary_statistics = 'You have successfully registered %d students' % (count_pairs*2+count_individuals)
+    
+    if compadmin.admin_number_of_pairs() > 0:
+        school_summary_statistics += '(%d individuals and %d pairs).' % (count_individuals, count_pairs)
 
     c = {
         'school_summary_blurb':school_summary_blurb,
@@ -221,6 +231,7 @@ def entry_review(request):
         'responsible_teacher':responsible_teacher[0],
         'student_list':individual_list,
         'pair_list':pair_list,
+        'max_num_pairs': compadmin.admin_number_of_pairs(),
         'entries_open':compadmin.isOpen() or request.user.is_staff,
         'invigilator_list': invigilator_list,
         'grades':range(8,13), 
@@ -228,7 +239,10 @@ def entry_review(request):
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
         'ierror':error,
-        "only_back":True}
+        "only_back":True,
+        'invigilators':compadmin.competition_has_invigilator(),
+        'address':assigned_school.address.replace(', ','\n'),
+        'maxEntries':compadmin.get_max_entries()}
 
     if request.method == 'POST' and 'edit_entry' in request.POST and (compadmin.isOpen() or request.user.is_staff):  # If the form has been submitted.
         return HttpResponseRedirect('../students/newstudents.html')
@@ -242,7 +256,7 @@ def entry_review(request):
 
 #*****************************************
 # Register Students   
-#User can register 5 students per grade and 5 pairs per grade 
+# Up to <competition.number_of_individuals> individuals and <competition.number_of_pairs> pairs per grade 
 @login_required
 def newstudents(request):
     error = " "
@@ -290,7 +304,9 @@ def newstudents(request):
         #Delete all previously stored information
 
         try:
+            assigned_school.address ='%s, %s, %s' % (form.getlist('physical_address','')[0], form.getlist('code','')[0], form.getlist('city','')[0])
             assigned_school.language = form.getlist('language','')[0]
+            assigned_school.phone = form.getlist('school_number','')[0]
             assigned_school.save()
 
             #Register a single responsible teacher (assigned to that school)
@@ -319,12 +335,17 @@ def newstudents(request):
                   #Registering the different pairs
                   #Information is set to null, only school name is given and reference
                   #Reference if the ID of the first person in the pair
+
+                  if compadmin.admin_number_of_pairs() == 0:
+                    break
+
                   for p in range(int(form.getlist("pairs",'')[grade-8])):
                         firstname = 'Pair/Paar'
-                        surname = str(grade)+chr(65+p)
+                        surname = str(grade)+chr(65 + p)   # Maps 0, 1, 2, 3... to A, B, C...
+                        pair_number = 51 + p
                         language = form.getlist('language','')[0]
                         school = assigned_school
-                        reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(11+p).zfill(2))
+                        reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
                         paired = True
                         location = assigned_school.location
 
@@ -335,23 +356,23 @@ def newstudents(request):
             #Add invigilator information
             for invigilator in invigilator_list:
                 invigilator.delete()
+            if compadmin.competition_has_invigilator():
+                for j in range(10):
+                    if form.getlist('inv_firstname','')[j] == u'':
+                        ierror = "Invigilator information incomplete"
+                    else:
+                        school = assigned_school
+                        ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
+                        isurname = correctCapitals(form.getlist('inv_surname','')[j])
+                        iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
+                        iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
+                        iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
+                        inotes = form.getlist('inv_notes','')[j].strip()
+                        location = assigned_school.location
 
-            for j in range(10):
-                if form.getlist('inv_firstname','')[j] == u'':
-                    ierror = "Invigilator information incomplete"
-                else:
-                    school = assigned_school
-                    ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
-                    isurname = correctCapitals(form.getlist('inv_surname','')[j])
-                    iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
-                    iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
-                    iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
-                    inotes = form.getlist('inv_notes','')[j].strip()
-                    location = assigned_school.location
-
-                    query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
-                                       phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
-                    query.save()
+                        query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
+                                        phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
+                        query.save()
 
             #Registering students, maximum number of students 25
             #Returns an error if information entered incorrectly
@@ -363,10 +384,11 @@ def newstudents(request):
                 if form.getlist('firstname','')[i] == u'': continue
                 firstname =  correctCapitals(form.getlist('firstname','')[i])
                 surname =  correctCapitals(form.getlist('surname','')[i])
+                ind_nr = (i % compadmin.admin_number_of_individuals()) + 1
                 language =  form.getlist('language','')[0]
                 school = assigned_school
                 grade = form.getlist('grade','')[i]
-                reference = '%3s%2s%2s'%(str(school.id).zfill(3),str(grade).zfill(2),str(i%5+1).zfill(2))
+                reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(ind_nr).zfill(2))
                 paired = False
                 location = assigned_school.location
 
@@ -399,6 +421,14 @@ def newstudents(request):
         #If not null, then the form has been filled out.
         #Therefore - redirect to entry_review page
         pass #HttpResponseRedirect('../entry_review.html')
+    invigilators = compadmin.competition_has_invigilator()
+    full = []
+    if assigned_school.entered == 1:
+        full = assigned_school.address.split(',')
+    full += ['']*(3-len(full))
+    address = full[0].strip()
+    code = full[1].strip()
+    city = full[2].strip()
 
     c = {'type':'Students',
         'schooln':assigned_school,
@@ -407,6 +437,7 @@ def newstudents(request):
         'student_list':individual_list,
         'pairs_per_grade':pairs_per_grade,
         'pair_range':pairs_per_grade,
+        'max_num_pairs': compadmin.admin_number_of_pairs(),
         'entries_per_grade':entries_per_grade,
         'invigilator_list': invigilator_list,
         'entries_open':compadmin.isOpen() or request.user.is_staff,
@@ -415,7 +446,12 @@ def newstudents(request):
         'invigilator_range':range(10-len(invigilator_list)), 
         'igrades':range(8,13),
         'editEntry':editEntry,
-        'ierror':error}
+        'ierror':error,
+        'invigilators':invigilators,
+        'address':address,
+        'code':code,
+        'city':city,
+        'maxEntries':compadmin.get_max_entries()}
 
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)

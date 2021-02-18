@@ -1,0 +1,6 @@
+@import "forms.css";
+
+.aligned label {
+    width: 16em;
+    height: 2em;
+}

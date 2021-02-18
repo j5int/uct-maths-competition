@@ -26,9 +26,10 @@ import reports
 import os
 import sys
 sys.path.append("../")
+sys.setrecursionlimit(10000)
 
 from background_task import background
-from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results
+from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results, bg_generate_as_grade_distinction
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -375,6 +376,14 @@ def remove_user_assoc(school_list):
         school.assigned_to = None
         school.save()
 
+def remove_emails_addresses():
+    """ Remove all addresses and school phone numbers from the database """
+    school_list = School.objects.all()
+    for school in school_list:
+        school.address = ""
+        school.phone = ""
+        school.save()
+
 #Called by admin to generate formatted 'tag list' for selected schools
 def output_schooltaglists(school_list):
     """ Generate the tags for a School QuerySet. Served as a single text file in HttpResponse. """
@@ -393,13 +402,13 @@ def output_schooltaglists(school_list):
     response['Content-Disposition'] = 'attachment; filename=schooltags(%s).txt'%(timestamp_now())
     return response
 
-def upload_results(request, student_list):
+def upload_results():
     """Facilitate upload of .RES (the results) files. Redirects to custom Admin page (upload_results.html), the logic contained in compadmin_views.py."""
     #Return response of redirect page
-    response = HttpResponseRedirect('../../../competition/admin/upload_results.html')
+    response = HttpResponseRedirect('../../../../competition/admin/upload_results.html')
     return response
     
-def rank_schools(school_list):
+def rank_schools():
     """ Ranks schools based on a sum of the top X scores. X is set via the 'Competition' form. """
     comp = Competition.objects.all() #Should only be one!
     
@@ -461,7 +470,7 @@ def rank_schools(school_list):
             school.save()
 
 
-def rank_students(student_list):
+def rank_students():
     """Rank students on their uploaded score. Used if a score has been changed and the remaining students need to be re-classified"""
 
     #Rank students
@@ -511,7 +520,7 @@ def score_studentlist(student_list):
             student.save()
 
 
-def export_awards(request, student_list):
+def export_awards(request):
     """ Assign awards to participants (QuerySet is list of students) to students based on their rank. Serves an excel workbook with the awards for each student."""
     output_workbook = xlwt.Workbook()
     #Ranked gold for each grade (pairs, individuals separated) (alphabetical by surname)
@@ -704,6 +713,69 @@ def school_summary(request):
     response['Content-Type'] = 'application/ms-excel'
     output_workbook.save(response)
     return response
+
+def export_courier_address(request, school_list):
+    """ Return for DL a list of school courier addresses"""
+    output_workbook = xlwt.Workbook()
+    errorSheet = False
+    wb_sheet = output_workbook.add_sheet('School Addresses')
+    header = ['Company Name','Email','Address','City','Postal/Zip Code','Province/Region','Country','Contact Name','Tel. No.']
+    cell_row_offset = 0
+    for index, h in enumerate(header):
+        wb_sheet.write(cell_row_offset,index,'%s'%(h))
+    
+    cell_row_offset+=1
+    error_sheet = None
+    error_row = 0
+    for ischool in school_list:
+        errors = []
+        resp_teacher = ResponsibleTeacher.objects.filter(school = ischool)
+        full = ischool.address.split(',')
+        full+=['']*(3-len(full))
+        
+        
+
+        if(not resp_teacher):
+            errors.append("responsible teacher")
+        if(not full[0]):
+            errors.append("address")
+            if(not full[1]):
+                errors.append("city")
+                if(not full[2]):
+                    errors.append("postal code") 
+        if(not ischool.phone):
+            errors.append("phone number")
+        errorMessage ='No %s assigned to school' % ((', ').join(errors))
+        if(errors):
+            if(ischool.entered == 0):
+                errorMessage = "Not entered"
+            if(not errorSheet):
+                error_sheet = output_workbook.add_sheet('Errors')
+                error_sheet.write(error_row,0,"School")
+                error_sheet.write(error_row,1,"Error")
+            error_row+=1
+            error_sheet.write(error_row,0,ischool.name)
+            error_sheet.write(error_row,1,errorMessage)
+            errorSheet = True
+            continue 
+        resp_teacher = resp_teacher[0]
+        cell_row_offset = cell_row_offset + 1
+        wb_sheet.write(cell_row_offset,0,unicode(ischool.name))
+        wb_sheet.write(cell_row_offset,1,resp_teacher.email)
+        wb_sheet.write(cell_row_offset,2,full[0])
+        wb_sheet.write(cell_row_offset,3,full[2])
+        wb_sheet.write(cell_row_offset,4,full[1])
+        wb_sheet.write(cell_row_offset,5,"Western Cape")
+        wb_sheet.write(cell_row_offset,6,"South Africa")
+        wb_sheet.write(cell_row_offset,7,resp_teacher.firstname + " " + resp_teacher.surname)
+        wb_sheet.write(cell_row_offset,8,ischool.phone)
+
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=school_addresses(%s).xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
     
     
 def timestamp_now():
@@ -866,7 +938,7 @@ def timestamp_now():
     to_return = '%s:%s-%s%s%s'%(str(now.hour).zfill(2), str(now.minute).zfill(2), str(now.day).zfill(2), str(now.month).zfill(2), str(now.year).zfill(4))
     return to_return
     
-def output_PRN_files(student_list):
+def output_PRN_files():
     """Generate PRN files lists for all students, regardless of selection at admin UI. Served to user as a .zip file with each (10 files) Paired/Grade list."""
 
     student_list = SchoolStudent.objects.all()
@@ -1006,7 +1078,8 @@ def printer_school_report(request, school_list=None):
                 'entries_open':isOpen(),
                 'school_award_blurb':school_award_blurb,
                 'grade_range':range(8,13),
-                'year':year}
+                'year':year,
+                'has_phone_alt': len(responsible_teacher[0].phone_alt) > 0}
             #Render the template with the context (from above)
 
             template = get_template('school_report.html')
@@ -1040,7 +1113,7 @@ def multi_reportgen(request, school_list):
     return response
 
 
-def certificate_list(request, school_list):
+def certificate_list(request):
     #Calculate number of gold, merit and participation certificates per school
     output_workbook = xlwt.Workbook()
 
@@ -1137,30 +1210,34 @@ def generate_school_answer_sheets(request, school_list):
     print(str(diff))
     return response
 
+def get_student_answer_sheet(request, student):
+    # Get the text for a single student's answer sheet
+    venue = Venue.objects.filter(code = student.venue)[0]
+    c = {
+        'name':student.firstname + " " + student.surname,
+        'school':student.school.name,
+        'grade':str(student.grade),
+        'code':str(student.reference),
+        'venue':str(venue.building)+ ' - '+ str(venue.code),
+    }
+    if student.paired:
+        template = get_template('pair_as_template.html')
+    else:
+        template = get_template('individual_as_template.html')
+    c.update(csrf(request))
+    context = Context(c)
+    return template.render(context)
+
 def printer_answer_sheet(request, assigned_school=None):
     """ Generate the school answer sheet for each school in the query set"""
 
     html = '' #Will hold rendered templates
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     for istudent in student_list:
-            venue = Venue.objects.filter(code = istudent.venue)[0]
-            c = {
-                'name':istudent.firstname + " " + istudent.surname,
-                'school':istudent.school.name,
-                'grade':str(istudent.grade),
-                'code':str(istudent.reference),
-                'venue':str(venue.building)+ ' - '+ str(venue.code),
-            }
-            if istudent.paired:
-                template = get_template('pair_as_template.html')
-            else:
-                template = get_template('individual_as_template.html')
-            c.update(csrf(request))
-            context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
+        html += get_student_answer_sheet(request, istudent) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
-            #Generate the pdf doc
+    #Generate the pdf doc
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
     if not pdf.err:
         return result
@@ -1216,3 +1293,37 @@ def email_school_answer_sheets(request, schools):
     response['Content-Type'] = 'application/txt'
     
     return response
+
+def competition_has_invigilator():
+    return Competition.objects.all()[0].invigilators
+
+def can_download_answer_sheets():
+    return Competition.objects.all()[0].answer_sheet_download_enabled
+    
+def generate_grade_answer_sheets(request):
+    all_students = SchoolStudent.objects.filter().order_by('school')
+    no_venue_assigned = []
+    for student in all_students:
+        if not venue_assigned(student):
+            no_venue_assigned.append("%s(%s)" % (student.firstname + " " + student.surname, student.school.name))
+    if no_venue_assigned:
+        response = HttpResponse("Unable to generate answer sheets for the following students because no venues were assigned: " + ", ".join(no_venue_assigned))
+        response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationErrors(%s).txt'%(timestamp_now())
+        response['Content-Type'] = 'application/txt'
+        return response
+
+    for grade in range(8, 12 + 1):
+        print("Creating background task for AS generation for grade %d." % grade)
+        bg_generate_as_grade_distinction(grade, True)
+        bg_generate_as_grade_distinction(grade, False)
+    
+    response = HttpResponse("""Attempting to generate answer sheets for all students, distinguished by grade. 
+This will take some time if many students have been entered. 
+Emails with the answer sheets by grade will be sent to the competition admin's email address(%s) as soon as they are ready.
+""" % (admin_emailaddress()))
+    response['Content-Disposition'] = 'attachment; filename=AnswerSheetGradeGenerationStatus(%s).txt'%(timestamp_now())
+    response['Content-Type'] = 'application/txt'
+    return response
+
+def get_max_entries():
+    return (Competition.objects.all()[0].number_of_individuals + Competition.objects.all()[0].number_of_pairs*2)*5
