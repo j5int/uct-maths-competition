@@ -735,8 +735,6 @@ def export_courier_address(request, school_list):
                 errors.append("city")
                 if(not full[2]):
                     errors.append("postal code") 
-        if(not ischool.phone):
-            errors.append("phone number")
         errorMessage ='No %s assigned to school' % ((', ').join(errors))
         if(errors):
             if(ischool.entered == 0):
