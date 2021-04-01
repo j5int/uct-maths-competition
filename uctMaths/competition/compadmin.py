@@ -376,14 +376,6 @@ def remove_user_assoc(school_list):
         school.assigned_to = None
         school.save()
 
-def remove_emails_addresses():
-    """ Remove all addresses and school phone numbers from the database """
-    school_list = School.objects.all()
-    for school in school_list:
-        school.address = ""
-        school.phone = ""
-        school.save()
-
 #Called by admin to generate formatted 'tag list' for selected schools
 def output_schooltaglists(school_list):
     """ Generate the tags for a School QuerySet. Served as a single text file in HttpResponse. """
@@ -743,8 +735,6 @@ def export_courier_address(request, school_list):
                 errors.append("city")
                 if(not full[2]):
                     errors.append("postal code") 
-        if(not ischool.phone):
-            errors.append("phone number")
         errorMessage ='No %s assigned to school' % ((', ').join(errors))
         if(errors):
             if(ischool.entered == 0):

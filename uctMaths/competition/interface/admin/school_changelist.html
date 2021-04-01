@@ -26,10 +26,6 @@
             {% csrf_token %}
                 <button type="submit" class="actionButton">Download school certificate list</button>
         </form>
-        <form action="clear_email_addresses/" method="POST">
-            {% csrf_token %}
-                <button type="submit" class="actionButton">Clear phone numbers and addresses for selected school(s)</button>
-        </form>
         <form action="generate_grade_answer_sheets/" method="POST">
             {% csrf_token %}
                 <button type="submit" class="actionButton">Generate answer sheets for entered students separated by grade</button>

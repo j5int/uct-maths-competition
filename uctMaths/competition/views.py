@@ -71,6 +71,8 @@ def printer_entry_result(request, school_list=None):
             c = {'type':'Students',
                 'timestamp':timestamp,
                 'schooln':assigned_school,
+                'delivery_address':assigned_school.address,
+                'contact_phone':assigned_school.phone,
                 'responsible_teacher':responsible_teacher[0],
                 'student_list':individual_list,
                 'pair_list':pair_list,

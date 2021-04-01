@@ -47,7 +47,6 @@ class SchoolAdmin(ImportExportModelAdmin):
 			url("^school_summary/", self.school_summary),
 			url("^update_school_entry_status/", self.update_school_entry_status),
 			url("^school_certificate_list/", self.school_certificate_list),
-			url("^clear_email_addresses/", self.clear_email_addresses),
 			url("^generate_grade_answer_sheets/", self.generate_grade_answer_sheets)
 		]
 		return my_urls + urls
@@ -66,10 +65,6 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def school_certificate_list(self, request):
 	    return compadmin.certificate_list(request)
 	
-	def clear_email_addresses(self, request):
-		compadmin.remove_emails_addresses()
-		return HttpResponseRedirect("../")
-
 	def generate_grade_answer_sheets(self, request):
 		return compadmin.generate_grade_answer_sheets(request)
 
