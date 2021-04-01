@@ -60,8 +60,8 @@
 
             <div>
                 <h2>Delivery Address</h2>
-                <p>{{delivery_address}}</p>
-                {% if (contact_phone %}<p><b>Phone:</b> {{ contact_phone }}</p>
+                <p>{{ delivery_address|linebreaks }}</p>
+		{% if contact_phone%}<p><b>Phone:</b> {{ contact_phone }}</p>{% endif%}
                 <h2>Responsible Teacher</h2>
                 {% csrf_token %}
                 <table width="500">
