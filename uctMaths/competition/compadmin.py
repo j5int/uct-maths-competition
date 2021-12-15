@@ -690,6 +690,11 @@ def makeCertificate(students, assigned_school):
             response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
             response['Content-Disposition'] = 'attachment; filename=' + filename
             response['Content-Length'] = os.path.getsize(filename)
+
+            file.close()
+            shutil.rmtree(filename[:-4])
+            os.remove(filename)
+
             return response
         else:
             raise Http404
