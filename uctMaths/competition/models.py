@@ -168,8 +168,8 @@ class ResponsibleTeacher(models.Model):
     phone_alt   = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50L, db_column='Email', blank=False)
     is_primary  = models.BooleanField(db_column='Is_primary', default="true")
-    report_downloaded = models.DateTimeField(db_column='Report_downloaded', blank=True, verbose_name="Results report downloaded manually by teacher")
-    answer_sheet_downloaded = models.DateTimeField(db_column='Answer_sheet_downloaded', blank=True, verbose_name="Answer sheets downloaded manually by teacher")
+    report_downloaded = models.DateTimeField(db_column='Report_downloaded', null=True, verbose_name="Results report downloaded manually by teacher")
+    answer_sheet_downloaded = models.DateTimeField(db_column='Answer_sheet_downloaded', blank=True, null=True, verbose_name="Answer sheets downloaded manually by teacher")
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
     def __unicode__(self):
