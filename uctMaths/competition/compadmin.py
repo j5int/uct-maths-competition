@@ -36,6 +36,8 @@ from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email
 from reportlab.pdfgen import canvas
 from reportlab.rl_config import defaultPageSize
 from PyPDF2 import PdfFileWriter, PdfFileReader
+from wsgiref.util import FileWrapper
+import mimetypes
 
 
 def admin_emailaddress():
@@ -677,12 +679,17 @@ def makeCertificate(students, assigned_school):
 
         filename = str(str(students[0].school).replace(" ", "_") + "_Certificates")
         shutil.make_archive(filename, 'zip', filename)
+        filename = filename + ".zip"
         if os.path.exists(filename):
-            filename = filename + ".zip"
-            response = HttpResponse(filename)
+            path = os.path.abspath(filename)
+            file = open(path, "rb")
+            file.seek(0)
+            wrapper = FileWrapper(file)
+
+            s = StringIO.StringIO()
+            response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
             response['Content-Disposition'] = 'attachment; filename=' + filename
-            os.remove(filename)
-            shutil.rmtree(filename[:-4])
+            response['Content-Length'] = os.path.getsize(filename)
             return response
         else:
             raise Http404
