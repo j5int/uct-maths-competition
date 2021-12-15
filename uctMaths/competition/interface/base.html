@@ -20,7 +20,9 @@ used on all the pages once you're logged in
             <ul class="style1">
 				{% if only_back%}
 					<li><a href="/accounts/profile/">Back</a></li>
+					
 				{%endif%}
+				<li><a href="/competition/register/school_certificates/" target="_blank">Download School Certificates</a></li>
 				{% if not only_back%}
 					<li><a href="/competition/register/entry_review/">Entry form</a></li>
 					{% if show_answer_sheets_download%}

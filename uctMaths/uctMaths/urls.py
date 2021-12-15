@@ -31,4 +31,5 @@ urlpatterns = patterns('',
     #load allauth/urls.py
     url(r'^accounts/', include('allauth.urls')),
 
+
 )

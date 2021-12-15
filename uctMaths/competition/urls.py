@@ -14,5 +14,6 @@ urlpatterns = patterns('',
 	url(r'^accounts/profile/$',views.profile),
 	url(r'^admin/upload_results',compadmin_views.upload_results, name='upload_results'),
 	url(r'^register/school_results',views.school_results, name='school_results'),
-	url(r'^register/answer_sheets',views.answer_sheets, name="answer_sheets")
+	url(r'^register/answer_sheets',views.answer_sheets, name="answer_sheets"),
+	url(r'^register/school_certificates', views.school_certificates, name="school_certificates")
 )

@@ -1,6 +1,7 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
+import io
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
@@ -23,6 +24,8 @@ from models import LOCATIONS
 
 import reports
 
+import shutil
+
 import os
 import sys
 sys.path.append("../")
@@ -30,6 +33,10 @@ sys.setrecursionlimit(10000)
 
 from background_task import background
 from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results, bg_generate_as_grade_distinction
+from reportlab.pdfgen import canvas
+from reportlab.rl_config import defaultPageSize
+from PyPDF2 import PdfFileWriter, PdfFileReader
+
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -630,6 +637,55 @@ def export_awards(request):
     output_workbook.save(response)
     return response
 
+def makeCertificate(students, assigned_school):
+    try:
+        os.mkdir(str(students[0].school).replace(" ", "_") + "_Certificates")
+
+    finally:
+        for student in students:
+
+            name = student.firstname + " " + student.surname
+            school = student.school
+            grade = student.grade
+            award = student.award
+
+            awardCerts = {"G": "C:/Users/dspies/work/uct/git/certificates/Templates/goldTemplateBlank2022.pdf", "M": "C:/Users/dspies/work/uct/git/certificates/Templates/meritTemplateBlank2022.pdf", None: "C:/Users/dspies/work/uct/git/certificates/Templates/partTemplateBlank2022.pdf"}
+            packet = io.BytesIO()
+
+            cert = canvas.Canvas(packet)
+            PAGE_WIDTH  = defaultPageSize[0]
+            PAGE_HEIGHT = defaultPageSize[1]
+            cert.setFont('Times-Italic', 24)
+
+            cert.drawCentredString(PAGE_WIDTH/2, 280, name)
+            cert.drawCentredString(PAGE_WIDTH/2, 255, str(school))
+            cert.drawCentredString(PAGE_WIDTH/2, 230, "Grade " + str(grade))
+            cert.drawImage("C:/Users/dspies/work/uct/git/certificates/Images/signature.jpg", 400, 150)
+            cert.showPage()
+            cert.save()
+
+            packet.seek(0)
+            new_pdf = PdfFileReader(packet)
+            existing_pdf = PdfFileReader(open(awardCerts.get(award), "rb"))
+            output = PdfFileWriter()
+            page = existing_pdf.getPage(0)
+            page.mergePage(new_pdf.getPage(0))
+            output.addPage(page)
+            outputStream = open(str(students[0].school).replace(" ", "_") + "_Certificates/" + name.replace(" ", "_") + "_cert.pdf", "wb")
+            output.write(outputStream)
+            outputStream.close()
+
+        filename = str(str(students[0].school).replace(" ", "_") + "_Certificates")
+        shutil.make_archive(filename, 'zip', filename)
+        if os.path.exists(filename):
+            filename = filename + ".zip"
+            response = HttpResponse(filename)
+            response['Content-Disposition'] = 'attachment; filename=' + filename
+            os.remove(filename)
+            shutil.rmtree(filename[:-4])
+            return response
+        else:
+            raise Http404
 
 def assign_student_awards():
 
@@ -685,6 +741,9 @@ def assign_student_awards():
                         student.save()
                     else:
                         break
+    
+    student_list = SchoolStudent.objects.all()
+
 
 def school_summary(request):
     """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant email addresses. Or something like that."""
