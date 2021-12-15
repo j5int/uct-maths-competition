@@ -58,6 +58,33 @@
         </table>
     </div>
 
+    <!-- register alternate responsible teacher from here --->
+
+    <div>
+        <h1>Alternate Responsible Teacher</h1>
+        <p>An Alternate Responsible Teacher can be assigned to take over correspondence if the primary responsible teacher leaves the school. This field is not compulsory.</p>
+        <p> {{ ierror }}</p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
+            </tr>
+            <tr>
+                <td><input type="text" class="alt_resp_firstname" name="art_firstname" value="{{alt_responsible_teacher.firstname}}"></td>
+                <td><input type="text" class="alt_resp_surname" name="art_surname" value="{{alt_responsible_teacher.surname}}"></td>
+                <td><input type ="text" class="alt_resp_phone_primary" name="art_phone_primary" value="{{alt_responsible_teacher.phone_primary}}"></td>                    
+                <td><input type ="text" class="alt_resp_phone_alt" name="art_phone_alt" value="{{alt_responsible_teacher.phone_alt}}"></td>
+                <td><input id="rmail" class="alt_resp_mail" type ="text" name="art_email" value={{alt_responsible_teacher.email|lower}}></td>
+                <input type ="hidden" name="alt_rt_registered_by" value ={{ user.id }} >
+            </tr>
+        </table>
+    </div>
+
 
 
     <!-- register invigilators from here -->

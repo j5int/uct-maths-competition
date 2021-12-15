@@ -38,6 +38,32 @@
         </table>
     </div>
 
+    <!-- register alternate responsible teacher from here --->
+
+    <div>
+        <h1>Alternate Responsible Teacher</h1>
+        <p>An Alternate Responsible Teacher can be assigned to take over correspondence if the primary responsible teacher leaves the school. This field is not compulsory</p>
+        <p> {{ ierror }}</p>
+        % csrf_token %
+
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
+            </tr>
+            <tr>
+                <td>{{alt_responsible_teacher.firstname}}</td>
+                <td>{{alt_responsible_teacher.surname}}</td>
+                <td>{{alt_responsible_teacher.phone_primary}}</td>
+                <td>{{alt_responsible_teacher.phone_alt}}</td>
+                <td>{{alt_responsible_teacher.email}}</td>
+            </tr>
+        </table>
+    </div>
+
 
 
     <!-- register invigilators from here -->
