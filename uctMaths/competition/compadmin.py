@@ -647,6 +647,8 @@ def makeCertificate(students, assigned_school):
         for student in students:
 
             name = student.firstname + " " + student.surname
+            surname = student.surname
+            isPair = student.paired
             school = student.school
             grade = student.grade
             award = student.award
@@ -661,7 +663,7 @@ def makeCertificate(students, assigned_school):
 
             cert.drawCentredString(PAGE_WIDTH/2, 280, name)
             cert.drawCentredString(PAGE_WIDTH/2, 255, str(school))
-            cert.drawCentredString(PAGE_WIDTH/2, 230, "Grade " + str(grade))
+            cert.drawCentredString(PAGE_WIDTH/2, 230, "Grade/Graad " + str(grade))
             cert.drawImage("C:/Users/dspies/work/uct/git/certificates/Images/signature.jpg", 400, 150)
             cert.showPage()
             cert.save()
@@ -673,7 +675,11 @@ def makeCertificate(students, assigned_school):
             page = existing_pdf.getPage(0)
             page.mergePage(new_pdf.getPage(0))
             output.addPage(page)
-            outputStream = open(str(students[0].school).replace(" ", "_") + "_Certificates/" + name.replace(" ", "_") + "_cert.pdf", "wb")
+            if isPair:
+                outPath = str(students[0].school).replace(" ", "_") + "_Certificates/" + surname.replace(" ", "_") + "_cert.pdf"
+            else:
+                outPath = str(students[0].school).replace(" ", "_") + "_Certificates/" + name.replace(" ", "_") + "_cert.pdf"
+            outputStream = open(outPath, "wb")
             output.write(outputStream)
             outputStream.close()
 
