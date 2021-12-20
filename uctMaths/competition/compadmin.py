@@ -640,10 +640,17 @@ def export_awards(request):
     return response
 
 def makeCertificate(students, assigned_school):
+    
+    certPath = "C:/Users/dspies/work/uct/git/uct-maths-competition/Certificates/"
+
+    awardCerts = {"G": "goldTemplate.docx", "M": "meritTemplate.docx", None: "participationTemplate.docx"}
+
     try:
         os.mkdir(str(students[0].school).replace(" ", "_") + "_Certificates")
-
+    
     finally:
+        certs = []
+        filename = str(str(students[0].school).replace(" ", "_") + "_Certificates")
         for student in students:
 
             name = student.firstname + " " + student.surname
@@ -651,39 +658,15 @@ def makeCertificate(students, assigned_school):
             isPair = student.paired
             school = student.school
             grade = student.grade
-            award = student.award
+            award = student.award            
 
-            awardCerts = {"G": "C:/Users/dspies/work/uct/git/certificates/Templates/goldTemplateBlank2022.pdf", "M": "C:/Users/dspies/work/uct/git/certificates/Templates/meritTemplateBlank2022.pdf", None: "C:/Users/dspies/work/uct/git/certificates/Templates/partTemplateBlank2022.pdf"}
-            packet = io.BytesIO()
+            if award in certs:
+                continue
 
-            cert = canvas.Canvas(packet)
-            PAGE_WIDTH  = defaultPageSize[0]
-            PAGE_HEIGHT = defaultPageSize[1]
-            cert.setFont('Times-Italic', 24)
+            certs.append(award)
 
-            cert.drawCentredString(PAGE_WIDTH/2, 280, name)
-            cert.drawCentredString(PAGE_WIDTH/2, 255, str(school))
-            cert.drawCentredString(PAGE_WIDTH/2, 230, "Grade/Graad " + str(grade))
-            cert.drawImage("C:/Users/dspies/work/uct/git/certificates/Images/signature.jpg", 400, 150)
-            cert.showPage()
-            cert.save()
+            shutil.copy(certPath + awardCerts.get(award), filename)
 
-            packet.seek(0)
-            new_pdf = PdfFileReader(packet)
-            existing_pdf = PdfFileReader(open(awardCerts.get(award), "rb"))
-            output = PdfFileWriter()
-            page = existing_pdf.getPage(0)
-            page.mergePage(new_pdf.getPage(0))
-            output.addPage(page)
-            if isPair:
-                outPath = str(students[0].school).replace(" ", "_") + "_Certificates/" + surname.replace(" ", "_") + "_cert.pdf"
-            else:
-                outPath = str(students[0].school).replace(" ", "_") + "_Certificates/" + name.replace(" ", "_") + "_cert.pdf"
-            outputStream = open(outPath, "wb")
-            output.write(outputStream)
-            outputStream.close()
-
-        filename = str(str(students[0].school).replace(" ", "_") + "_Certificates")
         shutil.make_archive(filename, 'zip', filename)
         filename = filename + ".zip"
         if os.path.exists(filename):
