@@ -751,7 +751,7 @@ def export_courier_address(request, school_list):
         resp_teacher = resp_teacher[0]
         cell_row_offset = cell_row_offset + 1
         wb_sheet.write(cell_row_offset,0,unicode(ischool.name))
-        wb_sheet.write(cell_row_offset,1,resp_teacher.email)
+        wb_sheet.write(cell_row_offset,1,resp_teacher.email_school)
         wb_sheet.write(cell_row_offset,2,full[0])
         wb_sheet.write(cell_row_offset,3,full[2])
         wb_sheet.write(cell_row_offset,4,full[1])
@@ -840,7 +840,7 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
             wb_sheet.write(cell_row_offset,0,unicode(school_obj.name))
             wb_sheet.write(cell_row_offset,1,unicode(school_obj.location))
             wb_sheet.write(cell_row_offset,2,('%s %s')%(resp_teacher.firstname, resp_teacher.surname))
-            wb_sheet.write(cell_row_offset,3,resp_teacher.email)
+            wb_sheet.write(cell_row_offset,3,resp_teacher.email_school)
             wb_sheet.write(cell_row_offset,4,resp_teacher.phone_primary)
             wb_sheet.write(cell_row_offset,5,resp_teacher.phone_alt)
             wb_sheet.write(cell_row_offset,6,count_individuals)
@@ -850,7 +850,7 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
                 wb_sheet.write(cell_row_offset,9,school_obj.rank)
                 wb_sheet.write(cell_row_offset,10,school_obj.score)
 
-            responsible_teacher_mailinglist.append(resp_teacher.email)
+            responsible_teacher_mailinglist.append(resp_teacher.email_school)
     
     wb_sheet.write(3,0,'Mailing list')
     wb_sheet.write(3,1,', '.join(responsible_teacher_mailinglist))

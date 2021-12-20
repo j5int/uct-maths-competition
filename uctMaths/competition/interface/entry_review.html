@@ -26,14 +26,18 @@
                 <th>Surname</th>
                 <th>Phone </th>
                 <th>Phone (Alternative)</th>
-                <th>Email </th>
+                <th>Cellphone</th>
+                <th>School Email </th>
+                <th>Personal Email</th>
             </tr>
             <tr>
                 <td>{{responsible_teacher.firstname}}</td>
                 <td>{{responsible_teacher.surname}}</td>
                 <td>{{responsible_teacher.phone_primary}}</td>
                 <td>{{responsible_teacher.phone_alt}}</td>
-                <td>{{responsible_teacher.email}}</td>
+                <td>{{responsible_teacher.cellphone}}</td>
+                <td>{{responsible_teacher.email_school}}</td>
+                <td>{{responsible_teacher.email_personal}}</td>
             </tr>
         </table>
     </div>
@@ -42,7 +46,7 @@
 
     <div>
         <h1>Alternate Responsible Teacher</h1>
-        <p>An Alternate Responsible Teacher can be assigned to take over correspondence if the primary responsible teacher leaves the school. This field is not compulsory.</p>
+        <p>An Alternate Responsible Teacher can be assigned to take over correspondence if the primary responsible teacher leaves the school. <i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
         <p> {{ ierror }}</p>
         {% csrf_token %}
 
@@ -52,14 +56,18 @@
                 <th>Surname</th>
                 <th>Phone </th>
                 <th>Phone (Alternative)</th>
-                <th>Email </th>
+                <th>Cellphone</th>
+                <th>School Email </th>
+                <th>Personal Email</th>
             </tr>
             <tr>
                 <td>{{alt_responsible_teacher.firstname}}</td>
                 <td>{{alt_responsible_teacher.surname}}</td>
                 <td>{{alt_responsible_teacher.phone_primary}}</td>
                 <td>{{alt_responsible_teacher.phone_alt}}</td>
-                <td>{{alt_responsible_teacher.email}}</td>
+                <td>{{alt_responsible_teacher.cellphone}}</td>
+                <td>{{alt_responsible_teacher.email_school}}</td>
+                <td>{{alt_responsible_teacher.email_personal}}</td>
             </tr>
         </table>
     </div>

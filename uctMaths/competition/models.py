@@ -159,14 +159,16 @@ class Invigilator(models.Model):
 
 class ResponsibleTeacher(models.Model):
     # ResponsibleTeacher registered by SchoolUser
-    # One ResponsibleTeacher to one school
+    # One Primary ResponsibleTeacher and one Alternate ResponsibleTeacher to one school
 
     school      = models.ForeignKey('School', db_column='School') 
     firstname   = models.CharField(max_length=255L, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255L, db_column='Surname')
     phone_primary = models.CharField(max_length=15L, db_column='Phone (Primary)', blank=True)
     phone_alt   = models.CharField(max_length=15L, db_column='Phone (Alternative)', blank=True)
-    email       = models.CharField(max_length=50L, db_column='Email', blank=False)
+    phone_cell  = models.CharField(max_length=15L, db_column='Cellphone', blank=True)
+    email_school   = models.CharField(max_length=50L, db_column='Email (School)', blank=False)
+    email_personal = models.CharField(max_length=50L, db_column='Email (Personal)', blank=True) 
     is_primary  = models.BooleanField(db_column='Is_primary', default="true")
     report_downloaded = models.DateTimeField(db_column='Report_downloaded', null=True, verbose_name="Results report downloaded manually by teacher")
     answer_sheet_downloaded = models.DateTimeField(db_column='Answer_sheet_downloaded', blank=True, null=True, verbose_name="Answer sheets downloaded manually by teacher")

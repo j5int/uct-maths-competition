@@ -102,13 +102,15 @@ class ResponsibleTeacherForm (ModelForm):
         fields = "__all__"
 
 class ResponsibleTeacherForm(forms.Form):
-        fields = ['school', 'firstname','surname', 'phone_primary','phone_alt', 'email']
+        fields = ['school', 'firstname','surname', 'phone_primary','phone_alt', 'phone_cell', 'email_school', 'email_personal']
         school = forms.ModelChoiceField(required=False, widget = forms.Select(), queryset = School.objects.all()) #gives all school options
         firstname = forms.CharField()
         surname = forms.CharField()
         phone_primary = forms.CharField()
         phone_alt = forms.CharField()
-        email = forms.CharField()
+        phone_cell = forms.CharField()
+        email_school = forms.CharField()
+        email_personal = forms.CharField()
 
 #*****************************************
 

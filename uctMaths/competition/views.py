@@ -63,6 +63,10 @@ def printer_entry_result(request, school_list=None):
         alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
         timestamp = str(datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
         year = str(datetime.now().strftime('%Y'))
+        if responsible_teacher:
+            responsible_teacher = responsible_teacher[0]
+        else:
+            responsible_teacher = None
         if alt_responsible_teacher:
             alt_responsible_teacher = alt_responsible_teacher[0]
         else:
@@ -77,7 +81,7 @@ def printer_entry_result(request, school_list=None):
                 'schooln':assigned_school,
                 'delivery_address':assigned_school.address,
                 'contact_phone':assigned_school.phone,
-                'responsible_teacher':responsible_teacher[0],
+                'responsible_teacher':responsible_teacher,
                 'alt_responsible_teacher': alt_responsible_teacher,
                 'student_list':individual_list,
                 'pair_list':pair_list,
@@ -234,6 +238,11 @@ def entry_review(request):
         assigned_school.entered=1 #The school has made an entry
         assigned_school.save()
     
+    if responsible_teacher:
+        responsible_teacher = responsible_teacher[0]
+    else:
+        responsible_teacher = None
+
     if alt_responsible_teacher:
         alt_responsible_teacher = alt_responsible_teacher[0]
     else:
@@ -241,7 +250,7 @@ def entry_review(request):
         
     c = {'type':'Students',
         'schooln':assigned_school,
-        'responsible_teacher':responsible_teacher[0],
+        'responsible_teacher':responsible_teacher,
         'alt_responsible_teacher':alt_responsible_teacher,
         'student_list':individual_list,
         'pair_list':pair_list,
@@ -330,12 +339,14 @@ def newstudents(request):
             rtsurname = form.getlist('rt_surname','')[0]
             rtphone_primary = form.getlist('rt_phone_primary','')[0].strip().replace(' ', '')
             rtphone_alt = form.getlist('rt_phone_alt','')[0].strip().replace(' ', '')
-            rtemail = form.getlist('rt_email','')[0].strip().replace(' ', '')
+            rtphone_cell = form.getlist('rt_phone_cell','')[0].strip().replace(' ', '')
+            rtemail_school = form.getlist('rt_email_school','')[0].strip().replace(' ', '')
+            rtemail_personal = form.getlist('rt_email_personal','')[0].strip().replace(' ', '')
 
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
             rt_query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary,
-                                      phone_alt = rtphone_alt, school = rtschool,
-                                      email = rtemail, is_primary = True)
+                                      phone_alt = rtphone_alt, phone_cell=rtphone_cell, school = rtschool,
+                                      email_school = rtemail_school, email_personal=rtemail_personal, is_primary = True)
 
             #Delete responsible teacher before saving the new one
             for rt in responsible_teacher:
@@ -351,12 +362,14 @@ def newstudents(request):
             artsurname = form.getlist('art_surname','')[0]
             artphone_primary = form.getlist('art_phone_primary','')[0].strip().replace(' ', '')
             artphone_alt = form.getlist('art_phone_alt','')[0].strip().replace(' ', '')
-            artemail = form.getlist('art_email','')[0].strip().replace(' ', '')
+            artphone_cell = form.getlist('rt_phone_cell','')[0].strip().replace(' ', '')
+            artemail_school = form.getlist('rt_email_school','')[0].strip().replace(' ', '')
+            artemail_personal = form.getlist('rt_email_personal','')[0].strip().replace(' ', '')
 
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
             art_query = ResponsibleTeacher(firstname = artfirstname , surname = artsurname, phone_primary = artphone_primary,
-                                      phone_alt = artphone_alt, school = artschool,
-                                      email = artemail, is_primary = False)
+                                      phone_alt = artphone_alt, phone_cell=artphone_cell, school = artschool,
+                                      email_school = artemail_school, email_personal=artemail_personal, is_primary = False)
 
             #Delete responsible teacher before saving the new one
             for art in alt_responsible_teacher:
@@ -454,6 +467,7 @@ def newstudents(request):
     if responsible_teacher:
         responsible_teacher = responsible_teacher[0]
     else:
+        responsible_teacher = None
         #If not null, then the form has been filled out.
         #Therefore - redirect to entry_review page
         pass #HttpResponseRedirect('../entry_review.html')
@@ -559,7 +573,7 @@ def school_select(request):
 def school_results(request):
     assigned_school = School.objects.get(assigned_to=request.user)
     if has_results(request, assigned_school):
-        report = ResponsibleTeacher.objects.get(school = assigned_school)
+        report = ResponsibleTeacher.objects.get(school = assigned_school)[0]
         report.report_downloaded = datetime.now()
         report.save()
         return compadmin.print_school_reports(request,[assigned_school])
