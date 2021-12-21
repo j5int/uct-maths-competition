@@ -362,9 +362,9 @@ def newstudents(request):
             artsurname = form.getlist('art_surname','')[0]
             artphone_primary = form.getlist('art_phone_primary','')[0].strip().replace(' ', '')
             artphone_alt = form.getlist('art_phone_alt','')[0].strip().replace(' ', '')
-            artphone_cell = form.getlist('rt_phone_cell','')[0].strip().replace(' ', '')
-            artemail_school = form.getlist('rt_email_school','')[0].strip().replace(' ', '')
-            artemail_personal = form.getlist('rt_email_personal','')[0].strip().replace(' ', '')
+            artphone_cell = form.getlist('art_phone_cell','')[0].strip().replace(' ', '')
+            artemail_school = form.getlist('art_email_school','')[0].strip().replace(' ', '')
+            artemail_personal = form.getlist('art_email_personal','')[0].strip().replace(' ', '')
 
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
             art_query = ResponsibleTeacher(firstname = artfirstname , surname = artsurname, phone_primary = artphone_primary,
