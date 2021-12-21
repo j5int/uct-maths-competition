@@ -22,7 +22,6 @@ used on all the pages once you're logged in
 					<li><a href="/accounts/profile/">Back</a></li>
 					
 				{%endif%}
-				<li><a href="/competition/register/school_certificates/" target="_blank">Download School Certificates</a></li>
 				{% if not only_back%}
 					<li><a href="/competition/register/entry_review/">Entry form</a></li>
 					{% if show_answer_sheets_download%}
@@ -30,6 +29,7 @@ used on all the pages once you're logged in
 					{%endif%}
 					{% if show_results_download%}
 						<li><a href="/competition/register/school_results/" target="_blank" >School Results</a></li>
+						<li><a href="/competition/register/school_certificates/" target="_blank">Download School Certificates</a></li>
 					{%endif%}
 					{% if admin%}
 						<li><a href="/competition/register/schools/">Schools</a></li>
