@@ -45,7 +45,7 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     if not rteachers:
         print("No responsible teacher for school!")
         return
-    rteacher = rteachers[0]
+    rteacher = rteachers.filter(is_primary=True)[0]
     #Header
     output_string = 'Dear %s, \n\n' \
                     'This email contains answer sheets for %s for the upcoming UCT Mathematics Competition. ' \
@@ -58,9 +58,8 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     recipient_list = [rteacher.email_school]
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
-
     send_email(
-        "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
+        "(Do not reply) UCT Mathematics Competition %s Answer Sheets %s" % (school.name, recipient_list),
         output_string,
         "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
         [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
@@ -70,7 +69,6 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     arteacher = ResponsibleTeacher.objects.filter(school=school.id).filter(is_primary=False)[0]
     alt_output_string = 'Dear %s, \n\n' \
                     'This email contains answer sheets for %s for the upcoming UCT Mathematics Competition. ' \
-                    'Attached you will find a printer-friendly .pdf file that contains the answer sheets that ' \
                     'your students will write on. \n\n' \
                     'Regards,\n\n' \
                     'The UCT Mathematics Competition team'%(arteacher.firstname + " " + arteacher.surname, school.name)
@@ -79,7 +77,7 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     recipient_list = [arteacher.email_school]
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
-
+    print(recipient_list)
     send_email(
         "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
         alt_output_string,
