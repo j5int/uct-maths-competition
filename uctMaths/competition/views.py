@@ -72,7 +72,7 @@ def printer_entry_result(request, school_list=None):
         else:
             alt_responsible_teacher = None
         #If someone managed to get to this page without having made an entry
-        if not responsible_teacher and not school_list:
+        if not (responsible_teacher or alt_responsible_teacher) and not school_list:
             return HttpResponseRedirect('../students/newstudents.html')
         #If the school has an entry
         elif responsible_teacher:
@@ -232,7 +232,7 @@ def entry_review(request):
     for p in range(8,13):
         pair_list[p] = pair_list[p]
 
-    if not responsible_teacher:
+    if not (responsible_teacher or alt_responsible_teacher):
         return HttpResponseRedirect('../students/newstudents.html')
     else:
         assigned_school.entered=1 #The school has made an entry
@@ -302,10 +302,10 @@ def newstudents(request):
     editEntry = False
     language_selection_options = ['e', 'a', 'b']
 
-    if responsible_teacher:
+    if (responsible_teacher or alt_responsible_teacher):
         editEntry = True
     
-    if assigned_school and responsible_teacher:
+    if assigned_school and (responsible_teacher or alt_responsible_teacher):
         language_temp = assigned_school.language
         language_selection = [language_temp]
         language_selection.extend([c for c in language_selection_options if c != language_temp])
@@ -573,7 +573,9 @@ def school_select(request):
 def school_results(request):
     assigned_school = School.objects.get(assigned_to=request.user)
     if has_results(request, assigned_school):
-        report = ResponsibleTeacher.objects.get(school = assigned_school)[0]
+        report = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary=True)
+        if report:
+            report = report[0]
         report.report_downloaded = datetime.now()
         report.save()
         return compadmin.print_school_reports(request,[assigned_school])
@@ -597,9 +599,14 @@ def answer_sheets(request, assigned_school = None):
     assigned_school = School.objects.get(assigned_to=request.user)
     rteachers = ResponsibleTeacher.objects.filter(school=assigned_school.id)
     if rteachers and compadmin.school_students_venue_assigned(assigned_school):
-        teacher = rteachers[0]
-        teacher.answer_sheet_downloaded = datetime.now()
-        teacher.save()
+        resp_teacher = rteachers.filter(is_primary=True)[0]
+        alt_resp_teacher = rteachers.filter(is_primary=False)[0]
+        if resp_teacher:
+            resp_teacher.answer_sheet_downloaded = datetime.now()
+            resp_teacher.save()
+        if alt_resp_teacher:
+            alt_resp_teacher.answer_sheet_downloaded = datetime.now()
+            alt_resp_teacher.save()
         return compadmin.generate_school_answer_sheets(request, [assigned_school])
     elif not rteachers:
         return HttpResponse("A responsible teacher has not been provided for your school yet.")
