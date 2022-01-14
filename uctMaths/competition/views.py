@@ -557,4 +557,4 @@ def answer_sheets(request, assigned_school = None):
 def school_certificates(request, assigned_school=None):
     assigned_school = School.objects.get(assigned_to=request.user)
     students = SchoolStudent.objects.filter(school=assigned_school.id)
-    return compadmin.makeCertificate(students, assigned_school)
+    return compadmin.makeCertificates(students, assigned_school)

@@ -639,54 +639,49 @@ def export_awards(request):
     output_workbook.save(response)
     return response
 
-def makeCertificate(students, assigned_school):
+def makeCertificates(students, assigned_school):
     
-    certPath = "C:/Users/dspies/work/uct/git/uct-maths-competition/Certificates/"
+    certPath = "../../Certificates/"
 
-    awardCerts = {"G": "goldTemplate.docx", "M": "meritTemplate.docx", None: "participationTemplate.docx"}
+    if len(students) > 0:
+        awardCerts = {"G": "goldTemplate.docx", "M": "meritTemplate.docx", None: "participationTemplate.docx", "MOX": "meritOxfordTemplate.docx", "OX": "oxfordTemplate"}
 
-    try:
-        os.mkdir(str(students[0].school).replace(" ", "_") + "_Certificates")
+        try:
+            os.mkdir(str(students[0].school).replace(" ", "_") + "_Certificates")
     
-    finally:
-        certs = []
-        filename = str(str(students[0].school).replace(" ", "_") + "_Certificates")
-        for student in students:
+        finally:
+            certs = []
+            filename = str(str(students[0].school).replace(" ", "_") + "_Certificates")
+            for student in students:
+                award = student.award            
 
-            name = student.firstname + " " + student.surname
-            surname = student.surname
-            isPair = student.paired
-            school = student.school
-            grade = student.grade
-            award = student.award            
+                if award in certs:
+                    continue
 
-            if award in certs:
-                continue
+                certs.append(award)
 
-            certs.append(award)
+                shutil.copy(certPath + awardCerts.get(award), filename)
 
-            shutil.copy(certPath + awardCerts.get(award), filename)
+            shutil.make_archive(filename, 'zip', filename)
+            filename = filename + ".zip"
+            if os.path.exists(filename):
+                path = os.path.abspath(filename)
+                file = open(path, "rb")
+                file.seek(0)
+                wrapper = FileWrapper(file)
 
-        shutil.make_archive(filename, 'zip', filename)
-        filename = filename + ".zip"
-        if os.path.exists(filename):
-            path = os.path.abspath(filename)
-            file = open(path, "rb")
-            file.seek(0)
-            wrapper = FileWrapper(file)
+                s = StringIO.StringIO()
+                response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
+                response['Content-Disposition'] = 'attachment; filename=' + filename
+                response['Content-Length'] = os.path.getsize(filename)
 
-            s = StringIO.StringIO()
-            response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
-            response['Content-Disposition'] = 'attachment; filename=' + filename
-            response['Content-Length'] = os.path.getsize(filename)
+                file.close()
+                shutil.rmtree(filename[:-4])
+                os.remove(filename)
 
-            file.close()
-            shutil.rmtree(filename[:-4])
-            os.remove(filename)
-
-            return response
-        else:
-            raise Http404
+                return response
+            else:
+                raise Http404
 
 def assign_student_awards():
 
