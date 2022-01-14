@@ -664,8 +664,6 @@ def makeCertificates(students, assigned_school):
                 file = open(path, "rb")
                 file.seek(0)
                 wrapper = FileWrapper(file)
-
-                s = StringIO.StringIO()
                 response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
                 response['Content-Disposition'] = 'attachment; filename=' + filename
                 response['Content-Length'] = os.path.getsize(filename)
