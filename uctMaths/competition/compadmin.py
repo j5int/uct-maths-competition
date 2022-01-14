@@ -1,8 +1,6 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
-
-from httplib2 import Http
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
