@@ -1,7 +1,6 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
-import io
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
@@ -33,11 +32,7 @@ sys.setrecursionlimit(10000)
 
 from background_task import background
 from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results, bg_generate_as_grade_distinction
-from reportlab.pdfgen import canvas
-from reportlab.rl_config import defaultPageSize
-from PyPDF2 import PdfFileWriter, PdfFileReader
 from wsgiref.util import FileWrapper
-import mimetypes
 
 
 def admin_emailaddress():
