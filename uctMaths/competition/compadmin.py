@@ -1,6 +1,8 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
+
+from httplib2 import Http
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
@@ -677,6 +679,8 @@ def makeCertificates(students, assigned_school):
                 return response
             else:
                 raise Http404
+    else:
+        return HttpResponse("Certificates from your school cannot be downloaded at this time")
 
 def assign_student_awards():
 
@@ -732,9 +736,6 @@ def assign_student_awards():
                         student.save()
                     else:
                         break
-    
-    student_list = SchoolStudent.objects.all()
-
 
 def school_summary(request):
     """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant email addresses. Or something like that."""
