@@ -685,9 +685,6 @@ def assign_student_awards():
                         student.save()
                     else:
                         break
-    
-    student_list = SchoolStudent.objects.all()
-
 
 def school_summary(request):
     """ Return for DL a summary list of all the schools that have made an entry; also create a "email these people" line with all the relevant email addresses. Or something like that."""
