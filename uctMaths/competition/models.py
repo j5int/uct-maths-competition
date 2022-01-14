@@ -170,7 +170,7 @@ class ResponsibleTeacher(models.Model):
     email_school   = models.CharField(max_length=50L, db_column='Email (School)', blank=False)
     email_personal = models.CharField(max_length=50L, db_column='Email (Personal)', blank=True) 
     is_primary  = models.BooleanField(db_column='Is_primary', default="true")
-    report_downloaded = models.DateTimeField(db_column='Report_downloaded', null=True, verbose_name="Results report downloaded manually by teacher")
+    report_downloaded = models.DateTimeField(db_column='Report_downloaded', blank=True, null=True, verbose_name="Results report downloaded manually by teacher")
     answer_sheet_downloaded = models.DateTimeField(db_column='Answer_sheet_downloaded', blank=True, null=True, verbose_name="Answer sheets downloaded manually by teacher")
     def __str__(self):
         return self.surname+', '+self.firstname+', '+self.phone_primary
