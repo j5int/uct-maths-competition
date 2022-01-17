@@ -2,7 +2,6 @@
 # administration.
 from __future__ import unicode_literals
 import tempfile
-import unicodedata
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
@@ -644,22 +643,25 @@ def makeCertificates(students, assigned_school):
         schoolname = ''.join([i if ord(i) < 128 else '' for i in repr(assigned_school)])
         schoolname = schoolname[8:-1].strip()
         tmpDir = tempfile.mkdtemp()
-        zipPath = os.path.join(tmpDir, schoolname+'.zip')
-        zipRepo = zipfile.ZipFile(zipPath, 'w')
-        certs = []
-        for student in students:
-            award = student.award            
+        try:
+            zipPath = os.path.join(tmpDir, schoolname+'.zip')
+            zipRepo = zipfile.ZipFile(zipPath, 'w')
+            certs = []
+            for student in students:
+                award = student.award            
 
-            if award in certs:
-                continue
+                if award in certs:
+                    continue
 
-            certs.append(award)
-            certLoc = certPath + awardCerts.get(award)
-            zipRepo.write(certLoc, os.path.basename(certLoc))
-        response = HttpResponse(zipRepo, content_type="application/x-zip-compressed")
-        response['Content-Disposition'] = 'attachment; filename=' + zipPath
-        response['Content-Length'] = os.path.getsize(zipPath)
-        return response
+                certs.append(award)
+                certLoc = certPath + awardCerts.get(award)
+                zipRepo.write(certLoc, os.path.basename(certLoc))
+            response = HttpResponse(zipRepo, content_type="application/x-zip-compressed")
+            response['Content-Disposition'] = 'attachment; filename=' + zipPath
+            response['Content-Length'] = os.path.getsize(zipPath)
+        finally:
+            shutil.rmtree(tmpDir)
+            return response
     else:
         return HttpResponse("Certificates from your school cannot be downloaded at this time")
             
