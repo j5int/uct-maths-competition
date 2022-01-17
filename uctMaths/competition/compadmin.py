@@ -637,13 +637,15 @@ def export_awards(request):
 
 def makeCertificates(students, assigned_school):
     
-    certPath = "C:/Users/dspies/work/uct/git/uct-maths-competition/Certificates/"
+    certPath = "../Certificates/"
 
     if len(students) > 0:
         awardCerts = {"G": "goldTemplate.docx", "M": "meritTemplate.docx", None: "participationTemplate.docx", "MOX": "meritOxfordTemplate.docx", "OX": "oxfordTemplate"}
         schoolname = ''.join([i if ord(i) < 128 else '' for i in repr(assigned_school)])
         schoolname = schoolname[8:-1].strip()
-        tmpFile = tempfile.NamedTemporaryFile(prefix=str(schoolname))
+        tmpDir = tempfile.mkdtemp()
+        zipPath = os.path.join(tmpDir, schoolname+'.zip')
+        zipRepo = zipfile.ZipFile(zipPath, 'w')
         certs = []
         for student in students:
             award = student.award            
@@ -652,12 +654,11 @@ def makeCertificates(students, assigned_school):
                 continue
 
             certs.append(award)
-
-            shutil.copy(certPath + awardCerts.get(award), os.path.dirname(tmpFile.name))
-        response = HttpResponse(os.path.dirname(tmpFile.name), content_type="application/x-zip-compressed")
-        response['Content-Disposition'] = 'attachment; filename=' + tmpFile.name
-        response['Content-Length'] = os.path.getsize(tmpFile.name)
-        tmpFile.close()
+            certLoc = certPath + awardCerts.get(award)
+            zipRepo.write(certLoc, os.path.basename(certLoc))
+        response = HttpResponse(zipRepo, content_type="application/x-zip-compressed")
+        response['Content-Disposition'] = 'attachment; filename=' + zipPath
+        response['Content-Length'] = os.path.getsize(zipPath)
         return response
     else:
         return HttpResponse("Certificates from your school cannot be downloaded at this time")
