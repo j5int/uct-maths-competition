@@ -1,6 +1,8 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
+import tempfile
+import unicodedata
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
@@ -636,47 +638,31 @@ def export_awards(request):
 
 def makeCertificates(students, assigned_school):
     
-    certPath = "../../Certificates/"
+    certPath = "C:/Users/dspies/work/uct/git/uct-maths-competition/Certificates/"
 
     if len(students) > 0:
         awardCerts = {"G": "goldTemplate.docx", "M": "meritTemplate.docx", None: "participationTemplate.docx", "MOX": "meritOxfordTemplate.docx", "OX": "oxfordTemplate"}
+        schoolname = ''.join([i if ord(i) < 128 else '' for i in repr(assigned_school)])
+        schoolname = schoolname[8:-1].strip()
+        tmpFile = tempfile.NamedTemporaryFile(prefix=str(schoolname))
+        certs = []
+        for student in students:
+            award = student.award            
 
-        try:
-            os.mkdir(str(students[0].school).replace(" ", "_") + "_Certificates")
-    
-        finally:
-            certs = []
-            filename = str(str(students[0].school).replace(" ", "_") + "_Certificates")
-            for student in students:
-                award = student.award            
+            if award in certs:
+                continue
 
-                if award in certs:
-                    continue
+            certs.append(award)
 
-                certs.append(award)
-
-                shutil.copy(certPath + awardCerts.get(award), filename)
-
-            shutil.make_archive(filename, 'zip', filename)
-            filename = filename + ".zip"
-            if os.path.exists(filename):
-                path = os.path.abspath(filename)
-                file = open(path, "rb")
-                file.seek(0)
-                wrapper = FileWrapper(file)
-                response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
-                response['Content-Disposition'] = 'attachment; filename=' + filename
-                response['Content-Length'] = os.path.getsize(filename)
-
-                file.close()
-                shutil.rmtree(filename[:-4])
-                os.remove(filename)
-
-                return response
-            else:
-                raise Http404
+            shutil.copy(certPath + awardCerts.get(award), os.path.dirname(tmpFile.name))
+        response = HttpResponse(os.path.dirname(tmpFile.name), content_type="application/x-zip-compressed")
+        response['Content-Disposition'] = 'attachment; filename=' + tmpFile.name
+        response['Content-Length'] = os.path.getsize(tmpFile.name)
+        tmpFile.close()
+        return response
     else:
         return HttpResponse("Certificates from your school cannot be downloaded at this time")
+            
 
 def assign_student_awards():
 
