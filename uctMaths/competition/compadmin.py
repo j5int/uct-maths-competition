@@ -34,7 +34,6 @@ sys.setrecursionlimit(10000)
 
 from background_task import background
 from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results, bg_generate_as_grade_distinction
-from wsgiref.util import FileWrapper
 
 
 def admin_emailaddress():
