@@ -2,6 +2,7 @@
 # administration.
 from __future__ import unicode_literals
 import tempfile
+from wsgiref.util import FileWrapper
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
@@ -641,11 +642,11 @@ def makeCertificates(students, assigned_school):
     if len(students) > 0:
         awardCerts = {"G": "goldTemplate.docx", "M": "meritTemplate.docx", None: "participationTemplate.docx", "MOX": "meritOxfordTemplate.docx", "OX": "oxfordTemplate"}
         schoolname = ''.join([i if ord(i) < 128 else '' for i in repr(assigned_school)])
-        schoolname = schoolname[8:-1].strip()
+        schoolname = schoolname[8:-1].strip().replace(" ", "_")
         tmpDir = tempfile.mkdtemp()
+        path = os.path.abspath(tmpDir)+'/'+schoolname
+        os.mkdir(path)
         try:
-            zipPath = os.path.join(tmpDir, schoolname+'.zip')
-            zipRepo = zipfile.ZipFile(zipPath, 'w')
             certs = []
             for student in students:
                 award = student.award            
@@ -655,11 +656,18 @@ def makeCertificates(students, assigned_school):
 
                 certs.append(award)
                 certLoc = certPath + awardCerts.get(award)
-                zipRepo.write(certLoc, os.path.basename(certLoc))
-            response = HttpResponse(zipRepo, content_type="application/x-zip-compressed")
-            response['Content-Disposition'] = 'attachment; filename=' + zipPath
-            response['Content-Length'] = os.path.getsize(zipPath)
+                shutil.copy(certLoc, path)
+            shutil.make_archive(path, 'zip', path)
+            path = path + ".zip"
+            outFile = open(path, 'rb')
+            outFile.seek(0)
+            wrapper = FileWrapper(outFile)
+            response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
+            response['Content-Disposition'] = 'attachment; filename=' + path
+            response['Content-Length'] = os.path.getsize(path)
+            outFile.close()
         finally:
+
             shutil.rmtree(tmpDir)
             return response
     else:
