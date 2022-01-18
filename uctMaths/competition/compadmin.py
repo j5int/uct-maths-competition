@@ -637,7 +637,7 @@ def export_awards(request):
 
 def makeCertificates(students, assigned_school):
     
-    certPath = "../Certificates/"
+    certPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'Certificates/')
 
     if len(students) > 0:
         awardCerts = {"G": "goldTemplate.docx", "M": "meritTemplate.docx", None: "participationTemplate.docx", "MOX": "meritOxfordTemplate.docx", "OX": "oxfordTemplate"}
