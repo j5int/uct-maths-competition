@@ -1,8 +1,8 @@
-<table width="550" border="2px" bordercolor = "red">
+<table> 
 <tr>
 <td>
     <div>
-        <table border="2px" bordercolor = "blue">
+        <table>
             <tr>
             <td>
             <h1>UCT Mathematics Competition {{year}}</h1>
@@ -20,18 +20,18 @@
                 </td>
 
             <td>
-                <table width="225" border="2px" bordercolor = "green">
+                <table> 
                     <tr>
                     <th width="80" align="left">Teacher in charge:</th>
-                    <td align="left">{{responsible_teacher.firstname}} {{responsible_teacher.surname}} amazing</td>
+                    <td align="left">{{responsible_teacher.firstname}} {{responsible_teacher.surname}} {% if has_alt_teacher%} and {{alt_responsible_teacher.firstname}} {{alt_responsible_teacher.surname}} {% endif%}</td>
                     </tr>
                     <tr>
                         <th width="80" align="left">Phone:</th>
-                        <td align="left"> {{responsible_teacher.phone_primary}} {% if has_phone_alt%} / {{responsible_teacher.phone_alt}} {% endif%}</td>
+                        <td align="left"> {{responsible_teacher.phone_primary}} {% if has_phone_alt%} / {{responsible_teacher.phone_alt}} {% endif%} {% if has_alt_teacher%}  OR {{alt_responsible_teacher.phone_primary}} {% endif%}{% if alt_has_phone_alt%} / {{alt_responsible_teacher.phone_alt}} {% endif%}</td>
                     </tr>
                     <tr>
                         <th width="80" align="left">Email:</th>
-                        <td align="left">{{responsible_teacher.email}}</td>
+                        <td align="left">{{responsible_teacher.email_school}} {% if has_alt_teacher%}  OR {{alt_responsible_teacher.email_school}} {% endif%}</td>
                     </tr>
                 </table>
 
@@ -45,13 +45,13 @@
     </div>
     <!-- <h3>Registered Participants</h3> -->
                 <br>
-                <table width = "650" border="2px" bordercolor = "yellow"> 
+                <table>
                     <tr>
                         <td valign="top">
                             {% for grade in grade_8_to_10 %}
                                 <div>
                                 <p><b>Registered Grade {{grade}} participants:</b></p>
-                                <table width="325" border="2px" bordercolor = "purple">
+                                <table>
                                 <tr>
                                     <th align="left">Reference </th>
                                     <th align="left">First Name</th>
@@ -98,7 +98,7 @@
                              
                         {% for grade in grade_11_to_12 %}
                         <p><b> Registered Grade {{grade}} participants:</b></p>
-                            <table width="325" border="2px" bordercolor = "black">
+                            <table> 
                             <tr>
                                 <th align="left">Reference </th>
                                 <th align="left">First Name</th>
