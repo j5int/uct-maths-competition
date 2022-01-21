@@ -1093,37 +1093,57 @@ def printer_school_report(request, school_list=None):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
         timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M'))
+        individual_gold_count = student_list.filter(award='G', paired=False).count()
+        pair_gold_count = student_list.filter(award='G', paired=True).count()
         gold_count = student_list.filter(award='G').count()
+        individual_merit_count = student_list.filter(award='M', paired=False).count()
+        individual_merit_count = individual_merit_count + student_list.filter(award='MOX', paired=False).count() #Oxford award can only be awarded to an individual
+        pair_merit_count = student_list.filter(award='M', paired=True).count()
         merit_count = student_list.filter(award='M').count()
         merit_count = merit_count + student_list.filter(award='MOX').count()
         school_award = student_list.filter(award='OX') | student_list.filter(award='MOX')
 
-        school_award_blurb = 'Congratulations! %s has received '%(unicode(assigned_school))
-
-        if merit_count > 0 or gold_count > 0:
+        school_award_blurb = ''
+        
+        if merit_count > 0 or gold_count > 0 or school_award.count() > 0 :
             if gold_count > 0:
-                school_award_blurb+='%d Gold award%s'%(gold_count, 's' if gold_count>1 else '')
-            if school_award.count() > 0:
-                school_award_blurb+='an Oxford Prize for %s %s' % (school_award[0].firstname, school_award[0].surname)
-            if (gold_count > 0 or school_award.count() > 0) and merit_count > 0:
-                school_award_blurb+=' and '
+                school_award_blurb = 'Number of Gold Award winners:         %d individual%s      %d pair%s'%(individual_gold_count,'' if individual_gold_count==1 else 's', 0.5*pair_gold_count,'' if 0.5*pair_gold_count==1 else 's' )
+                school_award_blurb += '\n'
             if merit_count > 0:
-                school_award_blurb+='%d Merit award%s'%(merit_count, 's' if merit_count>1 else '')
-        else:
-            school_award_blurb = ''
+                school_award_blurb += 'Number of Merit Award winners:         %d individual%s      %d pair%s'%(individual_merit_count,'' if individual_merit_count==1 else 's', 0.5*pair_merit_count,'' if 0.5*pair_merit_count==1 else 's' )
+                school_award_blurb += '\n'
+
+        #A participant student must have entered AND written
+        #TODO: Do this better - so far assumes no student actually scored 0
+        participants = student_list.filter(score__gt=1)
+        individual_participation_award =  len(participants.filter(paired=False)) - individual_gold_count - individual_merit_count
+        pair_participation_award =  0.5*(len(participants.filter(paired=True)) - pair_gold_count - pair_merit_count)
+        school_award_blurb += 'Number of Participation winners:         %d individuals      %d pairs'%(individual_participation_award, pair_participation_award)
+        school_award_blurb += '\nNumber of Participants/Certificates:         %d'%(len(participants))
+        if school_award.count() > 0:
+            school_award_blurb +='\n\nCongratulations! %s has received an Oxford Prize for %s %s' % (unicode(assigned_school),school_award[0].firstname, school_award[0].surname)
+        
         year = str(datetime.datetime.now().strftime('%Y'))
 
+        has_alt_teacher = len(responsible_teacher.filter(is_primary = False)) > 0
+        primary_responsible_teacher = responsible_teacher.filter(is_primary = True)
+        alt_responsible_teacher = responsible_teacher.filter(is_primary = False)
         if responsible_teacher:
             c = {'type':'Students',
                 'timestamp':timestamp,
                 'schooln':assigned_school,
-                'responsible_teacher':responsible_teacher[0],
+                'responsible_teacher': primary_responsible_teacher[0],
+                'has_alt_teacher': has_alt_teacher,
+                'alt_responsible_teacher': alt_responsible_teacher[0] if has_alt_teacher else None,
                 'student_list':grade_bucket,
                 'entries_open':isOpen(),
                 'school_award_blurb':school_award_blurb,
                 'grade_range':range(8,13),
+                'grade_8_to_10':range(8,11),
+                'grade_11_to_12':range(11,13),
                 'year':year,
-                'has_phone_alt': len(responsible_teacher[0].phone_alt) > 0}
+                'has_phone_alt': len(primary_responsible_teacher[0].phone_alt) > 0,
+                'alt_has_phone_alt': len(alt_responsible_teacher[0].phone_alt) > 0 if has_alt_teacher else False}
             #Render the template with the context (from above)
 
             template = get_template('school_report.html')
