@@ -1,6 +1,7 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
+import unicodedata
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
@@ -992,7 +993,7 @@ def email_school_reports(request, school_list):
         successes = []
         errors = []
         for ischool in school_list:
-            txt = "(Key %s) %s: \n" % (str(ischool.key), ischool.name.strip())
+            txt = "(Key %s) %s: \n" % (unicodedata.normalize('NFKD', ischool.key).encode('ascii', 'ignore'), ischool.name.strip())
             if views.has_results(request, ischool):
                 bg_email_results(ischool.id)
                 successes.append(ischool.name.strip())
@@ -1259,7 +1260,7 @@ def email_school_answer_sheets(request, schools):
         teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
 
         if (not venues_assigned) or (not teacher_assigned):
-            txt = "(Key %s) %s: \n" % (str(school.key), school.name.strip())
+            txt = "(Key %s) %s: \n" % (unicodedata.normalize('NFKD', school.key).encode('ascii', 'ignore'), school.name.strip())
             if not teacher_assigned:
                 txt += "\t- no responsible teacher assigned.\n"
             if not venues_assigned:
