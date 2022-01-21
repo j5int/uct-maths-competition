@@ -177,7 +177,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
 	change_form_template = "admin/rt_changeform.html"
-	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'report_downloaded', 'answer_sheet_downloaded')
+	list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'phone_cell', 'email_school', 'email_personal', 'report_downloaded', 'answer_sheet_downloaded')
 
 #Displays different fields for SchoolStudent and archives SchoolStudent
 class SchoolStudentAdmin(ImportExportModelAdmin):

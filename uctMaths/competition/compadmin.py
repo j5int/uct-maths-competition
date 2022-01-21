@@ -764,13 +764,14 @@ def export_courier_address(request, school_list):
     error_row = 0
     for ischool in school_list:
         errors = []
-        resp_teacher = ResponsibleTeacher.objects.filter(school = ischool)
+        resp_teacher = ResponsibleTeacher.objects.filter(school = ischool).filter(is_primary=True)
+        alt_resp_teacher = ResponsibleTeacher.objects.filter(school = ischool).filter(is_primary=False)
         full = ischool.address.split(',')
         full+=['']*(3-len(full))
         
         
 
-        if(not resp_teacher):
+        if not (resp_teacher or alt_resp_teacher):
             errors.append("responsible teacher")
         if(not full[0]):
             errors.append("address")
@@ -794,7 +795,7 @@ def export_courier_address(request, school_list):
         resp_teacher = resp_teacher[0]
         cell_row_offset = cell_row_offset + 1
         wb_sheet.write(cell_row_offset,0,unicode(ischool.name))
-        wb_sheet.write(cell_row_offset,1,resp_teacher.email)
+        wb_sheet.write(cell_row_offset,1,resp_teacher.email_school)
         wb_sheet.write(cell_row_offset,2,full[0])
         wb_sheet.write(cell_row_offset,3,full[2])
         wb_sheet.write(cell_row_offset,4,full[1])
@@ -850,7 +851,7 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
     wb_sheet.write(1,0,'Generated')
     wb_sheet.write(1,1,'%s'%(timestamp_now()))
 
-    header = ['School', 'Location', 'Resp. Teach Name', 'Resp. Teach. Email', 'Resp. Teach. Phone', 'Resp. Teach. Alt Phone', 'Individuals', 'Pairs', 'Total']
+    header = ['School', 'Location', 'Resp. Teach. Name', 'Resp. Teach. Email (School)', 'Resp. Teach. Email (Personal)', 'Resp. Teach. Phone', 'Resp. Teach. Alt Phone', 'Resp. Teach. Cell', 'Alt. Teach. Name', 'Alt Teach. Email (School)', 'Alt. Teach. Email (Personal)', 'Alt. Teach. Phone', 'Alt. Teach. Alt Phone', 'Alt. Teach. Cell', 'Individuals', 'Pairs', 'Total']
     if rank_extend:
         header.append('Rank')
         header.append('Score')
@@ -865,11 +866,12 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
     for school_obj in school_list:
         try: #Try get the student list for the school assigned to the requesting user
             student_list = SchoolStudent.objects.all().filter(school=school_obj)
-            resp_teacher = ResponsibleTeacher.objects.get(school=school_obj)
+            resp_teacher = ResponsibleTeacher.objects.filter(is_primary=True).get(school=school_obj)
+            alt_resp_teacher = ResponsibleTeacher.objects.filter(is_primary=False).get(school=school_obj)
         except exceptions.ObjectDoesNotExist:#Non-entry
             pass #Handled in if-not-empty statement below
 
-        if student_list and resp_teacher: #If the lists are not empty
+        if student_list and (resp_teacher or alt_resp_teacher): #If the lists are not empty
 
             grade_summary = gradeBucket(student_list) #Bin into categories (Pairing, grade)
             count_individuals = 0
@@ -883,17 +885,26 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
             wb_sheet.write(cell_row_offset,0,unicode(school_obj.name))
             wb_sheet.write(cell_row_offset,1,unicode(school_obj.location))
             wb_sheet.write(cell_row_offset,2,('%s %s')%(resp_teacher.firstname, resp_teacher.surname))
-            wb_sheet.write(cell_row_offset,3,resp_teacher.email)
-            wb_sheet.write(cell_row_offset,4,resp_teacher.phone_primary)
-            wb_sheet.write(cell_row_offset,5,resp_teacher.phone_alt)
-            wb_sheet.write(cell_row_offset,6,count_individuals)
-            wb_sheet.write(cell_row_offset,7,count_pairs)
-            wb_sheet.write(cell_row_offset,8,int(count_pairs*2 + count_individuals))
+            wb_sheet.write(cell_row_offset,3,resp_teacher.email_school)
+            wb_sheet.write(cell_row_offset,4,resp_teacher.email_personal)
+            wb_sheet.write(cell_row_offset,5,resp_teacher.phone_primary)
+            wb_sheet.write(cell_row_offset,6,resp_teacher.phone_alt)
+            wb_sheet.write(cell_row_offset,7,resp_teacher.phone_cell)
+            wb_sheet.write(cell_row_offset,8,('%s %s')%(alt_resp_teacher.firstname, alt_resp_teacher.surname))
+            wb_sheet.write(cell_row_offset,9,alt_resp_teacher.email_school)
+            wb_sheet.write(cell_row_offset,10,alt_resp_teacher.email_personal)
+            wb_sheet.write(cell_row_offset,11,alt_resp_teacher.phone_primary)
+            wb_sheet.write(cell_row_offset,12,alt_resp_teacher.phone_alt)
+            wb_sheet.write(cell_row_offset,13,alt_resp_teacher.phone_cell)
+            wb_sheet.write(cell_row_offset,14,count_individuals)
+            wb_sheet.write(cell_row_offset,15,count_pairs)
+            wb_sheet.write(cell_row_offset,16,int(count_pairs*2 + count_individuals))
             if rank_extend:
-                wb_sheet.write(cell_row_offset,9,school_obj.rank)
-                wb_sheet.write(cell_row_offset,10,school_obj.score)
+                wb_sheet.write(cell_row_offset,17,school_obj.rank)
+                wb_sheet.write(cell_row_offset,18,school_obj.score)
 
-            responsible_teacher_mailinglist.append(resp_teacher.email)
+            responsible_teacher_mailinglist.append(resp_teacher.email_school)
+            responsible_teacher_mailinglist.append(alt_resp_teacher.email_school)
     
     wb_sheet.write(3,0,'Mailing list')
     wb_sheet.write(3,1,', '.join(responsible_teacher_mailinglist))
@@ -1009,11 +1020,11 @@ def output_PRN_files():
 def update_school_entry_status():
     school_objects = School.objects.all()
     for school_obj in school_objects:
-        try:
-            responsible_teachers = ResponsibleTeacher.objects.get(school=school_obj)
+        responsible_teachers = ResponsibleTeacher.objects.filter(school=school_obj)
+        if responsible_teachers > 0:
             school_obj.entered=1 #If a responsible teacher is found; the school has entered
             school_obj.save()
-        except exceptions.ObjectDoesNotExist:
+        else:
             school_obj.entered=0
             school_obj.answer_sheets_emailed = None
             school_obj.save()

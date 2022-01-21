@@ -59,12 +59,20 @@ def printer_entry_result(request, school_list=None):
             count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
         
         invigilator_list = Invigilator.objects.filter(school = assigned_school)
-        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
+        alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
         timestamp = str(datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
         year = str(datetime.now().strftime('%Y'))
-
+        if responsible_teacher:
+            responsible_teacher = responsible_teacher[0]
+        else:
+            responsible_teacher = None
+        if alt_responsible_teacher:
+            alt_responsible_teacher = alt_responsible_teacher[0]
+        else:
+            alt_responsible_teacher = None
         #If someone managed to get to this page without having made an entry
-        if not responsible_teacher and not school_list:
+        if not (responsible_teacher or alt_responsible_teacher) and not school_list:
             return HttpResponseRedirect('../students/newstudents.html')
         #If the school has an entry
         elif responsible_teacher:
@@ -73,7 +81,8 @@ def printer_entry_result(request, school_list=None):
                 'schooln':assigned_school,
                 'delivery_address':assigned_school.address,
                 'contact_phone':assigned_school.phone,
-                'responsible_teacher':responsible_teacher[0],
+                'responsible_teacher':responsible_teacher,
+                'alt_responsible_teacher': alt_responsible_teacher,
                 'student_list':individual_list,
                 'pair_list':pair_list,
                 'max_num_pairs':compadmin.admin_number_of_pairs(),
@@ -217,20 +226,32 @@ def entry_review(request):
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
-    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
+    alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
 
     for p in range(8,13):
         pair_list[p] = pair_list[p]
 
-    if not responsible_teacher:
+    if not (responsible_teacher or alt_responsible_teacher):
         return HttpResponseRedirect('../students/newstudents.html')
     else:
         assigned_school.entered=1 #The school has made an entry
         assigned_school.save()
+    
+    if responsible_teacher:
+        responsible_teacher = responsible_teacher[0]
+    else:
+        responsible_teacher = None
+
+    if alt_responsible_teacher:
+        alt_responsible_teacher = alt_responsible_teacher[0]
+    else:
+        alt_responsible_teacher = None
         
     c = {'type':'Students',
         'schooln':assigned_school,
-        'responsible_teacher':responsible_teacher[0],
+        'responsible_teacher':responsible_teacher,
+        'alt_responsible_teacher':alt_responsible_teacher,
         'student_list':individual_list,
         'pair_list':pair_list,
         'max_num_pairs': compadmin.admin_number_of_pairs(),
@@ -275,15 +296,16 @@ def newstudents(request):
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
     invigilator_list = Invigilator.objects.filter(school = assigned_school)
-    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
+    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
+    alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
 
     editEntry = False
     language_selection_options = ['e', 'a', 'b']
 
-    if responsible_teacher:
+    if (responsible_teacher or alt_responsible_teacher):
         editEntry = True
     
-    if assigned_school and responsible_teacher:
+    if assigned_school and (responsible_teacher or alt_responsible_teacher):
         language_temp = assigned_school.language
         language_selection = [language_temp]
         language_selection.extend([c for c in language_selection_options if c != language_temp])
@@ -317,20 +339,45 @@ def newstudents(request):
             rtsurname = form.getlist('rt_surname','')[0]
             rtphone_primary = form.getlist('rt_phone_primary','')[0].strip().replace(' ', '')
             rtphone_alt = form.getlist('rt_phone_alt','')[0].strip().replace(' ', '')
-            rtemail = form.getlist('rt_email','')[0].strip().replace(' ', '')
+            rtphone_cell = form.getlist('rt_phone_cell','')[0].strip().replace(' ', '')
+            rtemail_school = form.getlist('rt_email_school','')[0].strip().replace(' ', '')
+            rtemail_personal = form.getlist('rt_email_personal','')[0].strip().replace(' ', '')
 
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
-            query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary,
-                                      phone_alt = rtphone_alt, school = rtschool,
-                                      email = rtemail)
+            rt_query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary,
+                                      phone_alt = rtphone_alt, phone_cell=rtphone_cell, school = rtschool,
+                                      email_school = rtemail_school, email_personal=rtemail_personal, is_primary = True)
 
             #Delete responsible teacher before saving the new one
             for rt in responsible_teacher:
                 rt.delete()
 
-            query.save()
-            query.reference=query.id
-            query.save()
+            rt_query.save()
+            rt_query.reference=rt_query.id
+            rt_query.save()
+
+            #Register an alternate responsible teacher
+            artschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
+            artfirstname = form.getlist('art_firstname','')[0]
+            artsurname = form.getlist('art_surname','')[0]
+            artphone_primary = form.getlist('art_phone_primary','')[0].strip().replace(' ', '')
+            artphone_alt = form.getlist('art_phone_alt','')[0].strip().replace(' ', '')
+            artphone_cell = form.getlist('art_phone_cell','')[0].strip().replace(' ', '')
+            artemail_school = form.getlist('art_email_school','')[0].strip().replace(' ', '')
+            artemail_personal = form.getlist('art_email_personal','')[0].strip().replace(' ', '')
+
+            #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
+            art_query = ResponsibleTeacher(firstname = artfirstname , surname = artsurname, phone_primary = artphone_primary,
+                                      phone_alt = artphone_alt, phone_cell=artphone_cell, school = artschool,
+                                      email_school = artemail_school, email_personal=artemail_personal, is_primary = False)
+
+            #Delete responsible teacher before saving the new one
+            for art in alt_responsible_teacher:
+                art.delete()
+
+            art_query.save()
+            art_query.reference=art_query.id
+            art_query.save()
 
             #Registering per grade
             for grade in range (8,13):
@@ -420,9 +467,14 @@ def newstudents(request):
     if responsible_teacher:
         responsible_teacher = responsible_teacher[0]
     else:
+        responsible_teacher = None
         #If not null, then the form has been filled out.
         #Therefore - redirect to entry_review page
         pass #HttpResponseRedirect('../entry_review.html')
+    if alt_responsible_teacher:
+        alt_responsible_teacher = alt_responsible_teacher[0]
+    else:
+        alt_responsible_teacher = None
     invigilators = compadmin.competition_has_invigilator()
     full = []
     if assigned_school.entered == 1:
@@ -436,6 +488,7 @@ def newstudents(request):
         'schooln':assigned_school,
         'language_options':language_selection,
         'responsible_teacher':responsible_teacher,
+        'alt_responsible_teacher':alt_responsible_teacher,
         'student_list':individual_list,
         'pairs_per_grade':pairs_per_grade,
         'pair_range':pairs_per_grade,
@@ -520,7 +573,9 @@ def school_select(request):
 def school_results(request):
     assigned_school = School.objects.get(assigned_to=request.user)
     if has_results(request, assigned_school):
-        report = ResponsibleTeacher.objects.get(school = assigned_school)
+        report = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary=True)
+        if report:
+            report = report[0]
         report.report_downloaded = datetime.now()
         report.save()
         return compadmin.print_school_reports(request,[assigned_school])
@@ -544,9 +599,14 @@ def answer_sheets(request, assigned_school = None):
     assigned_school = School.objects.get(assigned_to=request.user)
     rteachers = ResponsibleTeacher.objects.filter(school=assigned_school.id)
     if rteachers and compadmin.school_students_venue_assigned(assigned_school):
-        teacher = rteachers[0]
-        teacher.answer_sheet_downloaded = datetime.now()
-        teacher.save()
+        resp_teacher = rteachers.filter(is_primary=True)[0]
+        alt_resp_teacher = rteachers.filter(is_primary=False)[0]
+        if resp_teacher:
+            resp_teacher.answer_sheet_downloaded = datetime.now()
+            resp_teacher.save()
+        if alt_resp_teacher:
+            alt_resp_teacher.answer_sheet_downloaded = datetime.now()
+            alt_resp_teacher.save()
         return compadmin.generate_school_answer_sheets(request, [assigned_school])
     elif not rteachers:
         return HttpResponse("A responsible teacher has not been provided for your school yet.")
