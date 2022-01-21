@@ -1,6 +1,8 @@
 # Some auxiliary functions and constants for competition
 # administration.
 from __future__ import unicode_literals
+import tempfile
+from wsgiref.util import FileWrapper
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
 from datetime import date
 import xlwt
@@ -23,6 +25,8 @@ from models import LOCATIONS
 
 import reports
 
+import shutil
+
 import os
 import sys
 sys.path.append("../")
@@ -30,6 +34,7 @@ sys.setrecursionlimit(10000)
 
 from background_task import background
 from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results, bg_generate_as_grade_distinction
+
 
 def admin_emailaddress():
     """Get the competition admin's email address from the Competition.objects entry"""
@@ -630,6 +635,44 @@ def export_awards(request):
     output_workbook.save(response)
     return response
 
+def makeCertificates(students, assigned_school):
+    
+    certPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'Certificates/')
+
+    if len(students) > 0:
+        awardCerts = {"G": "goldTemplate.docx", "M": "meritTemplate.docx", None: "participationTemplate.docx", "MOX": "meritOxfordTemplate.docx", "OX": "oxfordTemplate"}
+        schoolname = ''.join([i if ord(i) < 128 else '' for i in repr(assigned_school)])
+        schoolname = schoolname[8:-1].strip().replace(" ", "_")
+        tmpDir = tempfile.mkdtemp()
+        path = os.path.abspath(tmpDir)+'/'+schoolname
+        os.mkdir(path)
+        try:
+            certs = []
+            for student in students:
+                award = student.award            
+
+                if award in certs:
+                    continue
+
+                certs.append(award)
+                certLoc = certPath + awardCerts.get(award)
+                shutil.copy(certLoc, path)
+            shutil.make_archive(path, 'zip', path)
+            path = path + ".zip"
+            outFile = open(path, 'rb')
+            outFile.seek(0)
+            wrapper = FileWrapper(outFile)
+            response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
+            response['Content-Disposition'] = 'attachment; filename=' + path
+            response['Content-Length'] = os.path.getsize(path)
+            outFile.close()
+        finally:
+
+            shutil.rmtree(tmpDir)
+            return response
+    else:
+        return HttpResponse("Certificates from your school cannot be downloaded at this time")
+            
 
 def assign_student_awards():
 
