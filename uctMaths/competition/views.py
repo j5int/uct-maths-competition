@@ -622,7 +622,6 @@ def has_results(request, assigned_school = None):
 
 @login_required 
 def answer_sheets(request, assigned_school = None):
-    print(request.user)
     assigned_school = School.objects.get(assigned_to=request.user)
     rteachers = ResponsibleTeacher.objects.filter(school=assigned_school.id)
     if rteachers and compadmin.school_students_venue_assigned(assigned_school):
