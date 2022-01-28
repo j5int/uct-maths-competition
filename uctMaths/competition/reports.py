@@ -84,13 +84,14 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     recipient_list = [rteacher.email_school]
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
-    send_email(
+    email = EmailMessage(
         "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
         output_string,
         'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),
-        [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
         recipient_list
     )
+    email.attach_file(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+    email.send()
 
     arteacher = ResponsibleTeacher.objects.filter(school=school.id).filter(is_primary=False)[0]
     alt_output_string = 'Dear %s, \n\n' \
@@ -103,13 +104,17 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     recipient_list = [arteacher.email_school]
     if cc_admin:
         recipient_list.append(compadmin.admin_emailaddress())
-    send_email(
+    email = EmailMessage(
         "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
         alt_output_string,
         'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),
-        [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
         recipient_list
     )
+    email.attach_file(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+    email.send()
+    print(answer_sheet.name)
+    answer_sheet.close()
+    os.remove(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
 
 def send_grade_answer_sheets_to_organiser(pdf_attachment_filename):
     print("Emailing " + os.path.basename(pdf_attachment_filename) + " to organiser.")

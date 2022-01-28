@@ -3,13 +3,15 @@
 from __future__ import unicode_literals
 import tempfile
 from wsgiref.util import FileWrapper
+
+from PyPDF2 import PdfFileMerger
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
-from datetime import date
+from datetime import date, datetime
 import xlwt
 from django.http import HttpResponse, HttpResponseRedirect
 import zipfile
 import datetime
-from django.core import exceptions 
+from django.core import exceptions
 import views
 #A few administration constants and associated methods to be used around the website.
 
@@ -1288,7 +1290,6 @@ def get_student_answer_sheet(request, student):
         template = get_template('pair_as_template.html')
     else:
         template = get_template('individual_as_template.html')
-    c.update(csrf(request))
     context = Context(c)
     return template.render(context)
 
@@ -1297,6 +1298,59 @@ def printer_answer_sheet(request, assigned_school=None):
 
     html = '' #Will hold rendered templates
     student_list = SchoolStudent.objects.filter(school = assigned_school)
+    
+    individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
+            
+    grade_summary = gradeBucket(student_list) #Bin into categories (Grade, Is Paired, Location)
+    count_individuals = 0
+    count_pairs = 0
+        
+    for i in range(8,13):
+        count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
+        count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
+        
+    invigilator_list = Invigilator.objects.filter(school = assigned_school)
+    responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
+    alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
+    timestamp = ''
+    year = ''
+    if responsible_teacher:
+        responsible_teacher = responsible_teacher[0]
+    else:
+        responsible_teacher = None
+    if alt_responsible_teacher:
+        alt_responsible_teacher = alt_responsible_teacher[0]
+    else:
+        alt_responsible_teacher = None
+    #If someone managed to get to this page without having made an entry
+    if not (responsible_teacher or alt_responsible_teacher) and not school_list:
+        return HttpResponseRedirect('../students/newstudents.html')
+    #If the school has an entry
+    elif responsible_teacher:
+        c = {'type':'Students',
+            'timestamp':timestamp,
+            'schooln':assigned_school,
+            'delivery_address':assigned_school.address,
+            'contact_phone':assigned_school.phone,
+            'responsible_teacher':responsible_teacher,
+            'alt_responsible_teacher': alt_responsible_teacher,
+            'student_list':individual_list,
+            'pair_list':pair_list,
+            'max_num_pairs':admin_number_of_pairs(),
+            'entries_open':isOpen(),
+            'invigilator_list': invigilator_list,
+            'grades':range(8,13),
+            'grade_left':range(8,11),
+            'invigilator_range':range(10-len(invigilator_list)), 
+            'igrades':range(8,13),
+            'total_num':int(count_pairs*2+count_individuals),
+            'year':year,
+            'invigilators_required':competition_has_invigilator()}
+        #Render the template with the context (from above)
+        template = get_template('printer_entry.html')
+        context = Context(c)
+        html += template.render(context) #Concatenate each rendered template to the html "string"
+
     for istudent in student_list:
         html += get_student_answer_sheet(request, istudent) #Concatenate each rendered template to the html "string"
 

@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from PyPDF2 import PdfFileMerger
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import Context
@@ -75,7 +76,7 @@ def printer_entry_result(request, school_list=None):
         if not (responsible_teacher or alt_responsible_teacher) and not school_list:
             return HttpResponseRedirect('../students/newstudents.html')
         #If the school has an entry
-        elif responsible_teacher:
+        elif responsible_teacher and request:
             c = {'type':'Students',
                 'timestamp':timestamp,
                 'schooln':assigned_school,
@@ -87,6 +88,31 @@ def printer_entry_result(request, school_list=None):
                 'pair_list':pair_list,
                 'max_num_pairs':compadmin.admin_number_of_pairs(),
                 'entries_open':compadmin.isOpen() or request.user.is_staff,
+                'invigilator_list': invigilator_list,
+                'grades':range(8,13),
+                'grade_left':range(8,11),
+                'invigilator_range':range(10-len(invigilator_list)), 
+                'igrades':range(8,13),
+                'total_num':int(count_pairs*2+count_individuals),
+                'year':year,
+                'invigilators_required':compadmin.competition_has_invigilator()}
+            #Render the template with the context (from above)
+            template = get_template('printer_entry.html')
+            c.update(csrf(request))
+            context = Context(c)
+            html += template.render(context) #Concatenate each rendered template to the html "string"
+        elif responsible_teacher:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln':assigned_school,
+                'delivery_address':assigned_school.address,
+                'contact_phone':assigned_school.phone,
+                'responsible_teacher':responsible_teacher,
+                'alt_responsible_teacher': alt_responsible_teacher,
+                'student_list':individual_list,
+                'pair_list':pair_list,
+                'max_num_pairs':compadmin.admin_number_of_pairs(),
+                'entries_open':compadmin.isOpen(),
                 'invigilator_list': invigilator_list,
                 'grades':range(8,13),
                 'grade_left':range(8,11),
@@ -596,6 +622,7 @@ def has_results(request, assigned_school = None):
 
 @login_required 
 def answer_sheets(request, assigned_school = None):
+    print(request.user)
     assigned_school = School.objects.get(assigned_to=request.user)
     rteachers = ResponsibleTeacher.objects.filter(school=assigned_school.id)
     if rteachers and compadmin.school_students_venue_assigned(assigned_school):
