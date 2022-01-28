@@ -112,7 +112,6 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     )
     email.attach_file(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
     email.send()
-    print(answer_sheet.name)
     answer_sheet.close()
     os.remove(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
 

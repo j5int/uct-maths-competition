@@ -1263,7 +1263,13 @@ def generate_school_answer_sheets(request, school_list):
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
             output_string=printer_answer_sheet(request, ischool)
-            zipf.writestr(get_answer_sheet_name(ischool), output_string.getvalue())
+            merger = PdfFileMerger()
+            merger.append(output_string)
+            merger.append(__file__+"\\..\\..\\..\\Declaration\\Declaration form 2022.pdf")
+            merger.write(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+
+            pdf = open(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+            zipf.write(pdf.name)
     
     response = HttpResponse(output_stringIO.getvalue())
     if len(school_list) == 1:
