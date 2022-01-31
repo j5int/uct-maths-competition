@@ -34,7 +34,7 @@ def printer_entry_result(request, school_list=None):
     #had to easy_install html5lib pisa
     #Create the HttpResponse object with the appropriate PDF headers.
     temp_school_list = []
-    if not school_list: #If not called by the admin
+    if not school_list and not request == None: #If not called by the admin
         try:
             #Attempt to find user's chosen school
             temp_school_list.append(School.objects.get(assigned_to=request.user))
@@ -46,113 +46,7 @@ def printer_entry_result(request, school_list=None):
 
     html = '' #Will hold rendered templates
 
-    for assigned_school in temp_school_list:
-        #Required that school form is pre-fetched to populate form
-        student_list = SchoolStudent.objects.filter(school = assigned_school)
-        individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
-            
-        grade_summary = compadmin.gradeBucket(student_list) #Bin into categories (Grade, Is Paired, Location)
-        count_individuals = 0
-        count_pairs = 0
-        
-        for i in range(8,13):
-            count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
-            count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
-        
-        invigilator_list = Invigilator.objects.filter(school = assigned_school)
-        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
-        alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
-        timestamp = str(datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
-        year = str(datetime.now().strftime('%Y'))
-        if responsible_teacher:
-            responsible_teacher = responsible_teacher[0]
-        else:
-            responsible_teacher = None
-        if alt_responsible_teacher:
-            alt_responsible_teacher = alt_responsible_teacher[0]
-        else:
-            alt_responsible_teacher = None
-        #If someone managed to get to this page without having made an entry
-        if not (responsible_teacher or alt_responsible_teacher) and not school_list:
-            return HttpResponseRedirect('../students/newstudents.html')
-        #If the school has an entry
-        elif responsible_teacher and request:
-            c = {'type':'Students',
-                'timestamp':timestamp,
-                'schooln':assigned_school,
-                'delivery_address':assigned_school.address,
-                'contact_phone':assigned_school.phone,
-                'responsible_teacher':responsible_teacher,
-                'alt_responsible_teacher': alt_responsible_teacher,
-                'student_list':individual_list,
-                'pair_list':pair_list,
-                'max_num_pairs':compadmin.admin_number_of_pairs(),
-                'entries_open':compadmin.isOpen() or request.user.is_staff,
-                'invigilator_list': invigilator_list,
-                'grades':range(8,13),
-                'grade_left':range(8,11),
-                'invigilator_range':range(10-len(invigilator_list)), 
-                'igrades':range(8,13),
-                'total_num':int(count_pairs*2+count_individuals),
-                'year':year,
-                'invigilators_required':compadmin.competition_has_invigilator()}
-            #Render the template with the context (from above)
-            template = get_template('printer_entry.html')
-            c.update(csrf(request))
-            context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
-        elif responsible_teacher:
-            c = {'type':'Students',
-                'timestamp':timestamp,
-                'schooln':assigned_school,
-                'delivery_address':assigned_school.address,
-                'contact_phone':assigned_school.phone,
-                'responsible_teacher':responsible_teacher,
-                'alt_responsible_teacher': alt_responsible_teacher,
-                'student_list':individual_list,
-                'pair_list':pair_list,
-                'max_num_pairs':compadmin.admin_number_of_pairs(),
-                'entries_open':compadmin.isOpen(),
-                'invigilator_list': invigilator_list,
-                'grades':range(8,13),
-                'grade_left':range(8,11),
-                'invigilator_range':range(10-len(invigilator_list)), 
-                'igrades':range(8,13),
-                'total_num':int(count_pairs*2+count_individuals),
-                'year':year,
-                'invigilators_required':compadmin.competition_has_invigilator()}
-            #Render the template with the context (from above)
-            template = get_template('printer_entry.html')
-            c.update(csrf(request))
-            context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
-        else:
-            c = {'type':'Students',
-                'timestamp':timestamp,
-                'schooln': assigned_school,
-                'grades':range(8,13),
-                'grade_left':range(8,11),
-                'invigilator_range':range(10-len(invigilator_list)), 
-                'igrades':range(8,13),
-                'max_num_pairs':compadmin.admin_number_of_pairs(),
-                'total_num':'No students entered for this school',
-                'invigilators_required':compadmin.competition_has_invigilator()}
-
-            #Render the template with the context (from above)
-            template = get_template('printer_entry.html')
-            c.update(csrf(request))
-            context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
-
-
-    result = StringIO.StringIO()
-
-    #Generate the pdf doc
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
-    if not pdf.err:
-        return result
-    else:
-        pass #Error handling?
+    return compadmin.generate_answer_sheets(request, school_list)
 
 #Method bound to printer_entry.html request
 @login_required
