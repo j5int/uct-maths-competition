@@ -8,6 +8,7 @@ html5lib==1.0b3
 oauthlib==0.6.0
 pisa==3.0.33
 psycopg2==2.7.0
+PyPDF2==1.26.0
 python-openid==2.2.5
 reportlab==2.7
 requests==2.2.0
