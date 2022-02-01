@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
 from django.core.mail import EmailMessage
@@ -36,7 +37,7 @@ def send_results(in_school, result, cc_admin=False):
     send_email(
                 '(Do not reply) UCT Mathematics Competition %s Competition Results'%(in_school.name),#Subject line
                 output_string, #Body
-                'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
+                'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
                 [{"name": '%s' % (compadmin.get_school_report_name(in_school)), "value": result.getvalue(), "type": "application/pdf"}],
                 recipient_list
     )
@@ -60,7 +61,7 @@ def send_results(in_school, result, cc_admin=False):
     send_email(
                 '(Do not reply) UCT Mathematics Competition %s Competition Results'%(in_school.name),#Subject line
                 output_string, #Body
-                'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
+                'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
                 [{"name": '%s' % (compadmin.get_school_report_name(in_school)), "value": result.getvalue(), "type": "application/pdf"}],
                 recipient_list
     )
@@ -86,7 +87,7 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     send_email(
         "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
         output_string,
-        "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
+        'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
         [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
         recipient_list
     )
@@ -105,7 +106,7 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
     send_email(
         "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
         alt_output_string,
-        "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
+        'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
         [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
         recipient_list
     )
@@ -120,7 +121,7 @@ This email contains part of the collection of answer sheets for all students, se
     send_email(
         "(Do not reply) " + os.path.basename(pdf_attachment_filename),
         output_string,
-        "UCT Mathematics Competition <UCTMathsCompetition@j5int.com>",
+        'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
         [
             {
                 "name": os.path.basename(pdf_attachment_filename), 

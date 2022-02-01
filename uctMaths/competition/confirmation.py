@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher
 from django.core.mail import EmailMessage
@@ -49,7 +50,7 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):
     email = EmailMessage(
                         '(Do not reply) UCT Mathematics Competition %s Entry Confirmation'%(in_school),#Subject line
                         output_string, #Body
-                        'UCT Mathematics Competition <UCTMathsCompetition@j5int.com>',#from
+                        'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
                         recipient_list,
                         )
     result = views.printer_entry_result(request)
