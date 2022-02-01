@@ -1262,13 +1262,7 @@ def generate_school_answer_sheets(request, school_list):
     start = datetime.datetime.now()
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
-            output_string=printer_answer_sheet(request, ischool)
-            merger = PdfFileMerger()
-            merger.append(output_string)
-            merger.append(os.path.join(__file__,"..","..","..","Declaration","Declaration form 2022.pdf"))
-            merger.write(os.path.join(__file__,"..","..","..","Declaration",str(school)+"_answer_sheets.pdf"))
-
-            pdf = open(os.path.join(__file__,"..","..","..","Declaration",str(school)+"_answer_sheets.pdf"))
+            pdf=printer_answer_sheet(request, ischool)
             zipf.write(pdf.name)
     
     response = HttpResponse(output_stringIO.getvalue())
@@ -1300,7 +1294,7 @@ def get_student_answer_sheet(request, student):
     return template.render(context)
 
 def generate_answer_sheets(request, school_list):
-    html = ''
+    register_html = '' 
     for assigned_school in school_list:
         #Required that school form is pre-fetched to populate form
         student_list = SchoolStudent.objects.filter(school = assigned_school)
@@ -1356,7 +1350,7 @@ def generate_answer_sheets(request, school_list):
             if request:
                 c.update(csrf(request))
             context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
+            register_html += template.render(context) #Concatenate each rendered template to the html "string"
         else:
             c = {'type':'Students',
                 'timestamp':timestamp,
@@ -1374,23 +1368,45 @@ def generate_answer_sheets(request, school_list):
             if request:
                 c.update(csrf(request))
             context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
-            
-        for istudent in student_list:
-            html += get_student_answer_sheet(request, istudent)
-
-    result = StringIO.StringIO()
+            register_html += template.render(context) #Concatenate each rendered template to the html "string"
+   
+    register_result = StringIO.StringIO()
 
     #Generate the pdf doc
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
-    if not pdf.err:
-        return result
+    register_pdf = pisa.pisaDocument(StringIO.StringIO(register_html.encode("UTF-8")), register_result, encoding='UTF-8')
+    
+    if not register_pdf.err:
+        return register_result
     else:
         pass #Error handling?
 
 def printer_answer_sheet(request, assigned_school=None):
     """ Generate the school answer sheet for each school in the query set"""
-    return generate_answer_sheets(request, [assigned_school])
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    answer_sheets_result = StringIO.StringIO()
+    answer_sheets_html = ''
+
+    for istudent in student_list:
+        answer_sheets_html += get_student_answer_sheet(request, istudent)
+
+    if isinstance(assigned_school, list):
+        register_result = generate_answer_sheets(request, assigned_school)
+    else:
+        register_result = generate_answer_sheets(request, [assigned_school])
+    answer_sheets_pdf = pisa.pisaDocument(StringIO.StringIO(answer_sheets_html.encode("UTF-8")), answer_sheets_result, encoding='UTF-8')
+
+    answer_sheets_pdf = pisa.pisaDocument(StringIO.StringIO(answer_sheets_html.encode("UTF-8")), answer_sheets_result, encoding='UTF-8')
+    merger = PdfFileMerger()
+    merger.append(register_result)
+    merger.append(answer_sheets_result)
+    merger.append(os.path.join(__file__,"..","..","..","Declaration","Declaration form 2022.pdf"))
+    merger.write(os.path.join(__file__,"..","..","..","Declaration","temp_answer_sheets.pdf"))
+    pdf = open(os.path.join(__file__,"..","..","..","Declaration","temp_answer_sheets.pdf"))
+    if not answer_sheets_pdf.err:
+        return pdf
+    else:
+        pass
+
     
 
 def venue_assigned(student):

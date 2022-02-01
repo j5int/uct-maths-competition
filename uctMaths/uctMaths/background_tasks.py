@@ -53,14 +53,7 @@ def bg_generate_school_answer_sheets(school_id):
         print("%s: Cannot send an email to a school with no assigned responsible teacher!" % (current_time()))
         return
     pdf = printer_answer_sheet(None, school)
-
-    merger = PdfFileMerger()
-    merger.append(pdf)
-    merger.append(__file__+"\\..\\..\\..\\Declaration\\Declaration form 2022.pdf")
-    merger.write(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
-
-    pdf = open(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
-
+    
     if not pdf:
         print("%s: Unable to get answer sheets!" % (current_time()))
         return
