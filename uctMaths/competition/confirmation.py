@@ -20,7 +20,8 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):
         name = request.user.username
     student_list = SchoolStudent.objects.filter(school = in_school)
     invigilator_list = Invigilator.objects.filter(school = in_school)
-    rteacher = ResponsibleTeacher.objects.filter(school = in_school)[0]
+    rteacher = ResponsibleTeacher.objects.filter(school = in_school).filter(is_primary = True)[0]
+    arteacher = ResponsibleTeacher.objects.filter(school = in_school).filter(is_primary = False)[0]
 
     #Header
     output_string = 'Dear %s, \n\n' \
@@ -32,7 +33,7 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):
     output_string += UMC_header()
     output_string += 'Confirmation letter for %s\nRequested by %s\n%s\n'%(in_school, name, UMC_datetime())
 
-    output_string += print_responsibleTeacher(rteacher)
+    output_string += print_responsibleTeacher(rteacher, arteacher)
     if compadmin.competition_has_invigilator():
         output_string += print_invigilators(invigilator_list)
     output_string += print_students(student_list)
@@ -112,15 +113,16 @@ def print_invigilators(invigilator_list, width=60):
 
     return invig_string
 
-def print_responsibleTeacher(rteacher, width=60):
+def print_responsibleTeacher(rteacher, arteacher, width=60):
     """Print responsible teacher section"""
 
     #Heading
     rt_string = 'Responsible teacher:\n'
-    rt_string += '%-20s %-15s %-15s %-20s\n%s\n'%('Name', 'Phone','(Alternate)', 'Email','-'*80)
+    rt_string += '%-20s %-15s %-15s %-15s %-20s %-20s\n%s\n'%('Name', 'Phone','(Alternate)', 'Cellphone', 'School Email', 'Personal Email', '-'*120)
 
     try:
-        rt_string += '%-20s %-15s %-15s %-20s\n'%(rteacher.surname+', '+rteacher.firstname, rteacher.phone_primary, rteacher.phone_alt,rteacher.email) 
+        rt_string += '%-20s %-15s %-15s %-15s %-20s %-20s\n'%(rteacher.surname+', '+rteacher.firstname, rteacher.phone_primary, rteacher.phone_alt, rteacher.phone_cell, rteacher.email_school, rteacher.email_personal) 
+        rt_string += '%-20s %-15s %-15s %-15s %-20s %-20s\n'%(arteacher.surname+', '+arteacher.firstname, arteacher.phone_primary, arteacher.phone_alt, arteacher.phone_cell, arteacher.email_school, arteacher.email_personal) 
 
     except IndexError: #If the user submitted an empty form
         print 'Index Error (Confirmation email - rteacher)'
