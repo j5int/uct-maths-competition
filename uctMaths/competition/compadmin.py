@@ -406,7 +406,7 @@ def upload_results():
     #Return response of redirect page
     response = HttpResponseRedirect('../../../../competition/admin/upload_results.html')
     return response
-    
+
 def rank_schools():
     """ Ranks schools based on a sum of the top X scores. X is set via the 'Competition' form. """
     comp = Competition.objects.all() #Should only be one!
@@ -1266,9 +1266,9 @@ def generate_school_answer_sheets(request, school_list):
             merger = PdfFileMerger()
             merger.append(output_string)
             merger.append(os.path.join(__file__,"..","..","..","Declaration","Declaration form 2022.pdf"))
-            merger.write(os.path.join(__file__+"..","..","..","Declaration",str(school),"_answer_sheets.pdf"))
+            merger.write(os.path.join(__file__,"..","..","..","Declaration",str(school)+"_answer_sheets.pdf"))
 
-            pdf = open(os.path.join(__file__,"..","..","..","Declaration",str(school),"_answer_sheets.pdf"))
+            pdf = open(os.path.join(__file__,"..","..","..","Declaration",str(school)+"_answer_sheets.pdf"))
             zipf.write(pdf.name)
     
     response = HttpResponse(output_stringIO.getvalue())
