@@ -1265,10 +1265,10 @@ def generate_school_answer_sheets(request, school_list):
             output_string=printer_answer_sheet(request, ischool)
             merger = PdfFileMerger()
             merger.append(output_string)
-            merger.append(__file__+"\\..\\..\\..\\Declaration\\Declaration form 2022.pdf")
-            merger.write(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+            merger.append(os.path.join(__file__,"..","..","..","Declaration","Declaration form 2022.pdf"))
+            merger.write(os.path.join(__file__+"..","..","..","Declaration",str(school),"_answer_sheets.pdf"))
 
-            pdf = open(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+            pdf = open(os.path.join(__file__,"..","..","..","Declaration",str(school),"_answer_sheets.pdf"))
             zipf.write(pdf.name)
     
     response = HttpResponse(output_stringIO.getvalue())
