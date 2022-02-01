@@ -34,7 +34,7 @@ def printer_entry_result(request, school_list=None):
     #had to easy_install html5lib pisa
     #Create the HttpResponse object with the appropriate PDF headers.
     temp_school_list = []
-    if not school_list and not request == None: #If not called by the admin
+    if not school_list: #If not called by the admin
         try:
             #Attempt to find user's chosen school
             temp_school_list.append(School.objects.get(assigned_to=request.user))
@@ -46,7 +46,7 @@ def printer_entry_result(request, school_list=None):
 
     html = '' #Will hold rendered templates
 
-    return compadmin.generate_answer_sheets(request, school_list)
+    return compadmin.generate_answer_sheets(request, temp_school_list)
 
 #Method bound to printer_entry.html request
 @login_required
