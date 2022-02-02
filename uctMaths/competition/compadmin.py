@@ -407,6 +407,10 @@ def upload_results():
     response = HttpResponseRedirect('../../../../competition/admin/upload_results.html')
     return response
 
+def upload_declaration():
+    response = HttpResponseRedirect('../../../../competition/admin/upload_declaration.html')
+    return response
+
 def rank_schools():
     """ Ranks schools based on a sum of the top X scores. X is set via the 'Competition' form. """
     comp = Competition.objects.all() #Should only be one!
@@ -1264,6 +1268,8 @@ def generate_school_answer_sheets(request, school_list):
         for ischool in school_list:
             pdf=printer_answer_sheet(request, ischool)
             zipf.write(pdf.name)
+            pdf.close()
+            os.remove(pdf.name)
     
     response = HttpResponse(output_stringIO.getvalue())
     if len(school_list) == 1:
@@ -1399,9 +1405,9 @@ def printer_answer_sheet(request, assigned_school=None):
     merger = PdfFileMerger()
     merger.append(register_result)
     merger.append(answer_sheets_result)
-    merger.append(os.path.join(__file__,"..","..","..","Declaration","Declaration form 2022.pdf"))
-    merger.write(os.path.join(__file__,"..","..","..","Declaration","temp_answer_sheets.pdf"))
-    pdf = open(os.path.join(__file__,"..","..","..","Declaration","temp_answer_sheets.pdf"))
+    merger.append(os.path.join(__file__,"..","..","Declaration","Declaration.pdf"))
+    merger.write(os.path.join(__file__,"..","..","Declaration","temp_answer_sheets.pdf"))
+    pdf = open(os.path.join(__file__,"..","..","Declaration","temp_answer_sheets.pdf"))
     if not answer_sheets_pdf.err:
         return pdf
     else:

@@ -90,7 +90,7 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
         'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),
         recipient_list
     )
-    email.attach_file(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+    email.attach_file(os.path.join(__file__,"..","..","Declaration", str(school) + "_answer_sheets.pdf"))
     email.send()
 
     arteacher = ResponsibleTeacher.objects.filter(school=school.id).filter(is_primary=False)[0]
@@ -110,10 +110,10 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
         'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),
         recipient_list
     )
-    email.attach_file(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+    email.attach_file(os.path.join(__file__,"..","..","Declaration", str(school) + "_answer_sheets.pdf"))
     email.send()
     answer_sheet.close()
-    os.remove(__file__+"\\..\\..\\..\\Declaration\\" + str(school) + "_answer_sheets.pdf")
+    os.remove(os.path.join(__file__,"..","..","Declaration", str(school) + "_answer_sheets.pdf"))
 
 def send_grade_answer_sheets_to_organiser(pdf_attachment_filename):
     print("Emailing " + os.path.basename(pdf_attachment_filename) + " to organiser.")
