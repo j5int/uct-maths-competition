@@ -1391,7 +1391,6 @@ def printer_answer_sheet(request, assigned_school=None):
     student_list = SchoolStudent.objects.filter(school = assigned_school)
     answer_sheets_result = StringIO.StringIO()
     answer_sheets_html = ''
-
     for istudent in student_list:
         answer_sheets_html += get_student_answer_sheet(request, istudent)
 
@@ -1399,8 +1398,6 @@ def printer_answer_sheet(request, assigned_school=None):
         register_result = generate_answer_sheets(request, assigned_school)
     else:
         register_result = generate_answer_sheets(request, [assigned_school])
-    answer_sheets_pdf = pisa.pisaDocument(StringIO.StringIO(answer_sheets_html.encode("UTF-8")), answer_sheets_result, encoding='UTF-8')
-
     answer_sheets_pdf = pisa.pisaDocument(StringIO.StringIO(answer_sheets_html.encode("UTF-8")), answer_sheets_result, encoding='UTF-8')
     merger = PdfFileMerger()
     merger.append(register_result)
