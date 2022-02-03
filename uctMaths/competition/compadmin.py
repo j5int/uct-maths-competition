@@ -1266,10 +1266,8 @@ def generate_school_answer_sheets(request, school_list):
     start = datetime.datetime.now()
     with zipfile.ZipFile(output_stringIO, 'w') as zipf:
         for ischool in school_list:
-            pdf=printer_answer_sheet(request, ischool)
-            zipf.write(pdf.name)
-            pdf.close()
-            os.remove(pdf.name)
+            output_string=printer_answer_sheet(request, ischool)
+            zipf.writestr(get_answer_sheet_name(ischool), output_string.getvalue())
     
     response = HttpResponse(output_stringIO.getvalue())
     if len(school_list) == 1:
@@ -1299,7 +1297,7 @@ def get_student_answer_sheet(request, student):
     context = Context(c)
     return template.render(context)
 
-def generate_answer_sheets(request, school_list):
+def generate_school_confirmation(request, school_list):
     register_html = '' 
     for assigned_school in school_list:
         #Required that school form is pre-fetched to populate form
@@ -1395,18 +1393,19 @@ def printer_answer_sheet(request, assigned_school=None):
         answer_sheets_html += get_student_answer_sheet(request, istudent)
 
     if isinstance(assigned_school, list):
-        register_result = generate_answer_sheets(request, assigned_school)
+        register_result = generate_school_confirmation(request, assigned_school)
     else:
-        register_result = generate_answer_sheets(request, [assigned_school])
+        register_result = generate_school_confirmation(request, [assigned_school])
     answer_sheets_pdf = pisa.pisaDocument(StringIO.StringIO(answer_sheets_html.encode("UTF-8")), answer_sheets_result, encoding='UTF-8')
     merger = PdfFileMerger()
+    outpdf = StringIO.StringIO()
     merger.append(register_result)
-    merger.append(answer_sheets_result)
     merger.append(os.path.join(__file__,"..","..","Declaration","Declaration.pdf"))
-    merger.write(os.path.join(__file__,"..","..","Declaration","temp_answer_sheets.pdf"))
-    pdf = open(os.path.join(__file__,"..","..","Declaration","temp_answer_sheets.pdf"))
+    merger.append(answer_sheets_result)
+    merger.write(outpdf)
+    merger.close()
     if not answer_sheets_pdf.err:
-        return pdf
+        return outpdf
     else:
         pass
 

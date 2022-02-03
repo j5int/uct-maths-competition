@@ -2,7 +2,7 @@
 {% block title %}Upload Declaration Form{% endblock %}
  
 {% block content %}
-<p> Please select the .pdf file that is the Declaration form to be appended to the answer sheets. The file must be named Declaration.pdf. If there is no declaration for this year's competition, please upload a blank pdf. </p>
+<p> Please select the .pdf file that is the Declaration form to be appended to the answer sheets. If there is no declaration for this year's competition, please upload a blank pdf. </p>
 <form enctype="multipart/form-data" method="post">
    {% csrf_token %}   
    <table>

@@ -295,7 +295,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
 class CompetitionAdmin(admin.ModelAdmin):
 	
 	list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date', 'invigilators', 'answer_sheet_download_enabled')
-	actions = ['export_competition','upload_declaration']
+	actions = ['export_competition']
 	# Single action button functions (don't require selection)
 	change_list_template = "admin/competition_changelist.html"
 	def get_urls(self):

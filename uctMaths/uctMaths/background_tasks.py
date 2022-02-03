@@ -1,4 +1,3 @@
-from PyPDF2 import PdfFileMerger
 from background_task import background
 
 import ho.pisa as pisa
@@ -53,12 +52,11 @@ def bg_generate_school_answer_sheets(school_id):
         print("%s: Cannot send an email to a school with no assigned responsible teacher!" % (current_time()))
         return
     pdf = printer_answer_sheet(None, school)
-    
     if not pdf:
         print("%s: Unable to get answer sheets!" % (current_time()))
         return
-    
     send_answer_sheets(school, pdf, True)
+    pdf.close()
     school.answer_sheets_emailed = timezone.now()
     school.save()
     print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))

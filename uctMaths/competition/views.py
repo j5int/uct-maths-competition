@@ -45,7 +45,7 @@ def printer_entry_result(request, school_list=None):
         temp_school_list = [school for school in school_list]
 
     html = '' #Will hold rendered templates
-    return compadmin.generate_answer_sheets(request, temp_school_list)
+    return compadmin.generate_school_confirmation(request, temp_school_list)
 
 #Method bound to printer_entry.html request
 @login_required

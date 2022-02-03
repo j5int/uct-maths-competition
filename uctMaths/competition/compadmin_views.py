@@ -77,17 +77,14 @@ def upload_declaration(request):
             form = UploadDeclarationForm(request.POST, request.FILES)
             file = request.FILES['upload_file']
             filepath = os.path.join(__file__,"..","..","Declaration")
-            filename = str(file)
-            if not filename == 'Declaration.pdf':
-                handler_output = ['Declaration must be a pdf and be named Declaration.pdf']
-            else:
-                shutil.rmtree(filepath)
-                os.mkdir(filepath)
-                filepath = os.path.join(filepath,"")
-                default_storage.save(filepath, File(file))
-                if len(os.listdir(filepath)) == 1:
-                    autofilename = os.listdir(filepath)[0]
-                    os.rename(os.path.join(filepath,autofilename), os.path.join(filepath,filename))
+            filename = "Declaration.pdf"
+            shutil.rmtree(filepath)
+            os.mkdir(filepath)
+            filepath = os.path.join(filepath,"")
+            default_storage.save(filepath, File(file))
+            if len(os.listdir(filepath)) == 1:
+                autofilename = os.listdir(filepath)[0]
+                os.rename(os.path.join(filepath,autofilename), os.path.join(filepath,filename))
         except Exception as e:#If the user just spams the 'Submit' button without selecting file
             handler_output = [e]
 
