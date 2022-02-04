@@ -651,7 +651,7 @@ def makeCertificates(students, assigned_school):
             for student in students:
                 award = student.award            
 
-                if award in certs:
+                if award in certs or award == '':
                     continue
 
                 certs.append(award)
