@@ -83,6 +83,19 @@
                         <td>{{responsible_teacher.email_school}}</td>
                         <td>{{responsible_teacher.email_personal}}</td>
                     </tr>
+                </table>
+                <h2>Alternate Responsible Teacher</h2>
+                {% csrf_token %}
+                <table width="500">
+                    <tr>
+                        <th align="left">First Name</th>
+                        <th align="left">Surname</th>
+                        <th align="left">Phone </th>
+                        <th align="left">Phone (Alternative)</th>
+                        <th align="left">Cellphone</th>
+                        <th align="left">School Email </th>
+                        <th align="left">Personal Email</th>
+                    </tr>
                     <tr>
                         <td>{{alt_responsible_teacher.firstname}}</td>
                         <td>{{alt_responsible_teacher.surname}}</td>

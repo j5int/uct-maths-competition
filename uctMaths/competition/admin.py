@@ -293,10 +293,20 @@ class InvigilatorAdmin(ImportExportModelAdmin):
         transaction.commit_unless_managed()
 
 class CompetitionAdmin(admin.ModelAdmin):
-	change_form_template = "admin/competition_changeform.html"
-
+	
 	list_display = ('newentries_Opendate', 'newentries_Closedate', 'admin_emailaddress', 'prizegiving_date', 'invigilators', 'answer_sheet_download_enabled')
 	actions = ['export_competition']
+	# Single action button functions (don't require selection)
+	change_list_template = "admin/competition_changelist.html"
+	def get_urls(self):
+		urls = super(CompetitionAdmin, self).get_urls()
+		my_urls = [
+			url("^upload_declaration/", self.upload_declaration),
+		]
+		return my_urls + urls
+
+	def upload_declaration(self, request):
+		return compadmin.upload_declaration()
 
 	def export_competition(self, request, queryset):
 		return compadmin.export_competition(request)

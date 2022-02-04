@@ -3,13 +3,15 @@
 from __future__ import unicode_literals
 import tempfile
 from wsgiref.util import FileWrapper
+
+from PyPDF2 import PdfFileMerger
 from models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition, LOCATIONS
-from datetime import date
+from datetime import date, datetime
 import xlwt
 from django.http import HttpResponse, HttpResponseRedirect
 import zipfile
 import datetime
-from django.core import exceptions 
+from django.core import exceptions
 import views
 #A few administration constants and associated methods to be used around the website.
 
@@ -404,7 +406,11 @@ def upload_results():
     #Return response of redirect page
     response = HttpResponseRedirect('../../../../competition/admin/upload_results.html')
     return response
-    
+
+def upload_declaration():
+    response = HttpResponseRedirect('../../../../competition/admin/upload_declaration.html')
+    return response
+
 def rank_schools():
     """ Ranks schools based on a sum of the top X scores. X is set via the 'Competition' form. """
     comp = Competition.objects.all() #Should only be one!
@@ -1288,25 +1294,122 @@ def get_student_answer_sheet(request, student):
         template = get_template('pair_as_template.html')
     else:
         template = get_template('individual_as_template.html')
-    c.update(csrf(request))
     context = Context(c)
     return template.render(context)
 
-def printer_answer_sheet(request, assigned_school=None):
-    """ Generate the school answer sheet for each school in the query set"""
+def generate_school_confirmation(request, school_list):
+    register_html = '' 
+    for assigned_school in school_list:
+        #Required that school form is pre-fetched to populate form
+        student_list = SchoolStudent.objects.filter(school = assigned_school)
+        individual_list, pair_list = processGrade(student_list) #processGrade is defined below this method
+            
+        grade_summary = gradeBucket(student_list) #Bin into categories (Grade, Is Paired, Location)
+        count_individuals = 0
+        count_pairs = 0
+        
+        for i in range(8,13):
+            count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
+            count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
+        
+        invigilator_list = Invigilator.objects.filter(school = assigned_school)
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
+        alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
+        timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
+        year = str(datetime.datetime.now().strftime('%Y'))
+        if responsible_teacher:
+            responsible_teacher = responsible_teacher[0]
+        else:
+            responsible_teacher = None
+        if alt_responsible_teacher:
+            alt_responsible_teacher = alt_responsible_teacher[0]
+        else:
+            alt_responsible_teacher = None
+        #If someone managed to get to this page without having made an entry
+        if not (responsible_teacher or alt_responsible_teacher) and not school_list:
+            return HttpResponseRedirect('../students/newstudents.html')
+        #If the school has an entry
+        elif responsible_teacher:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln':assigned_school,
+                'delivery_address':assigned_school.address,
+                'contact_phone':assigned_school.phone,
+                'responsible_teacher':responsible_teacher,
+                'alt_responsible_teacher': alt_responsible_teacher,
+                'student_list':individual_list,
+                'pair_list':pair_list,
+                'max_num_pairs':admin_number_of_pairs(),
+                'entries_open':isOpen(),
+                'invigilator_list': invigilator_list,
+                'grades':range(8,13),
+                'grade_left':range(8,11),
+                'invigilator_range':range(10-len(invigilator_list)), 
+                'igrades':range(8,13),
+                'total_num':int(count_pairs*2+count_individuals),
+                'year':year,
+                'invigilators_required':competition_has_invigilator()}
+            #Render the template with the context (from above)
+            template = get_template('printer_entry.html')
+            if request:
+                c.update(csrf(request))
+            context = Context(c)
+            register_html += template.render(context) #Concatenate each rendered template to the html "string"
+        else:
+            c = {'type':'Students',
+                'timestamp':timestamp,
+                'schooln': assigned_school,
+                'grades':range(8,13),
+                'grade_left':range(8,11),
+                'invigilator_range':range(10-len(invigilator_list)), 
+                'igrades':range(8,13),
+                'max_num_pairs':admin_number_of_pairs(),
+                'total_num':'No students entered for this school',
+                'invigilators_required':competition_has_invigilator()}
 
-    html = '' #Will hold rendered templates
-    student_list = SchoolStudent.objects.filter(school = assigned_school)
-    for istudent in student_list:
-        html += get_student_answer_sheet(request, istudent) #Concatenate each rendered template to the html "string"
+            #Render the template with the context (from above)
+            template = get_template('printer_entry.html')
+            if request:
+                c.update(csrf(request))
+            context = Context(c)
+            register_html += template.render(context) #Concatenate each rendered template to the html "string"
+   
+    register_result = StringIO.StringIO()
 
-    result = StringIO.StringIO()
     #Generate the pdf doc
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
-    if not pdf.err:
-        return result
+    register_pdf = pisa.pisaDocument(StringIO.StringIO(register_html.encode("UTF-8")), register_result, encoding='UTF-8')
+    
+    if not register_pdf.err:
+        return register_result
     else:
         pass #Error handling?
+
+def printer_answer_sheet(request, assigned_school=None):
+    """ Generate the school answer sheet for each school in the query set"""
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    answer_sheets_result = StringIO.StringIO()
+    answer_sheets_html = ''
+    for istudent in student_list:
+        answer_sheets_html += get_student_answer_sheet(request, istudent)
+
+    if isinstance(assigned_school, list):
+        register_result = generate_school_confirmation(request, assigned_school)
+    else:
+        register_result = generate_school_confirmation(request, [assigned_school])
+    answer_sheets_pdf = pisa.pisaDocument(StringIO.StringIO(answer_sheets_html.encode("UTF-8")), answer_sheets_result, encoding='UTF-8')
+    merger = PdfFileMerger()
+    outpdf = StringIO.StringIO()
+    merger.append(register_result)
+    merger.append(os.path.join(__file__,"..","..","Declaration","Declaration.pdf"))
+    merger.append(answer_sheets_result)
+    merger.write(outpdf)
+    merger.close()
+    if not answer_sheets_pdf.err:
+        return outpdf
+    else:
+        pass
+
+    
 
 def venue_assigned(student):
     # Check that the student has a venue allocated

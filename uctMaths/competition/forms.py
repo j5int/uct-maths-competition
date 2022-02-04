@@ -121,4 +121,7 @@ class UploadResultsForm(forms.Form):
                         )
 #*****************************************
 
-
+class UploadDeclarationForm(forms.Form):
+        upload_file = forms.FileField(
+                        label='Select a file'
+        )

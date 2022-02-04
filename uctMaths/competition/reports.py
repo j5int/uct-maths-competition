@@ -121,7 +121,7 @@ This email contains part of the collection of answer sheets for all students, se
     send_email(
         "(Do not reply) " + os.path.basename(pdf_attachment_filename),
         output_string,
-        'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
+        'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),
         [
             {
                 "name": os.path.basename(pdf_attachment_filename), 
