@@ -56,7 +56,6 @@ def bg_generate_school_answer_sheets(school_id):
         print("%s: Unable to get answer sheets!" % (current_time()))
         return
     send_answer_sheets(school, pdf, True)
-    pdf.close()
     school.answer_sheets_emailed = timezone.now()
     school.save()
     print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
