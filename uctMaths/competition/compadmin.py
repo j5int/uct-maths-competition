@@ -1400,7 +1400,7 @@ def printer_answer_sheet(request, assigned_school=None):
     merger = PdfFileMerger()
     outpdf = StringIO.StringIO()
     merger.append(register_result)
-    merger.append(os.path.join(__file__,"..","..","Declaration","Declaration.pdf"))
+    merger.append(os.path.join(os.path.dirname(__file__), "..", "Declaration", "Declaration.pdf"))
     merger.append(answer_sheets_result)
     merger.write(outpdf)
     merger.close()
