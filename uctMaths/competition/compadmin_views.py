@@ -76,9 +76,10 @@ def upload_declaration(request):
         try: #Try receive file from 'Submit' post from user
             form = UploadDeclarationForm(request.POST, request.FILES)
             file = request.FILES['upload_file']
-            filepath = os.path.join(__file__,"..","..","Declaration")
+            filepath = os.path.join(os.path.dirname(__file__), "..", "Declaration")
             filename = "Declaration.pdf"
-            shutil.rmtree(filepath)
+            if os.path.exists(filepath):
+                shutil.rmtree(filepath)
             os.mkdir(filepath)
             filepath = os.path.join(filepath,"")
             default_storage.save(filepath, File(file))
