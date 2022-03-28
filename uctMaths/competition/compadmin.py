@@ -655,6 +655,8 @@ def makeCertificates(students, assigned_school):
         try:
             certs = []
             for student in students:
+                if student.score == 0:  # student is absent
+                    continue
                 award = student.award            
 
                 if award in certs:
