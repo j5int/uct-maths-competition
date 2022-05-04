@@ -655,6 +655,8 @@ def makeCertificates(students, assigned_school):
         try:
             certs = []
             for student in students:
+                if student.score == 0:  # student is absent
+                    continue
                 award = student.award            
 
                 if award in certs:
@@ -669,7 +671,8 @@ def makeCertificates(students, assigned_school):
             outFile.seek(0)
             wrapper = FileWrapper(outFile)
             response = HttpResponse(wrapper, content_type="application/x-zip-compressed")
-            response['Content-Disposition'] = 'attachment; filename=' + path
+            filename = schoolname + "_Certificates.zip"
+            response['Content-Disposition'] = 'attachment; filename=' + filename
             response['Content-Length'] = os.path.getsize(path)
             outFile.close()
         finally:
