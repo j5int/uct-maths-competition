@@ -402,7 +402,7 @@ def output_schooltaglists(school_list):
     return response
 
 def upload_results():
-    """Facilitate upload of .RES (the results) files. Redirects to custom Admin page (upload_results.html), the logic contained in compadmin_views.py."""
+    """Facilitate upload of Ranked.csv (the results) files. Redirects to custom Admin page (upload_results.html), the logic contained in compadmin_views.py."""
     #Return response of redirect page
     response = HttpResponseRedirect('../../../../competition/admin/upload_results.html')
     return response
@@ -655,7 +655,7 @@ def makeCertificates(students, assigned_school):
         try:
             certs = []
             for student in students:
-                if student.score == 0:  # student is absent
+                if student.score == 0 or student.score is None:  # student is absent
                     continue
                 award = student.award            
 
