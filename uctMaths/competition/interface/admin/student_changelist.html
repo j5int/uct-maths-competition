@@ -12,7 +12,7 @@
     <div>
         <form action="upload_results/" method="POST">
             {% csrf_token %}
-                <button type="submit" class="actionButton">Upload students' results (.RES file required)</button>
+                <button type="submit" class="actionButton">Upload students' results (Ranked.csv file required)</button>
         </form>
         <form action="rank_students/" method="POST">
             {% csrf_token %}

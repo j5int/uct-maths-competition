@@ -235,11 +235,11 @@ Actions and exports
 
     A .zip archive file is generated containing the files required for the MailMerge program. The names and formatting of the student entries and  file names is based on examples from previous years.
         
-- **Upload students' results (.RES file required)**
+- **Upload students' results (Ranked.csv file required)**
 
     Allows the upload of student results files to the database. Errors are presented to the user on the page after upload has taken place.
 
-    .. note:: The file names are expected to be those as seen in the example files. (eg. INDGR8.RES for INDividuals in grade 8 or PRGR8.RES for Pairs in grade 8.)
+    .. note:: The file names are expected to be those as seen in the example files. (eg. "GR8 IND Ranked.csv" for INDividuals in grade 8 or "GR8 PRS Ranked.csv" for Pairs in grade 8.)
 
 - **Assign awards and export (.xls) document (regardless of selection)**
 
@@ -255,7 +255,7 @@ Actions and exports
 
     Assigns ranks to all students based on their score. 
     
-    .. note:: The ranks are imported when a .RES file is uploaded. However, if you wish to manually disqualify a student, you can delete their score (leave the field blank - which is equivalent to an 'ABSENT') and then use this function to re-rank the remaining students.
+    .. note:: The ranks are imported when a Ranked.csv file is uploaded. However, if you wish to manually disqualify a student, you can delete their score (leave the field blank - which is equivalent to an 'ABSENT') and then use this function to re-rank the remaining students.
 
 - **Assign awards (regardless of selection)**
 

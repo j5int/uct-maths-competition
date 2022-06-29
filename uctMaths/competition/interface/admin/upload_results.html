@@ -2,7 +2,7 @@
 {% block title %}Upload student results{% endblock %}
  
 {% block content %}
-<p> Please select the .RES file that contains the results data of the students for the grade and category (e.g. Grade 8 Individuals), and click Submit. Repeat this process for each grade and category. </p>
+<p> Please select the Ranked.csv file that contains the results data of the students for the grade and category (e.g. Grade 8 Individuals), and click Submit. Repeat this process for each grade and category. </p>
 <form enctype="multipart/form-data" method="post">
    {% csrf_token %}   
    <table>
