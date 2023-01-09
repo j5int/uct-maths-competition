@@ -617,8 +617,9 @@ def export_awards(request):
         #Get the students from the eligible school, order by score (descending)
         school_students = SchoolStudent.objects.filter(school=school, paired=False, award__contains = 'OX').order_by('-score')
 
-        if school_students:
-            award_winners.append(school_students[0])
+        #Appends all students who have the OX award
+        for student in school_students:
+            award_winners.append(student)
 
     wb_sheet.write(0, 0, 'Oxford School Award')
     header = ['', 'School', 'Reference', 'First Name', 'Last Name', 'Grade', 'Rank', 'Award']
