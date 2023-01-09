@@ -15,7 +15,8 @@ from django.core import exceptions
 import views
 #A few administration constants and associated methods to be used around the website.
 
-from django.core.context_processors import csrf
+from django.views.decorators import csrf #TODO: check
+
 import ho.pisa as pisa
 # StrIO can accept str and unicode values
 import StringIO as StrIO

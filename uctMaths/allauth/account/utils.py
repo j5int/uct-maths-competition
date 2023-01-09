@@ -15,7 +15,8 @@ from django.contrib.auth import login
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.http import HttpResponseRedirect
 from django.utils.http import urlencode
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict as SortedDict
+
 try:
     from django.utils.encoding import force_text
 except ImportError:

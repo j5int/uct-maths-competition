@@ -6,7 +6,7 @@ from django.core import exceptions
 from django.db.models import Q
 from django.utils.translation import pgettext, ugettext_lazy as _, ugettext
 from django.utils.http import int_to_base36
-from django.utils.importlib import import_module
+from importlib import import_module
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator

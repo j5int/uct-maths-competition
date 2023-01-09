@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render, render_to_response
 from django.template import loader, Context
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.template import RequestContext
 from django import forms
 from django.forms.models import modelformset_factory
