@@ -79,7 +79,7 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
                                                             self.redirect_field_name),
                 "site": Site.objects.get_current(),
                 "redirect_field_name": self.redirect_field_name,
-                "redirect_field_value": self.request.REQUEST.get(self.redirect_field_name),
+                "redirect_field_value": self.request.GET.get(self.redirect_field_name),
                 })
         return ret
 
@@ -139,7 +139,7 @@ class SignupView(RedirectAuthenticatedUserMixin, CloseableSignupMixin, FormView)
                                                   reverse("account_login"),
                                                   self.redirect_field_name)
         redirect_field_name = self.redirect_field_name
-        redirect_field_value = self.request.REQUEST.get(redirect_field_name)
+        redirect_field_value = self.request.GET.get(redirect_field_name)
         ret.update({"login_url": login_url,
                     "redirect_field_name": redirect_field_name,
                     "redirect_field_value": redirect_field_value })
@@ -449,7 +449,7 @@ class LogoutView(TemplateResponseMixin, View):
         ctx = kwargs
         ctx.update({
             "redirect_field_name": self.redirect_field_name,
-            "redirect_field_value": self.request.REQUEST.get(self.redirect_field_name),
+            "redirect_field_value": self.request.GET.get(self.redirect_field_name),
         })
         return ctx
     

@@ -87,7 +87,7 @@ class OAuth2CallbackView(OAuth2View):
                 login.state = SocialLogin \
                     .verify_and_unstash_state(
                         request,
-                        request.REQUEST.get('state'))
+                        request.GET.get('state'))
             else:
                 login.state = SocialLogin.unstash_state(request)
             return complete_social_login(request, login)
