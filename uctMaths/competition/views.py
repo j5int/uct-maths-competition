@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from PyPDF2 import PdfFileMerger
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render as render_to_response
 from django.template import Context
 from django.http import HttpResponseRedirect
 from django.views.decorators import csrf #TODO: check if okay
@@ -82,7 +82,7 @@ def profile(request):
     show_answer_sheets_download = False
     if assigned_school and ResponsibleTeacher.objects.filter(school=assigned_school.id).count() > 0 and compadmin.can_download_answer_sheets():
         show_answer_sheets_download = compadmin.school_students_venue_assigned(assigned_school)
-    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
+    return render_to_response(request, 'profile.html', {'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
 
 
 # submitted thingszz
@@ -123,8 +123,8 @@ def submitted(request):
         'school_summary_statistics':school_summary_statistics,
         }
 
-    c.update(csrf(request))
-    return render_to_response('submitted.html', c)
+    # c.update(csrf(request))
+    return render_to_response(request, 'submitted.html', c)
 
 
 #*****************************************
@@ -192,8 +192,8 @@ def entry_review(request):
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
         return HttpResponseRedirect('../submitted.html')
 
-    c.update(csrf(request))
-    return render_to_response('entry_review.html', c, context_instance=RequestContext(request))
+    # c.update(csrf(request))
+    return render_to_response(request, 'entry_review.html', c)
 
 
 #*****************************************
@@ -426,9 +426,9 @@ def newstudents(request):
         'city':city,
         'maxEntries':compadmin.get_max_entries()}
 
-    c.update(csrf(request))
+    # c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
-    return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
+    return render_to_response(request, 'newstudents.html', c)
 
 def correctCapitals(input_name):
     
@@ -484,8 +484,8 @@ def school_select(request):
 
     schoolOptions = School.objects.all()
     c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error, 'admin_emailaddress':compadmin.admin_emailaddress()} 
-    c.update(csrf(request))
-    return render_to_response('school_select.html', c, context_instance=RequestContext(request))
+    # c.update(csrf(request))
+    return render_to_response(request, 'school_select.html', c)
 
 @login_required
 def school_results(request):

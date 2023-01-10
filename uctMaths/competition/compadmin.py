@@ -1158,7 +1158,7 @@ def printer_school_report(request, school_list=None):
             #Render the template with the context (from above)
 
             template = get_template('school_report.html')
-            c.update(csrf(request))
+            # c.update(csrf(request))
             context = Context(c)
             html += template.render(context) #Concatenate each rendered template to the html "string"
 
@@ -1356,8 +1356,8 @@ def generate_school_confirmation(request, school_list):
                 'invigilators_required':competition_has_invigilator()}
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
-            if request:
-                c.update(csrf(request))
+            #if request:
+                # c.update(csrf(request))
             context = Context(c)
             register_html += template.render(context) #Concatenate each rendered template to the html "string"
         else:
@@ -1374,8 +1374,8 @@ def generate_school_confirmation(request, school_list):
 
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
-            if request:
-                c.update(csrf(request))
+            #if request:
+                # c.update(csrf(request))
             context = Context(c)
             register_html += template.render(context) #Concatenate each rendered template to the html "string"
    

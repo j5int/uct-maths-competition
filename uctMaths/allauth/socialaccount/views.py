@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render as render_to_response
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
 
@@ -48,8 +48,7 @@ signup = SignupView.as_view()
 
 def login_cancelled(request):
     d = {}
-    return render_to_response('socialaccount/login_cancelled.html', d, 
-                              context_instance=RequestContext(request))
+    return render_to_response(request, 'socialaccount/login_cancelled.html', d)
 
 
 def login_error(request):
@@ -70,7 +69,4 @@ def connections(request):
     if not form:
         form = DisconnectForm(request=request)
     d = dict(form=form)
-    return render_to_response(
-            'socialaccount/connections.html',
-            d,
-            context_instance=RequestContext(request))
+    return render_to_response(request, 'socialaccount/connections.html', d)
