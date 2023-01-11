@@ -33,10 +33,10 @@ Windows:
 ```
 ~/work$ pip install virtualenv
 ~/work$ mkdir venv
-~/work$ cd work/venv
+~/work$ cd venv
 ~/work/venv$ virtualenv uctmaths_venv
-~/work/venv$ cd work/venv/uctmaths_venv
-~/work/venv/uctmaths_venv$ Scripts/activate
+~/work/venv$ cd uctmaths_venv/Scripts
+~/work/venv/uctmaths_venv/Scripts$ activate
 ```
 
 * Install requirements for uct-maths-competition (Django 1.11.29 and other libraries)
