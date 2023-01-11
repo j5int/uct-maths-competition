@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render as render_to_response
 from django.template import Context
 from django.http import HttpResponseRedirect
-from django.views.decorators import csrf #TODO: check if okay
+from django.views.decorators import csrf
 from django.template import RequestContext
 from forms import StudentForm
 from models import SchoolStudent, School, Invigilator, ResponsibleTeacher

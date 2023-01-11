@@ -37,7 +37,7 @@ def _openid_consumer(request):
 
 def login(request):
     if 'openid' in request.GET or request.method == 'POST':
-        form = LoginForm(request.REQUEST)
+        form = LoginForm(request.GET)
         if form.is_valid():
             client = _openid_consumer(request)
             try:
@@ -89,7 +89,7 @@ def _get_email_from_response(response):
 def callback(request):
     client = _openid_consumer(request)
     response = client.complete(
-        dict(request.REQUEST.items()),
+        dict(request.GET.items()),
         request.build_absolute_uri(request.path))
     if response.status == consumer.SUCCESS:
         user = get_adapter() \

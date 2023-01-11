@@ -14,7 +14,7 @@ class JSONField(models.TextField):
     on database.
     """
     #__metaclass__ = models.SubfieldBase
-    # TODO: add to_python method too?
+    # TODO: should possibly add to_python method too
 
     # def __init__(self, *agrs, **kwargs):
     #

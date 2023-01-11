@@ -220,7 +220,7 @@ class SocialLogin(object):
         next_url = get_next_redirect_url(request)
         if next_url:
             state['next'] = next_url
-        state['process'] = request.REQUEST.get('process', 'login')
+        state['process'] = request.GET.get('process', 'login')
         return state
 
     @classmethod

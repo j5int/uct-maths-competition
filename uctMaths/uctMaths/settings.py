@@ -143,7 +143,7 @@ TEMPLATE_DIRS = tuple([
 
 #allauth
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.get", #TODO check
+    "django.template.context_processors.request",
     'django.contrib.auth.context_processors.auth',
     "allauth.account.context_processors.account",
     "allauth.socialaccount.context_processors.socialaccount",
@@ -160,7 +160,7 @@ TEMPLATES = [
         'OPTIONS': {
             'debug': DEBUG,
             'context_processors': [
-                "django.template.context_processors.request", #TODO check
+                "django.template.context_processors.request",
                 'django.contrib.auth.context_processors.auth',
                 "allauth.account.context_processors.account",
                 "allauth.socialaccount.context_processors.socialaccount",
