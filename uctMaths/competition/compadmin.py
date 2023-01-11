@@ -1159,8 +1159,8 @@ def printer_school_report(request, school_list=None):
 
             template = get_template('school_report.html')
             # c.update(csrf(request))
-            context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
+            #context = Context(c)
+            html += template.render(c) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
     #Generate the pdf doc
@@ -1299,8 +1299,8 @@ def get_student_answer_sheet(request, student):
         template = get_template('pair_as_template.html')
     else:
         template = get_template('individual_as_template.html')
-    context = Context(c)
-    return template.render(context)
+    #context = Context(c)
+    return template.render(c)
 
 def generate_school_confirmation(request, school_list):
     register_html = '' 
@@ -1358,8 +1358,8 @@ def generate_school_confirmation(request, school_list):
             template = get_template('printer_entry.html')
             #if request:
                 # c.update(csrf(request))
-            context = Context(c)
-            register_html += template.render(context) #Concatenate each rendered template to the html "string"
+            #context = Context(c)
+            register_html += template.render(c) #Concatenate each rendered template to the html "string"
         else:
             c = {'type':'Students',
                 'timestamp':timestamp,
@@ -1376,8 +1376,8 @@ def generate_school_confirmation(request, school_list):
             template = get_template('printer_entry.html')
             #if request:
                 # c.update(csrf(request))
-            context = Context(c)
-            register_html += template.render(context) #Concatenate each rendered template to the html "string"
+            #context = Context(c)
+            register_html += template.render(c) #Concatenate each rendered template to the html "string"
    
     register_result = StringIO.StringIO()
 
