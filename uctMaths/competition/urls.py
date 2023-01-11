@@ -1,9 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.views.generic.base import TemplateView
 from competition import views, compadmin_views
 
-urlpatterns = patterns('',
-
+urlpatterns = [
 	#registration views
     url(r'^register/school_select/', views.school_select, name='school_select'),
 	url(r'^register/students/', views.newstudents, name='newstudents'),
@@ -17,4 +16,4 @@ urlpatterns = patterns('',
 	url(r'^register/school_results',views.school_results, name='school_results'),
 	url(r'^register/answer_sheets',views.answer_sheets, name="answer_sheets"),
 	url(r'^register/school_certificates', views.school_certificates, name="school_certificates")
-)
+]

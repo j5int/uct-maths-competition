@@ -142,7 +142,7 @@
             {%endfor%}
             
             {%for invigilator in invigilator_range%}
-            {% if invigilator_list|length = 0 and forloop.first %}
+            {% if invigilator_list|length == 0 and forloop.first %}
                 <tr>
                     <td><input type="text" class="invig_firstname" required name="inv_firstname"></td>
                     <td><input type="text" class="invig_surname" required name="inv_surname"></td>

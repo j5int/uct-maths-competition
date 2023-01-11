@@ -1,5 +1,5 @@
 from django.utils.http import urlencode
-from django.shortcuts import render_to_response
+from django.shortcuts import render as render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -37,7 +37,7 @@ def _openid_consumer(request):
 
 def login(request):
     if 'openid' in request.GET or request.method == 'POST':
-        form = LoginForm(request.REQUEST)
+        form = LoginForm(request.GET)
         if form.is_valid():
             client = _openid_consumer(request)
             try:
@@ -65,8 +65,7 @@ def login(request):
     else:
         form = LoginForm()
     d = dict(form=form)
-    return render_to_response('openid/login.html',
-                              d, context_instance=RequestContext(request))
+    return render_to_response(request, 'openid/login.html', d)
 
 
 def _get_email_from_response(response):
@@ -90,7 +89,7 @@ def _get_email_from_response(response):
 def callback(request):
     client = _openid_consumer(request)
     response = client.complete(
-        dict(request.REQUEST.items()),
+        dict(request.GET.items()),
         request.build_absolute_uri(request.path))
     if response.status == consumer.SUCCESS:
         user = get_adapter() \

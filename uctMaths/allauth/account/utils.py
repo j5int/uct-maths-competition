@@ -15,7 +15,8 @@ from django.contrib.auth import login
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.http import HttpResponseRedirect
 from django.utils.http import urlencode
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict as SortedDict
+
 try:
     from django.utils.encoding import force_text
 except ImportError:
@@ -35,7 +36,7 @@ def get_next_redirect_url(request, redirect_field_name="next"):
     Returns the next URL to redirect to, if it was explicitly passed
     via the request.
     """
-    redirect_to = request.REQUEST.get(redirect_field_name)
+    redirect_to = request.GET.get(redirect_field_name)
     # light security check -- make sure redirect_to isn't garabage.
     if not redirect_to or "://" in redirect_to or " " in redirect_to:
         redirect_to = None

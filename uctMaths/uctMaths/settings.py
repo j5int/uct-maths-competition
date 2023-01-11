@@ -143,14 +143,31 @@ TEMPLATE_DIRS = tuple([
 
 #allauth
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.request",
+    "django.template.context_processors.request",
     'django.contrib.auth.context_processors.auth',
     "allauth.account.context_processors.account",
     "allauth.socialaccount.context_processors.socialaccount",
-    # "django.core.context_processors.auth", 
+    # "django.core.context_processors.auth",
 
 )
 #endallauth
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['allauth/templates', 'competition/interface'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': DEBUG,
+            'context_processors': [
+                "django.template.context_processors.request",
+                'django.contrib.auth.context_processors.auth',
+                "allauth.account.context_processors.account",
+                "allauth.socialaccount.context_processors.socialaccount",
+            ],
+        },
+    },
+]
 
 INSTALLED_APPS = (
     'django.contrib.auth',

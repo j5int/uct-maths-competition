@@ -94,8 +94,8 @@ class OAuthClient(object):
             # Passing along oauth_verifier is required according to:
             # http://groups.google.com/group/twitter-development-talk/browse_frm/thread/472500cfe9e7cdb9#
             # Though, the custom oauth_callback seems to work without it?
-            if 'oauth_verifier' in self.request.REQUEST:
-                at_url = at_url + '?' + urlencode({'oauth_verifier': self.request.REQUEST['oauth_verifier']})
+            if 'oauth_verifier' in self.request.GET:
+                at_url = at_url + '?' + urlencode({'oauth_verifier': self.request.GET['oauth_verifier']})
             response = requests.post(url=at_url, auth=oauth)
             if response.status_code != 200:
                 raise OAuthError(

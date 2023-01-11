@@ -33,20 +33,20 @@ Windows:
 ```
 ~/work$ pip install virtualenv
 ~/work$ mkdir venv
-~/work$ cd work/venv
+~/work$ cd venv
 ~/work/venv$ virtualenv uctmaths_venv
-~/work/venv$ cd work/venv/uctmaths_venv
-~/work/venv/uctmaths_venv$ Scripts/activate
+~/work/venv$ cd uctmaths_venv/Scripts
+~/work/venv/uctmaths_venv/Scripts$ activate
 ```
 
-* Install requirements for uct-maths-competition (Django 1.7 and other libraries)
+* Install requirements for uct-maths-competition (Django 1.11.29 and other libraries)
 
 ```
 (uctmaths_venv)$ cd ~/work/uct-maths-competition
 (uctmaths_venv)~/work/uct-maths-competition$ pip install -r req.txt 
 ```
 
-*Note: most of the libraries are extremely out of date. Updating any of them should be done with care. The project was originally developed in Django 1.6, and upgraded to 1.7 by us in January 2021. There might be bugs introduced by that upgrade that we missed. Many features used in Django 1.6 have since been deprecated.*
+*Note: most of the libraries are extremely out of date. Updating any of them should be done with care. The project was originally developed in Django 1.6, and upgraded to 1.11.29 by us in January 2022. There might be bugs introduced by that upgrade that we missed. Many features used in Django 1.6 have since been deprecated.*
 
 * Create a "uctmaths" database and user on postgres
 
@@ -56,12 +56,12 @@ Windows:
     * TEMPLATE_DIR should be the absolute path to `uctMaths/competition/interface` in your filesystem.
     * Mail settings can be configured with Mailhog.
 
-* Sync database (create tables based on your Django models) and create superuser (`syncdb` is deprecated from Django 1.8, only use migrations for Django 1.7 onwards)
+* Sync database (create tables based on your Django models) and create superuser
 
 ```
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py makemigrations
 (uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py migrate
-(uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py syncdb
+(uctmaths_venv)~/work/uct-maths-competition/uctMaths$ python manage.py createsuperuser
 ```
 
 * Start Django server

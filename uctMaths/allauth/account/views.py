@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render as render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils.http import base36_to_int
 from django.utils.translation import ugettext
@@ -79,7 +79,7 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
                                                             self.redirect_field_name),
                 "site": Site.objects.get_current(),
                 "redirect_field_name": self.redirect_field_name,
-                "redirect_field_value": self.request.REQUEST.get(self.redirect_field_name),
+                "redirect_field_value": self.request.GET.get(self.redirect_field_name),
                 })
         return ret
 
@@ -139,7 +139,7 @@ class SignupView(RedirectAuthenticatedUserMixin, CloseableSignupMixin, FormView)
                                                   reverse("account_login"),
                                                   self.redirect_field_name)
         redirect_field_name = self.redirect_field_name
-        redirect_field_value = self.request.REQUEST.get(redirect_field_name)
+        redirect_field_value = self.request.GET.get(redirect_field_name)
         ret.update({"login_url": login_url,
                     "redirect_field_name": redirect_field_name,
                     "redirect_field_value": redirect_field_value })
@@ -312,7 +312,7 @@ def email(request, **kwargs):
     else:
         add_email_form = form_class()
     ctx = { "add_email_form": add_email_form }
-    return render_to_response(template_name, RequestContext(request, ctx))
+    return render_to_response(request, template_name)
 
 
 @login_required
@@ -337,7 +337,7 @@ def password_change(request, **kwargs):
     else:
         password_change_form = form_class(request.user)
     ctx = { "password_change_form": password_change_form }
-    return render_to_response(template_name, RequestContext(request, ctx))
+    return render_to_response(request, template_name)
 
 
 @login_required
@@ -362,7 +362,7 @@ def password_set(request, **kwargs):
     else:
         password_set_form = form_class(request.user)
     ctx = { "password_set_form": password_set_form }
-    return render_to_response(template_name, RequestContext(request, ctx))
+    return render_to_response(request, template_name)
 
 
 def password_reset(request, **kwargs):
@@ -378,12 +378,13 @@ def password_reset(request, **kwargs):
     else:
         password_reset_form = form_class()
 
-    return render_to_response(template_name, RequestContext(request, { "password_reset_form": password_reset_form, }))
+    # return render_to_response(template_name, RequestContext(request, { "password_reset_form": password_reset_form, }))
+    return render_to_response(request, template_name)
 
 
 def password_reset_done(request, **kwargs):
 
-    return render_to_response(kwargs.pop("template_name", "account/password_reset_done.html"), RequestContext(request, {}))
+    return render_to_response(request, kwargs.pop("template_name", "account/password_reset_done.html"))
 
 
 def password_reset_from_key(request, uidb36, key, **kwargs):
@@ -417,7 +418,8 @@ def password_reset_from_key(request, uidb36, key, **kwargs):
     else:
         ctx = { "token_fail": True, }
 
-    return render_to_response(template_name, RequestContext(request, ctx))
+    # return render_to_response(template_name, RequestContext(request, ctx))
+    return render_to_response(request, template_name)
 
 
 class LogoutView(TemplateResponseMixin, View):
@@ -449,7 +451,7 @@ class LogoutView(TemplateResponseMixin, View):
         ctx = kwargs
         ctx.update({
             "redirect_field_name": self.redirect_field_name,
-            "redirect_field_value": self.request.REQUEST.get(self.redirect_field_name),
+            "redirect_field_value": self.request.GET.get(self.redirect_field_name),
         })
         return ctx
     

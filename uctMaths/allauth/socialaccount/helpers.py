@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render, render as render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -84,10 +84,9 @@ def _process_signup(request, sociallogin):
 def _login_social_account(request, sociallogin):
     user = sociallogin.account.user
     if not user.is_active:
-        ret = render_to_response(
+        ret = render_to_response(request,
             'socialaccount/account_inactive.html',
-            {},
-            context_instance=RequestContext(request))
+            {})
     else:
         ret = perform_login(request, user, 
                             email_verification=app_settings.EMAIL_VERIFICATION,
@@ -97,9 +96,9 @@ def _login_social_account(request, sociallogin):
 
 
 def render_authentication_error(request, extra_context={}):
-    return render_to_response(
+    return render_to_response(request,
         "socialaccount/authentication_error.html",
-        extra_context, context_instance=RequestContext(request))
+        extra_context)
 
 def _add_social_account(request, sociallogin):
     if request.user.is_anonymous():

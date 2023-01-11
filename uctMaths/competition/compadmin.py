@@ -15,7 +15,8 @@ from django.core import exceptions
 import views
 #A few administration constants and associated methods to be used around the website.
 
-from django.core.context_processors import csrf
+from django.views.decorators import csrf
+
 import ho.pisa as pisa
 # StrIO can accept str and unicode values
 import StringIO as StrIO
@@ -617,8 +618,9 @@ def export_awards(request):
         #Get the students from the eligible school, order by score (descending)
         school_students = SchoolStudent.objects.filter(school=school, paired=False, award__contains = 'OX').order_by('-score')
 
-        if school_students:
-            award_winners.append(school_students[0])
+        #Appends all students who have the OX award
+        for student in school_students:
+            award_winners.append(student)
 
     wb_sheet.write(0, 0, 'Oxford School Award')
     header = ['', 'School', 'Reference', 'First Name', 'Last Name', 'Grade', 'Rank', 'Award']
@@ -1156,9 +1158,9 @@ def printer_school_report(request, school_list=None):
             #Render the template with the context (from above)
 
             template = get_template('school_report.html')
-            c.update(csrf(request))
-            context = Context(c)
-            html += template.render(context) #Concatenate each rendered template to the html "string"
+            # c.update(csrf(request))
+            #context = Context(c)
+            html += template.render(c) #Concatenate each rendered template to the html "string"
 
     result = StringIO.StringIO()
     #Generate the pdf doc
@@ -1297,8 +1299,8 @@ def get_student_answer_sheet(request, student):
         template = get_template('pair_as_template.html')
     else:
         template = get_template('individual_as_template.html')
-    context = Context(c)
-    return template.render(context)
+    #context = Context(c)
+    return template.render(c)
 
 def generate_school_confirmation(request, school_list):
     register_html = '' 
@@ -1354,10 +1356,10 @@ def generate_school_confirmation(request, school_list):
                 'invigilators_required':competition_has_invigilator()}
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
-            if request:
-                c.update(csrf(request))
-            context = Context(c)
-            register_html += template.render(context) #Concatenate each rendered template to the html "string"
+            #if request:
+                # c.update(csrf(request))
+            #context = Context(c)
+            register_html += template.render(c) #Concatenate each rendered template to the html "string"
         else:
             c = {'type':'Students',
                 'timestamp':timestamp,
@@ -1372,10 +1374,10 @@ def generate_school_confirmation(request, school_list):
 
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
-            if request:
-                c.update(csrf(request))
-            context = Context(c)
-            register_html += template.render(context) #Concatenate each rendered template to the html "string"
+            #if request:
+                # c.update(csrf(request))
+            #context = Context(c)
+            register_html += template.render(c) #Concatenate each rendered template to the html "string"
    
     register_result = StringIO.StringIO()
 

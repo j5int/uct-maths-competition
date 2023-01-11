@@ -5,7 +5,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.validators import validate_email, ValidationError
 from django.core import urlresolvers
 from django.db.models import EmailField, FieldDoesNotExist
-from django.utils import importlib, six
+from django.utils import six
+import importlib
 try:
     from django.utils.encoding import force_text
 except ImportError:
@@ -95,13 +96,13 @@ def import_callable(path_or_callable):
 
 
 def get_user_model():
-    from django.db.models import get_model
+    from django.apps import apps
 
     try:
         app_label, model_name = app_settings.USER_MODEL.split('.')
     except ValueError:
         raise ImproperlyConfigured("AUTH_USER_MODEL must be of the form 'app_label.model_name'")
-    user_model = get_model(app_label, model_name)
+    user_model = apps.get_model(app_label, model_name)
     if user_model is None:
         raise ImproperlyConfigured("AUTH_USER_MODEL refers to model '%s' that has not been installed" % app_settings.USER_MODEL)
     return user_model

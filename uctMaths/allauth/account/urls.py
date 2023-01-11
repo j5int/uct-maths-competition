@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from . import views
 
-urlpatterns = patterns("",
+urlpatterns = [
     url(r"^email/$", views.email, name="account_email"),
     url(r"^signup/$", views.signup, name="account_signup"),
     url(r"^login/$", views.login, name="account_login"),
@@ -23,4 +23,4 @@ urlpatterns = patterns("",
     
     #localhost/accounts/
     # url(r'^$', views.allauthtest, name='allauthtest'),
-)
+]
