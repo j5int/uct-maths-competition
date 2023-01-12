@@ -57,7 +57,7 @@ class EmailAddress(models.Model):
         """
         Given a new email address, change self and re-confirm.
         """
-        with transaction.commit_on_success():
+        with transaction.commit_on_success(): #TODO: replace depreciated
             user_email(self.user, new_email)
             self.user.save()
             self.email = new_email

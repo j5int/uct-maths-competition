@@ -312,7 +312,7 @@ def email(request, **kwargs):
     else:
         add_email_form = form_class()
     ctx = { "add_email_form": add_email_form }
-    return render_to_response(request, template_name)
+    return render_to_response(request, template_name, ctx)
 
 
 @login_required
@@ -337,7 +337,7 @@ def password_change(request, **kwargs):
     else:
         password_change_form = form_class(request.user)
     ctx = { "password_change_form": password_change_form }
-    return render_to_response(request, template_name)
+    return render_to_response(request, template_name, ctx)
 
 
 @login_required
@@ -362,7 +362,7 @@ def password_set(request, **kwargs):
     else:
         password_set_form = form_class(request.user)
     ctx = { "password_set_form": password_set_form }
-    return render_to_response(request, template_name)
+    return render_to_response(request, template_name, ctx)
 
 
 def password_reset(request, **kwargs):
@@ -379,12 +379,12 @@ def password_reset(request, **kwargs):
         password_reset_form = form_class()
 
     # return render_to_response(template_name, RequestContext(request, { "password_reset_form": password_reset_form, }))
-    return render_to_response(request, template_name)
+    return render_to_response(request, template_name, { "password_reset_form": password_reset_form, })
 
 
 def password_reset_done(request, **kwargs):
 
-    return render_to_response(request, kwargs.pop("template_name", "account/password_reset_done.html"))
+    return render_to_response(request, kwargs.pop("template_name", "account/password_reset_done.html"), {})
 
 
 def password_reset_from_key(request, uidb36, key, **kwargs):
@@ -419,7 +419,7 @@ def password_reset_from_key(request, uidb36, key, **kwargs):
         ctx = { "token_fail": True, }
 
     # return render_to_response(template_name, RequestContext(request, ctx))
-    return render_to_response(request, template_name)
+    return render_to_response(request, template_name, ctx)
 
 
 class LogoutView(TemplateResponseMixin, View):
