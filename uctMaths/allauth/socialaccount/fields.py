@@ -64,6 +64,6 @@ class JSONField(models.TextField):
 
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^allauth\.socialaccount\.fields\.JSONField"])
+    add_introspection_rules([], ["^allauth\.socialaccount\.fields\.JSONField"]) #TODO: check if this is fine to not use as South is deprecated
 except:
     pass

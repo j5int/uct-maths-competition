@@ -214,16 +214,17 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 		return HttpResponseRedirect("../")
 	#Adds all students in the SchoolStudent table to the Archived table, and adds the current date
 	def archive_student(modeladmin, request, queryset):
-	    cursor = connection.cursor()
-	    cursor.execute ("INSERT INTO `competition_schoolstudentarchive`("
-						"`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Venue`, `Paired`, 'Location') "
-						"select "
-						"`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`,  `Venue`, `Paired`, 'Location' "
-						"FROM `competition_schoolstudent`")
-	    cursor.execute("UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
-	    transaction.commit_unless_managed()
+		cursor = connection.cursor()
+		cursor.execute("INSERT INTO `competition_schoolstudentarchive`("
+					   "`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`, `Venue`, `Paired`, 'Location') "
+					   "select "
+					   "`First_name`, `Surname`, `Language`, `Reference`, `School`, `Score`, `Rank`, `Grade`,  `Venue`, `Paired`, 'Location' "
+					   "FROM `competition_schoolstudent`")
+		cursor.execute(
+			"UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
+		transaction.commit_unless_managed() #TODO: replace depreciated
 
-    # -------------- Import_Export functionality  ----------
+	# -------------- Import_Export functionality  ----------
 	resource_class = SchoolStudentResource
 	list_filter=('grade', 'paired', 'venue', 'language','school', 'award') #Field filters (shown as bar on right)
 
@@ -247,7 +248,7 @@ class VenueAdmin(ImportExportModelAdmin):
 	search_fields = ['building', 'code']
 	list_filter = ('grade', 'allocated_to_pairs')
 	actions = ['auto_allocate', 'deallocate', 'write_venue_register']
-    # -------------- Import_Export functionality  ----------
+     # -------------- Import_Export functionality  ----------
 	resource_class = VenueResource
 	#Expects csv (comma-separated) file with the first line being:
     #id,name,key,language,address,phone,fax,contact,entered,score,email,assigned_to(leave blank),registered_by
@@ -268,29 +269,33 @@ class VenueAdmin(ImportExportModelAdmin):
 	deallocate.short_description = 'Deallocate students from selected venue(s)'
 	write_venue_register.short_description = 'Export XLS student registry for selected venue(s)'
 
-#Displays different fields for Invigilators and archives Invigilators
+
+# Displays different fields for Invigilators and archives Invigilators
 class InvigilatorAdmin(ImportExportModelAdmin):
-    #list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
-    list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name','rt_phone_primary','rt_email', 'location')
-    #actions = ['archive_invigilator']
-    search_fields = ['firstname', 'surname']
+	# list_display = ('school', 'firstname', 'surname', 'grade', 'venue', 'registered_by')
+	list_display = (
+	'school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'email', 'venue', 'rt_name', 'rt_phone_primary',
+	'rt_email', 'location')
+	# actions = ['archive_invigilator']
+	search_fields = ['firstname', 'surname']
 
-    # -------------- Import_Export functionality  ----------
-    resource_class = InvigilatorResource
-    list_filter=('school', 'venue') #Field filters (shown as bar on right)
+	# -------------- Import_Export functionality  ----------
+	resource_class = InvigilatorResource
+	list_filter = ('school', 'venue')  # Field filters (shown as bar on right)
 
-    #Adds all invigilators in the Invigilators table, to the Archived table, and adds the current date
-    def archive_invigilator(modeladmin, request, queryset):
-        cursor = connection.cursor()
-        
-        cursor.execute ("INSERT INTO `competition_invigilatorarchive`( "
-						"`School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By`, `Notes`, 'Location') "
-						"select "
-						"`School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By`, `Notes`, 'Location' "
-						"FROM competition_invigilator ")
+	# Adds all invigilators in the Invigilators table, to the Archived table, and adds the current date
+	def archive_invigilator(modeladmin, request, queryset):
+		cursor = connection.cursor()
 
-        cursor.execute("UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
-        transaction.commit_unless_managed()
+		cursor.execute("INSERT INTO `competition_invigilatorarchive`( "
+					   "`School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By`, `Notes`, 'Location') "
+					   "select "
+					   "`School`, `First_name`, `Surname`, `Venue`, `Inv_Reg`, `Phone (Primary)`, `Phone (Alternative)`, 'Email', `Registered By`, `Notes`, 'Location' "
+					   "FROM competition_invigilator ")
+
+		cursor.execute(
+			"UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
+		transaction.commit_unless_managed() #TODO: replace depreciated
 
 class CompetitionAdmin(admin.ModelAdmin):
 	
