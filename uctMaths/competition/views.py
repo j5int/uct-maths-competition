@@ -327,21 +327,26 @@ def newstudents(request):
                 invigilator.delete()
             if compadmin.competition_has_invigilator():
                 for j in range(10):
-                    if form.getlist('inv_firstname','')[j] == u'':
-                        ierror = "Invigilator information incomplete"
-                    else:
-                        school = assigned_school
-                        ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
-                        isurname = correctCapitals(form.getlist('inv_surname','')[j])
-                        iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
-                        iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
-                        iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
-                        inotes = form.getlist('inv_notes','')[j].strip()
-                        location = assigned_school.location
+                    school = assigned_school
+                    ifirstname = correctCapitals(form.getlist('inv_firstname',[])[j] or '')
+                    isurname = correctCapitals(form.getlist('inv_surname',[])[j] or '')
+                    iphone_primary = form.getlist('inv_phone_primary',[])[j] or ''
+                    iphone_primary = iphone_primary.strip().replace(' ', '')
+                    iphone_alt = form.getlist('inv_phone_alt',[])[j] or ''
+                    iphone_alt = iphone_alt.strip().replace(' ', '')
+                    iemail = form.getlist('inv_email',[])[j] or ''
+                    iemail = iemail.strip().replace(' ', '')
+                    inotes = form.getlist('inv_notes',[])[j] or ''
+                    inotes = inotes.strip()
+                    location = assigned_school.location
 
-                        query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
-                                        phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
-                        query.save()
+                    if not (ifirstname and isurname and iemail):
+                        ierror = "Invigilator information incomplete"
+                        continue
+
+                    query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
+                                    phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
+                    query.save()
 
             #Registering students, maximum number of students 25
             #Returns an error if information entered incorrectly
