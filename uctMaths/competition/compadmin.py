@@ -16,6 +16,7 @@ import views
 #A few administration constants and associated methods to be used around the website.
 
 from django.views.decorators import csrf
+from django.template.context_processors import csrf
 
 import ho.pisa as pisa
 # StrIO can accept str and unicode values
@@ -1158,7 +1159,7 @@ def printer_school_report(request, school_list=None):
             #Render the template with the context (from above)
 
             template = get_template('school_report.html')
-            # c.update(csrf(request))
+            c.update(csrf(request))
             #context = Context(c)
             html += template.render(c) #Concatenate each rendered template to the html "string"
 
@@ -1356,8 +1357,8 @@ def generate_school_confirmation(request, school_list):
                 'invigilators_required':competition_has_invigilator()}
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
-            #if request:
-                # c.update(csrf(request))
+            if request:
+                c.update(csrf(request))
             #context = Context(c)
             register_html += template.render(c) #Concatenate each rendered template to the html "string"
         else:
@@ -1374,8 +1375,8 @@ def generate_school_confirmation(request, school_list):
 
             #Render the template with the context (from above)
             template = get_template('printer_entry.html')
-            #if request:
-                # c.update(csrf(request))
+            if request:
+                c.update(csrf(request))
             #context = Context(c)
             register_html += template.render(c) #Concatenate each rendered template to the html "string"
    

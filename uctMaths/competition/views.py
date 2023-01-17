@@ -5,6 +5,7 @@ from django.shortcuts import render as render_to_response
 from django.template import Context
 from django.http import HttpResponseRedirect
 from django.views.decorators import csrf
+from django.template.context_processors import csrf
 from django.template import RequestContext
 from forms import StudentForm
 from models import SchoolStudent, School, Invigilator, ResponsibleTeacher
@@ -123,7 +124,7 @@ def submitted(request):
         'school_summary_statistics':school_summary_statistics,
         }
 
-    # c.update(csrf(request))
+    c.update(csrf(request))
     return render_to_response(request, 'submitted.html', c)
 
 
@@ -192,7 +193,7 @@ def entry_review(request):
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
         return HttpResponseRedirect('../submitted.html')
 
-    # c.update(csrf(request))
+    c.update(csrf(request))
     return render_to_response(request, 'entry_review.html', c)
 
 
@@ -426,7 +427,7 @@ def newstudents(request):
         'city':city,
         'maxEntries':compadmin.get_max_entries()}
 
-    # c.update(csrf(request))
+    c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
     return render_to_response(request, 'newstudents.html', c)
 
@@ -484,7 +485,7 @@ def school_select(request):
 
     schoolOptions = School.objects.all()
     c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error, 'admin_emailaddress':compadmin.admin_emailaddress()} 
-    # c.update(csrf(request))
+    c.update(csrf(request))
     return render_to_response(request, 'school_select.html', c)
 
 @login_required

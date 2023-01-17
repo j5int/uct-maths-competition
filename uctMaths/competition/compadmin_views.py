@@ -61,7 +61,7 @@ def upload_results(request):
 
     #Present upload form and handler message (prompt for input/errors text) to the user
     c = {'fileUpload' : fileUpload, 'handler_output' : handler_output}
-    # c.update(csrf(request))
+    c.update(csrf(request))
 
     return render_to_response(request, 'admin/upload_results.html', c)
 
@@ -101,7 +101,7 @@ def upload_declaration(request):
 
     #Present upload form and handler message (prompt for input/errors text) to the user
     c = {'fileUpload' : fileUpload, 'handler_output' : handler_output}
-    # c.update(csrf(request))
+    c.update(csrf(request))
 
     return render_to_response(request, 'admin/upload_declaration.html', c)
 
