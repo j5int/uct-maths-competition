@@ -328,15 +328,15 @@ def newstudents(request):
             if compadmin.competition_has_invigilator():
                 for j in range(10):
                     school = assigned_school
-                    ifirstname = correctCapitals(form.getlist('inv_firstname',[])[j] or '')
-                    isurname = correctCapitals(form.getlist('inv_surname',[])[j] or '')
-                    iphone_primary = form.getlist('inv_phone_primary',[])[j] or ''
+                    ifirstname = correctCapitals(form.getlist('inv_firstname', [])[j] or '')
+                    isurname = correctCapitals(form.getlist('inv_surname', [])[j] or '')
+                    iphone_primary = form.getlist('inv_phone_primary', [])[j] or ''
                     iphone_primary = iphone_primary.strip().replace(' ', '')
-                    iphone_alt = form.getlist('inv_phone_alt',[])[j] or ''
+                    iphone_alt = form.getlist('inv_phone_alt', [])[j] or ''
                     iphone_alt = iphone_alt.strip().replace(' ', '')
-                    iemail = form.getlist('inv_email',[])[j] or ''
+                    iemail = form.getlist('inv_email', [])[j] or ''
                     iemail = iemail.strip().replace(' ', '')
-                    inotes = form.getlist('inv_notes',[])[j] or ''
+                    inotes = form.getlist('inv_notes', [])[j] or ''
                     inotes = inotes.strip()
                     location = assigned_school.location
 
