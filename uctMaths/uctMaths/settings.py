@@ -1,10 +1,11 @@
 # Django settings for uctMaths project.
+import os
 from ConfigParser import RawConfigParser
 
 import background_task
 
 config = RawConfigParser()
-config.read('uctMaths/settings.ini')
+config.read(os.path.join(os.path.dirname(__file__), 'settings.ini'))
 
 DEBUG = config.get('debug', 'DEBUG')
 TEMPLATE_DEBUG = DEBUG
@@ -155,7 +156,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['allauth/templates', 'competition/interface'],
+        'DIRS': ['uctMaths/allauth/templates', 'uctMaths/competition/interface', 'allauth/templates', 'competition/interface'],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': DEBUG,
