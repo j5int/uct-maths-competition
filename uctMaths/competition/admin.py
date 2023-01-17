@@ -222,7 +222,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 					   "FROM `competition_schoolstudent`")
 		cursor.execute(
 			"UPDATE `competition_schoolstudentarchive` SET `Date Archived` = CURDATE() WHERE `Date Archived` is NULL")
-		transaction.commit_unless_managed() #TODO: replace depreciated
+		transaction.commit_unless_managed() #TODO: replace deprecated
 
 	# -------------- Import_Export functionality  ----------
 	resource_class = SchoolStudentResource
@@ -295,7 +295,7 @@ class InvigilatorAdmin(ImportExportModelAdmin):
 
 		cursor.execute(
 			"UPDATE `competition_invigilatorarchive` SET `Date_Archived` = CURDATE() WHERE `Date_Archived` is NULL")
-		transaction.commit_unless_managed() #TODO: replace depreciated
+		transaction.commit_unless_managed() #TODO: replace deprecated
 
 class CompetitionAdmin(admin.ModelAdmin):
 	

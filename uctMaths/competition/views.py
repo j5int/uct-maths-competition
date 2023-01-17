@@ -115,7 +115,7 @@ def submitted(request):
     school_summary_statistics = 'You have successfully registered %d students' % (count_pairs*2+count_individuals)
     
     if compadmin.admin_number_of_pairs() > 0:
-        school_summary_statistics += '(%d individuals and %d pairs).' % (count_individuals, count_pairs)
+        school_summary_statistics += ' (%d individuals and %d pairs).' % (count_individuals, count_pairs)
 
     c = {
         'school_summary_blurb':school_summary_blurb,
