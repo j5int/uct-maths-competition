@@ -1,8 +1,7 @@
 /*
 login.css
 http://hostclipse.com/blog/2011/07/17/freebie-sleek-css3-register-and-login-forms/
-
-css for the login and signup pages. 
+css for the login and signup pages.
 mainly used for button styling.
 */
 .wrapper {
@@ -19,19 +18,19 @@ mainly used for button styling.
 	color: #777;
 	-webkit-box-shadow: 0px 0px 8px 2px #d1d1d1;
 	-moz-box-shadow: 0px 0px 8px 2px #d1d1d1;
-	box-shadow: 0px 0px 8px 2px #d1d1d1; 
-	-webkit-border-top-left-radius: 6px;
-	-webkit-border-top-right-radius: 6px;
+	box-shadow: 0px 0px 8px 2px #d1d1d1;
+	-webkit-border-top-left-radius: 0px;
+	-webkit-border-top-right-radius: 0px;
 	-webkit-border-bottom-right-radius: 6px;
 	-webkit-border-bottom-left-radius: 6px;
-	-moz-border-radius-topleft: 6px;
-	-moz-border-radius-topright: 6px;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
 	-moz-border-radius-bottomright: 6px;
 	-moz-border-radius-bottomleft: 6px;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
 	border-bottom-right-radius: 6px;
-	border-bottom-left-radius: 6px; 
+	border-bottom-left-radius: 6px;
 	overflow: hidden;
 }
 
@@ -41,9 +40,9 @@ mainly used for button styling.
 }
 
 .formtitle {
-	padding: 20px;
+	padding: 5px;
 	line-height: 25px;
-	font-size: 40px;
+	font-size: 16px;
 	text-shadow: -1px -1px #00548f;
 	color: #fff;
 	font-weight: bold;
@@ -59,19 +58,6 @@ mainly used for button styling.
 	background: -ms-linear-gradient(top, #378fcd 0%,#2a6e9d 50%,#00548f 51%,#00548f 100%); /* IE10+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#378fcd', endColorstr='#00548f',GradientType=0 ); /* IE6-9 */
 	background: linear-gradient(top, #378fcd 0%,#2a6e9d 50%,#00548f 51%,#00548f 100%); /* W3C */
-
-	-webkit-border-top-left-radius: 6px;
-	-webkit-border-top-right-radius: 6px;
-	-webkit-border-bottom-right-radius: 0px;
-	-webkit-border-bottom-left-radius: 0px;
-	-moz-border-radius-topleft: 6px;
-	-moz-border-radius-topright: 6px;
-	-moz-border-radius-bottomright: 0px;
-	-moz-border-radius-bottomleft: 0px;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
-	border-bottom-right-radius: 0px;
-	border-bottom-left-radius: 0px;
 }
 
 .input {
