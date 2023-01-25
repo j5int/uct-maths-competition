@@ -24,7 +24,7 @@ Linux:
 ~/work$ mkdir venv
 ~/work$ cd work/venv
 ~/work/venv$ virtualenv uctmaths_venv
-~/work/venv$ cd work/venv/uctmaths_venv
+~/work/venv$ cd uctmaths_venv
 ~/work/venv/uctmaths_venv$ source bin/activate
 ```
 
