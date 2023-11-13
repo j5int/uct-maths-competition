@@ -138,7 +138,7 @@ class Invigilator(models.Model):
     def rt_email(self):
         responsible_teacher = ResponsibleTeacher.objects.filter(school = self.school)
         if responsible_teacher:
-            return responsible_teacher[0].email
+            return responsible_teacher[0].email_personal
         else:
             return 'Not specified' #This should not happen!
 

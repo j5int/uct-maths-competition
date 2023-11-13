@@ -8,7 +8,7 @@ from allauth.account.models import EmailAddress, EmailConfirmation
 class Command(BaseCommand):
     def handle(self, *args, **options):
         if False:
-            EmailAddress.objects.all().delete()
+            EmailAddress.objects.all().delete() #TODO no such method exists?
 
         if EmailAddress.objects.all().exists():
             raise CommandError('New-style EmailAddress objects exist, please delete those first')

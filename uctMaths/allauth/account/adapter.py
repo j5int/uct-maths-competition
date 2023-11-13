@@ -8,6 +8,7 @@ from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.contrib import messages
+from django.urls.resolvers import LocaleRegexURLResolver
 
 try:
     from django.utils.encoding import force_text
@@ -162,10 +163,10 @@ class DefaultAccountAdapter(object):
         (dynamically) restrict what usernames can be chosen.
         """
         from django.contrib.auth.forms import UserCreationForm
-        USERNAME_REGEX = UserCreationForm().fields['username'].regex
-        if not USERNAME_REGEX.match(username):
-            raise forms.ValidationError(_("Usernames can only contain "
-                                          "letters, digits and @/./+/-/_."))
+        # USERNAME_REGEX = UserCreationForm().fields['username'].regex
+        # if not USERNAME_REGEX.match(username):
+        #     raise forms.ValidationError(_("Usernames can only contain "
+        #                                   "letters, digits and @/./+/-/_."))
 
         # TODO: Add regexp support to USERNAME_BLACKLIST 
         if username in app_settings.USERNAME_BLACKLIST:

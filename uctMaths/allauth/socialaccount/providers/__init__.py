@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.utils import importlib
+import importlib
 
 class ProviderRegistry(object):
     def __init__(self):

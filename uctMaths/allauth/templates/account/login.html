@@ -6,7 +6,6 @@ redirects to profile view if successful.
 -->
 {% load i18n %}
 {% load account %}
-{% load url from future %}
 {%block title%}Log in{%endblock%}
 {% block head %}
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -68,7 +67,7 @@ for a {{site_name}} account and sign in below:{% endblocktrans %}</p>
 
     <form class="form1" method="POST" action="{% url 'account_login' %}">
 
-      <div class="formtitle"> Log in to your account</div>
+      <div class="formtitle" style="font-size: 26px"> Log in to your account</div>
       {% csrf_token %}
       {{ form.as_p }}
       {% if redirect_field_value %}

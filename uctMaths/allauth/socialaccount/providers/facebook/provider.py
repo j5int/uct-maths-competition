@@ -93,8 +93,7 @@ class FacebookProvider(OAuth2Provider):
                 request.build_absolute_uri(reverse('facebook_channel')),
                 'fb_login_options': mark_safe(json.dumps(fb_login_options)),
                 'facebook_jssdk_locale': locale}
-        return render_to_string('facebook/fbconnect.html',
-                                ctx,
-                                RequestContext(request))
+        return render_to_string(request, 'facebook/fbconnect.html',
+                                ctx)
 
 providers.registry.register(FacebookProvider)

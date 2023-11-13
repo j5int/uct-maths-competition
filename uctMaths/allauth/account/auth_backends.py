@@ -8,8 +8,9 @@ from . import app_settings
 
 User = get_user_model()
 
+
 class AuthenticationBackend(ModelBackend):
-    
+
     def authenticate(self, **credentials):
         ret = None
         if app_settings.AUTHENTICATION_METHOD == AuthenticationMethod.EMAIL:
@@ -26,7 +27,7 @@ class AuthenticationBackend(ModelBackend):
     def _authenticate_by_username(self, **credentials):
         # Django ModelBackend <1.5 does not support additional params
         return super(AuthenticationBackend, self) \
-            .authenticate(username=credentials.get('username'),
+            .authenticate(None, username=credentials.get('username'),
                           password=credentials.get('password'))
 
     def _authenticate_by_email(self, **credentials):

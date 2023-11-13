@@ -5,11 +5,11 @@ import shutil
 from django.conf import settings
 from django.http import HttpResponse
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render, render_to_response
+from django.shortcuts import get_object_or_404, render as render_to_response
 from django.template import loader, Context
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.template import RequestContext
 from django import forms
 from django.forms.models import modelformset_factory
@@ -63,7 +63,7 @@ def upload_results(request):
     c = {'fileUpload' : fileUpload, 'handler_output' : handler_output}
     c.update(csrf(request))
 
-    return render_to_response('admin/upload_results.html', c, context_instance=RequestContext(request))
+    return render_to_response(request, 'admin/upload_results.html', c)
 
 @login_required
 def upload_declaration(request):
@@ -103,7 +103,7 @@ def upload_declaration(request):
     c = {'fileUpload' : fileUpload, 'handler_output' : handler_output}
     c.update(csrf(request))
 
-    return render_to_response('admin/upload_declaration.html', c, context_instance=RequestContext(request))
+    return render_to_response(request, 'admin/upload_declaration.html', c)
 
 def handle_uploaded_file(inputf):
     """ Handle input Ranked.csv file and return any errors to calling function (ie. return a string to be used in template) """

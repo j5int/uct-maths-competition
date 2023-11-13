@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 from PyPDF2 import PdfFileMerger
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render as render_to_response
 from django.template import Context
 from django.http import HttpResponseRedirect
-from django.core.context_processors import csrf
+from django.views.decorators import csrf
+from django.template.context_processors import csrf
 from django.template import RequestContext
 from forms import StudentForm
 from models import SchoolStudent, School, Invigilator, ResponsibleTeacher
@@ -82,7 +83,7 @@ def profile(request):
     show_answer_sheets_download = False
     if assigned_school and ResponsibleTeacher.objects.filter(school=assigned_school.id).count() > 0 and compadmin.can_download_answer_sheets():
         show_answer_sheets_download = compadmin.school_students_venue_assigned(assigned_school)
-    return render_to_response('profile.html',{'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
+    return render_to_response(request, 'profile.html', {'school_blurb':school_blurb,'closingdate_blurb':closingdate_blurb, 'admin_contact':admin_contact, 'show_results_download':show_results_download, 'show_answer_sheets_download':show_answer_sheets_download})
 
 
 # submitted thingszz
@@ -115,7 +116,7 @@ def submitted(request):
     school_summary_statistics = 'You have successfully registered %d students' % (count_pairs*2+count_individuals)
     
     if compadmin.admin_number_of_pairs() > 0:
-        school_summary_statistics += '(%d individuals and %d pairs).' % (count_individuals, count_pairs)
+        school_summary_statistics += ' (%d individuals and %d pairs).' % (count_individuals, count_pairs)
 
     c = {
         'school_summary_blurb':school_summary_blurb,
@@ -124,7 +125,7 @@ def submitted(request):
         }
 
     c.update(csrf(request))
-    return render_to_response('submitted.html', c)
+    return render_to_response(request, 'submitted.html', c)
 
 
 #*****************************************
@@ -193,7 +194,7 @@ def entry_review(request):
         return HttpResponseRedirect('../submitted.html')
 
     c.update(csrf(request))
-    return render_to_response('entry_review.html', c, context_instance=RequestContext(request))
+    return render_to_response(request, 'entry_review.html', c)
 
 
 #*****************************************
@@ -326,21 +327,26 @@ def newstudents(request):
                 invigilator.delete()
             if compadmin.competition_has_invigilator():
                 for j in range(10):
-                    if form.getlist('inv_firstname','')[j] == u'':
-                        ierror = "Invigilator information incomplete"
-                    else:
-                        school = assigned_school
-                        ifirstname = correctCapitals(form.getlist('inv_firstname','')[j])
-                        isurname = correctCapitals(form.getlist('inv_surname','')[j])
-                        iphone_primary = form.getlist('inv_phone_primary','')[j].strip().replace(' ', '')
-                        iphone_alt = form.getlist('inv_phone_alt','')[j].strip().replace(' ', '')
-                        iemail = form.getlist('inv_email','')[j].strip().replace(' ', '')
-                        inotes = form.getlist('inv_notes','')[j].strip()
-                        location = assigned_school.location
+                    school = assigned_school
+                    ifirstname = correctCapitals(form.getlist('inv_firstname', [])[j] or '')
+                    isurname = correctCapitals(form.getlist('inv_surname', [])[j] or '')
+                    iphone_primary = form.getlist('inv_phone_primary', [])[j] or ''
+                    iphone_primary = iphone_primary.strip().replace(' ', '')
+                    iphone_alt = form.getlist('inv_phone_alt', [])[j] or ''
+                    iphone_alt = iphone_alt.strip().replace(' ', '')
+                    iemail = form.getlist('inv_email', [])[j] or ''
+                    iemail = iemail.strip().replace(' ', '')
+                    inotes = form.getlist('inv_notes', [])[j] or ''
+                    inotes = inotes.strip()
+                    location = assigned_school.location
 
-                        query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
-                                        phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
-                        query.save()
+                    if not (ifirstname and isurname and iemail):
+                        ierror = "Invigilator information incomplete"
+                        continue
+
+                    query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
+                                    phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
+                    query.save()
 
             #Registering students, maximum number of students 25
             #Returns an error if information entered incorrectly
@@ -428,7 +434,7 @@ def newstudents(request):
 
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
-    return render_to_response('newstudents.html', c, context_instance=RequestContext(request))
+    return render_to_response(request, 'newstudents.html', c)
 
 def correctCapitals(input_name):
     
@@ -485,7 +491,7 @@ def school_select(request):
     schoolOptions = School.objects.all()
     c = {'schools':schoolOptions, 'invalid_request' : invalid_request, 'inv_req_message' : inv_req_message, 'user':request.user,'error':error,'ierror':error, 'admin_emailaddress':compadmin.admin_emailaddress()} 
     c.update(csrf(request))
-    return render_to_response('school_select.html', c, context_instance=RequestContext(request))
+    return render_to_response(request, 'school_select.html', c)
 
 @login_required
 def school_results(request):

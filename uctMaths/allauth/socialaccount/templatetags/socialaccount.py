@@ -17,7 +17,7 @@ class ProviderLoginURLNode(template.Node):
                       in self.params.items()])
         request = context['request']
         if 'next' not in query:
-            next = request.REQUEST.get('next')
+            next = request.GET.get('next')
             if next:
                 query['next'] = next
         else:

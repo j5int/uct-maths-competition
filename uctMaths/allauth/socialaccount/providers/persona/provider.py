@@ -21,9 +21,8 @@ class PersonaProvider(Provider):
         settings = self.get_settings()
         request_parameters = settings.get('REQUEST_PARAMETERS', {})
         ctx = { 'request_parameters': json.dumps(request_parameters) }
-        return render_to_string('persona/auth.html',
-                                ctx,
-                                RequestContext(request))
+        return render_to_string(request, 'persona/auth.html',
+                                ctx)
 
     def get_login_url(self, request, **kwargs):
         next_url = "'%s'" % (kwargs.get('next') or '')

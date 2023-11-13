@@ -13,7 +13,13 @@ class JSONField(models.TextField):
     """Simple JSON field that stores python structures as JSON strings
     on database.
     """
-    __metaclass__ = models.SubfieldBase
+    #__metaclass__ = models.SubfieldBase
+    # TODO: should possibly add to_python method too
+
+    # def __init__(self, *agrs, **kwargs):
+    #
+    # def from_db_value(self, value, expression, connection, context):
+
 
     def to_python(self, value):
         """
@@ -58,6 +64,6 @@ class JSONField(models.TextField):
 
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^allauth\.socialaccount\.fields\.JSONField"])
+    add_introspection_rules([], ["^allauth\.socialaccount\.fields\.JSONField"]) #TODO: check if this is fine to not use as South is deprecated
 except:
     pass
