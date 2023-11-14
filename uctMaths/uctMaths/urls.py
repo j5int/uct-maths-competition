@@ -20,15 +20,15 @@ urlpatterns = [
 
 	#Aurelia is not quite sure what this does. It make the login work.
 	# path(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
-	path('/accounts/profile', comp_views.profile, name='profile'),
+	path('accounts/profile/', comp_views.profile, name='profile'),
 
 	#loads competitions/paths.py
     path('competition/', include('apps.competition.urls')),
     #
     #
     # #admin and admin docs
-    # path(r'^admin/doc/', include('django.contrib.admindocs')),
-    # # path(r'^admin/', include('admin.site')),
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
+    path('admin/', admin.site.urls),
     #
     # #load allauth/paths.py
     path('accounts/', include('apps.allauth.urls'))

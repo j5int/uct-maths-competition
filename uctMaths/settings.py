@@ -147,16 +147,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 #endallauth
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'apps/allauth/apps/allauth/templates'),
-                 os.path.join(BASE_DIR, 'apps/competition/apps/competition/interface'),
-                 os.path.join(BASE_DIR, 'apps/allauth/apps/allauth/templates'),
-                 os.path.join(BASE_DIR, 'apps/competition/apps/competition/interface')],
+        'DIRS': [os.path.join(BASE_DIR, 'apps/allauth/templates'),
+                 os.path.join(BASE_DIR, 'apps/competition/interface')],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': DEBUG,

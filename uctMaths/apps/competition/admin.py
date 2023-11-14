@@ -3,6 +3,9 @@
 # sets up how each model is displayed (list_display in each <Model>Admin class)
 # methods for archiving student and invigilators
 from __future__ import unicode_literals
+
+from django.urls import path
+
 from .models import *
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
@@ -12,7 +15,6 @@ from django.db import connection, transaction
 from django import forms
 import datetime
 
-from django.template.defaulttags import url
 #Import_export models(https://django-import-export.readthedocs.org/en/latest/getting_started.html)
 from import_export.admin import ImportExportModelAdmin
 import tablib
@@ -45,11 +47,11 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def get_urls(self):
 		urls = super(SchoolAdmin, self).get_urls()
 		my_urls = [
-			url("^assign_school_ranks/", self.assign_school_ranks),
-			url("^school_summary/", self.school_summary),
-			url("^update_school_entry_status/", self.update_school_entry_status),
-			url("^school_certificate_list/", self.school_certificate_list),
-			url("^generate_grade_answer_sheets/", self.generate_grade_answer_sheets)
+			path("^assign_school_ranks/", self.assign_school_ranks),
+			path("^school_summary/", self.school_summary),
+			path("^update_school_entry_status/", self.update_school_entry_status),
+			path("^school_certificate_list/", self.school_certificate_list),
+			path("^generate_grade_answer_sheets/", self.generate_grade_answer_sheets)
 		]
 		return my_urls + urls
 
@@ -191,11 +193,11 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	def get_urls(self):
 		urls = super(SchoolStudentAdmin, self).get_urls()
 		my_urls = [
-			url("^upload_results/", self.upload_results),
-			url("^rank_students/", self.rank_students),
-			url("^output_assign_awards/", self.output_assign_awards),
-			url("^output_PRN_files/", self.output_PRN_files),
-			url("^assign_student_awards/", self.assign_student_awards),
+			path("^upload_results/", self.upload_results),
+			path("^rank_students/", self.rank_students),
+			path("^output_assign_awards/", self.output_assign_awards),
+			path("^output_PRN_files/", self.output_PRN_files),
+			path("^assign_student_awards/", self.assign_student_awards),
 		]
 		return my_urls + urls
 	def upload_results(self, request):
@@ -308,7 +310,7 @@ class CompetitionAdmin(admin.ModelAdmin):
 	def get_urls(self):
 		urls = super(CompetitionAdmin, self).get_urls()
 		my_urls = [
-			url("^upload_declaration/", self.upload_declaration),
+			path("upload_declaration/", self.upload_declaration),
 		]
 		return my_urls + urls
 
