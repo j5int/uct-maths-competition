@@ -1,0 +1,160 @@
+{%extends "base.html" %}
+
+{%block title%}Entry Review{%endblock%}
+{%block content%}
+<h1 >Review Entry for {{schooln}}</h1>
+<p> {{ error }} </p>
+<form action="." method="post">
+    {% csrf_token %}
+    <!-- {{ form.as_p  }} -->
+    {% if user.is_authenticated %}
+    {% else %}
+        <p>Not working.</p>
+    {% endif %}
+    <p>Physical address of the school for delivery by courier.</p>
+    <textarea readonly style = "width: 24em; resize: none" rows ="5" type ="text">{{address}}&#13;&#10;{{schooln.phone}}</textarea>
+    <!-- register responsible teacher from here --->
+    <div>
+        <h1>Responsible Teacher</h1>
+        <p>One responsible teacher is compulsory for each school entry. The responsible teacher may be contacted by the university on administrative matters.</p>
+        <p> {{ ierror }} </p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Cellphone</th>
+                <th>School Email </th>
+                <th>Personal Email</th>
+            </tr>
+            <tr>
+                <td>{{responsible_teacher.firstname}}</td>
+                <td>{{responsible_teacher.surname}}</td>
+                <td>{{responsible_teacher.phone_primary}}</td>
+                <td>{{responsible_teacher.phone_alt}}</td>
+                <td>{{responsible_teacher.cellphone}}</td>
+                <td>{{responsible_teacher.email_school}}</td>
+                <td>{{responsible_teacher.email_personal}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- register alternate responsible teacher from here --->
+
+    <div>
+        <h1>Alternate Responsible Teacher</h1>
+        <p>An Alternate Responsible Teacher can be assigned to take over correspondence if the primary responsible teacher leaves the school. <i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
+        <p> {{ ierror }}</p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Cellphone</th>
+                <th>School Email </th>
+                <th>Personal Email</th>
+            </tr>
+            <tr>
+                <td>{{alt_responsible_teacher.firstname}}</td>
+                <td>{{alt_responsible_teacher.surname}}</td>
+                <td>{{alt_responsible_teacher.phone_primary}}</td>
+                <td>{{alt_responsible_teacher.phone_alt}}</td>
+                <td>{{alt_responsible_teacher.cellphone}}</td>
+                <td>{{alt_responsible_teacher.email_school}}</td>
+                <td>{{alt_responsible_teacher.email_personal}}</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <!-- register invigilators from here -->
+    {% if invigilators %}
+    <div>
+        <h1>Registered Invigilators</h1>
+        <p>Please note that every school must send at least 1 invigilator; 2 invigilators are required if {{maxEntries}} entries are to be submitted. If the responsible teacher is going to invigilate kindly add his/her name to the list of invigilators.</p>
+        <p> {{ ierror }} </p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone </th>
+                <th>Phone (Alternative)</th>
+                <th>Email </th>
+                <th>Notes </th>
+            </tr>
+            <!-- Populates the list with previously registered invigilators -->
+            {%for invigilator in invigilator_list%}
+                <tr>
+                    <td>{{invigilator.firstname}}</td>
+                    <td>{{invigilator.surname}}</td>
+                    <td>{{invigilator.phone_primary}}</td>                    
+                    <td>{{invigilator.phone_alt}}</td>
+                    <td>{{invigilator.email}}</td>
+                    <td>{{invigilator.notes}}</td>
+                </tr>
+            {%endfor%}
+        </table>
+
+
+    </div>
+    {% endif %}
+
+    <h1>Registered Participants</h1>
+    {%for grade in grades%}
+    <div>
+        <!-- <form action="." method="post"> -->
+        <h2>Grade {{grade}}</h2>
+        {% if max_num_pairs > 0%}
+            <div>
+                <h3>Pairs:</h3>
+                    {%for key, p in pair_list.items%}
+                        {% if grade == key %}
+                        <p> {{p}} pairs (teams of 2) have been registered for grade {{grade}}. </p>
+                        {%endif%}
+                    {%endfor%}
+            </div> 
+        {% endif%}
+
+        <h3>Individuals:</h3>
+        <table>
+        <tr>
+            <th>First Name</th>
+            <th>Surname</th>
+        </tr>
+        <!-- Populates the list with previously registered students -->
+        {%for key, student_l in student_list.items%}
+            {% if grade == key %} <!-- only for the current grade -->
+                {%for student in student_l%}
+                <tr>
+                    <td>{{student.firstname}}</td>
+                    <td>{{student.surname}}</td>
+                </tr>
+                {%endfor%}
+            {%endif%}
+        {%endfor%}
+
+        </table>
+        <br><br>
+    </div>
+    {%endfor%} <!-- endfor grade -->
+    <small> <a href="../printer_entry">Download Printer Friendly Version</a> </small>
+    <!-- <input class="bluebutton left" type="submit" name='save_form' value="Save"> -->
+    {% if entries_open %}
+    <p>Please remember that it is your responsibility to ensure that accurate information has been entered. You will be able to edit your school's entry up until the closing date for new entries to the competition. </p>
+    <input class="bluebutton left" type="submit" name='edit_entry' value="Edit">
+    {% else %}
+    <h3> Sign-up closed </h3> <p> No more entries are to be accepted for this year's UCT Mathematics Competition.</p>
+    {%endif%}
+
+    <input class="bluebutton left" type="submit" name='resend_confirmation' value="Re-send email">
+    </form>
+{%endblock%}

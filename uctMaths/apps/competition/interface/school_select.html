@@ -1,0 +1,26 @@
+{%extends "base.html" %}
+
+{%block title%}Select school{%endblock%}
+{%block content%}
+<h1 > Select school </h1>
+<p> {{ error }} </p>
+<form action="" method="post">
+    {% csrf_token %}
+    <!-- {{ form.as_p  }} -->
+    {% if user.is_authenticated %}
+    {% else %}
+        <p>Not working.</p>
+    {% endif %}
+    <p>Please select the school you are responsible for. This school will be associated with your user name. If your school is not on the list, please contact {{admin_emailaddress}}. </p>
+    <select name = "school">
+        {% for school in schools %}
+            <option value="{{ school.id }}">{{ school.name }}</option>
+        {% endfor %}
+    </select>
+
+    <input class="bluebutton left" type="submit" name='Continue' value="Continue">
+
+    {% if invalid_request %}
+    <p> {{inv_req_message}} </p>
+    {% endif %}
+{%endblock%}

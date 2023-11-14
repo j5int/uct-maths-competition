@@ -1,0 +1,254 @@
+{%extends "base.html" %}
+
+{%block head%}
+<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+<script type='text/javascript' src='/static/sidebar.js'></script>
+<script type='text/javascript' src='/static/tables.js'></script>
+{%endblock%}
+{%block title%}New Students{%endblock%}
+{%block content%}
+<noscript> <h2> WARNING: Your browser does not support JavaScript! In order to complete this form please switch to a browser that supports it or enable JavaScript. You are not currently able to submit. </h2> </noscript>
+<h1 >Student registration form for {{schooln}}</h1>
+<p> {{ error }} </p>
+<form name='registration' action='.' method='post' onsubmit='return validateForm(this)'>
+    {% csrf_token %}
+    <!-- {{ form.as_p  }} -->
+    {% if user.is_authenticated %}
+    {% else %}
+        <p>Not working.</p>
+    {% endif %}
+
+    <!-- For "Confirm your school's language? -->
+    <p> Please confirm your school's preferred language. </p>
+    <select name = "language">
+        {%for lang in language_options%}
+        {%if lang == "e"%}<option value="e">English</option>{%endif%}
+        {%if lang == "a"%}<option value="a">Afrikaans</option>{%endif%}
+		{%if lang == "b"%}<option value="b">Bilingual</option>{%endif%}
+		{%endfor%}
+    </select>
+    <p>Physical address of the school for delivery by courier. Please do not use a PO Box number.</p>
+    <td>Address<br><textarea style = "width: 24em; resize: none" rows ="5" type ="text" class="physical_address" name="physical_address" required value="" >{{address}}</textarea></td>
+    <br><td>Postal/Zip Code<br><input type="text" class="code" name="code" required value="{{code}}"></td>
+    <br><td>City<br><input type="text" class="city" name="city" required value="{{city}}"></td>
+    <br><td>Phone Number for Delivery<br><input type="text" class="school_number" name="school_number" required value="{{schooln.phone}}"></td>
+    <!-- register responsible teacher from here --->
+    <div>
+        <h1>Register Responsible Teacher</h1>
+        <p>The responsible teacher may be contacted by the university on administrative matters. Compulsory 1 per school.<br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
+        <p> {{ ierror }} </p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name*</th>
+                <th>Surname*</th>
+                <th>Phone*</th>
+                <th>Phone (Alternative)</th>
+                <th>Cellphone</th>
+                <th>School Email* </th>
+                <th>Personal Email</th>
+            </tr>
+            <tr>	<!-- the required attribute does not work with IE9 and lower -->
+                <td><input type="text" class="resp_firstname" name="rt_firstname" required value="{{responsible_teacher.firstname}}"></td>
+                <td><input type="text" class="resp_surname" name="rt_surname" required value="{{responsible_teacher.surname}}"></td>
+                <td><input type ="text" class="resp_phone_primary" name="rt_phone_primary" required value="{{responsible_teacher.phone_primary}}"></td>                    
+                <td><input type ="text" class="resp_phone_alt" name="rt_phone_alt" value="{{responsible_teacher.phone_alt}}"></td>
+                <td><input type ="text" class="resp_cell" name="rt_phone_cell" value="{{responsible_teacher.phone_cell}}"></td>
+                <td><input id="rmail" class="resp_mail_school" type ="text" name="rt_email_school" required value={{responsible_teacher.email_school|lower}}></td>
+                <td><input id="rmail" class="resp_mail_personal" type ="text" name="rt_email_personal" value={{responsible_teacher.email_personal|lower}}></td>
+                <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
+            </tr>
+        </table>
+    </div>
+
+    <!-- register alternate responsible teacher from here --->
+
+    <div>
+        <h1>Alternate Responsible Teacher</h1>
+        <p>An Alternate Responsible Teacher can be assigned to take over correspondence if the primary responsible teacher leaves the school. <i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
+        <p> {{ ierror }}</p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name*</th>
+                <th>Surname*</th>
+                <th>Phone* </th>
+                <th>Phone (Alternative)</th>
+                <th>Cellphone</th>
+                <th>School Email* </th>
+                <th>Personal Email</th>
+            </tr>
+            <tr>
+                <td><input type="text" class="alt_resp_firstname" name="art_firstname" required value="{{alt_responsible_teacher.firstname}}"></td>
+                <td><input type="text" class="alt_resp_surname" name="art_surname" required value="{{alt_responsible_teacher.surname}}"></td>
+                <td><input type ="text" class="alt_resp_phone_primary" name="art_phone_primary" required value="{{alt_responsible_teacher.phone_primary}}"></td>                    
+                <td><input type ="text" class="alt_resp_phone_alt" name="art_phone_alt" value="{{alt_responsible_teacher.phone_alt}}"></td>
+                <td><input type ="text" class="alt_resp_cell" name="art_phone_cell" value="{{alt_responsible_teacher.phone_cell}}"></td>
+                <td><input id="rmail" class="alt_resp_mail_school" type ="text" name="art_email_school" required value={{alt_responsible_teacher.email_school|lower}}></td>
+                <td><input id="rmail" class="alt_resp_mail_personal" type ="text" name="art_email_personal" value={{alt_responsible_teacher.email_personal|lower}}></td>
+                <input type ="hidden" name="alt_rt_registered_by" value ={{ user.id }} >
+            </tr>
+        </table>
+    </div>
+
+
+
+    <!-- register invigilators from here -->
+    {% if invigilators %}
+    <div>
+        <h1>Register Invigilators</h1>
+        <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Schools which send a full entry of {{maxEntries}} participants must send at least two invigilators.
+ <br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
+        <p> {{ ierror }} </p>
+        {% csrf_token %}
+
+        <table>
+            <tr>
+                <th>First Name*</th>
+                <th>Surname*</th>
+				<th>Phone* </th>
+				<th>Phone (Alternative)</th>
+				<th>Email* </th>
+				<th>Notes </th>
+            </tr>
+            <!-- Populates the list with previously registered invigilators -->
+
+            <!-- then the first invigilator is always required -->
+            {%for invigilator in invigilator_list%}
+                {% if forloop.first %} <!-- if this is the first iteration of the loop -->
+                <tr>
+                    <td><input type="text" class="invig_firstname" name="inv_firstname" required value="{{invigilator.firstname}}"></td>
+                    <td><input type="text" class="invig_surname" name="inv_surname" required value="{{invigilator.surname}}"></td>
+                    <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" required value="{{invigilator.phone_primary}}"></td>                    
+                    <td><input type ="text"  class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
+                    <td><input type ="text" class="invig_mail" name="inv_email" required value={{invigilator.email|lower}}></td>
+                    <td><input type ="text" class="invig_notes" name="inv_notes" value={{invigilator.notes}}></td>
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                </tr>
+                {% else %}
+                <tr>
+                    <td><input type="text" class="invig_firstname" name="inv_firstname" value="{{invigilator.firstname}}"></td>
+                    <td><input type="text" class="invig_surname" name="inv_surname" value="{{invigilator.surname}}"></td>
+                    <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" value="{{invigilator.phone_primary | cut:" "}}"></td>                    
+                    <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
+                    <td><input type ="text" class="invig_mail" name="inv_email" value={{invigilator.email|lower}}></td>
+                    <td><input type ="text" class="invig_notes" name="inv_notes" value={{invigilator.notes}}></td>
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                </tr>
+                {% endif %}
+
+            {%endfor%}
+            
+            {%for invigilator in invigilator_range%}
+            {% if invigilator_list|length == 0 and forloop.first %}
+                <tr>
+                    <td><input type="text" class="invig_firstname" required name="inv_firstname"></td>
+                    <td><input type="text" class="invig_surname" required name="inv_surname"></td>
+                    <td><input type ="text" class="invig_phone_primary" required name="inv_phone_primary"></td>
+                    <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt"></td>
+                    <td><input type ="text" class="invig_mail" required name="inv_email"></td>
+                    <td><input type ="text" class="invig_notes" name="inv_notes"></td>
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                </tr>
+            {% else %}
+                <tr>
+                    <td><input type="text" class="invig_firstname" name="inv_firstname"></td>
+                    <td><input type="text" class="invig_surname" name="inv_surname"></td>
+                    <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary"></td>                    
+                    <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt"></td>
+                    <td><input type ="text" class="invig_mail" name="inv_email"></td>
+                    <td><input type ="text" class="invig_notes" name="inv_notes"></td>
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                </tr>
+            {% endif %}
+
+            {%endfor%}
+
+        </table>
+
+
+    </div>
+    {% endif %}
+
+    <div>
+        <h1>Register Participants</h1>
+    </div>
+    {% if max_num_pairs > 0%}
+        <p> For each grade, please select the number of pair entrants, and enter the names of the individual entrants.</p>
+    {% else%}
+        <p> For each grade, please enter the names of the individual entrants.</p>
+    {% endif%}
+    {%for grade in grades%}
+    <div>
+        <!-- <form action="." method="post"> -->
+        <h2>Grade {{grade}}</h2>
+        {% if max_num_pairs > 0%}
+            <div>
+                <h3>Number of pairs:
+                <select name = "pairs" class='pairs'>
+                    {%for key, pair_list in pairs_per_grade.items%}
+                        {% if grade == key %}
+                            {%for p in pair_list%}
+                            <option value='{{p}}'>{{p}}</option>
+                            {%endfor%}
+                        {%endif%}
+                    {%endfor%}
+                </select>
+                </h3>
+            </div> 
+        {% endif%}
+
+        <h3>Individuals:</h3>
+        <table>
+        <tr>
+            <th>First Name</th>
+            <th>Surname</th>
+        </tr>
+        <!-- Populates the list with previously registered students -->
+        {%for key, student_l in student_list.items%}
+            {% if grade == key %} <!-- only for the current grade -->
+                {%for student in student_l%}
+                <tr>
+                    <td><input type="text" class="st_firstname" name="firstname" value="{{student.firstname}}"></td>
+                    <td><input type="text" class="st_surname" name="surname" value="{{student.surname}}"></td>
+                    <input type='hidden' name='grade' value='{{grade}}'>
+                    <input type ="hidden" name="registered_by" value ={{ user.id }} >
+                </tr>
+                {%endfor%}
+            {%endif%}
+        {%endfor%}
+
+        {%for key, entry_range in entries_per_grade.items%}
+            {% if grade == key %}
+                {% for entry in entry_range %}
+                <tr>
+                  <td><input type="text" class="st_firstname" name="firstname"></td>
+                  <td><input type="text" class="st_surname" name="surname"></td>
+                  <input type='hidden' name='grade' value='{{grade}}'>
+                  <input type ="hidden" name="registered_by" value ={{ user.id }} >
+                </tr>
+                {%endfor%}
+            {%endif%}
+        {%endfor%}
+
+        </table>
+        <br><br>
+    </div>
+    {%endfor%} <!-- endfor grade -->
+
+
+    <div id='alert'>
+        <input type="checkbox" name="confirm" align="left" onclick="disableElement(this)"> Have you confirmed that all the information entered is correct? It is your responsibility to ensure that your application has met the requirements stated for each section.<br> </br>
+    </div>
+
+
+    {% if entries_open %}
+    <input class="greybutton left" id='complete' type="submit" name='submit_form' value="Submit" disabled>
+    {% else %}
+    <h3> Sign-up closed </h3> <p> No more entries are to be accepted for this year's UCT Mathematics Competition </p>
+    {% endif %}
+
+    </form>
+{%endblock%}

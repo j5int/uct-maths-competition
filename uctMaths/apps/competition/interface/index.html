@@ -1,0 +1,27 @@
+{%extends 'plain_base.html' %}
+<!-- 
+landing page
+not sure what content should go on here.
+has links to login and signup pages. 
+when you cancel login or signup you get redirected here.
+-->
+
+{%block control%}
+<div id='control' style='height:1.5em'>
+	<a href='/accounts/login' style='color:white'>Log in</a>
+	<a href='/accounts/signup' style='color:white'>Sign up</a>
+</div>
+{%endblock%}
+
+{%block content%}
+
+<p style='margin-right:25%; margin-left:25%'>
+The UCT Mathematics Competition, established in 1977, is an annual event for high schools in the Western Cape, held on the University of Cape Town campus.
+<br><br>
+About 7000 high school students participate in the competition each year, and invitations are sent to 400 high schools in the Western Cape. Each school can enter five individuals and five pairs per grade. Separate question papers are set for each grade, from 8 to 12. There is no entry fee.
+<br><br>
+Trophies, calculators and book prizes are awarded for the best performances, and Gold, Merit and Participation certificates are awarded to all participants
+</p>
+{%endblock%}
+
+{%block title%}UCT Mathematics Competition{%endblock%}

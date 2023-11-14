@@ -191,7 +191,7 @@ $RECYCLE.BIN/
 #############
 
 *.py[co]
-uctMaths/uctMaths/settings.ini
+uctMaths/settings.ini
 
 # Packages
 *.egg
@@ -220,4 +220,4 @@ pip-log.txt
 
 *.json
 uctMaths/generated_grade_answer_sheets/
-uctMaths/competition/migrations/*
+uctMaths/apps/competition/migrations/*

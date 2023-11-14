@@ -1,0 +1,56 @@
+{%extends "plain_base.html" %}
+<!-- 
+contains the sidebar. 
+used on all the pages once you're logged in
+ -->
+
+{%block head%}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src='/static/sidebar.js'></script>
+{%endblock%} <!-- end head -->
+
+{%block sidebar%}
+<!-- sidebar -->
+
+	<div id='sidebar'>
+        <div class="box">
+            <div class="head">
+                <h2><a href="/accounts/profile/">Profile</a></h2>
+            </div>
+            <ul class="style1">
+				{% if only_back%}
+					<li><a href="/accounts/profile/">Back</a></li>
+					
+				{%endif%}
+				{% if not only_back%}
+					<li><a href="/apps/competition/register/entry_review/">Entry form</a></li>
+					{% if show_answer_sheets_download%}
+						<li><a href="/apps/competition/register/answer_sheets/" target="_blank" >Answer Sheets</a></li>
+					{%endif%}
+					{% if show_results_download%}
+						<li><a href="/apps/competition/register/school_results/" target="_blank" >School Results</a></li>
+						<li><a href="/apps/competition/register/school_certificates/" target="_blank">Download School Certificates</a></li>
+					{%endif%}
+					{% if admin%}
+						<li><a href="/apps/competition/register/schools/">Schools</a></li>
+						<li><a href="/apps/competition/register/venues/">Venues</a></li>
+					{%endif%}
+				{%endif%}
+            </ul>
+        </div>
+
+		<div class="box">
+			<div class="head">
+				<h2></h2>
+			</div>
+			<ul class="style1">
+				<li><a href="/accounts/logout/">Log out</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div id='hide'>
+		<input type='image' width='30' id='hideshow' src='/static/hidebutton.png' title="Hide Sidebar" alt="Hide">
+	</div>
+
+{%endblock%}

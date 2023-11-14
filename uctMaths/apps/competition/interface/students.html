@@ -1,0 +1,35 @@
+{%extends 'base.html' %}
+<!-- view the registered (by logged in user) students -->
+
+
+{%block head%}
+<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+<script type='text/javascript' src='/static/sidebar.js'></script>
+<script type='text/javascript' src='/static/tables.js'></script>
+{%endblock%}
+{%block title%}Registered Students{%endblock%}
+{%block content%}
+    <h1>Registered Students</h1>
+    <form action='' method='post' onsubmit='return drop("student");'>
+        {% csrf_token %}
+        <!-- {{ form.as_p }} -->
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th class= 'narrow'>Grade</th>
+                <th class= 'narrow'></th>
+            </tr>
+            {%for s in students%}
+            <tr id='show{{s.id}}'>
+                <td>{{s.firstname}}</td>
+                <td>{{s.surname}}</td>
+                <td>{{s.grade}}</td>
+                <td>
+                <input id='{{s.id}}' name='del_student{{s.id}}' class='bluebutton narrow' type='submit' value='X'>
+                </td>
+            </tr>
+            {%endfor%}
+        </table>
+    </form>
+{%endblock%}

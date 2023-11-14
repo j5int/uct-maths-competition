@@ -1,13 +1,12 @@
-from background_task import background
+# from background_task import background
 
-import ho.pisa as pisa
+from xhtml2pdf import pisa  
 import sys
 from django.utils import timezone
-import pytz
-import settings
+
 sys.path.append("../")
 
-from competition.models import School, ResponsibleTeacher, SchoolStudent
+from apps.competition.models import School, ResponsibleTeacher, SchoolStudent
 import os
 
 # It seems that this file needs to be in the uctMaths folder and not competition. 
@@ -24,8 +23,8 @@ def current_time():
 def bg_email_results(school_id):
     
     print("%s: Emailing results for school with ID: %s" %(current_time(), str(school_id)) )
-    from competition.compadmin import printer_school_report, timestamp_now
-    from competition.reports import send_results
+    from apps.competition.compadmin import printer_school_report
+    from apps.competition import send_results
 
     school = School.objects.filter(id=school_id)[0]
     rteachers = ResponsibleTeacher.objects.filter(school=school.id)
@@ -42,8 +41,8 @@ def bg_email_results(school_id):
 # Ideally this function would be in competition/compadmin.py
 @background(queue="AS-generation-queue")
 def bg_generate_school_answer_sheets(school_id):
-    from competition.compadmin import printer_answer_sheet, timestamp_now
-    from competition.reports import send_answer_sheets
+    from apps.competition.compadmin import printer_answer_sheet
+    from apps.competition import send_answer_sheets
     print("%s: Emailing answer sheets for school with ID: %s" %(current_time(), str(school_id)) )
 
     school = School.objects.filter(id=school_id)[0]
@@ -62,10 +61,10 @@ def bg_generate_school_answer_sheets(school_id):
 
 @background(queue="AS-generation-queue")
 def bg_generate_as_grade_distinction(grade, paired):
-    from competition.compadmin import get_student_answer_sheet
+    from apps.competition.compadmin import get_student_answer_sheet
     import StringIO
     import datetime
-    from competition.reports import send_grade_answer_sheets_to_organiser
+    from apps.competition import send_grade_answer_sheets_to_organiser
 
     BATCH_SIZE = 2000
 

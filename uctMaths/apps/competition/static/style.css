@@ -1,0 +1,188 @@
+/*
+style.css
+main style of for the page. 
+headers, sizes of things etc.
+*/
+
+@import "login.css";
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #f4f4f4;
+	font-family: "Helvetica Neue" ,Helvetica, Arial,sans-serif;
+	overflow: scroll;
+}
+
+
+.link { text-align: center; clear: both; padding: 20px 0; }
+.link a { color: #333333; }
+
+
+#content .narrow{
+	width: 2em;
+}
+
+
+#content .wide{
+	min-width: 12em;
+}
+
+.header {
+	text-align: center;
+    height:9em;
+    background:#00548f;
+	padding-top: 20px;
+	padding-bottom: 20px; 
+	/*margin-bottom: 20px;*/
+	text-transform: uppercase;
+}
+
+#control {
+	text-align: right;
+    background:#00548f;
+	/*padding-bottom: 20px; */
+	margin-bottom: 20px;
+	color: white;
+
+	/*text-transform: uppercase;*/
+}
+
+
+	
+.title	{
+		padding-left: 50px;
+		padding-right: 50px;
+		vertical-align: center;
+		letter-spacing: 0.20em;
+		font-weight: 700;
+		font-size: 40px;
+		color: white;
+	}
+	
+.byline	{
+		letter-spacing: 0.15em;
+		text-transform: uppercase;
+		font-weight: 400;
+		font-size: 25px;
+		color: #ababab;
+	}
+
+#content {
+    width: 80%;
+    /*background: #F0F0F0;*/
+    min-height: 20em;
+    overflow: auto;
+    /*border: 1px solid #CCC;*/
+    margin: 20px auto;
+   	font: 14px;
+
+}
+
+/*Sidebar*/
+#hide{
+	float: left;
+	width: 25px;
+	background:#00548f;
+	padding-right: 12px;
+	margin-right: 20px;
+	padding-top: 1em;
+	min-height:49em;
+}
+
+#sidebar
+	{
+		float: left;
+		width: 10%;
+		margin-left: 20px;
+		padding-left: 1%;
+		height: 50em;
+		background:#00548f;
+		color: white;
+	}
+
+#sidebar .head h2
+	{
+		font-size: 1.6em;
+	}
+	
+#sidebar .box
+	{
+		margin-bottom: 1em;
+	}
+
+#sidebar a
+	{
+		color: white;
+		text-decoration: none;
+	}
+
+ul.style1
+	{
+		margin: 0;
+		padding: 10px;
+		list-style: none;
+	}
+	
+ul.style1 li
+	{
+		border-top: solid 1px #ababab;
+		padding: 0.80em 0;
+	}
+	
+ul.style1 li:first-child
+	{
+		border-top: 0;
+		padding-top: 0;
+	}
+
+/*Table formatting*/
+#content table
+{
+	table-layout: fixed;
+	background-color: #C1D0DB;
+	border-collapse:collapse;
+}
+#content td, th 
+{
+	width:8em;
+	font-size:1em;
+	padding:3px 7px 2px 7px;
+}
+#content tr{
+	border: solid #A0A9B0 1px;
+}
+#content input{
+  width:8em;
+}
+
+th 
+{
+	font-size:1em;
+	text-align:left;
+	padding-top:5px;
+	padding-bottom:4px;
+	background-color:#00548f;
+	color:#ffffff;
+	/*border: none;*/
+}
+tr.alt td 
+{
+	color:#000000;
+	background-color:#C1D0DB;
+}
+
+.leftpad{
+	padding-left: 5em;
+}
+
+#alert{
+	padding-top:20px;
+}
+
+#alert:hover {
+	background-color:#E0E0E1;
+}
+
+
+
