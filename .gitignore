@@ -218,6 +218,9 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
-*.json
 uctMaths/generated_grade_answer_sheets/
 uctMaths/apps/competition/migrations/*
+
+.idea
+.vscode/settings.json
+
