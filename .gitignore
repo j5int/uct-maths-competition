@@ -225,3 +225,6 @@ uctMaths/Declaration/
 .idea
 .vscode/settings.json
 
+venv
+*.code-workspace
+
