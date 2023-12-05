@@ -220,6 +220,7 @@ pip-log.txt
 
 uctMaths/generated_grade_answer_sheets/
 uctMaths/apps/competition/migrations/*
+uctMaths/Declaration/
 
 .idea
 .vscode/settings.json
