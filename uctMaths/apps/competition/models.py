@@ -24,6 +24,10 @@ class Competition(models.Model):
     answer_sheet_download_enabled = models.BooleanField(db_column='answer_sheet_download_enabled', default=False,
                                                         verbose_name="Allow teachers to download answer sheets")
 
+
+def _on_delete(school, *args, **kwargs):
+    pass
+
 class School(models.Model):
     # Contains school information. Duplicates should not be allowed, but will be removed by the admin.
     name        = models.CharField(max_length=255, db_column='Name', verbose_name="School name")
@@ -40,7 +44,7 @@ class School(models.Model):
     entered     = models.IntegerField(null=True, db_column='Entered') 
     score       = models.IntegerField(null=True, db_column='Score', blank=True) 
     email       = models.CharField(max_length=50, db_column='Email', blank=True) 
-    assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True, on_delete=lambda x:x) #ForeignKey (gets assigned a single user)
+    assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True, on_delete=_on_delete) #ForeignKey (gets assigned a single user)
     rank = models.IntegerField(null=True, db_column='Rank', blank=True)
     location = models.CharField(max_length=3, choices=LOCATIONS, db_column='Location')
     answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", blank=True, verbose_name="Answer sheets emailed to teacher")
@@ -52,6 +56,7 @@ class School(models.Model):
         return u'%s'%(self.name)
     class Meta:
         ordering = ['name']     #defines the way the records are sorted.
+
 
 class SchoolStudent(models.Model):
     # A single student. Not a User. Score and Rank will added/updated by the admin so they can be null.

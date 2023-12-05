@@ -23,7 +23,7 @@ urlpatterns = [
 	path('accounts/profile/', comp_views.profile, name='profile'),
 
 	#loads competitions/paths.py
-    path('competition/', include('apps.competition.urls')),
+    path('apps/competition/', include('apps.competition.urls')),
     #
     #
     # #admin and admin docs

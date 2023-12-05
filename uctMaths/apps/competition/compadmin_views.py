@@ -57,20 +57,16 @@ def upload_declaration(request):
 
     #Once the user has pressed 'Submit'
     if request.method == 'POST':
-        #a=request.POST
         try: #Try receive file from 'Submit' post from user
             form = UploadDeclarationForm(request.POST, request.FILES)
             file = request.FILES['upload_file']
-            filepath = os.path.join(os.path.dirname(__file__), "../..", "Declaration")
             filename = "Declaration.pdf"
-            if os.path.exists(filepath):
-                shutil.rmtree(filepath)
-            os.mkdir(filepath)
-            filepath = os.path.join(filepath,"")
+
+            filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../..", "Declaration", filename))
+            if os.path.exists(os.path.dirname(filepath)):
+                shutil.rmtree(os.path.dirname(filepath))
+                os.mkdir(os.path.dirname(filepath))
             default_storage.save(filepath, File(file))
-            if len(os.listdir(filepath)) == 1:
-                autofilename = os.listdir(filepath)[0]
-                os.rename(os.path.join(filepath,autofilename), os.path.join(filepath,filename))
         except Exception as e:#If the user just spams the 'Submit' button without selecting file
             handler_output = [e]
 
@@ -96,13 +92,12 @@ def handle_uploaded_file(inputf):
     if 'Ranked.csv' not in inputf.name:
         return ['Incorrect file format provided.']
 
-    input_fstring=u''
+    input_fstring=''
     #Chunks for handling larger files - will essentially just have a long string of char's after this
     for chunk in inputf.chunks():
         input_fstring += chunk.decode('utf-8','replace') #Replace accented characters with unicode equivalents
 
-    input_fbytes = io.BytesIO(input_fstring.encode('utf-8'))  # Python 2's csv.reader doesn't support unicode, only utf-8 encoded bytes
-    results = csv.DictReader(input_fbytes)
+    results = csv.DictReader(input_fstring)
 
     dne_list = [] #Hold "list of errors" to be placed on template. Called "Does Not Exist (DNE) list"
 

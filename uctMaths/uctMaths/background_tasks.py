@@ -85,7 +85,7 @@ def bg_generate_as_grade_distinction(grade, paired):
             os.mkdir("generated_grade_answer_sheets")
         grade_result = open(filename, "w+b")
         print("Creating PDF for %s grade %d, batch %d of %d. Started at %s" % ("pairs" if paired else "individuals", grade, batch_no + 1, len(batches), str(startTime)))
-        pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), grade_result, encoding="UTF-8")
+        pdf = pisa.pisaDocument(html, grade_result, encoding="UTF-8")
         grade_result.close()
         send_grade_answer_sheets_to_organiser(filename)
         diff = datetime.datetime.now() - startTime 

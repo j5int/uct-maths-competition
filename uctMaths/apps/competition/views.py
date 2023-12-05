@@ -32,7 +32,7 @@ def printer_entry_result(request, school_list=None):
             temp_school_list.append(School.objects.get(assigned_to=request.user))
         except exceptions.ObjectDoesNotExist:
             # No school is associated with this user! Redirect to the select_schools page
-            return HttpResponseRedirect('../school_select/school_select.html')
+            return HttpResponseRedirect('../school_select/')
     else:
         temp_school_list = [school for school in school_list]
 
@@ -87,7 +87,7 @@ def submitted(request):
         school_asmt = School.objects.get(assigned_to=request.user)
         student_list = SchoolStudent.objects.all().filter(school=school_asmt)
     except exceptions.ObjectDoesNotExist:
-        return HttpResponseRedirect('../school_select/school_select.html')
+        return HttpResponseRedirect('../school_select/')
     except Exception:
         school_summary_blurb = 'An error has occured.' #This could occur if a user has become associated with > 1 school.
     
@@ -129,7 +129,7 @@ def entry_review(request):
         assigned_school = School.objects.get(assigned_to=request.user)
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
-        return HttpResponseRedirect('../school_select/school_select.html')
+        return HttpResponseRedirect('../school_select/')
 
     #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
 
@@ -144,7 +144,7 @@ def entry_review(request):
         pair_list[p] = pair_list[p]
 
     if not (responsible_teacher or alt_responsible_teacher):
-        return HttpResponseRedirect('../students/newstudents.html')
+        return HttpResponseRedirect('../students/')
     else:
         assigned_school.entered=1 #The school has made an entry
         assigned_school.save()
@@ -179,10 +179,10 @@ def entry_review(request):
         'maxEntries': compadmin.get_max_entries()}
 
     if request.method == 'POST' and 'edit_entry' in request.POST and (compadmin.isOpen() or request.user.is_staff):  # If the form has been submitted.
-        return HttpResponseRedirect('../students/newstudents.html')
+        return HttpResponseRedirect('../students/')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
-        return HttpResponseRedirect('../submitted.html')
+        return HttpResponseRedirect('../')
 
     c.update(csrf(request))
     return render_to_response(request, 'entry_review.html', c)
@@ -199,7 +199,7 @@ def newstudents(request):
         assigned_school = School.objects.get(assigned_to=request.user)
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
-        return HttpResponseRedirect('../school_select/school_select.html')
+        return HttpResponseRedirect('../school_select/')
 
     #NOTE: School.objects.get(pk=int(form.getlist('school','')[0])) was previously used to get school from drop-down menu
 
@@ -367,10 +367,10 @@ def newstudents(request):
                  #The school has made an entry
                 try:
                     confirmation.send_confirmation(request, assigned_school, cc_admin=True)
-                    return HttpResponseRedirect('../submitted.html')
+                    return HttpResponseRedirect('../submitted/')
                 except Exception as e:
                     print(e)
-                    return HttpResponseRedirect('../submitted_noemail.html')
+                    return HttpResponseRedirect('../submitted/')
             else:
                 print('This should not happen')
 
@@ -471,10 +471,10 @@ def school_select(request):
                 school_selected.assigned_to = request.user
                 school_selected.save()
                 #School.objects.set(name=school_selected).assign_to(request.user)
-                return HttpResponseRedirect('../students/newstudents.html')
+                return HttpResponseRedirect('../students/')
 
             elif school_assignment == request.user: #This should not happen
-                return HttpResponseRedirect('../students/newstudents.html')
+                return HttpResponseRedirect('../students/')
             else:
                 invalid_request = True 
                 inv_req_message = 'This school has already been assigned to another user. If you believe this to be an error, please contact ' + compadmin.admin_emailaddress() + '.'

@@ -3,11 +3,11 @@
 from __future__ import unicode_literals
 from __future__ import unicode_literals
 
+import io
 import tempfile
 from wsgiref.util import FileWrapper
 
-from PyPDF2 import PdfFileMerger
-from six import StringIO
+from PyPDF2 import PdfMerger
 
 from .models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
 from datetime import date, datetime
@@ -331,12 +331,12 @@ def output_studenttags(student_list):
     #Generate individuals name tags 
     #Eg: "Ref#","Name Surname","School name",Grade(int),"Building Room(Code)"
     venue_list = Venue.objects.all()
-    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+    output_io = io.BytesIO() #Used to write to files then zip
     
-    with zipfile.ZipFile(output_stringIO, 'w') as zipf:
+    with zipfile.ZipFile(output_io, 'w') as zipf:
         for location in LOCATIONS:
             for grade in range(8, 13):
-                output_string = StringIO.StringIO()
+                output_string = io.BytesIO()
                 for student in grade_bucket[grade, False, location[0]]: #Individuals in grade + location
                     venue_object = [venue for venue in venue_list if venue.code == student.venue]
                     s_line = u''
@@ -348,11 +348,11 @@ def output_studenttags(student_list):
                     s_line += '\"' + str(venue_str) + '\"\n'
                     output_string.write(s_line)
 
-                #Generate file from StringIO and write to zip (ensure str UTF-* encoding is used)
-                zipf.writestr('Mailmerge_' + location[0] + '_GRD' + str(grade) + '_IND.txt', output_string.getvalue().encode('utf-8'))
+                #Generate file from io and write to zip (ensure str UTF-* encoding is used)
+                zipf.writestr('Mailmerge_' + location[0] + '_GRD' + str(grade) + '_IND.txt', output_string.getvalue())
                 output_string.close()
 
-                output_string = StringIO.StringIO()
+                output_string = io.BytesIO()
                 for student in grade_bucket[grade, True, location[0]]: #Pairs in grade + location
                     venue_object = [venue for venue in venue_list if venue.code == student.venue]
                     s_line = u''
@@ -364,13 +364,13 @@ def output_studenttags(student_list):
                     s_line += '\"' + str(venue_str) + '\"\n'
                     output_string.write(s_line)
 
-                #Generate file from StringIO and write to zip (ensure str UTF-* encoding is used)
+                #Generate file from io and write to zip (ensure str UTF-* encoding is used)
                 zipf.writestr('Mailmerge_' + location[0] + '_GRD' +str(grade) + '_PAR.txt',
-                              output_string.getvalue().encode('utf-8'))
+                              output_string.getvalue())
                 output_string.close()
 
     #Generate response and serve file to the user
-    response = HttpResponse(output_stringIO.getvalue())
+    response = HttpResponse(output_io.getvalue())
     response['Content-Disposition'] = 'attachment; filename=mailmergestudents(%s).zip'%(timestamp_now())
     response['Content-Type'] = 'application/x-zip-compressed'
     return response
@@ -386,28 +386,28 @@ def remove_user_assoc(school_list):
 def output_schooltaglists(school_list):
     """ Generate the tags for a School QuerySet. Served as a single text file in HttpResponse. """
 
-    output_stringio = StringIO.StringIO()
+    output_io = io.BytesIO()
 
     #Generate and format school entry (as in spec. sheet)
     for school in school_list:
         s_entry = '\"' + school.contact + '\",'
         s_entry += '\"' + school.name + '\",'
         s_entry += '\"' + school.address + '\"\n'
-        output_stringio.write(s_entry)
+        output_io.write(s_entry)
 
     #Serve to user as text file
-    response = HttpResponse(output_stringio.getvalue().encode('utf-8'))
+    response = HttpResponse(output_io.getvalue())
     response['Content-Disposition'] = 'attachment; filename=schooltags(%s).txt'%(timestamp_now())
     return response
 
 def upload_results():
     """Facilitate upload of Ranked.csv (the results) files. Redirects to custom Admin page (upload_results.html), the logic contained in compadmin_views.py."""
     #Return response of redirect page
-    response = HttpResponseRedirect('../../../../competition/admin/upload_results.html')
+    response = HttpResponseRedirect('/apps/competition/admin/upload_results')
     return response
 
 def upload_declaration():
-    response = HttpResponseRedirect('../../../../competition/admin/upload_declaration.html')
+    response = HttpResponseRedirect('/apps/competition/admin/upload_declaration')
     return response
 
 def rank_schools():
@@ -997,31 +997,31 @@ def output_PRN_files():
     student_list = SchoolStudent.objects.all()
     grade_bucket = gradeBucket(student_list)
 
-    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+    output_io = io.BytesIO() #Used to write to files then zip
     
-    with zipfile.ZipFile(output_stringIO, 'w') as zipf: 
+    with zipfile.ZipFile(output_io, 'w') as zipf: 
         for grade in range(8, 13):
             #with open('Grade'+str(grade)+'individuals.txt', 'w') as temp_file:
-            output_string = StringIO.StringIO()
+            output_string = io.BytesIO()
 
             for student in grade_bucket[grade, False, 'ALL']: #Individual students
                 s_line = u'%-10s %3s %s; %s, %s\n'%(student.reference, 'SCI', str(student.school)[0:10], student.surname, student.firstname[0])
                 output_string.write(s_line)
                 
-            #Generate file from StringIO and write to zip (ensure str UTF-* encoding is used)
-            zipf.writestr('INDGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
+            #Generate file from io and write to zip (ensure str UTF-* encoding is used)
+            zipf.writestr('INDGR%d.PRN'%(grade), output_string.getvalue())
             output_string.close()
-            output_string = StringIO.StringIO()
+            output_string = io.BytesIO()
             for student in grade_bucket[grade, True, 'ALL']: #Paired students
                 s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', str(student.school)[0:10], 'Pair / Paar ', student.surname)  
                 #TODO: Seems like an error to me... But it's like this in the sample files.
                 output_string.write(s_line)
             
-            #Generate file from StringIO and write to zip (ensure str UTF-* encoding is used)
-            zipf.writestr('PRGR%d.PRN'%(grade), output_string.getvalue().encode('utf-8'))
+            #Generate file from io and write to zip (ensure str UTF-* encoding is used)
+            zipf.writestr('PRGR%d.PRN'%(grade), output_string.getvalue())
             output_string.close()
     #Generate response and serve file to the user
-    response = HttpResponse(output_stringIO.getvalue())
+    response = HttpResponse(output_io.getvalue())
     response['Content-Disposition'] = 'attachment; filename=PRN_files(%s).zip'%(timestamp_now())
     response['Content-Type'] = 'application/x-zip-compressed'
     return response
@@ -1155,28 +1155,28 @@ def printer_school_report(request, school_list=None):
                 'alt_has_phone_alt': len(alt_responsible_teacher[0].phone_alt) > 0 if has_alt_teacher else False}
             #Render the template with the context (from above)
 
-            template = get_template('interface/school_report.html')
+            template = get_template('school_report.html')
             c.update(csrf(request))
             #context = Context(c)
             html += template.render(c) #Concatenate each rendered template to the html "string"
 
-    result = StringIO.StringIO()
+    result = io.BytesIO()
     #Generate the pdf doc
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    pdf = pisa.pisaDocument(html, result)
     if not pdf.err:
         return result
     else:
         pass #Error handling?
 
 def multi_reportgen(request, school_list):
-    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+    output_io = io.BytesIO() #Used to write to files then zip
 
-    with zipfile.ZipFile(output_stringIO, 'w') as zipf:
+    with zipfile.ZipFile(output_io, 'w') as zipf:
         for ischool in school_list:
             output_string=printer_school_report(request, [ischool])
             zipf.writestr('UCTMaths_Report_%s.pdf'%(ischool.name), output_string.getvalue())
 
-    response = HttpResponse(output_stringIO.getvalue())
+    response = HttpResponse(output_io.getvalue())
     if len(school_list) == 1:
         response['Content-Disposition'] = 'attachment; filename=%s' % (get_school_report_name(ischool))
         response['Content-Type'] = 'application/pdf'
@@ -1265,16 +1265,16 @@ def generate_school_answer_sheets(request, school_list):
         response['Content-Type'] = 'application/txt'
         return response
     
-    output_stringIO = StringIO.StringIO() #Used to write to files then zip
+    output_io = io.BytesIO() #Used to write to files then zip
     start = datetime.datetime.now()
-    with zipfile.ZipFile(output_stringIO, 'w') as zipf:
+    with zipfile.ZipFile(output_io, 'w') as zipf:
         for ischool in school_list:
             output_string=printer_answer_sheet(request, ischool)
             zipf.writestr(get_answer_sheet_name(ischool), output_string.getvalue())
     
-    response = HttpResponse(output_stringIO.getvalue())
+    response = HttpResponse(output_io.getvalue())
     if len(school_list) == 1:
-        response['Content-Disposition'] = 'attachment; filename=%s'%(get_answer_sheet_name(school_list[0]))
+        response['Content-Disposition'] = 'inline; filename=%s'%(get_answer_sheet_name(school_list[0]))
         response['Content-Type'] = 'application/pdf'
     else:
         response['Content-Disposition'] = 'attachment; filename=Answer_Sheets(%s).zip' % (timestamp_now())
@@ -1294,9 +1294,9 @@ def get_student_answer_sheet(request, student):
         'venue':str(venue.building)+ ' - '+ str(venue.code),
     }
     if student.paired:
-        template = get_template('interface/pair_as_template.html')
+        template = get_template('pair_as_template.html')
     else:
-        template = get_template('interface/individual_as_template.html')
+        template = get_template('individual_as_template.html')
     #context = Context(c)
     return template.render(c)
 
@@ -1330,7 +1330,7 @@ def generate_school_confirmation(request, school_list):
             alt_responsible_teacher = None
         #If someone managed to get to this page without having made an entry
         if not (responsible_teacher or alt_responsible_teacher) and not school_list:
-            return HttpResponseRedirect('../students/newstudents.html')
+            return HttpResponseRedirect('../students/')
         #If the school has an entry
         elif responsible_teacher:
             c = {'type':'Students',
@@ -1353,7 +1353,7 @@ def generate_school_confirmation(request, school_list):
                 'year':year,
                 'invigilators_required':competition_has_invigilator()}
             #Render the template with the context (from above)
-            template = get_template('interface/printer_entry.html')
+            template = get_template('printer_entry.html')
             if request:
                 c.update(csrf(request))
             #context = Context(c)
@@ -1371,16 +1371,16 @@ def generate_school_confirmation(request, school_list):
                 'invigilators_required':competition_has_invigilator()}
 
             #Render the template with the context (from above)
-            template = get_template('interface/printer_entry.html')
+            template = get_template('printer_entry.html')
             if request:
                 c.update(csrf(request))
             #context = Context(c)
             register_html += template.render(c) #Concatenate each rendered template to the html "string"
    
-    register_result = StringIO.StringIO()
+    register_result = io.BytesIO()
 
     #Generate the pdf doc
-    register_pdf = pisa.pisaDocument(StringIO.StringIO(register_html.encode("UTF-8")), register_result, encoding='UTF-8')
+    register_pdf = pisa.pisaDocument(register_html, register_result)
     
     if not register_pdf.err:
         return register_result
@@ -1390,7 +1390,7 @@ def generate_school_confirmation(request, school_list):
 def printer_answer_sheet(request, assigned_school=None):
     """ Generate the school answer sheet for each school in the query set"""
     student_list = SchoolStudent.objects.filter(school = assigned_school)
-    answer_sheets_result = StringIO.StringIO()
+    answer_sheets_result = io.BytesIO()
     answer_sheets_html = ''
     for istudent in student_list:
         answer_sheets_html += get_student_answer_sheet(request, istudent)
@@ -1399,11 +1399,11 @@ def printer_answer_sheet(request, assigned_school=None):
         register_result = generate_school_confirmation(request, assigned_school)
     else:
         register_result = generate_school_confirmation(request, [assigned_school])
-    answer_sheets_pdf = pisa.pisaDocument(StringIO.StringIO(answer_sheets_html.encode("UTF-8")), answer_sheets_result, encoding='UTF-8')
-    merger = PdfFileMerger()
-    outpdf = StringIO.StringIO()
-    merger.append(register_result)
-    merger.append(os.path.join(os.path.dirname(__file__), "../..", "Declaration", "Declaration.pdf"))
+    answer_sheets_pdf = pisa.pisaDocument(answer_sheets_html, answer_sheets_result)
+    merger = PdfMerger()
+    outpdf = io.BytesIO()
+    # merger.append(register_result)
+    # merger.append(os.path.join(os.path.dirname(__file__), "../..", "Declaration", "Declaration.pdf"))
     merger.append(answer_sheets_result)
     merger.write(outpdf)
     merger.close()

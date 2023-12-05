@@ -47,11 +47,11 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def get_urls(self):
 		urls = super(SchoolAdmin, self).get_urls()
 		my_urls = [
-			path("^assign_school_ranks/", self.assign_school_ranks),
-			path("^school_summary/", self.school_summary),
-			path("^update_school_entry_status/", self.update_school_entry_status),
-			path("^school_certificate_list/", self.school_certificate_list),
-			path("^generate_grade_answer_sheets/", self.generate_grade_answer_sheets)
+			path("assign_school_ranks/", self.assign_school_ranks),
+			path("school_summary/", self.school_summary),
+			path("update_school_entry_status/", self.update_school_entry_status),
+			path("school_certificate_list/", self.school_certificate_list),
+			path("generate_grade_answer_sheets/", self.generate_grade_answer_sheets)
 		]
 		return my_urls + urls
 
@@ -193,11 +193,11 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	def get_urls(self):
 		urls = super(SchoolStudentAdmin, self).get_urls()
 		my_urls = [
-			path("^upload_results/", self.upload_results),
-			path("^rank_students/", self.rank_students),
-			path("^output_assign_awards/", self.output_assign_awards),
-			path("^output_PRN_files/", self.output_PRN_files),
-			path("^assign_student_awards/", self.assign_student_awards),
+			path("upload_results/", self.upload_results),
+			path("rank_students/", self.rank_students),
+			path("output_assign_awards/", self.output_assign_awards),
+			path("output_PRN_files/", self.output_PRN_files),
+			path("assign_student_awards/", self.assign_student_awards),
 		]
 		return my_urls + urls
 	def upload_results(self, request):

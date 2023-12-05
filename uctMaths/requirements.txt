@@ -19,3 +19,4 @@ requests-oauthlib
 six
 tablib
 xlwt
+Jinja2
