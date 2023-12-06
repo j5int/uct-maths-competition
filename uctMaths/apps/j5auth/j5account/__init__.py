@@ -1,0 +1,1 @@
+default_app_config = 'apps.j5auth.apps.J5AuthConfig'

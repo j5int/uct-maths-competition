@@ -31,5 +31,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #
     # #load allauth/paths.py
-    path('accounts/', include('apps.allauth.urls'))
+    path('accounts/', include('apps.j5auth.j5account.urls'))
 ]

@@ -141,7 +141,7 @@ WSGI_APPLICATION = 'uctMaths.wsgi.application'
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.template.context_processors.request",
     'django.contrib.auth.context_processors.auth',
-    "apps.allauth.account.context_processors.account",
+    "apps.j5auth.j5account.context_processors.account",
     # "django.core.context_processors.auth",
 
 )
@@ -161,7 +161,7 @@ TEMPLATES = [
             'context_processors': [
                 "django.template.context_processors.request",
                 'django.contrib.auth.context_processors.auth',
-                "apps.allauth.account.context_processors.account",
+                "apps.j5auth.j5account.context_processors.account",
                 "django.contrib.messages.context_processors.messages",
 
             ],
@@ -172,6 +172,8 @@ TEMPLATES = [
 INSTALLED_APPS = (
     'uctMaths',
     'apps.competition',
+	'apps.j5auth',
+	'apps.j5auth.j5account',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
