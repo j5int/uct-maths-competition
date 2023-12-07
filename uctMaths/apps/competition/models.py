@@ -52,7 +52,7 @@ class School(models.Model):
 
     def __str__(self):
         return self.name
-    def __unicode__(self):
+    def getFormatName(self):
         return u'%s'%(self.name)
     class Meta:
         ordering = ['name']     #defines the way the records are sorted.
