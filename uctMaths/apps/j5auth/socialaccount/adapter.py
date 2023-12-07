@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from django.utils.translation import gettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 
 from ..utils import (import_attribute,
