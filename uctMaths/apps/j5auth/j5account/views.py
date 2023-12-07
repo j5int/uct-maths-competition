@@ -426,9 +426,9 @@ class LogoutView(TemplateResponseMixin, View):
     redirect_field_name = "next"
     
     def get(self, *args, **kwargs):
-        if app_settings.LOGOUT_ON_GET:
+        if app_settings.app_settings.LOGOUT_ON_GET:
             return self.post(*args, **kwargs)
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return redirect(self.get_redirect_url())
         ctx = self.get_context_data()
         return self.render_to_response(ctx)
