@@ -58,16 +58,16 @@ class SchoolAdmin(ImportExportModelAdmin):
 	def assign_school_ranks(self, request):
 		compadmin.rank_schools()
 		return HttpResponseRedirect("../")
-	    
+
 	def school_summary(self, request):
-	    return compadmin.school_summary(request)
+		return compadmin.school_summary(request)
 
 	def update_school_entry_status(self, request):
 		compadmin.update_school_entry_status()
 		return HttpResponseRedirect("../")
-
+	
 	def school_certificate_list(self, request):
-	    return compadmin.certificate_list(request)
+		return compadmin.certificate_list(request)
 	
 	def generate_grade_answer_sheets(self, request):
 		return compadmin.generate_grade_answer_sheets(request)
@@ -87,22 +87,22 @@ class SchoolAdmin(ImportExportModelAdmin):
 	dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'location']
 
 	def remove_user_associations(self, request, queryset):
-	    return compadmin.remove_user_assoc(queryset)
+		return compadmin.remove_user_assoc(queryset)
 
 	def output_schooltaglist(self, request, queryset):
-	    return compadmin.output_schooltaglists(queryset)
+		return compadmin.output_schooltaglists(queryset)
 
 	def print_school_confirmations(self, request, queryset):
-	    return compadmin.print_school_confirmations(request, queryset)
+		return compadmin.print_school_confirmations(request, queryset)
 
 	def generate_school_reports(self, request, queryset):
-	    return compadmin.print_school_reports(request, queryset)
+		return compadmin.print_school_reports(request, queryset)
 
 	def email_school_reports(self, request, queryset):
-	    return compadmin.email_school_reports(request, queryset)
+		return compadmin.email_school_reports(request, queryset)
 
 	def generate_multi_school_reports(self, request, queryset):
-	    return compadmin.multi_reportgen(request, queryset)
+		return compadmin.multi_reportgen(request, queryset)
 	
 	def generate_school_answer_sheets(self, request, queryset):
 		return compadmin.generate_school_answer_sheets(request, queryset)
@@ -201,14 +201,14 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 		]
 		return my_urls + urls
 	def upload_results(self, request):
-	    return compadmin.upload_results()
+		return compadmin.upload_results()
 
 	def rank_students(self, request):
 		compadmin.rank_students()
 		return HttpResponseRedirect("../")
 
 	def output_assign_awards(self, request):
-	    return compadmin.export_awards(request)
+		return compadmin.export_awards(request)
 
 	def output_PRN_files(self, request):
 		return compadmin.output_PRN_files()
@@ -236,11 +236,11 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
 	dataset.headers = ['school', 'firstname', 'surname', 'grade', 'reference', 'paired']
 
 	def write_studentlist(self, request, queryset):
-	    return compadmin.output_studentlists(queryset)
+		return compadmin.output_studentlists(queryset)
 	write_studentlist.short_description = 'Export (.xls) student registry for selected student(s)'
 
 	def write_studenttags(self, request, queryset):
-	    return compadmin.output_studenttags(queryset)
+		return compadmin.output_studenttags(queryset)
 	write_studenttags.short_description = 'Generate MailMerge student tags for selected student(s)'
 
 	
@@ -261,13 +261,13 @@ class VenueAdmin(ImportExportModelAdmin):
 	dataset.headers = ['building', 'code', 'seats','grade', 'allocated_to_pairs', 'occupied_seats']
 
 	def auto_allocate(self, request, queryset):
-	    compadmin.auto_allocate(queryset)
+		compadmin.auto_allocate(queryset)
 
 	def deallocate(self, request, queryset):
-	    compadmin.venue_deallocate(queryset)
+		compadmin.venue_deallocate(queryset)
 
 	def write_venue_register(self, request, queryset):
-	    return compadmin.output_register(queryset)
+		return compadmin.output_register(queryset)
 
 	auto_allocate.short_description = 'Auto-allocate unallocated students to selected venue(s)' 
 	deallocate.short_description = 'Deallocate students from selected venue(s)'

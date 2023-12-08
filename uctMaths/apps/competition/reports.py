@@ -5,7 +5,7 @@ import datetime
 
 import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
                  # report email.
-import StringIO
+from io import StringIO
 import os
 
 # Methods for very simple formatting of data entered by a certain user (filter)
@@ -123,7 +123,7 @@ This email contains part of the collection of answer sheets for all students, se
         [
             {
                 "name": os.path.basename(pdf_attachment_filename), 
-                "value": StringIO.StringIO(f.read()).getvalue(), 
+                "value": StringIO(f.read()).getvalue(), 
                 "type": "application/pdf"
             }
         ],

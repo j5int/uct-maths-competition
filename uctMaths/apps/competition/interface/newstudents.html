@@ -57,7 +57,7 @@
                 <td><input type ="text" class="resp_cell" name="rt_phone_cell" value="{{responsible_teacher.phone_cell}}"></td>
                 <td><input id="rmail" class="resp_mail_school" type ="text" name="rt_email_school" required value={{responsible_teacher.email_school|lower}}></td>
                 <td><input id="rmail" class="resp_mail_personal" type ="text" name="rt_email_personal" value={{responsible_teacher.email_personal|lower}}></td>
-                <input type ="hidden" name="rt_registered_by" value ={{ user.id }} >
+                <input type ="hidden" name="rt_registered_by" value ={{ user.id }} > <!-- Remove space? -->
             </tr>
         </table>
     </div>
@@ -88,7 +88,7 @@
                 <td><input type ="text" class="alt_resp_cell" name="art_phone_cell" value="{{alt_responsible_teacher.phone_cell}}"></td>
                 <td><input id="rmail" class="alt_resp_mail_school" type ="text" name="art_email_school" required value={{alt_responsible_teacher.email_school|lower}}></td>
                 <td><input id="rmail" class="alt_resp_mail_personal" type ="text" name="art_email_personal" value={{alt_responsible_teacher.email_personal|lower}}></td>
-                <input type ="hidden" name="alt_rt_registered_by" value ={{ user.id }} >
+                <input type ="hidden" name="alt_rt_registered_by" value ={{ user.id }} > <!-- Remove space? -->
             </tr>
         </table>
     </div>
@@ -125,7 +125,7 @@
                     <td><input type ="text"  class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
                     <td><input type ="text" class="invig_mail" name="inv_email" required value={{invigilator.email|lower}}></td>
                     <td><input type ="text" class="invig_notes" name="inv_notes" value={{invigilator.notes}}></td>
-                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} > <!-- Remove space? -->
                 </tr>
                 {% else %}
                 <tr>
@@ -135,7 +135,7 @@
                     <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
                     <td><input type ="text" class="invig_mail" name="inv_email" value={{invigilator.email|lower}}></td>
                     <td><input type ="text" class="invig_notes" name="inv_notes" value={{invigilator.notes}}></td>
-                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} > <!-- Remove space? -->
                 </tr>
                 {% endif %}
 
@@ -150,7 +150,7 @@
                     <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt"></td>
                     <td><input type ="text" class="invig_mail" required name="inv_email"></td>
                     <td><input type ="text" class="invig_notes" name="inv_notes"></td>
-                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} > <!-- Remove space? -->
                 </tr>
             {% else %}
                 <tr>
@@ -160,7 +160,7 @@
                     <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt"></td>
                     <td><input type ="text" class="invig_mail" name="inv_email"></td>
                     <td><input type ="text" class="invig_notes" name="inv_notes"></td>
-                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} >
+                    <input type ="hidden" name="inv_registered_by" value ={{ user.id }} > <!-- Remove space? -->
                 </tr>
             {% endif %}
 
@@ -214,7 +214,7 @@
                     <td><input type="text" class="st_firstname" name="firstname" value="{{student.firstname}}"></td>
                     <td><input type="text" class="st_surname" name="surname" value="{{student.surname}}"></td>
                     <input type='hidden' name='grade' value='{{grade}}'>
-                    <input type ="hidden" name="registered_by" value ={{ user.id }} >
+                    <input type ="hidden" name="registered_by" value ={{ user.id }} > <!-- Remove space? -->
                 </tr>
                 {%endfor%}
             {%endif%}
@@ -227,7 +227,7 @@
                   <td><input type="text" class="st_firstname" name="firstname"></td>
                   <td><input type="text" class="st_surname" name="surname"></td>
                   <input type='hidden' name='grade' value='{{grade}}'>
-                  <input type ="hidden" name="registered_by" value ={{ user.id }} >
+                  <input type ="hidden" name="registered_by" value ={{ user.id }} > <!-- Remove space? -->
                 </tr>
                 {%endfor%}
             {%endif%}
