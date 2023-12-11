@@ -18,7 +18,7 @@ from ..utils import (import_attribute, get_user_model,
                      generate_unique_username,
                      resolve_url)
 
-from . import app_settings
+from .app_settings import app_settings
 
 class DefaultAccountAdapter(object):
 
@@ -91,7 +91,7 @@ class DefaultAccountAdapter(object):
         that URLs passed explicitly (e.g. by passing along a `next`
         GET parameter) take precedence over the value returned here.
         """
-        assert request.user.is_authenticated()
+        assert request.user.is_authenticated
         url = getattr(settings, "LOGIN_REDIRECT_URLNAME", None)
         if url:
             warnings.warn("LOGIN_REDIRECT_URLNAME is deprecated, simply"
@@ -192,6 +192,8 @@ class DefaultAccountAdapter(object):
         except TemplateDoesNotExist:
             pass
 
+
+
 def get_adapter():
-    return import_attribute(app_settings.app_settings.ADAPTER)()
+    return import_attribute(app_settings.ADAPTER)()
 
