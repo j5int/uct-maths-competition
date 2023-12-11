@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -35,12 +35,12 @@ urlpatterns = [
 #    }, name="acct_passwd_delete_done"),
     path("logout/", views.logout, name="account_logout"),
     
-    path("email_confirm/", views.confirm_email, name="account_confirm_email"),
+    re_path("email_confirm/(?P<key>\w+)/$", views.confirm_email, name="account_confirm_email"),
     
     # password reset
     path("password_reset/", views.password_reset, name="account_reset_password"),
     path("password_reset_done/", views.password_reset_done, name="account_reset_password_done"),
-    path("password_reset_from_key/", views.password_reset_from_key, name="account_reset_password_from_key"),
+    re_path("password_reset_from_key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)", views.password_reset_from_key, name="account_reset_password_from_key"),
     
     #localhost/accounts/
     # path(r'^$', views.allauthtest, name='allauthtest'),
