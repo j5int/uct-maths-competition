@@ -67,7 +67,7 @@ def email_address_exists(email, exclude_user=None):
         emailaddresses = emailaddresses.exclude(user=exclude_user)
     ret = emailaddresses.filter(email__iexact=email).exists()
     if not ret:
-        email_field = account_settings.USER_MODEL_EMAIL_FIELD
+        email_field = account_settings.app_settings.USER_MODEL_EMAIL_FIELD
         if email_field:
             users = get_user_model().objects
             if exclude_user:
