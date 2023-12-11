@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from uctMaths import views
+from . import views
 
 from apps.competition import views as comp_views
 
@@ -17,7 +17,7 @@ urlpatterns = [
     # path(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, name='password_reset_confirm'),
     # path(r'^reset/done/$', password_reset_complete),
 	path('account/', include('django.contrib.auth.urls')),
-
+    
 	#Aurelia is not quite sure what this does. It make the login work.
 	# path(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
 	path('accounts/profile/', comp_views.profile, name='profile'),
