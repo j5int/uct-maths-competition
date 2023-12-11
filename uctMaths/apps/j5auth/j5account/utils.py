@@ -77,10 +77,10 @@ def user_field(user, field, *args):
             return getattr(user, field)
 
 def user_username(user, *args):
-    return user_field(user, app_settings.USER_MODEL_USERNAME_FIELD, *args)
+    return user_field(user, app_settings.app_settings.USER_MODEL_USERNAME_FIELD, *args)
 
 def user_email(user, *args):
-    return user_field(user, app_settings.USER_MODEL_EMAIL_FIELD, *args)
+    return user_field(user, app_settings.app_settings.USER_MODEL_EMAIL_FIELD, *args)
 
 # def has_openid(request):
 #     """
