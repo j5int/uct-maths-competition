@@ -30,8 +30,11 @@ DATABASES = {
 
 #Email settings
 SMTP_ENABLED = config.get('email', 'SMTP_ENABLED')
-EMAIL_BACKEND = config.get('email', 'EMAIL_BACKEND')
+# EMAIL_BACKEND = config.get('email', 'EMAIL_BACKEND')
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_USE_TLS = config.get('email', 'EMAIL_USE_TLS')
+EMAIL_USE_SSL = config.get('email', 'EMAIL_USE_SSL')
+
 EMAIL_HOST = config.get('email', 'EMAIL_HOST')
 EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD')
@@ -153,7 +156,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'apps/allauth/templates'),
+        'DIRS': [os.path.join(BASE_DIR, 'apps/j5auth'),
                  os.path.join(BASE_DIR, 'apps/competition/interface')],
         'APP_DIRS': True,
         'OPTIONS': {
