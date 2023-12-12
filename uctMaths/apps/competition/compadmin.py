@@ -1274,7 +1274,7 @@ def generate_school_answer_sheets(request, school_list):
     
     response = HttpResponse(output_io.getvalue())
     if len(school_list) == 1:
-        response['Content-Disposition'] = 'inline; filename=%s'%(get_answer_sheet_name(school_list[0]))
+        response['Content-Disposition'] = 'attachment; filename=%s'%(get_answer_sheet_name(school_list[0]))
         response['Content-Type'] = 'application/pdf'
     else:
         response['Content-Disposition'] = 'attachment; filename=Answer_Sheets(%s).zip' % (timestamp_now())
