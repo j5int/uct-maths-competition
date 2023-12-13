@@ -268,6 +268,17 @@ class VenueAdmin(ImportExportModelAdmin):
 
 	def write_venue_register(self, request, queryset):
 		return compadmin.output_register(queryset)
+	
+	def response_change(self, request, obj):
+		"""
+		Overides method in parent class.
+		Figure out where to redirect after the 'Save' button has been pressed
+		when editing an existing object.
+		"""
+		queryset = [obj]
+		self.deallocate(request, queryset)
+		test = super()
+		return test.response_change(request, obj) 
 
 	auto_allocate.short_description = 'Auto-allocate unallocated students to selected venue(s)' 
 	deallocate.short_description = 'Deallocate students from selected venue(s)'
