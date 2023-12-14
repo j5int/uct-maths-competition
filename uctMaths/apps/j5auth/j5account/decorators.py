@@ -29,7 +29,7 @@ def verified_email_required(function=None,
                                                verified=True).exists():
                 send_email_confirmation(request, request.user)
                 return render(request,
-                              'account/../templates/account/verified_email_required.html')
+                              'j5account/../templates/account/verified_email_required.html')
             return view_func(request, *args, **kwargs)
         return _wrapped_view
         

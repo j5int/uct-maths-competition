@@ -179,6 +179,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 
 
 
+
 class ResponsibleTeacherAdmin(ImportExportModelAdmin):
     change_form_template = "admin/rt_changeform.html"
     list_display = ('school', 'firstname', 'surname', 'phone_primary', 'phone_alt', 'phone_cell', 'email_school', 'email_personal', 'report_downloaded', 'answer_sheet_downloaded')
@@ -244,6 +245,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
     write_studenttags.short_description = 'Generate MailMerge student tags for selected student(s)'
 
     
+
 
 #Displays different fields for Venue
 class VenueAdmin(ImportExportModelAdmin):
