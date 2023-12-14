@@ -366,20 +366,19 @@ def newstudents(request):
                 query.save()
                 num_individuals += 1
 
-            #update view after new entries are added to the table
+            #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission
             student_list = SchoolStudent.objects.filter(school = assigned_school)
-            individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
-            entries_per_grade = {} #Dictionary with grade:range(...)
+            individual_list, pair_list = compadmin.processGrade(student_list)
+            entries_per_grade = {}
             pairs_per_grade = {}
             for grade in range(8,13):
                 entries_per_grade[grade] = range(compadmin.admin_number_of_individuals() - len(individual_list[grade]))
-                #Place the "Previously Selected" number of pairs at the top of the list (So it appears as a default)
                 pairs_per_grade[grade] = [pair_list[grade]]
                 pairs_per_grade[grade].extend([i for i in range(0, compadmin.admin_number_of_pairs() + 1) if i != pair_list[grade]])
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
                 enoughInvigilators.checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs)
-                if enoughInvigilators.enoughInvigilators:
+                if enoughInvigilators.enoughInvigilators: #Only proceed with submission if enough invigilators are entered
                     assigned_school.entered=1 #The school has made an entry
                     assigned_school.save()
                     #The school has made an entry
@@ -456,20 +455,19 @@ class enoughInvigilators():
     enoughInvigilators=True
         
     def checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs):
+        """
+        Returns false only when there are less than two invigilators but maximum number of students entered.
+        In this case there are not enough invigilators entered and user should be prompted to add more.
+        """
+
         if num_invigilators>=2:
             enoughInvigilators.enoughInvigilators=True
             return
 
-        print("pairs")
-        print(num_pairs)
-        print(compadmin.admin_number_of_pairs())
         if num_pairs<(5*compadmin.admin_number_of_pairs()):
             enoughInvigilators.enoughInvigilators=True
             return
             
-        print("indivs")
-        print(num_individuals)
-        print(compadmin.admin_number_of_individuals())
         if num_individuals<(5*compadmin.admin_number_of_individuals()):
             enoughInvigilators.enoughInvigilators=True
             return

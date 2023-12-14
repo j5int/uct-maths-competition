@@ -273,8 +273,8 @@ class VenueAdmin(ImportExportModelAdmin):
 
     def response_change(self, request, obj):
         """
-        Overides method in parent class.
-        Figure out where to redirect after the 'Save' button has been pressed
+        This overides method in parent class that is in the Django files.
+        Deallocates students from the venue before figuring out where to redirect after the 'Save' button has been pressed
         when editing an existing object.
         """
         queryset = [obj]
