@@ -366,6 +366,17 @@ def newstudents(request):
                 query.save()
                 num_individuals += 1
 
+            #update view after new entries are added to the table
+            student_list = SchoolStudent.objects.filter(school = assigned_school)
+            individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
+            entries_per_grade = {} #Dictionary with grade:range(...)
+            pairs_per_grade = {}
+            for grade in range(8,13):
+                entries_per_grade[grade] = range(compadmin.admin_number_of_individuals() - len(individual_list[grade]))
+                #Place the "Previously Selected" number of pairs at the top of the list (So it appears as a default)
+                pairs_per_grade[grade] = [pair_list[grade]]
+                pairs_per_grade[grade].extend([i for i in range(0, compadmin.admin_number_of_pairs() + 1) if i != pair_list[grade]])
+
             if 'submit_form' in request.POST: #Send confirmation email and continue
                 enoughInvigilators.checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs)
                 if enoughInvigilators.enoughInvigilators:
@@ -406,6 +417,12 @@ def newstudents(request):
     code = full[1].strip()
     city = full[2].strip()
 
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
+    entries_per_grade = {} #Dictionary with grade:range(...)
+    for grade in range(8,13):
+        entries_per_grade[grade] = range(compadmin.admin_number_of_individuals() - len(individual_list[grade]))
+
     c = {'type':'Students',
         'schooln':assigned_school,
         'language_options':language_selection,
@@ -445,13 +462,15 @@ class enoughInvigilators():
 
         print("pairs")
         print(num_pairs)
-        if num_pairs<25:
+        print(compadmin.admin_number_of_pairs())
+        if num_pairs<(5*compadmin.admin_number_of_pairs()):
             enoughInvigilators.enoughInvigilators=True
             return
             
         print("indivs")
         print(num_individuals)
-        if num_individuals<25:
+        print(compadmin.admin_number_of_individuals())
+        if num_individuals<(5*compadmin.admin_number_of_individuals()):
             enoughInvigilators.enoughInvigilators=True
             return
 

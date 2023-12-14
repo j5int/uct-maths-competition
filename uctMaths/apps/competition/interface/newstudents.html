@@ -18,6 +18,12 @@
         <p>Not working.</p>
     {% endif %}
 
+    {% if not enough_invigilators %}
+        <tr>
+            <p><b>Since 75 students have been registered, please fill out the required fields for at least two invigilators</b></p>
+        </tr>
+        {% endif %}
+
     <!-- For "Confirm your school's language? -->
     <p> Please confirm your school's preferred language. </p>
     <select name = "language">
@@ -134,16 +140,6 @@
                     <td><input type ="text" class="invig_notes" name="inv_notes" value={{invigilator.notes}}></td>
                     <input type ="hidden" name="inv_registered_by" value ={{user.id}}> 
                 </tr>
-                {% elif forloop.counter == 2 and not enough_invigilators %} <!-- Enforce two invigilators if required -->
-                <tr>
-                    <td><input type="text" class="invig_firstname" name="inv_firstname" required value="{{invigilator.firstname}}"></td>
-                    <td><input type="text" class="invig_surname" name="inv_surname" required value="{{invigilator.surname}}"></td>
-                    <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" required value="{{invigilator.phone_primary}}"></td>                    
-                    <td><input type ="text"  class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
-                    <td><input type ="text" class="invig_mail" name="inv_email" required value={{invigilator.email|lower}}></td>
-                    <td><input type ="text" class="invig_notes" name="inv_notes" value={{invigilator.notes}}></td>
-                    <input type ="hidden" name="inv_registered_by" value ={{user.id}}> 
-                </tr> 
                 {% else %}
                 <tr>
                     <td><input type="text" class="invig_firstname" name="inv_firstname" value="{{invigilator.firstname}}"></td>
@@ -160,26 +156,6 @@
 
             {%for invigilator in invigilator_range%}
                 {% if invigilator_list|length == 0 and forloop.first %}
-                <tr>
-                    <td><input type="text" class="invig_firstname" required name="inv_firstname"></td>
-                    <td><input type="text" class="invig_surname" required name="inv_surname"></td>
-                    <td><input type ="text" class="invig_phone_primary" required name="inv_phone_primary"></td>
-                    <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt"></td>
-                    <td><input type ="text" class="invig_mail" required name="inv_email"></td>
-                    <td><input type ="text" class="invig_notes" name="inv_notes"></td>
-                    <input type ="hidden" name="inv_registered_by" value ={{user.id}}>
-                </tr>
-                {% elif invigilator_list|length == 0 and forloop.counter == 2 and not enough_invigilators %}
-                <tr>
-                    <td><input type="text" class="invig_firstname" required name="inv_firstname"></td>
-                    <td><input type="text" class="invig_surname" required name="inv_surname"></td>
-                    <td><input type ="text" class="invig_phone_primary" required name="inv_phone_primary"></td>
-                    <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt"></td>
-                    <td><input type ="text" class="invig_mail" required name="inv_email"></td>
-                    <td><input type ="text" class="invig_notes" name="inv_notes"></td>
-                    <input type ="hidden" name="inv_registered_by" value ={{user.id}}>
-                </tr>
-                {% elif invigilator_list|length == 1 and forloop.counter == 1 and not enough_invigilators %}
                 <tr>
                     <td><input type="text" class="invig_firstname" required name="inv_firstname"></td>
                     <td><input type="text" class="invig_surname" required name="inv_surname"></td>
