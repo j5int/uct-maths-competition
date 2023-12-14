@@ -456,11 +456,17 @@ class enoughInvigilators():
         
     def checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs):
         """
-        Returns false only when there are less than two invigilators but maximum number of students entered.
+        Sets enoughtInvigilators to false only when: 
+        the competiton has invigilator AND
+        there are less than two invigilators but maximum number of students entered.
         In this case there are not enough invigilators entered and user should be prompted to add more.
         """
 
-        if num_invigilators>=2:
+        if not compadmin.competition_has_invigilator():
+            enoughInvigilators.enoughInvigilators=True
+            return
+        
+        if num_invigilators>=2 or not compadmin.competition_has_invigilator():
             enoughInvigilators.enoughInvigilators=True
             return
 
