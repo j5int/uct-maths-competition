@@ -24,7 +24,7 @@ from ..utils import import_callable, valid_email_or_none
 
 from . import signals
 
-from . import app_settings
+from .app_settings import app_settings
 from .adapter import get_adapter
 
 
@@ -106,7 +106,7 @@ def perform_login(request, user, email_verification,
                                             verified=True).exists()):
         send_email_confirmation(request, user)
         return render(request,
-                      "account/../templates/account/verification_sent.html",
+                      "j5account/../templates/account/verification_sent.html",
                       { "email": user_email(user) })
     # HACK: This may not be nice. The proper Django way is to use an
     # authentication backend, but I fail to see any added benefit
@@ -249,7 +249,7 @@ def send_email_confirmation(request, user, email_address=None):
     COOLDOWN_PERIOD = timedelta(minutes=3)
     email = user_email(user)
     if (email 
-        and app_settings.EMAIL_VERIFICATION != EmailVerificationMethod.NONE):
+        and app_settings.EMAIL_VERIFICATION != app_settings.EmailVerificationMethod.NONE):
         try:
             if email_address is None:
                 email_address = EmailAddress.objects.get(user=user,
@@ -301,7 +301,7 @@ def random_token(extra=None, hash_func=hashlib.sha256):
     if extra is None:
         extra = []
     bits = extra + [str(random.SystemRandom().getrandbits(512))]
-    return hash_func("".join(bits)).hexdigest()
+    return hash_func("".join(bits).encode('utf-8')).hexdigest()
 
 
 def passthrough_next_redirect_url(request, url, redirect_field_name):

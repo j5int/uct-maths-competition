@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.http import urlencode
 
 from allauth.socialaccount.providers.base import Provider

@@ -24,7 +24,7 @@ def bg_email_results(school_id):
     
     print("%s: Emailing results for school with ID: %s" %(current_time(), str(school_id)) )
     from apps.competition.compadmin import printer_school_report
-    from apps.competition import send_results
+    from apps.competition.reports import send_results
 
     school = School.objects.filter(id=school_id)[0]
     rteachers = ResponsibleTeacher.objects.filter(school=school.id)
@@ -42,7 +42,7 @@ def bg_email_results(school_id):
 @background(queue="AS-generation-queue")
 def bg_generate_school_answer_sheets(school_id):
     from apps.competition.compadmin import printer_answer_sheet
-    from apps.competition import send_answer_sheets
+    from apps.competition.reports import send_answer_sheets
     print("%s: Emailing answer sheets for school with ID: %s" %(current_time(), str(school_id)) )
 
     school = School.objects.filter(id=school_id)[0]
@@ -62,9 +62,9 @@ def bg_generate_school_answer_sheets(school_id):
 @background(queue="AS-generation-queue")
 def bg_generate_as_grade_distinction(grade, paired):
     from apps.competition.compadmin import get_student_answer_sheet
-    import StringIO
+    from io import StringIO
     import datetime
-    from apps.competition import send_grade_answer_sheets_to_organiser
+    from apps.competition.reports import send_grade_answer_sheets_to_organiser
 
     BATCH_SIZE = 2000
 

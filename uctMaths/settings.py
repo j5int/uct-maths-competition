@@ -32,6 +32,7 @@ DATABASES = {
 SMTP_ENABLED = config.get('email', 'SMTP_ENABLED')
 EMAIL_BACKEND = config.get('email', 'EMAIL_BACKEND')
 EMAIL_USE_TLS = config.get('email', 'EMAIL_USE_TLS')
+EMAIL_USE_SSL = config.get('email', 'EMAIL_USE_SSL') #MAYBE REMOVE
 EMAIL_HOST = config.get('email', 'EMAIL_HOST')
 EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD')
@@ -153,7 +154,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'apps/allauth/templates'),
+        'DIRS': [os.path.join(BASE_DIR, 'apps/j5auth'),
                  os.path.join(BASE_DIR, 'apps/competition/interface')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -171,9 +172,10 @@ TEMPLATES = [
 
 INSTALLED_APPS = (
     'uctMaths',
-    'apps.competition',
 	'apps.j5auth',
 	'apps.j5auth.j5account',
+    'apps.competition',
+    
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

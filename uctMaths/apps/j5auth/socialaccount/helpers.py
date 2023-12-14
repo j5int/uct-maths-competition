@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.shortcuts import render, render as render_to_response
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.defaultfilters import slugify
 
 from allauth.utils import (generate_unique_username, email_address_exists,

@@ -26,38 +26,38 @@ class MultipleChoiceStats:
                 q += 1
 
 def print_header():
-    print "Question   &            &  1   &  2   &  3   &  4   &  5   & Abstain\\cr"
-    print "           &            &      &      &      &      &      &        \\cr"
+    print("Question   &            &  1   &  2   &  3   &  4   &  5   & Abstain\\cr")
+    print("           &            &      &      &      &      &      &        \\cr")
 
 
 def print_question_output(question, individual_stats, pair_stats):
     """
-    Print the TEX output to this question. The first line is for individuals and the next for pairs:
+    Print(the TEX output to this question. The first line is for individuals and the next for pairs:
     """
     iq = individual_stats.questions[question]
-    print '\\qquad %2d & Individuals' % question,
+    print('\\qquad %2d & Individuals' % question),
     for c in range(1, 6):
         if c == int(iq['correct']):
-            print '&[%2s] ' % iq['choice%s' % c],
+            print('&[%2s] ' % iq['choice%s' % c]),
         else:
-            print '& %2s  ' % iq['choice%s' % c],
-    print '& %2s     \\cr' % iq['abstain']
+            print('& %2s  ' % iq['choice%s' % c]),
+    print('& %2s     \\cr' % iq['abstain'])
 
     pq = pair_stats.questions[question]
-    print '          & Pairs      ',
+    print('          & Pairs      '),
     for c in range(1, 6):
         if c == int(pq['correct']):
-            print '&[%2s] ' % pq['choice%s' % c],
+            print('&[%2s] ' % pq['choice%s' % c]),
         else:
-            print '& %2s  ' % pq['choice%s' % c],
-    print '& %2s     \\cr' % pq['abstain']
+            print('& %2s  ' % pq['choice%s' % c]),
+    print('& %2s     \\cr' % pq['abstain'])
 
-    print '          &             &      &      &      &      &      &        \\cr'
+    print('          &             &      &      &      &      &      &        \\cr')
 
 
 def main():
     if len(sys.argv) < 3:
-        print "Usage: python ItemAnalysis <individuals file> <pairs file>"
+        print("Usage: python ItemAnalysis <individuals file> <pairs file>")
         exit()
     individual_stats = MultipleChoiceStats(sys.argv[1])
     pair_stats = MultipleChoiceStats(sys.argv[2])

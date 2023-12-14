@@ -16,7 +16,7 @@ from ..utils import (email_address_exists, get_user_model)
 
 from .models import EmailAddress
 from .utils import perform_login, send_email_confirmation, setup_user_email
-from .app_settings import app_settings
+from .app_settings import AppSettings, app_settings
 from .adapter import get_adapter
 import collections
 
@@ -390,7 +390,7 @@ class ResetPasswordForm(forms.Form):
             context = { "site": current_site,
                         "user": user,
                         "password_reset_url": url }
-            get_adapter().send_mail('account/email/password_reset_key',
+            get_adapter().send_mail('j5templates/account/email/password_reset_key',
                                     email,
                                     context)
         return self.cleaned_data["email"]

@@ -6,7 +6,7 @@ import warnings
 
 from django.test.utils import override_settings
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.sites.models import Site
 from django.test.client import RequestFactory
 from django.contrib.messages.middleware import MessageMiddleware
