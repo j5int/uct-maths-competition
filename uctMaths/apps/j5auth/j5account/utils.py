@@ -101,7 +101,7 @@ def perform_login(request, user, email_verification,
     # not is_active: social users are redirected to a template
     # local users are stopped due to form validation checking is_active
     assert user.is_active
-    if (email_verification == app_settings.app_settings.EmailVerificationMethod.MANDATORY
+    if (email_verification == app_settings.EmailVerificationMethod.MANDATORY
         and not EmailAddress.objects.filter(user=user,
                                             verified=True).exists()):
         send_email_confirmation(request, user)
