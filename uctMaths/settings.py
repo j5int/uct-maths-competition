@@ -29,16 +29,16 @@ DATABASES = {
 }
 
 #Email settings
-SMTP_ENABLED = config.get('email', 'SMTP_ENABLED')
-EMAIL_BACKEND = config.get('email', 'EMAIL_BACKEND')
-EMAIL_USE_TLS = config.get('email', 'EMAIL_USE_TLS')
-EMAIL_USE_SSL = config.get('email', 'EMAIL_USE_SSL') #MAYBE REMOVE
-EMAIL_HOST = config.get('email', 'EMAIL_HOST')
-EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = config.get('email', 'DEFAULT_FROM_EMAIL')
-SERVER_EMAIL = config.get('email', 'SERVER_EMAIL')
-EMAIL_PORT = config.get('email', 'EMAIL_PORT')
+SMTP_ENABLED = config.get('email', 'SMTP_ENABLED', fallback=False)
+EMAIL_BACKEND = config.get('email', 'EMAIL_BACKEND', fallback='django.core.mail.backends.console.EmailBackend')
+EMAIL_USE_TLS = config.get('email', 'EMAIL_USE_TLS', fallback=False)
+EMAIL_USE_SSL = config.get('email', 'EMAIL_USE_SSL', fallback=False) #MAYBE REMOVE
+EMAIL_HOST = config.get('email', 'EMAIL_HOST', fallback='localhost')
+EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER', fallback='')
+EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD', fallback='')
+DEFAULT_FROM_EMAIL = config.get('email', 'DEFAULT_FROM_EMAIL', fallback='')
+SERVER_EMAIL = config.get('email', 'SERVER_EMAIL', fallback='')
+EMAIL_PORT = config.get('email', 'EMAIL_PORT', fallback=25)
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
