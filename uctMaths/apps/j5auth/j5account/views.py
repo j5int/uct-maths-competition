@@ -332,6 +332,7 @@ def password_change(request, **kwargs):
             signals.password_changed.send(sender=request.user.__class__,
                                           request=request, user=request.user)
             password_change_form = form_class(request.user)
+            return redirect("/accounts/profile/")
     else:
         password_change_form = form_class(request.user)
     ctx = { "password_change_form": password_change_form }
