@@ -5,7 +5,7 @@ from django.urls import path, include
 
 from . import app_settings
 
-# urlpatterns = [path('', include('apps.j5auth.j5account.urls'))]
+urlpatterns = [path('', include('apps.j5auth.j5account.urls'))]
 
 for provider in providers.registry.get_class_list():
     try:

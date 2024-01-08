@@ -54,7 +54,9 @@ def send_confirmation(request, in_school='UNDEFINED',cc_admin=False):
                         recipient_list,
                         )
     result = views.printer_entry_result(request)
-    email.attach('%s_confirmation.pdf'%(unicode(in_school)),result.getvalue(), mimetype='application/pdf')
+    if in_school != "UNDEFINED":
+        in_school = in_school.getFormatName()
+    email.attach('%s_confirmation.pdf'%(in_school),result.getvalue(), mimetype='application/pdf')
     email.send()
 
 

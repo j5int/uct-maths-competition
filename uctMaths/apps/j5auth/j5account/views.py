@@ -24,7 +24,7 @@ from .utils import sync_user_email_addresses
 from .models import EmailAddress, EmailConfirmation
 
 from . import signals
-from . import app_settings
+from .app_settings import app_settings
 
 from .adapter import get_adapter
 
@@ -50,7 +50,7 @@ class RedirectAuthenticatedUserMixin(object):
         
 class LoginView(RedirectAuthenticatedUserMixin, FormView):
     form_class = LoginForm
-    template_name = "account/../templates/account/login.html"
+    template_name = "j5account/../templates/account/login.html"
     success_url = None
     redirect_field_name = "next"
 
@@ -110,7 +110,7 @@ class CloseableSignupMixin(object):
 
 
 class SignupView(RedirectAuthenticatedUserMixin, CloseableSignupMixin, FormView):
-    template_name = "account/../templates/account/signup.html"
+    template_name = "j5account/../templates/account/signup.html"
     form_class = SignupForm
     redirect_field_name = "next"
     success_url = None
@@ -422,7 +422,7 @@ def password_reset_from_key(request, uidb36, key, **kwargs):
 
 class LogoutView(TemplateResponseMixin, View):
     
-    template_name = "account/../templates/account/logout.html"
+    template_name = "j5account/../templates/account/logout.html"
     redirect_field_name = "next"
     
     def get(self, *args, **kwargs):

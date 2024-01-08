@@ -22,7 +22,7 @@ urlpatterns = [
 	# path(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
 	path('accounts/profile/', comp_views.profile, name='profile'),
 
-	#loads competitions/paths.py
+	#loads competitions/urls.py
     path('apps/competition/', include('apps.competition.urls')),
     #
     #
@@ -30,6 +30,6 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     #
-    # #load allauth/paths.py
+    # #load j5auth/j5account/urls.py
     path('accounts/', include('apps.j5auth.j5account.urls'))
 ]

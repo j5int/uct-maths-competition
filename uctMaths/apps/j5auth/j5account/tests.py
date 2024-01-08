@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from django.test.utils import override_settings
 from django.test import TestCase
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test.client import Client
 from django.core import mail
 from django.contrib.sites.models import Site
@@ -17,7 +17,7 @@ from apps.j5auth.j5account.forms import BaseSignupForm
 from apps.j5auth.j5account.models import EmailAddress, EmailConfirmation
 from apps.j5auth.utils import get_user_model
 
-from . import app_settings
+from .app_settings import app_settings
 
 from .adapter import get_adapter
 
@@ -29,7 +29,7 @@ User = get_user_model()
      ACCOUNT_SIGNUP_FORM_CLASS=None,
      ACCOUNT_EMAIL_SUBJECT_PREFIX=None,
      LOGIN_REDIRECT_URL='/accounts/profile/',
-     ACCOUNT_ADAPTER='allauth.account.adapter.DefaultAccountAdapter',
+     ACCOUNT_ADAPTER='j5auth.j5account.adapter.DefaultAccountAdapter',
      ACCOUNT_USERNAME_REQUIRED=True)
 class AccountTests(TestCase):
 

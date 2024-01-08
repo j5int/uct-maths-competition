@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.sites.models import Site
 from django.shortcuts import render as render_to_response
 from django.contrib.auth.decorators import login_required

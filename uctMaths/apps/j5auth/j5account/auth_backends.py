@@ -3,7 +3,7 @@ from django.db.models import Q
 
 from ..utils import get_user_model
 
-from .app_settings import AuthenticationMethod
+from .app_settings import AppSettings, app_settings
 from . import app_settings
 
 User = get_user_model()
@@ -13,10 +13,10 @@ class AuthenticationBackend(ModelBackend):
 
     def authenticate(self, **credentials):
         ret = None
-        if app_settings.AUTHENTICATION_METHOD == AuthenticationMethod.EMAIL:
+        if app_settings.AUTHENTICATION_METHOD == AppSettings.AuthenticationMethod.EMAIL:
             ret = self._authenticate_by_email(**credentials)
         elif app_settings.AUTHENTICATION_METHOD \
-                == AuthenticationMethod.USERNAME_EMAIL:
+                == AppSettings.AuthenticationMethod.USERNAME_EMAIL:
             ret = self._authenticate_by_email(**credentials)
             if not ret:
                 ret = self._authenticate_by_username(**credentials)

@@ -1,6 +1,6 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.template import RequestContext

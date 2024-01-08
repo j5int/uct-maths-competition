@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.management.color import no_style
 from django.db import connections
 
-from apps.j5auth.j5account import app_settings
+from apps.j5auth.j5account.app_settings import app_settings
 from apps.j5auth.j5account.models import EmailAddress, EmailConfirmation
 
 class Command(BaseCommand):
