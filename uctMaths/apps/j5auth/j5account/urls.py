@@ -6,8 +6,8 @@ urlpatterns = [
     path("email/", views.email, name="account_email"),
     path("signup/", views.signup, name="account_signup"),
     path("login/", views.login, name="account_login"),
-    path("password_change/", views.password_change, name="account_change_password"),
-    path("password_set/", views.password_set, name="account_set_password"),
+    path("password/change/", views.password_change, name="account_change_password"),
+    path("password/set/", views.password_set, name="account_set_password"),
 #    path(r"^password_delete/$", views.password_delete, name="acct_passwd_delete"),
 #    path(r"^password_delete/done/$", "django.views.generic.simple.direct_to_template", {
 #        "template": "account/password_delete_done.html",

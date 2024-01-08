@@ -77,10 +77,10 @@ def user_field(user, field, *args):
             return getattr(user, field)
 
 def user_username(user, *args):
-    return user_field(user, app_settings.USER_MODEL_USERNAME_FIELD, *args)
+    return user_field(user, app_settings.app_settings.USER_MODEL_USERNAME_FIELD, *args)
 
 def user_email(user, *args):
-    return user_field(user, app_settings.USER_MODEL_EMAIL_FIELD, *args)
+    return user_field(user, app_settings.app_settings.USER_MODEL_EMAIL_FIELD, *args)
 
 # def has_openid(request):
 #     """
@@ -101,7 +101,7 @@ def perform_login(request, user, email_verification,
     # not is_active: social users are redirected to a template
     # local users are stopped due to form validation checking is_active
     assert user.is_active
-    if (email_verification == app_settings.EmailVerificationMethod.MANDATORY
+    if (email_verification == app_settings.app_settings.EmailVerificationMethod.MANDATORY
         and not EmailAddress.objects.filter(user=user,
                                             verified=True).exists()):
         send_email_confirmation(request, user)
@@ -249,7 +249,7 @@ def send_email_confirmation(request, user, email_address=None):
     COOLDOWN_PERIOD = timedelta(minutes=3)
     email = user_email(user)
     if (email 
-        and app_settings.EMAIL_VERIFICATION != app_settings.EmailVerificationMethod.NONE):
+        and app_settings.EMAIL_VERIFICATION != app_settings.app_settings.EmailVerificationMethod.NONE):
         try:
             if email_address is None:
                 email_address = EmailAddress.objects.get(user=user,
