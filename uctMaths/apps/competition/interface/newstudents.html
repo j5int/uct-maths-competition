@@ -18,6 +18,12 @@
         <p>Not working.</p>
     {% endif %}
 
+    {% if not enough_invigilators %}
+        <tr>
+            <p><b>Since 75 students have been registered, please fill out the required fields for at least two invigilators</b></p>
+        </tr>
+        {% endif %}
+
     <!-- For "Confirm your school's language? -->
     <p> Please confirm your school's preferred language. </p>
     <select name = "language">
@@ -100,7 +106,14 @@
     <div>
         <h1>Register Invigilators</h1>
         <p>Please note that every school must send at least 1 Invigilator and that if the responsible teacher is going to invigilate kindly add your name to the Invigilators list. <br> Schools which send a full entry of {{maxEntries}} participants must send at least two invigilators.
- <br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i></p>
+        <br><i> All fields marked with an <b>asterisk (*) must be filled for an entry to be valid.</b></i><p>
+        {% if not enough_invigilators %}
+        <tr>
+            <p><b>Please enter 2 invigilators</b></p>
+        </tr>
+        {% endif %}
+        
+
         <p> {{ ierror }} </p>
         {% csrf_token %}
 
@@ -131,18 +144,18 @@
                 <tr>
                     <td><input type="text" class="invig_firstname" name="inv_firstname" value="{{invigilator.firstname}}"></td>
                     <td><input type="text" class="invig_surname" name="inv_surname" value="{{invigilator.surname}}"></td>
-                    <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" value="{{invigilator.phone_primary | cut:}}"></td>                    
+                    <td><input type ="text" class="invig_phone_primary" name="inv_phone_primary" value='{{invigilator.phone_primary | cut:" "}}'></td>                    
                     <td><input type ="text" class="invig_phone_alt" name="inv_phone_alt" value="{{invigilator.phone_alt}}"></td>
                     <td><input type ="text" class="invig_mail" name="inv_email" value="{{invigilator.email|lower}}"></td>
                     <td><input type ="text" class="invig_notes" name="inv_notes" value="{{invigilator.notes}}"></td>
                     <input type ="hidden" name="inv_registered_by" value ="{{user.id}}">
                 </tr>
                 {% endif %}
-
             {%endfor%}
             
+
             {%for invigilator in invigilator_range%}
-            {% if invigilator_list|length == 0 and forloop.first %}
+                {% if invigilator_list|length == 0 and forloop.first %}
                 <tr>
                     <td><input type="text" class="invig_firstname" required name="inv_firstname"></td>
                     <td><input type="text" class="invig_surname" required name="inv_surname"></td>
@@ -152,7 +165,7 @@
                     <td><input type ="text" class="invig_notes" name="inv_notes"></td>
                     <input type ="hidden" name="inv_registered_by" value ="{{user.id}}">
                 </tr>
-            {% else %}
+                {% else %}
                 <tr>
                     <td><input type="text" class="invig_firstname" name="inv_firstname"></td>
                     <td><input type="text" class="invig_surname" name="inv_surname"></td>
@@ -162,9 +175,8 @@
                     <td><input type ="text" class="invig_notes" name="inv_notes"></td>
                     <input type ="hidden" name="inv_registered_by" value ="{{user.id}}">
                 </tr>
-            {% endif %}
-
-            {%endfor%}
+                {% endif %}
+            {% endfor %}
 
         </table>
 

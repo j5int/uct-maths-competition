@@ -233,7 +233,6 @@ def newstudents(request):
         pairs_per_grade[grade].extend([i for i in range(0, compadmin.admin_number_of_pairs() + 1) if i != pair_list[grade]])
 
     if request.method == 'POST':  # If the form has been submitted...
-
         form = (request.POST) # A form bound to the POST data
 
         #Delete all previously stored information
@@ -243,7 +242,7 @@ def newstudents(request):
             assigned_school.language = form.getlist('language','')[0]
             assigned_school.phone = form.getlist('school_number','')[0]
             assigned_school.save()
-
+                
             #Register a single responsible teacher (assigned to that school)
             rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
             rtfirstname = form.getlist('rt_firstname','')[0]
@@ -256,8 +255,8 @@ def newstudents(request):
 
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
             rt_query = ResponsibleTeacher(firstname = rtfirstname , surname = rtsurname, phone_primary = rtphone_primary,
-                                      phone_alt = rtphone_alt, phone_cell=rtphone_cell, school = rtschool,
-                                      email_school = rtemail_school, email_personal=rtemail_personal, is_primary = True)
+                                        phone_alt = rtphone_alt, phone_cell=rtphone_cell, school = rtschool,
+                                        email_school = rtemail_school, email_personal=rtemail_personal, is_primary = True)
 
             #Delete responsible teacher before saving the new one
             for rt in responsible_teacher:
@@ -279,8 +278,8 @@ def newstudents(request):
 
             #rtregistered_by =  User.objects.get(pk=int(form.getlist('rt_registered_by','')[0]))
             art_query = ResponsibleTeacher(firstname = artfirstname , surname = artsurname, phone_primary = artphone_primary,
-                                      phone_alt = artphone_alt, phone_cell=artphone_cell, school = artschool,
-                                      email_school = artemail_school, email_personal=artemail_personal, is_primary = False)
+                                        phone_alt = artphone_alt, phone_cell=artphone_cell, school = artschool,
+                                        email_school = artemail_school, email_personal=artemail_personal, is_primary = False)
 
             #Delete responsible teacher before saving the new one
             for art in alt_responsible_teacher:
@@ -290,16 +289,17 @@ def newstudents(request):
             art_query.reference=art_query.id
             art_query.save()
 
+            num_pairs = 0
             #Registering per grade
             for grade in range (8,13):
-                  #Registering the different pairs
-                  #Information is set to null, only school name is given and reference
-                  #Reference if the ID of the first person in the pair
+                #Registering the different pairs
+                #Information is set to null, only school name is given and reference
+                #Reference if the ID of the first person in the pair
 
-                  if compadmin.admin_number_of_pairs() == 0:
+                if compadmin.admin_number_of_pairs() == 0:
                     break
 
-                  for p in range(int(form.getlist("pairs",'')[grade-8])):
+                for p in range(int(form.getlist("pairs",'')[grade-8])):
                         firstname = 'Pair/Paar'
                         surname = str(grade)+chr(65 + p)   # Maps 0, 1, 2, 3... to A, B, C...
                         pair_number = 51 + p
@@ -310,9 +310,11 @@ def newstudents(request):
                         location = assigned_school.location
 
                         query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
-                                school=school, grade=grade, paired=paired, location=location)
+                                    school=school, grade=grade, paired=paired, location=location)
                         query.save()
+                        num_pairs += 1
 
+            num_invigilators = 0
             #Add invigilator information
             for invigilator in invigilator_list:
                 invigilator.delete()
@@ -338,7 +340,9 @@ def newstudents(request):
                     query = Invigilator(school=school, firstname=ifirstname, surname=isurname, location=location,
                                     phone_primary=iphone_primary, phone_alt=iphone_alt, email=iemail, notes=inotes)
                     query.save()
+                    num_invigilators += 1
 
+            num_individuals = 0
             #Registering students, maximum number of students 25
             #Returns an error if information entered incorrectly
 
@@ -358,19 +362,32 @@ def newstudents(request):
                 location = assigned_school.location
 
                 query = SchoolStudent(firstname=firstname, surname=surname, language=language, reference=reference,
-                        school=school, grade=grade, paired=paired, location=location)
+                            school=school, grade=grade, paired=paired, location=location)
                 query.save()
+                num_individuals += 1
+
+            #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission
+            student_list = SchoolStudent.objects.filter(school = assigned_school)
+            individual_list, pair_list = compadmin.processGrade(student_list)
+            entries_per_grade = {}
+            pairs_per_grade = {}
+            for grade in range(8,13):
+                entries_per_grade[grade] = range(compadmin.admin_number_of_individuals() - len(individual_list[grade]))
+                pairs_per_grade[grade] = [pair_list[grade]]
+                pairs_per_grade[grade].extend([i for i in range(0, compadmin.admin_number_of_pairs() + 1) if i != pair_list[grade]])
 
             if 'submit_form' in request.POST: #Send confirmation email and continue
-                assigned_school.entered=1 #The school has made an entry
-                assigned_school.save()
-                 #The school has made an entry
-                try:
-                    confirmation.send_confirmation(request, assigned_school, cc_admin=True)
-                    return HttpResponseRedirect('../submitted/')
-                except Exception as e:
-                    print(e)
-                    return HttpResponseRedirect('../submitted/')
+                enoughInvigilators.checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs)
+                if enoughInvigilators.enoughInvigilators: #Only proceed with submission if enough invigilators are entered
+                    assigned_school.entered=1 #The school has made an entry
+                    assigned_school.save()
+                    #The school has made an entry
+                    try:
+                        confirmation.send_confirmation(request, assigned_school, cc_admin=True)
+                        return HttpResponseRedirect('../submitted/')
+                    except Exception as e:
+                        print(e)
+                        return HttpResponseRedirect('../submitted/')
             else:
                 print('This should not happen')
 
@@ -399,6 +416,12 @@ def newstudents(request):
     code = full[1].strip()
     city = full[2].strip()
 
+    student_list = SchoolStudent.objects.filter(school = assigned_school)
+    individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
+    entries_per_grade = {} #Dictionary with grade:range(...)
+    for grade in range(8,13):
+        entries_per_grade[grade] = range(compadmin.admin_number_of_individuals() - len(individual_list[grade]))
+
     c = {'type':'Students',
         'schooln':assigned_school,
         'language_options':language_selection,
@@ -410,6 +433,7 @@ def newstudents(request):
         'max_num_pairs': compadmin.admin_number_of_pairs(),
         'entries_per_grade':entries_per_grade,
         'invigilator_list': invigilator_list,
+        'enough_invigilators': enoughInvigilators.enoughInvigilators,
         'entries_open': compadmin.isOpen() or request.user.is_staff,
         'grades':range(8,13), 
         'error':error,
@@ -426,6 +450,36 @@ def newstudents(request):
     c.update(csrf(request))
     #TODO Cancel button (Go back to 'Entry Review' - if possible)
     return render_to_response(request, 'newstudents.html', c)
+
+class enoughInvigilators():
+    enoughInvigilators=True
+        
+    def checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs):
+        """
+        Sets enoughtInvigilators to false only when: 
+        the competiton has invigilator AND
+        there are less than two invigilators but maximum number of students entered.
+        In this case there are not enough invigilators entered and user should be prompted to add more.
+        """
+
+        if not compadmin.competition_has_invigilator():
+            enoughInvigilators.enoughInvigilators=True
+            return
+        
+        if num_invigilators>=2 or not compadmin.competition_has_invigilator():
+            enoughInvigilators.enoughInvigilators=True
+            return
+
+        if num_pairs<(5*compadmin.admin_number_of_pairs()):
+            enoughInvigilators.enoughInvigilators=True
+            return
+            
+        if num_individuals<(5*compadmin.admin_number_of_individuals()):
+            enoughInvigilators.enoughInvigilators=True
+            return
+
+        enoughInvigilators.enoughInvigilators=False
+
 
 def correctCapitals(input_name):
     
