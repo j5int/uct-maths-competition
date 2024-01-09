@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from __future__ import unicode_literals
 
 import io
+import logging
 import tempfile
 from wsgiref.util import FileWrapper
 
@@ -1156,15 +1157,13 @@ def printer_school_report(request, school_list=None):
                 'alt_has_phone_alt': len(alt_responsible_teacher[0].phone_alt) > 0 if has_alt_teacher else False}
             #Render the template with the context (from above)
 
-            template = get_template('school_report.html')
+            template = get_template('pdf_templates/school_report.html')
             c.update(csrf(request))
             #context = Context(c)
             html += template.render(c) #Concatenate each rendered template to the html "string"
+    status, result = build_full_pdf(html)
 
-    result = io.BytesIO()
-    #Generate the pdf doc
-    pdf = pisa.pisaDocument(html, result)
-    if not pdf.err:
+    if not status.err:
         return result
     else:
         pass #Error handling?
@@ -1265,23 +1264,24 @@ def generate_school_answer_sheets(request, school_list):
         response['Content-Disposition'] = 'attachment; filename=AnswerSheetDownloadErrors(%s).txt'%(timestamp_now())
         response['Content-Type'] = 'application/txt'
         return response
-    
-    output_io = io.BytesIO() #Used to write to files then zip
+
     start = datetime.datetime.now()
-    with zipfile.ZipFile(output_io, 'w') as zipf:
-        for ischool in school_list:
-            output_string=printer_answer_sheet(request, ischool)
-            zipf.writestr(get_answer_sheet_name(ischool), output_string.getvalue())
-    
-    response = HttpResponse(output_io.getvalue())
+
     if len(school_list) == 1:
+        response = HttpResponse(printer_answer_sheet(request, school_list[0]).getvalue())
         response['Content-Disposition'] = 'attachment; filename=%s'%(get_answer_sheet_name(school_list[0]))
         response['Content-Type'] = 'application/pdf'
     else:
+        output_io = io.BytesIO()  # Used to write to files then zip
+        with zipfile.ZipFile(output_io, 'w') as zipf:
+            for ischool in school_list:
+                output_string = printer_answer_sheet(request, ischool)
+                zipf.writestr(get_answer_sheet_name(ischool), output_string.getvalue())
+        response = HttpResponse(output_io.getvalue())
         response['Content-Disposition'] = 'attachment; filename=Answer_Sheets(%s).zip' % (timestamp_now())
         response['Content-Type'] = 'application/x-zip-compressed'
     diff = datetime.datetime.now() - start
-    print(str(diff))
+    logging.info("Time taken to generate reports: %s", diff)
     return response
 
 def get_student_answer_sheet(request, student):
@@ -1295,9 +1295,9 @@ def get_student_answer_sheet(request, student):
         'venue':str(venue.building)+ ' - '+ str(venue.code),
     }
     if student.paired:
-        template = get_template('pair_as_template.html')
+        template = get_template('pdf_templates/pair_as_template.html')
     else:
-        template = get_template('individual_as_template.html')
+        template = get_template('pdf_templates/individual_as_template.html')
     #context = Context(c)
     return template.render(c)
 
@@ -1354,7 +1354,7 @@ def generate_school_confirmation(request, school_list):
                 'year':year,
                 'invigilators_required':competition_has_invigilator()}
             #Render the template with the context (from above)
-            template = get_template('printer_entry.html')
+            template = get_template('pdf_templates/printer_entry.html')
             if request:
                 c.update(csrf(request))
             #context = Context(c)
@@ -1377,21 +1377,25 @@ def generate_school_confirmation(request, school_list):
                 c.update(csrf(request))
             #context = Context(c)
             register_html += template.render(c) #Concatenate each rendered template to the html "string"
-   
-    register_result = io.BytesIO()
 
-    #Generate the pdf doc
-    register_pdf = pisa.pisaDocument(register_html, register_result)
-    
-    if not register_pdf.err:
-        return register_result
+    status, result = build_full_pdf(register_html)
+
+    if not status.err:
+        return result
     else:
         pass #Error handling?
+
+def build_full_pdf(html):
+    base_template = get_template('pdf_templates/pdf_base.html')
+    result = io.BytesIO()
+    status = pisa.CreatePDF(base_template.render({"content": html}), dest=result, encoding="utf-8")
+
+    return status, result
 
 def printer_answer_sheet(request, assigned_school=None):
     """ Generate the school answer sheet for each school in the query set"""
     student_list = SchoolStudent.objects.filter(school = assigned_school)
-    answer_sheets_result = io.BytesIO()
+
     answer_sheets_html = ''
     for istudent in student_list:
         answer_sheets_html += get_student_answer_sheet(request, istudent)
@@ -1400,15 +1404,17 @@ def printer_answer_sheet(request, assigned_school=None):
         register_result = generate_school_confirmation(request, assigned_school)
     else:
         register_result = generate_school_confirmation(request, [assigned_school])
-    answer_sheets_pdf = pisa.pisaDocument(answer_sheets_html, answer_sheets_result)
+
+    status, answer_sheets_result = build_full_pdf(answer_sheets_html)
+
     merger = PdfMerger()
     outpdf = io.BytesIO()
-    # merger.append(register_result)
-    # merger.append(os.path.join(os.path.dirname(__file__), "../..", "Declaration", "Declaration.pdf"))
+    merger.append(register_result)
+    merger.append(os.path.join(os.path.dirname(__file__), "../..", "Declaration", "Declaration.pdf"))
     merger.append(answer_sheets_result)
     merger.write(outpdf)
     merger.close()
-    if not answer_sheets_pdf.err:
+    if not status.err:
         return outpdf
     else:
         pass
