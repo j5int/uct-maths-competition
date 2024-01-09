@@ -12,7 +12,7 @@ from . import app_settings
 
 
 def generate_unique_username(txt):
-    from .j5account.app_settings import USER_MODEL_USERNAME_FIELD
+    from .account.app_settings import USER_MODEL_USERNAME_FIELD
 
     username = unicodedata.normalize('NFKD', txt)
     username = username.encode('ascii', 'ignore').decode('ascii')
@@ -59,8 +59,8 @@ def valid_email_or_none(email):
 
 
 def email_address_exists(email, exclude_user=None):
-    from .j5account import app_settings as account_settings
-    from .j5account.models import EmailAddress
+    from .account import app_settings as account_settings
+    from .account.models import EmailAddress
 
     emailaddresses = EmailAddress.objects
     if exclude_user:

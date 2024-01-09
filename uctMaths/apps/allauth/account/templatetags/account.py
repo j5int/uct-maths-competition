@@ -1,6 +1,6 @@
 from django import template
 
-from apps.j5auth.j5account.utils import user_display
+from apps.allauth.account.utils import user_display
 
 register = template.Library()
 

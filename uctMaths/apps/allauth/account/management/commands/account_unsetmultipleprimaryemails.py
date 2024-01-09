@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.db.models import Count
 
-from apps.j5auth.utils import get_user_model
-from apps.j5auth.j5account.utils import user_email
-from apps.j5auth.j5account.models import EmailAddress
+from apps.allauth.utils import get_user_model
+from apps.allauth.account.utils import user_email
+from apps.allauth.account.models import EmailAddress
 
 User = get_user_model()
 

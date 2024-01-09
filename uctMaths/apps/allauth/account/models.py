@@ -1,5 +1,6 @@
 import datetime
 
+from allauth.account.models import EmailAddress as AllAuth_EmailAddress, EmailConfirmation as AllAuth_EmailConfirmation
 from django.db import models
 from django.db import transaction
 from django.urls import reverse
@@ -14,21 +15,13 @@ from .utils import random_token, user_email
 from .managers import EmailAddressManager, EmailConfirmationManager
 from .adapter import get_adapter
 
-class EmailAddress(models.Model):
-    
-    user = models.ForeignKey(allauth_app_settings.USER_MODEL, related_name="EmailAddress_related_user", on_delete=lambda x:x)
-    email = models.EmailField(unique=app_settings.UNIQUE_EMAIL)
-    verified = models.BooleanField(default=False)
-    primary = models.BooleanField(default=False)
-    
-    objects = EmailAddressManager()
+
+class EmailAddress(AllAuth_EmailAddress):
 
     class Meta:
-        verbose_name = _("email address")
-        verbose_name_plural = _("email addresses")
-        if not app_settings.UNIQUE_EMAIL:
-            unique_together = [("user", "email")]
-    
+        proxy = True
+        db_table= "account_emailaddress"
+
     def __str__(self):
         return u"%s (%s)" % (self.email, self.user)
     
@@ -64,19 +57,12 @@ class EmailAddress(models.Model):
                 self.send_confirmation(request)
 
 
-class EmailConfirmation(models.Model):
-    
-    email_address = models.ForeignKey(EmailAddress, on_delete=lambda x:x)
-    created = models.DateTimeField(default=timezone.now)
-    sent = models.DateTimeField(null=True)
-    key = models.CharField(max_length=64, unique=True)
-    
-    objects = EmailConfirmationManager()
-    
+class EmailConfirmation(AllAuth_EmailConfirmation):
+
     class Meta:
-        verbose_name = _("email confirmation")
-        verbose_name_plural = _("email confirmations")
-    
+        proxy = True
+        db_table= "account_emailconfirmation"
+
     def __str__(self):
         return u"confirmation for %s" % self.email_address
     

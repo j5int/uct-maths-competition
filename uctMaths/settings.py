@@ -40,6 +40,8 @@ DEFAULT_FROM_EMAIL = config.get('email', 'DEFAULT_FROM_EMAIL', fallback='')
 SERVER_EMAIL = config.get('email', 'SERVER_EMAIL', fallback='')
 EMAIL_PORT = config.get('email', 'EMAIL_PORT', fallback=25)
 
+ACCOUNT_UNIQUE_EMAIL = True
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
@@ -142,7 +144,7 @@ WSGI_APPLICATION = 'uctMaths.wsgi.application'
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.template.context_processors.request",
     'django.contrib.auth.context_processors.auth',
-    "apps.j5auth.j5account.context_processors.account",
+    "apps.allauth.account.context_processors.account",
     # "django.core.context_processors.auth",
 
 )
@@ -154,7 +156,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'apps/j5auth'),
+        'DIRS': [os.path.join(BASE_DIR, 'apps/allauth'),
                  os.path.join(BASE_DIR, 'apps/competition/interface')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -162,7 +164,7 @@ TEMPLATES = [
             'context_processors': [
                 "django.template.context_processors.request",
                 'django.contrib.auth.context_processors.auth',
-                "apps.j5auth.j5account.context_processors.account",
+                "apps.allauth.account.context_processors.account",
                 "django.contrib.messages.context_processors.messages",
 
             ],
@@ -172,8 +174,8 @@ TEMPLATES = [
 
 INSTALLED_APPS = (
     'uctMaths',
-	'apps.j5auth',
-	'apps.j5auth.j5account',
+	'apps.allauth',
+	'apps.allauth.account',
     'apps.competition',
     
     'django.contrib.auth',
@@ -190,7 +192,6 @@ INSTALLED_APPS = (
     #allauth apps
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
     #endallauth
     #Import-export functionality
     'import_export', #(https://django-import-export.readthedocs.org/en/latest/configuration.html)

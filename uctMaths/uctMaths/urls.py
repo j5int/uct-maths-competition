@@ -30,6 +30,6 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     #
-    # #load j5auth/j5account/urls.py
-    path('accounts/', include('apps.j5auth.j5account.urls'))
+    # #load allauth/account/urls.py
+    path('accounts/', include('apps.allauth.account.urls'))
 ]

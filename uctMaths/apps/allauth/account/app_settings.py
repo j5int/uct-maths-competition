@@ -168,7 +168,7 @@ class AppSettings(object):
     @property
     def ADAPTER(self):
         return self._setting('ADAPTER', 
-                             'apps.j5auth.j5account.adapter.DefaultAccountAdapter')
+                             'apps.allauth.account.adapter.DefaultAccountAdapter')
 
     @property
     def LOGOUT_REDIRECT_URL(self):
