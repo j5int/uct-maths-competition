@@ -44,7 +44,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["CPT-XSHOFMEYR01.ingrnet.com", "127.0.0.1", "192.168.0.119"]
+ALLOWED_HOSTS = ["localhost","CPT-XSHOFMEYR01.ingrnet.com", "127.0.0.1", "192.168.0.119"]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -245,4 +245,12 @@ LOGGING = {
             'level': 'ERROR'
        },
     }
+}
+
+Q_CLUSTER = {
+    'redis': {
+        'host': 'CPT-XSHOFMEYR01.ingrnet.com',
+        'port': 6379,
+        'db': 2,
+        'password': None}
 }
