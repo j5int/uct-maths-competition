@@ -7,6 +7,7 @@ import io
 import tempfile
 from wsgiref.util import FileWrapper
 
+import pytz
 from PyPDF2 import PdfMerger
 
 from .models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
@@ -822,7 +823,7 @@ def export_courier_address(request, school_list):
     
     
 def timestamp_now():
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg"))
     to_return = '%s:%s[%s-%s-%s]'%(now.hour, now.minute, now.day, now.month, now.year)
     return to_return
     
@@ -987,7 +988,7 @@ def print_school_confirmations(request, school_list):
     
 def timestamp_now():
     """ Time-stamp-formatting method. Used for all files served by server and a few xls sheets. NB: check cross-OS compatibility! """
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg"))
     to_return = '%s:%s-%s%s%s'%(str(now.hour).zfill(2), str(now.minute).zfill(2), str(now.day).zfill(2), str(now.month).zfill(2), str(now.year).zfill(4))
     return to_return
     
@@ -1044,7 +1045,7 @@ def email_school_reports(request, school_list):
         msg = ""
         if comp.count() == 1:
             pg_date = comp[0].prizegiving_date
-            msg = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + " is before prizegiving date: " + str(pg_date) + " 21:00" 
+            msg = datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg")).strftime("%Y-%m-%d %H:%M") + " is before prizegiving date: " + str(pg_date) + " 21:00"
             msg += "<br>"+"Please wait until after the prize giving before sending out the results" 
             msg += " or change the date at: "+"<a href=\"/admin/competition/competition/\">Competition</a>"
         else:
@@ -1101,7 +1102,7 @@ def printer_school_report(request, school_list=None):
         for igrade in range(8, 13):
             grade_bucket[igrade].extend(student_list.filter(grade=igrade).order_by('reference'))
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school)
-        timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M'))
+        timestamp = str(datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg")).strftime('%d %B %Y at %H:%M'))
         individual_gold_count = student_list.filter(award='G', paired=False).count()
         pair_gold_count = student_list.filter(award='G', paired=True).count()
         gold_count = student_list.filter(award='G').count()
@@ -1318,8 +1319,8 @@ def generate_school_confirmation(request, school_list):
         invigilator_list = Invigilator.objects.filter(school = assigned_school)
         responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
         alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
-        timestamp = str(datetime.datetime.now().strftime('%d %B %Y at %H:%M (local time)'))
-        year = str(datetime.datetime.now().strftime('%Y'))
+        timestamp = str(datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg")).strftime('%d %B %Y at %H:%M (local time)'))
+        year = str(datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg")).strftime('%Y'))
         if responsible_teacher:
             responsible_teacher = responsible_teacher[0]
         else:

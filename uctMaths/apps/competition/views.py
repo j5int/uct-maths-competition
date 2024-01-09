@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+
+import pytz
 from django.http import HttpResponse
 from django.shortcuts import render as render_to_response
 from django.http import HttpResponseRedirect
@@ -554,7 +556,7 @@ def school_results(request):
         report = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary=True)
         if report:
             report = report[0]
-        report.report_downloaded = datetime.now()
+        report.report_downloaded = datetime.now(tz=pytz.timezone("Africa/Johannesburg"))
         report.save()
         return compadmin.print_school_reports(request, [assigned_school])
     return HttpResponse("Results will be available soon.")
@@ -580,10 +582,10 @@ def answer_sheets(request, assigned_school = None):
         resp_teacher = rteachers.filter(is_primary=True)[0]
         alt_resp_teacher = rteachers.filter(is_primary=False)[0]
         if resp_teacher:
-            resp_teacher.answer_sheet_downloaded = datetime.now()
+            resp_teacher.answer_sheet_downloaded = datetime.now(tz=pytz.timezone("Africa/Johannesburg"))
             resp_teacher.save()
         if alt_resp_teacher:
-            alt_resp_teacher.answer_sheet_downloaded = datetime.now()
+            alt_resp_teacher.answer_sheet_downloaded = datetime.now(tz=pytz.timezone("Africa/Johannesburg"))
             alt_resp_teacher.save()
         return compadmin.generate_school_answer_sheets(request, [assigned_school])
     elif not rteachers:

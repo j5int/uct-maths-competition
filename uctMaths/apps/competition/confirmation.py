@@ -1,3 +1,4 @@
+import pytz
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from .models import SchoolStudent, Invigilator, ResponsibleTeacher
@@ -142,6 +143,6 @@ def UMC_header(width=40):
 
 def UMC_datetime(width=40):
     """ Get/format current time/date of when the submission was passed """ 
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg"))
     to_return = 'Generated %s:%s %s/%s/%s\n\n'%(now.hour, now.minute, now.day, now.month, now.year)
     return to_return
