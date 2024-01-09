@@ -2,11 +2,11 @@ from allauth.account.admin import (EmailAddressAdmin as AllAuth_EmailAddressAdmi
                                    EmailConfirmationAdmin as AllAuth_EmailConfirmationAdmin)
 from django.contrib import admin
 from allauth.account.models import EmailAddress as AllAuth_EmailAddress
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+
 from .app_settings import app_settings
 from .models import EmailConfirmation, EmailAddress
-from ..utils import get_user_model
-
-User = get_user_model()
 
 class EmailAddressAdmin(AllAuth_EmailAddressAdmin):
     list_display = ('email', 'user', 'primary', 'verified')
@@ -29,4 +29,15 @@ if admin.site.is_registered(AllAuth_EmailAddress):
     admin.site.unregister(AllAuth_EmailAddress)
 admin.site.register(EmailAddress, EmailAddressAdmin)
 
-# admin.site.register(EmailConfirmation, EmailConfirmationAdmin)
+
+
+@admin.action(description="Mark selected Users as inactive")
+def make_published(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+
+class j5UserAdmin(UserAdmin):
+    actions = [make_published]
+
+admin.site.unregister(User)
+admin.site.register(User, j5UserAdmin)
