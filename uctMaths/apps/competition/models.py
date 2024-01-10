@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 #Import_export models(https://django-import-export.readthedocs.org/en/latest/getting_started.html)
 
 LOCATIONS = (
-    ('C', 'Cape Town'),
-    ('G', 'George')
+    ('CPT', 'Cape Town'),
+    ('GEO', 'George')
 )
 
 class Competition(models.Model):
