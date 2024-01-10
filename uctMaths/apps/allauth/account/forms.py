@@ -390,7 +390,7 @@ class ResetPasswordForm(forms.Form):
             context = { "site": current_site,
                         "user": user,
                         "password_reset_url": url }
-            get_adapter().send_mail('j5templates/account/email/password_reset_key',
+            get_adapter().send_mail('templates/account/email/password_reset_key',
                                     email,
                                     context)
         return self.cleaned_data["email"]

@@ -193,7 +193,7 @@ def entry_review(request):
         return HttpResponseRedirect('../students/')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
-        return HttpResponseRedirect('../')
+        return HttpResponseRedirect('../entry_review/')
 
     c.update(csrf(request))
     return render_to_response(request, 'entry_review.html', c)
