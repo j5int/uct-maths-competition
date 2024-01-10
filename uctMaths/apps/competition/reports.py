@@ -1,10 +1,10 @@
 import pytz
 from django.conf import settings
-from models import ResponsibleTeacher
+from .models import ResponsibleTeacher
 from django.core.mail import EmailMessage
 import datetime
 
-import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
+from . import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
                  # report email.
 from io import StringIO
 import os

@@ -36,9 +36,10 @@ sys.path.append("../../")
 sys.setrecursionlimit(10000)
 
 #TODO django-q for background tasks
+from django_q.tasks import async_task
 
 # from background_task import background
-# from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results, bg_generate_as_grade_distinction
+from uctMaths.background_tasks import bg_generate_school_answer_sheets, bg_email_results, bg_generate_as_grade_distinction
 
 
 def admin_emailaddress():
@@ -1061,7 +1062,9 @@ def email_school_reports(request, school_list):
         for ischool in school_list:
             txt = "(Key %s) %s: \n" % (str(ischool.key), ischool.name.strip())
             if views.has_results(request, ischool):
-                #TODO bg_email_results(ischool.id)
+                #TODO
+                async_task(bg_email_results,
+                           ischool.id)
                 successes.append(ischool.name.strip())
             else:
                 has_scores = views.has_results(request, ischool)
@@ -1456,7 +1459,9 @@ def email_school_answer_sheets(request, schools):
             errors.append(txt)
         else:
             print("Creating background task for %s with ID %d." % (school.name, school.id))
-            #TODO bg_generate_school_answer_sheets(school.id)
+            #TODO 
+            async_task(bg_generate_school_answer_sheets,
+                       school.id)
             successes.append(school.name.strip())
     
     
@@ -1493,8 +1498,14 @@ def generate_grade_answer_sheets(request):
 
     for grade in range(8, 12 + 1):
         print("Creating background task for AS generation for grade %d." % grade)
-        #TODO bg_generate_as_grade_distinction(grade, True)
-        #TODO bg_generate_as_grade_distinction(grade, False)
+        #TODO 
+        async_task(bg_generate_as_grade_distinction,
+                   grade, 
+                   True)
+        #TODO 
+        async_task(bg_generate_as_grade_distinction,
+                   grade, 
+                   False)
     
     response = HttpResponse("""Attempting to generate answer sheets for all students, distinguished by grade. 
 This will take some time if many students have been entered. 

@@ -1,5 +1,3 @@
-# from background_task import background
-
 from xhtml2pdf import pisa  
 import sys
 from django.utils import timezone
@@ -19,7 +17,6 @@ def current_time():
     t = timezone.now()
     return "%d-%d-%d %d:%d:%d" % (t.year, t.month, t.day, t.hour, t.minute, t.second)
 
-@background(queue="report-email-queue")
 def bg_email_results(school_id):
     
     print("%s: Emailing results for school with ID: %s" %(current_time(), str(school_id)) )
@@ -39,7 +36,6 @@ def bg_email_results(school_id):
     print("%s: Finished sending report email for %s." % (current_time(), school.name))
 
 # Ideally this function would be in competition/compadmin.py
-@background(queue="AS-generation-queue")
 def bg_generate_school_answer_sheets(school_id):
     from apps.competition.compadmin import printer_answer_sheet
     from apps.competition.reports import send_answer_sheets
@@ -59,7 +55,6 @@ def bg_generate_school_answer_sheets(school_id):
     school.save()
     print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
 
-@background(queue="AS-generation-queue")
 def bg_generate_as_grade_distinction(grade, paired):
     from apps.competition.compadmin import get_student_answer_sheet
     from io import StringIO
