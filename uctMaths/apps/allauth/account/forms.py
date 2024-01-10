@@ -200,7 +200,6 @@ class BaseSignupForm(_base_signup_form_class()):
             return value
         raise forms.ValidationError(_("This username is already taken. Please "
                                       "choose another."))
-    # can add a clause here to prevent funny chars in usernames. Not sure of implementation yet
     
     def clean_email(self):
         value = self.cleaned_data["email"]
