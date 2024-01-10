@@ -246,8 +246,11 @@ def newstudents(request):
     if request.method == 'POST':  # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
 
-        #Delete all previously stored information
+        # Entry is cancelled and user returns to entry review
+        if 'cancel' in request.POST:
+            return HttpResponseRedirect('../entry_review/')
 
+        #Delete all previously stored information
         try:
             assigned_school.address ='%s, %s, %s' % (form.getlist('physical_address','')[0], form.getlist('code','')[0], form.getlist('city','')[0])
             assigned_school.language = form.getlist('language','')[0]
@@ -472,7 +475,6 @@ def newstudents(request):
         'maxEntries': compadmin.get_max_entries()}
 
     c.update(csrf(request))
-    #TODO Cancel button (Go back to 'Entry Review' - if possible)
     return render_to_response(request, 'newstudents.html', c)
 
 class enoughInvigilators():
