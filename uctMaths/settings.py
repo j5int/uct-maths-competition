@@ -32,7 +32,6 @@ DATABASES = {
 SMTP_ENABLED = config.get('email', 'SMTP_ENABLED', fallback=False)
 EMAIL_BACKEND = config.get('email', 'EMAIL_BACKEND', fallback='django.core.mail.backends.console.EmailBackend')
 EMAIL_USE_TLS = config.get('email', 'EMAIL_USE_TLS', fallback=False)
-
 EMAIL_USE_SSL = config.get('email', 'EMAIL_USE_SSL', fallback=False) #MAYBE REMOVE
 EMAIL_HOST = config.get('email', 'EMAIL_HOST', fallback='localhost')
 EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER', fallback='')
