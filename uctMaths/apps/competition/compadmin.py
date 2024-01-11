@@ -721,8 +721,8 @@ def assign_student_awards():
 
     for igrade in range(8, 13):
         #Assign gold awards
-        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=4, score__gt=0).order_by('rank')
-        individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=11, score__gt=0).order_by('rank')
+        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=4, score__gt=-1).order_by('rank')
+        individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=11, score__gt=-1).order_by('rank')
 
         for individual in individualQS:
             school_list=school_list.exclude(name=individual.school)
@@ -735,8 +735,8 @@ def assign_student_awards():
             pair.save()
 
         #Merit awards
-        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=101, rank__gt=3, score__gt=0).order_by('school')
-        individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=201, rank__gt=10, score__gt=0).order_by('school')
+        pairQS = student_list.filter(grade = igrade, paired=True, rank__lt=101, rank__gt=3, score__gt=-1).order_by('school')
+        individualQS = student_list.filter(grade = igrade, paired=False, rank__lt=201, rank__gt=10, score__gt=-1).order_by('school')
 
         for individual in individualQS:
             individual.award='M'
@@ -749,7 +749,7 @@ def assign_student_awards():
     for ischool in school_list:
         #See condition below (student must have entered AND written)
         #TODO: Do this better - so far assumes no student actually scored 0
-        school_students = SchoolStudent.objects.filter(school=ischool, paired=False, score__gt=1).order_by('rank')
+        school_students = SchoolStudent.objects.filter(school=ischool, paired=False, score__gt=-1).order_by('rank')
 
         #School may only receive an OX award if 10 or more individuals entered AND wrote.
         if len(school_students)>= 10:
@@ -1033,7 +1033,7 @@ def output_PRN_files():
 
             for student in grade_bucket[grade, False, 'ALL']: #Individual students
                 s_line = u'%-10s %3s %s; %s, %s\n'%(student.reference, 'SCI', str(student.school)[0:10], student.surname, student.firstname[0])
-                output_string.write(s_line)
+                output_string.write(bytes(s_line,"utf-8"))
                 
             #Generate file from io and write to zip (ensure str UTF-* encoding is used)
             zipf.writestr('INDGR%d.PRN'%(grade), output_string.getvalue())
@@ -1042,7 +1042,7 @@ def output_PRN_files():
             for student in grade_bucket[grade, True, 'ALL']: #Paired students
                 s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', str(student.school)[0:10], 'Pair / Paar ', student.surname)  
                 #TODO: Seems like an error to me... But it's like this in the sample files.
-                output_string.write(s_line)
+                output_string.write(bytes(s_line,"utf-8"))
             
             #Generate file from io and write to zip (ensure str UTF-* encoding is used)
             zipf.writestr('PRGR%d.PRN'%(grade), output_string.getvalue())
