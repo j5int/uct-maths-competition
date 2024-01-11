@@ -204,6 +204,7 @@ def output_register(venue_list):
 
     output_workbook = xlwt.Workbook()
     student_header = ['Reference No.','School', 'First name(s)','Surname']
+    invigilator_header = ['School', 'First name(s)','Surname']
 
     #Generate summary sheet
     #----------------------
@@ -236,10 +237,9 @@ def output_register(venue_list):
     #Generate a 'Register' sheet for each venue in QuerySet
     #------------------------------------------------------
     for venue in venue_list:
+
+
         student_list = SchoolStudent.objects.all().filter(venue=venue.code)
-        
-        #TODO? Include invigilators in the sheet?
-        #invigilator_list = Invigilator.objects.all().filter(venue=venue.code)
 
         if student_list:
             venue_sheet = output_workbook.add_sheet(str(venue.code))
@@ -257,16 +257,38 @@ def output_register(venue_list):
                 venue_sheet.write(index,0, venue_header[index*2])
                 venue_sheet.write(index,1, venue_header[index*2+1])
 
+            row_counter=7
+
+            #Add invigilators to the sheet (if any)
+            invigilator_list = Invigilator.objects.all().filter(venue=venue)
+            if Competition.invigilators and invigilator_list:
+                venue_sheet.write(row_counter,0,"Invigilators")
+                row_counter+=1
+                for h_index, word in enumerate(invigilator_header):
+                    venue_sheet.write(row_counter,h_index,word)
+                row_counter+=1
+                for i_index, invigilator in enumerate(invigilator_list):
+                    venue_sheet.write(row_counter,0,invigilator.school.name)
+                    venue_sheet.write(row_counter,1,invigilator.firstname)
+                    venue_sheet.write(row_counter,2,invigilator.surname)
+                    row_counter+=1
+                #Create a row between Invigilators and students
+                row_counter+=1
+
+            venue_sheet.write(row_counter,0,"Students")
+            row_counter+=1
+            
             # Print student header (name columns) to sheet
             for h_index, word in enumerate(student_header):
-                venue_sheet.write(7,h_index,student_header[h_index])
+                venue_sheet.write(row_counter,h_index,student_header[h_index])
+            row_counter += 1
 
             # Print the students in that venue to sheet
             for s_index, student in enumerate(student_list):
-                venue_sheet.write(s_index+8,0,str(student.reference))
-                venue_sheet.write(s_index+8,2,student.firstname)
-                venue_sheet.write(s_index+8,3,student.surname)
-                venue_sheet.write(s_index+8,1,student.school)
+                venue_sheet.write(s_index+row_counter,0,str(student.reference))
+                venue_sheet.write(s_index+row_counter,1,student.school.name)
+                venue_sheet.write(s_index+row_counter,2,student.firstname)
+                venue_sheet.write(s_index+row_counter,3,student.surname)               
 
         else:
             pass # Venue is empty - no point making a sheet for it...
@@ -351,7 +373,7 @@ def output_studenttags(student_list):
                     s_line += str(student.grade) + ','
                     venue_str = venue_object[0] if len(venue_object) == 1 else 'Unallocated'
                     s_line += '\"' + str(venue_str) + '\"\n'
-                    output_string.write(s_line)
+                    output_string.write(bytes(s_line,'utf-8'))
 
                 #Generate file from io and write to zip (ensure str UTF-* encoding is used)
                 zipf.writestr('Mailmerge_' + location[0] + '_GRD' + str(grade) + '_IND.txt', output_string.getvalue())
@@ -367,7 +389,7 @@ def output_studenttags(student_list):
                     s_line += str(student.grade) + ','
                     venue_str = venue_object[0] if len(venue_object) == 1 else 'Unallocated'
                     s_line += '\"' + str(venue_str) + '\"\n'
-                    output_string.write(s_line)
+                    output_string.write(bytes(s_line,'utf-8'))
 
                 #Generate file from io and write to zip (ensure str UTF-* encoding is used)
                 zipf.writestr('Mailmerge_' + location[0] + '_GRD' +str(grade) + '_PAR.txt',
@@ -398,7 +420,7 @@ def output_schooltaglists(school_list):
         s_entry = '\"' + school.contact + '\",'
         s_entry += '\"' + school.name + '\",'
         s_entry += '\"' + school.address + '\"\n'
-        output_io.write(s_entry)
+        output_io.write(bytes(s_entry,"utf-8"))
 
     #Serve to user as text file
     response = HttpResponse(output_io.getvalue())
@@ -1174,18 +1196,27 @@ def printer_school_report(request, school_list=None):
         pass #Error handling?
 
 def multi_reportgen(request, school_list):
-    output_io = io.BytesIO() #Used to write to files then zip
+    # output_io = io.BytesIO() #Used to write to files then zip
 
-    with zipfile.ZipFile(output_io, 'w') as zipf:
-        for ischool in school_list:
-            output_string=printer_school_report(request, [ischool])
-            zipf.writestr('UCTMaths_Report_%s.pdf'%(ischool.name), output_string.getvalue())
+    # with zipfile.ZipFile(output_io, 'w') as zipf:
+    #     for ischool in school_list:
+    #         output_string=printer_school_report(request, [ischool])
+    #         zipf.writestr('UCTMaths_Report_%s.pdf'%(ischool.name), output_string.getvalue())
 
-    response = HttpResponse(output_io.getvalue())
+    # response = HttpResponse(output_io.getvalue())
     if len(school_list) == 1:
-        response['Content-Disposition'] = 'attachment; filename=%s' % (get_school_report_name(ischool))
+        response = HttpResponse(printer_school_report(request, school_list).getvalue())
+        response['Content-Disposition'] = 'attachment; filename=%s' % (get_school_report_name(school_list[0]))
         response['Content-Type'] = 'application/pdf'
     else:
+        output_io = io.BytesIO() #Used to write to files then zip
+
+        with zipfile.ZipFile(output_io, 'w') as zipf:
+            for ischool in school_list:
+                output_string=printer_school_report(request, [ischool])
+                zipf.writestr('UCTMaths_Report_%s.pdf'%(ischool.name), output_string.getvalue())
+
+        response = HttpResponse(output_io.getvalue())
         response['Content-Disposition'] = 'attachment; filename=SchoolReports(%s).zip'%(timestamp_now())
         response['Content-Type'] = 'application/x-zip-compressed'
     return response
