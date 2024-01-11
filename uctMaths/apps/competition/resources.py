@@ -9,6 +9,27 @@ class SchoolStudentResource(resources.ModelResource):
     class Meta:
         model = SchoolStudent
 
+    def import_row(
+        self,
+        row,
+        instance_loader,
+        using_transactions=True,
+        dry_run=False,
+        raise_errors=None,
+        **kwargs
+    ):
+        parent=super()
+        if isinstance(row.__getitem__('score'),str):
+            row.__setitem__('score', None)
+        row.__setitem__('rank', None)
+        row.__setitem__('award', None)
+        return  parent.import_row(row,
+                                 instance_loader,
+                                 using_transactions=True,
+                                 dry_run=False,
+                                 raise_errors=None,
+                                 **kwargs)
+
 
 class SchoolResource(resources.ModelResource):
     class Meta:
