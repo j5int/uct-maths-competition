@@ -748,7 +748,6 @@ def assign_student_awards():
 
     for ischool in school_list:
         #See condition below (student must have entered AND written)
-        #TODO: Do this better - so far assumes no student actually scored 0
         school_students = SchoolStudent.objects.filter(school=ischool, paired=False, score__gt=-1).order_by('rank')
 
         #School may only receive an OX award if 10 or more individuals entered AND wrote.
@@ -1041,7 +1040,6 @@ def output_PRN_files():
             output_string = io.BytesIO()
             for student in grade_bucket[grade, True, 'ALL']: #Paired students
                 s_line = u'%-10s %3s %s%s %s\n'%(student.reference, 'SCI', str(student.school)[0:10], 'Pair / Paar ', student.surname)  
-                #TODO: Seems like an error to me... But it's like this in the sample files.
                 output_string.write(bytes(s_line,"utf-8"))
             
             #Generate file from io and write to zip (ensure str UTF-* encoding is used)
@@ -1152,14 +1150,20 @@ def printer_school_report(request, school_list=None):
                 school_award_blurb += '\n'
 
         #A participant student must have entered AND written
-        #TODO: Do this better - so far assumes no student actually scored 0
-        participants = student_list.filter(score__gt=1)
+        #TODO: Do this better - so far assumes no student actually scored 0 (Should be done)
+        participants = student_list.filter(score__gt=-1)
         individual_participation_award =  len(participants.filter(paired=False)) - individual_gold_count - individual_merit_count
         pair_participation_award =  0.5*(len(participants.filter(paired=True)) - pair_gold_count - pair_merit_count)
         school_award_blurb += 'Number of Participation winners:         %d individuals      %d pairs'%(individual_participation_award, pair_participation_award)
         school_award_blurb += '\nNumber of Participants/Certificates:         %d'%(len(participants))
         if school_award.count() > 0:
-            school_award_blurb +='\n\nCongratulations! %s has received an Oxford Prize for %s %s' % (str(assigned_school),school_award[0].firstname, school_award[0].surname)
+            winners = ' %s %s' % (school_award[0].firstname, school_award[0].surname) 
+            if school_award.count() > 1:
+                for winner in school_award:
+                    if winner == school_award[0]:
+                        continue
+                    winners = winners + ' and %s %s' % (winner.firstname, winner.surname) 
+            school_award_blurb +='\n\nCongratulations! %s has received an Oxford Prize for %s.' % (str(assigned_school),winners)
         
         year = str(datetime.datetime.now().strftime('%Y'))
 
