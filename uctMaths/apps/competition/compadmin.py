@@ -265,7 +265,7 @@ def output_register(venue_list):
                 venue_sheet.write(s_index+8,0,str(student.reference))
                 venue_sheet.write(s_index+8,2,student.firstname)
                 venue_sheet.write(s_index+8,3,student.surname)
-                venue_sheet.write(s_index+8,1,student.school)
+                venue_sheet.write(s_index+8,1,student.school.name)
 
         else:
             pass # Venue is empty - no point making a sheet for it...
