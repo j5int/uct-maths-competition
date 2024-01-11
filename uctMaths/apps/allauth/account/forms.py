@@ -192,6 +192,8 @@ class BaseSignupForm(_base_signup_form_class()):
     def clean_username(self):
         value = self.cleaned_data["username"]
         value = get_adapter().clean_username(value)
+        if not value.isalnum():
+            raise forms.ValidationError(_("Usernames may not contain any special characters"))
         try:
             User.objects.get(username__iexact=value)
         except User.DoesNotExist:
