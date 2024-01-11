@@ -318,7 +318,7 @@ def newstudents(request):
                         school = assigned_school
                         reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
                         paired = True
-                        location = assigned_school.location
+                        location = 'CPT' #all students write in CPT
 
                         query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
                                     school=school, grade=grade, paired=paired, location=location)
@@ -342,7 +342,7 @@ def newstudents(request):
                     iemail = iemail.strip().replace(' ', '')
                     inotes = form.getlist('inv_notes', [])[j] or ''
                     inotes = inotes.strip()
-                    location = assigned_school.location
+                    location = 'CPT' #all students write in CPT
 
                     if not (ifirstname and isurname and iemail):
                         ierror = "Invigilator information incomplete"
@@ -370,7 +370,7 @@ def newstudents(request):
                 grade = form.getlist('grade','')[i]
                 reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(ind_nr).zfill(2))
                 paired = False
-                location = assigned_school.location
+                location = 'CPT' #all students write in CPT
 
                 query = SchoolStudent(firstname=firstname, surname=surname, language=language, reference=reference,
                             school=school, grade=grade, paired=paired, location=location)
