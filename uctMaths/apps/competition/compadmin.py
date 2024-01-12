@@ -548,6 +548,44 @@ def score_studentlist(student_list):
             rank_delta = rank_delta + 1
             student.save()
 
+def generate_result_fillout(request):
+    output_workbook = xlwt.Workbook()
+    student_list = SchoolStudent.objects.all()
+
+    for igrade in range(8, 13):
+        #Individuals
+        wb_sheet = output_workbook.add_sheet('Grade %d individuals'%(igrade))
+        individualQS = student_list.filter(grade = igrade, paired=False).order_by('reference')
+
+        header = ['Reference', 'First Name', 'Last Name', 'School', 'Score', 'Rank']
+        for i, h in enumerate(header):
+            wb_sheet.write(0, i, '%s'%h)
+
+        for index, individual in enumerate(individualQS):
+            wb_sheet.write(index+1,0,str(individual.reference))
+            wb_sheet.write(index+1,1,individual.firstname)
+            wb_sheet.write(index+1,2,individual.surname)
+            wb_sheet.write(index+1,3,str(individual.school))
+        
+        # Pairs
+        wb_sheet = output_workbook.add_sheet('Grade %d Pairs'%(igrade))
+        pairQS = student_list.filter(grade = igrade, paired=True).order_by('reference')
+        header = ['Reference', 'First Name', 'Last Name', 'School','Score','Rank']
+        for i, h in enumerate(header):
+            wb_sheet.write(0, i, '%s'%h)
+        for index, pair in enumerate(pairQS):
+            wb_sheet.write(index+1,0,str(pair.reference))
+            wb_sheet.write(index+1,1,pair.firstname)
+            wb_sheet.write(index+1,2,pair.surname)
+            wb_sheet.write(index+1,3,str(pair.school))
+
+    #Return the response with attached content to the user
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment; filename=Results(%s).xls'%(timestamp_now())
+    response['Content-Type'] = 'application/ms-excel'
+    output_workbook.save(response)
+    return response
+
 
 def export_awards(request):
     """ Assign awards to participants (QuerySet is list of students) to students based on their rank. Serves an excel workbook with the awards for each student."""

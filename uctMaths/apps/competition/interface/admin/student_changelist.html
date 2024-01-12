@@ -1,9 +1,10 @@
 {% extends 'admin/change_list.html' %}
 
 {% block object-tools-items %}
-    <li><a href="upload_results/" class="export_link">Upload results (Ranked.csv file required)</a></li>
-    <li><a href="rank_students/" class="export_link">Re-rank students</a></li>
-    <li><a href="assign_student_awards/" class="export_link">Assign student awards</a></li>
+    <li><a href="generate_result_fillout/" class="export_link">Generate (.xls) for results</a></li> 
+    <li><a href="upload_results/" class="export_link">Upload results</a></li>
+    <li><a href="rank_students/" class="export_link">Rank students</a></li>
+    <li><a href="assign_student_awards/" class="export_link">Assign awards</a></li>
     <li><a href="output_assign_awards/" class="export_link">Export Award (.xls) document</a></li>
     <li><a href="output_PRN_files/" class="export_link">Generate PRN files for all students</a></li> 
 {% endblock%}
