@@ -549,6 +549,7 @@ def score_studentlist(student_list):
             student.save()
 
 def generate_result_fillout(request):
+    """Generates an excel sheet that can be used to fill out the students' results"""
     output_workbook = xlwt.Workbook()
     student_list = SchoolStudent.objects.all()
 
