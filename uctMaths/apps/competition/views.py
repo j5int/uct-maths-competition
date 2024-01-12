@@ -58,7 +58,7 @@ def profile(request):
     try:
         #Attempt to find user's chosen school
         assigned_school = School.objects.get(assigned_to=request.user)
-        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics Competition entry forms. Please navigate to \'Entry Form\' on the side-bar to review or edit your entry.'
+        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics Competition entry forms. Please navigate to \'Entry Form\' on the side-bar to review or edit your entry. If this profile is associated with the wrong school, please contact the competition admin at: ' + compadmin.admin_emailaddress()
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
         school_blurb += 'not associated with any school. Navigate to \'Entry Form\' to select your school.'
@@ -318,7 +318,7 @@ def newstudents(request):
                         school = assigned_school
                         reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
                         paired = True
-                        location = assigned_school.location
+                        location = 'CPT' #all students write in CPT
 
                         query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
                                     school=school, grade=grade, paired=paired, location=location)
@@ -342,7 +342,7 @@ def newstudents(request):
                     iemail = iemail.strip().replace(' ', '')
                     inotes = form.getlist('inv_notes', [])[j] or ''
                     inotes = inotes.strip()
-                    location = assigned_school.location
+                    location = 'CPT' #all students write in CPT
 
                     if not (ifirstname and isurname and iemail):
                         ierror = "Invigilator information incomplete"
@@ -370,7 +370,7 @@ def newstudents(request):
                 grade = form.getlist('grade','')[i]
                 reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(ind_nr).zfill(2))
                 paired = False
-                location = assigned_school.location
+                location = 'CPT' #all students write in CPT
 
                 query = SchoolStudent(firstname=firstname, surname=surname, language=language, reference=reference,
                             school=school, grade=grade, paired=paired, location=location)
