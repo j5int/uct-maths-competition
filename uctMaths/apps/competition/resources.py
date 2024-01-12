@@ -19,7 +19,13 @@ class SchoolStudentResource(resources.ModelResource):
         **kwargs
     ):
         parent=super()
-        if isinstance(row.__getitem__('score'),str):
+        try:
+            score = row.__getitem__('score')
+            print(score)
+            print(type(score))
+            score=int(score)
+            row.__setitem__('score', score)
+        except:
             row.__setitem__('score', None)
         row.__setitem__('rank', None)
         row.__setitem__('award', None)

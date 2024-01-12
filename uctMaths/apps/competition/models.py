@@ -69,8 +69,8 @@ class SchoolStudent(models.Model):
     ), db_column = 'Language')
     reference   = models.CharField(max_length=7, db_column='Reference') 
     school      = models.ForeignKey('School', db_column='School', on_delete=lambda x:x)
-    score       = models.IntegerField(null=True, db_column='Score', blank=True) 
-    rank        = models.IntegerField(null=True, db_column='Rank', blank=True) 
+    score       = models.IntegerField(null=True, db_column='Score', blank=True, editable=False) 
+    rank        = models.IntegerField(null=True, db_column='Rank', blank=True, editable=False) 
     grade       = models.IntegerField(db_column='Grade', 
         validators = [
             MaxValueValidator(12),

@@ -1055,7 +1055,7 @@ def update_school_entry_status():
     school_objects = School.objects.all()
     for school_obj in school_objects:
         responsible_teachers = ResponsibleTeacher.objects.filter(school=school_obj)
-        if responsible_teachers > 0:
+        if len(responsible_teachers) > 0:
             school_obj.entered=1 #If a responsible teacher is found; the school has entered
             school_obj.save()
         else:
@@ -1249,8 +1249,8 @@ def certificate_list(request):
         pair_g = student_list.filter(school=school, paired=True, award='G')
         ind_m = student_list.filter(school=school, paired=False, award__contains='M')
         pair_m = student_list.filter(school=school, paired=True, award__contains='M')
-        ind_all = student_list.filter(school=school, paired=False, score__gt=0)
-        pair_all = student_list.filter(school=school, paired=True, score__gt=0)
+        ind_all = student_list.filter(school=school, paired=False, score__gt=-1)
+        pair_all = student_list.filter(school=school, paired=True, score__gt=-1)
 
         gold_num = len(ind_g) + (len(pair_g) * 2)
         merit_num = len(ind_m) + (len(pair_m) * 2)
@@ -1534,13 +1534,15 @@ def generate_grade_answer_sheets(request):
     for grade in range(8, 12 + 1):
         print("Creating background task for AS generation for grade %d." % grade)
         #TODO 
-        async_task(bg_generate_as_grade_distinction,
-                   grade, 
-                   True)
+        # async_task(bg_generate_as_grade_distinction,
+        #            grade, 
+        #            True)
+        bg_generate_as_grade_distinction(grade,True)
         #TODO 
-        async_task(bg_generate_as_grade_distinction,
-                   grade, 
-                   False)
+        bg_generate_as_grade_distinction(grade,False)
+        # async_task(bg_generate_as_grade_distinction,
+        #            grade, 
+        #            False)
     
     response = HttpResponse("""Attempting to generate answer sheets for all students, distinguished by grade. 
 This will take some time if many students have been entered. 

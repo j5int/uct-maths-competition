@@ -124,7 +124,7 @@ This email contains part of the collection of answer sheets for all students, se
         [
             {
                 "name": os.path.basename(pdf_attachment_filename), 
-                "value": StringIO(f.read()).getvalue(), 
+                "value": StringIO(str(f.read())).getvalue(), 
                 "type": "application/pdf"
             }
         ],
