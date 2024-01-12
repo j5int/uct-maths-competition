@@ -1,36 +1,10 @@
 {% extends 'admin/change_list.html' %}
 
-{% block object-tools %}
-    <style>
-        .actionButton {
-            width: 30%;
-            background-color: whitesmoke;
-            padding: 10px;
-        }
-    </style>
-
-    <div>
-        <form action="upload_results/" method="POST">
-            {% csrf_token %}
-                <button type="submit" class="actionButton">Upload students' results (Ranked.csv file required)</button>
-        </form>
-        <form action="rank_students/" method="POST">
-            {% csrf_token %}
-                <button type="submit" class="actionButton">Re-rank students.</button>
-        </form>
-        <form action="output_assign_awards/" method="POST">
-            {% csrf_token %}
-                <button type="submit" class="actionButton">Export Award (.xls) document</button>
-        </form>
-        <form action="output_PRN_files/" method="POST">
-            {% csrf_token %}
-                <button type="submit" class="actionButton">Generate PRN files for all students</button>
-        </form>
-        <form action="assign_student_awards/" method="POST">
-            {% csrf_token %}
-                <button type="submit" class="actionButton">Assign student awards</button>
-        </form>
-    </div>
-    <br />
-    {{ block.super }}
-{% endblock %}
+{% block object-tools-items %}
+    <li><a href="generate_result_fillout/" class="export_link">Generate (.xls) for results</a></li> 
+    <li><a href="upload_results/" class="export_link">Upload results</a></li>
+    <li><a href="rank_students/" class="export_link">Rank students</a></li>
+    <li><a href="assign_student_awards/" class="export_link">Assign awards</a></li>
+    <li><a href="output_assign_awards/" class="export_link">Export Award (.xls) document</a></li>
+    <li><a href="output_PRN_files/" class="export_link">Generate PRN files for all students</a></li> 
+{% endblock%}

@@ -68,7 +68,7 @@
                                                 <td>{{student.reference}}</td>
                                                 <td>{{student.firstname}}</td>
                                                 <td>{{student.surname}}</td>
-                                                <td>{%if student.score > 0%}
+                                                <td>{%if student.score >= 0%}
                                                     {{student.score}}
                                                     {%else%}
                                                     ABSENT
