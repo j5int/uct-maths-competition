@@ -9,7 +9,7 @@ from backports.configparser import RawConfigParser
 config = RawConfigParser()
 config.read(os.path.join(os.path.dirname(__file__), 'settings.ini'))
 
-DEBUG = config.get('debug', 'DEBUG')
+DEBUG = config.getboolean('debug', 'DEBUG', fallback=False)
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -202,6 +202,7 @@ INSTALLED_APPS = (
 
 # BACKGROUND_TASK_RUN_ASYNC = False
 MAX_ATTEMPTS = 9
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

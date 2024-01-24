@@ -4,6 +4,7 @@ from django.urls import path, include
 from . import views
 
 from apps.competition import views as comp_views
+from .views import not_found_view, server_error_view
 
 admin.autodiscover()
 
@@ -31,5 +32,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #
     # #load allauth/account/urls.py
-    path('accounts/', include('apps.allauth.account.urls'))
+    path('accounts/', include('apps.allauth.account.urls')),
+    path("403/", not_found_view),
+    path("500/", server_error_view),
 ]
+
+handler404 = 'uctMaths.views.handler404'
+handler500 = 'uctMaths.views.handler500'
