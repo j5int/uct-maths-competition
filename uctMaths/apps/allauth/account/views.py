@@ -210,7 +210,7 @@ def email(request, **kwargs):
     form_class = kwargs.pop("form_class", AddEmailForm)
     template_name = kwargs.pop("template_name", "account/email.html")
     sync_user_email_addresses(request.user)
-    if request.method == "POST" and request.user.is_authenticated():
+    if request.method == "POST" and request.user.is_authenticated:
         if "action_add" in request.POST:
             add_email_form = form_class(request.user, request.POST)
             if add_email_form.is_valid():

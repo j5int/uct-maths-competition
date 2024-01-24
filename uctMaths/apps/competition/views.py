@@ -17,7 +17,7 @@ from . import compadmin
 from datetime import datetime,time
 
 def auth(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponseRedirect('/accounts/login')
 
 
