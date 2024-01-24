@@ -3,7 +3,7 @@ from allauth.account.admin import (EmailAddressAdmin as AllAuth_EmailAddressAdmi
 from django.contrib import admin
 from allauth.account.models import EmailAddress as AllAuth_EmailAddress
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from .app_settings import app_settings
 from .models import EmailConfirmation, EmailAddress
@@ -41,3 +41,5 @@ class j5UserAdmin(UserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, j5UserAdmin)
+
+admin.site.unregister(Group)
