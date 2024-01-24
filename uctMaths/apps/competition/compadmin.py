@@ -104,6 +104,15 @@ def closingDate():
     else: #Error!
         return 'a date yet to be set by the admin'
 
+def openingDate():
+    """ Display formatted dd/mm/yyyy date as string. Or message on unspecified date (to be displayed on 'Profile' page) """
+    comp = Competition.objects.all()
+    if comp.count() == 1:
+        comp_openingdate = comp[0].newentries_Opendate
+        return str(comp_openingdate.day) + '/' + str(comp_openingdate.month)  + '/' + str(comp_openingdate.year)
+    else: #Error!
+        return 'a date yet to be set by the admin'
+
 def gradeBucket(student_list):
     """
     Sort ("bucket") the QuerySet list of students into a dict with key based on

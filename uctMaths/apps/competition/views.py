@@ -67,7 +67,10 @@ def profile(request):
     if compadmin.isOpen():
         closingdate_blurb='Please note that online entries for this year\'s UCT Mathematics Competition strictly close on ' + compadmin.closingDate() + '.'
     elif not request.user.is_staff:
-        closingdate_blurb='School submissions for this year\'s UCT Mathematics Competition are closed. If you have previously submitted an entry, please navigate to \'Entry form\' if you wish to view your entry.'
+
+        closingdate_blurb=(f'School submissions for this year\'s UCT Mathematics Competition are closed. '
+                           'If you have previously submitted an entry, please navigate to \'Entry form\' if you '
+                           f'wish to view your entry. The competition registration window is set for {compadmin.openingDate()} -> {compadmin.closingDate()}')
     else:
         closingdate_blurb='Online entries are closed but you may still create and modify entries because you have admin rights.'
     show_results_download = False
