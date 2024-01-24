@@ -1,13 +1,15 @@
-# admin.py
+# sites.py
 # registers models for the admin view.
 # sets up how each model is displayed (list_display in each <Model>Admin class)
 # methods for archiving student and invigilators
 from __future__ import unicode_literals
 
-from django.urls import path
+from django.contrib import admin
+from django.contrib.auth import get_permission_codename
+from django.urls import path, reverse
+from django.utils.html import format_html
 
 from .models import *
-from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 
 from django.http import HttpResponseRedirect
@@ -38,8 +40,8 @@ class SchoolModelForm( forms.ModelForm ):
 class SchoolAdmin(ImportExportModelAdmin):
     change_form_template = "admin/rt_changeform.html"
     form = SchoolModelForm
-    list_display = ('key', 'name', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'entered', 'location', 'answer_sheets_emailed', 'report_emailed') ##Which columns should be kept here?
-    search_fields = ['name']
+    list_display = ('name', 'address','phone','contact','email','assigned_to_link', 'score', 'rank', 'entered', 'answer_sheets_emailed', 'report_emailed') ##Which columns should be kept here?
+    search_fields = ['name', "address"]
     resource_class = SchoolResource
 
     # Single action button functions (don't require selection)
@@ -54,6 +56,16 @@ class SchoolAdmin(ImportExportModelAdmin):
             path("generate_grade_answer_sheets/", self.generate_grade_answer_sheets)
         ]
         return my_urls + urls
+
+    def assigned_to_link(self, obj):
+        link = reverse("admin:auth_user_change", args=[obj.assigned_to])
+        if obj.assigned_to:
+            return format_html('<a href="{}">{}</a>',
+                               link,
+                               f"{obj.assigned_to.first_name} {obj.assigned_to.last_name}" if obj.assigned_to.first_name else obj.assigned_to.username)
+        return ""
+
+    assigned_to_link.short_description = 'Assigned To'
 
     def assign_school_ranks(self, request):
         compadmin.rank_schools()
@@ -76,7 +88,7 @@ class SchoolAdmin(ImportExportModelAdmin):
     actions = [    
                 'remove_user_associations', 'output_schooltaglist','print_school_confirmations','generate_school_reports',
                 'generate_multi_school_reports','email_school_reports','generate_school_answer_sheets',
-                'email_school_answer_sheets','export_courier_address'
+                'email_school_answer_sheets','export_courier_address', "reset_school_data"
             ]
 
     #import school dataset
@@ -85,6 +97,15 @@ class SchoolAdmin(ImportExportModelAdmin):
     #Entries are on separate rows (separated by line break)
     dataset = tablib.Dataset()
     dataset.headers = ['id', 'name', 'key', 'language', 'address','phone','fax','contact','email','assigned_to', 'score', 'rank', 'location']
+
+    def has_reset_permission(self, request):
+        """Does the user have the publish permission?"""
+        return request.user.is_superuser
+
+    @admin.action(permissions=["reset"], description="Reset school data for next Competition")
+    def reset_school_data(self, request, queryset):
+         queryset.update(rank=None,score=None,entered=None,answer_sheets_emailed=None,report_emailed=None,
+                         assigned_to=None)
 
     def remove_user_associations(self, request, queryset):
         return compadmin.remove_user_assoc(queryset)
