@@ -315,25 +315,25 @@ def newstudents(request):
             alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
 
             num_pairs = 0
-            for grade in range (8,13):
+            for grade in range(8, 13):
 
-                for p in range(int(form.getlist("pairs",'')[grade-8])):
+                for p in range(int(form.getlist("pairs", '')[grade - 8])):
                     firstname = 'Pair/Paar'
-                    surname = str(grade)+chr(65 + p)   # Maps 0, 1, 2, 3... to A, B, C...
+                    surname = str(grade) + chr(65 + p)  # Maps 0, 1, 2, 3... to A, B, C...
                     pair_number = 51 + p
-                    language = form.getlist('language','')[0]
+                    language = form.getlist('language', '')[0]
                     school = assigned_school
                     reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
                     paired = True
-                    location = 'CPT' #all students write in CPT
+                    location = 'CPT'  # all students write in CPT
 
-                    query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
+                    query = SchoolStudent(firstname=firstname, surname=surname, language=language, reference=reference,
                                           school=school, grade=grade, paired=paired, location=location)
                     query.save()
                     num_pairs += 1
 
             num_invigilators = 0
-            #Add invigilator information
+            # Add invigilator information
             for invigilator in invigilator_list:
                 invigilator.delete()
             if compadmin.competition_has_invigilator():
