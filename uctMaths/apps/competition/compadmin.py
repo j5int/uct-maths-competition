@@ -286,7 +286,7 @@ def output_register(venue_list):
 
             venue_sheet.write(row_counter,0,"Students")
             row_counter+=1
-            
+
             # Print student header (name columns) to sheet
             for h_index, word in enumerate(student_header):
                 venue_sheet.write(row_counter,h_index,student_header[h_index])
@@ -294,10 +294,10 @@ def output_register(venue_list):
 
             # Print the students in that venue to sheet
             for s_index, student in enumerate(student_list):
-                venue_sheet.write(s_index+row_counter,0,str(student.reference))
-                venue_sheet.write(s_index+row_counter,1,student.school.name)
-                venue_sheet.write(s_index+row_counter,2,student.firstname)
-                venue_sheet.write(s_index+row_counter,3,student.surname)               
+                venue_sheet.write(s_index+8,0,str(student.reference))
+                venue_sheet.write(s_index+8,2,student.firstname)
+                venue_sheet.write(s_index+8,3,student.surname)
+                venue_sheet.write(s_index+8,1,student.school.name)
 
         else:
             pass # Venue is empty - no point making a sheet for it...
@@ -576,7 +576,7 @@ def generate_result_fillout(request):
             wb_sheet.write(index+1,1,individual.firstname)
             wb_sheet.write(index+1,2,individual.surname)
             wb_sheet.write(index+1,3,str(individual.school))
-        
+
         # Pairs
         wb_sheet = output_workbook.add_sheet('Grade %d Pairs'%(igrade))
         pairQS = student_list.filter(grade = igrade, paired=True).order_by('reference')
@@ -1205,12 +1205,12 @@ def printer_school_report(request, school_list=None):
         school_award_blurb += 'Number of Participation winners:         %d individuals      %d pairs'%(individual_participation_award, pair_participation_award)
         school_award_blurb += '\nNumber of Participants/Certificates:         %d'%(len(participants))
         if school_award.count() > 0:
-            winners = ' %s %s' % (school_award[0].firstname, school_award[0].surname) 
+            winners = ' %s %s' % (school_award[0].firstname, school_award[0].surname)
             if school_award.count() > 1:
                 for winner in school_award:
                     if winner == school_award[0]:
                         continue
-                    winners = winners + ' and %s %s' % (winner.firstname, winner.surname) 
+                    winners = winners + ' and %s %s' % (winner.firstname, winner.surname)
             school_award_blurb +='\n\nCongratulations! %s has received an Oxford Prize for %s.' % (str(assigned_school),winners)
         
         year = str(datetime.datetime.now().strftime('%Y'))
@@ -1542,7 +1542,7 @@ def email_school_answer_sheets(request, schools):
             errors.append(txt)
         else:
             print("Creating background task for %s with ID %d." % (school.name, school.id))
-            #TODO 
+            #TODO
             async_task(bg_generate_school_answer_sheets,
                        school.id)
             successes.append(school.name.strip())
@@ -1581,15 +1581,15 @@ def generate_grade_answer_sheets(request):
 
     for grade in range(8, 12 + 1):
         print("Creating background task for AS generation for grade %d." % grade)
-        #TODO 
+        #TODO
         # async_task(bg_generate_as_grade_distinction,
-        #            grade, 
+        #            grade,
         #            True)
         bg_generate_as_grade_distinction(grade,True)
-        #TODO 
+        #TODO
         bg_generate_as_grade_distinction(grade,False)
         # async_task(bg_generate_as_grade_distinction,
-        #            grade, 
+        #            grade,
         #            False)
     
     response = HttpResponse("""Attempting to generate answer sheets for all students, distinguished by grade. 

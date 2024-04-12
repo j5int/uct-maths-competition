@@ -58,7 +58,7 @@ def profile(request):
     try:
         #Attempt to find user's chosen school
         assigned_school = School.objects.get(assigned_to=request.user)
-        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics Competition entry forms. Please navigate to \'Entry Form\' on the side-bar to review or edit your entry.'
+        school_blurb += 'associated with ' + str(assigned_school.name) + ' and has sole access and responsibility for its UCT Mathematics Competition entry forms. Please navigate to \'Entry Form\' on the side-bar to review or edit your entry. If this profile is associated with the wrong school, please contact the competition admin at: ' + compadmin.admin_emailaddress()
     except exceptions.ObjectDoesNotExist:
         # No school is associated with this user! Redirect to the select_schools page
         school_blurb += 'not associated with any school. Navigate to \'Entry Form\' to select your school.'
@@ -283,7 +283,7 @@ def newstudents(request):
             rt_query.save()
             rt_query.reference=rt_query.id
             rt_query.save()
-            
+
             #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission
             responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
 
@@ -314,6 +314,23 @@ def newstudents(request):
             #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission
             alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
 
+            num_pairs = 0
+            for grade in range (8,13):
+
+                for p in range(int(form.getlist("pairs",'')[grade-8])):
+                    firstname = 'Pair/Paar'
+                    surname = str(grade)+chr(65 + p)   # Maps 0, 1, 2, 3... to A, B, C...
+                    pair_number = 51 + p
+                    language = form.getlist('language','')[0]
+                    school = assigned_school
+                    reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
+                    paired = True
+                    location = 'CPT' #all students write in CPT
+
+                    query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
+                                          school=school, grade=grade, paired=paired, location=location)
+                    query.save()
+                    num_pairs += 1
 
             num_invigilators = 0
             #Add invigilator information
@@ -332,7 +349,7 @@ def newstudents(request):
                     iemail = iemail.strip().replace(' ', '')
                     inotes = form.getlist('inv_notes', [])[j] or ''
                     inotes = inotes.strip()
-                    location = assigned_school.location
+                    location = 'CPT' #all students write in CPT
 
                     if not (ifirstname and isurname and iemail):
                         ierror = "Invigilator information incomplete"
@@ -343,7 +360,7 @@ def newstudents(request):
                     query.save()
                     num_invigilators += 1
 
-            #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission        
+            #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission
             invigilator_list = Invigilator.objects.filter(school = assigned_school)
 
 
@@ -371,7 +388,7 @@ def newstudents(request):
                                     school=school, grade=grade, paired=paired, location=location)
                         query.save()
                         num_pairs += 1
- 
+
             num_individuals = 0
             #Registering students, maximum number of students 25
             #Returns an error if information entered incorrectly
@@ -389,7 +406,7 @@ def newstudents(request):
                 grade = form.getlist('grade','')[i]
                 reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(ind_nr).zfill(2))
                 paired = False
-                location = assigned_school.location
+                location = 'CPT' #all students write in CPT
 
                 query = SchoolStudent(firstname=firstname, surname=surname, language=language, reference=reference,
                             school=school, grade=grade, paired=paired, location=location)
@@ -405,7 +422,7 @@ def newstudents(request):
                 entries_per_grade[grade] = range(compadmin.admin_number_of_individuals() - len(individual_list[grade]))
                 pairs_per_grade[grade] = [pair_list[grade]]
                 pairs_per_grade[grade].extend([i for i in range(0, compadmin.admin_number_of_pairs() + 1) if i != pair_list[grade]])
-            
+
             enoughInvigilators.checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs)
             if enoughInvigilators.enoughInvigilators: #Only proceed with submission if enough invigilators are entered
                 if 'submit_form' in request.POST: #Send confirmation email and continue

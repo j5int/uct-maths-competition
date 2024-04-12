@@ -42,10 +42,10 @@ class School(models.Model):
     fax         = models.CharField(max_length=15, db_column='Fax', blank=True) 
     contact     = models.CharField(max_length=255, db_column='Contact', blank=True)
     entered     = models.IntegerField(null=True, db_column='Entered') 
-    score       = models.IntegerField(null=True, db_column='Score', blank=True) 
+    score       = models.IntegerField(null=True, db_column='Score', blank=True, editable = False)
     email       = models.CharField(max_length=50, db_column='Email', blank=True) 
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True, on_delete=_on_delete) #ForeignKey (gets assigned a single user)
-    rank = models.IntegerField(null=True, db_column='Rank', blank=True)
+    rank = models.IntegerField(null=True, db_column='Rank', blank=True, editable = False)
     location = models.CharField(max_length=3, choices=LOCATIONS, db_column='Location')
     answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", blank=True, verbose_name="Answer sheets emailed to teacher")
     report_emailed = models.DateTimeField(db_column="report_emailed", blank=True, verbose_name="Results report emailed to teacher")
@@ -69,8 +69,8 @@ class SchoolStudent(models.Model):
     ), db_column = 'Language')
     reference   = models.CharField(max_length=7, db_column='Reference') 
     school      = models.ForeignKey('School', db_column='School', on_delete=lambda x:x)
-    score       = models.IntegerField(null=True, db_column='Score', blank=True, editable=False) 
-    rank        = models.IntegerField(null=True, db_column='Rank', blank=True, editable=False) 
+    score       = models.IntegerField(null=True, db_column='Score', blank=True, editable = False)
+    rank        = models.IntegerField(null=True, db_column='Rank', blank=True, editable = False)
     grade       = models.IntegerField(db_column='Grade', 
         validators = [
             MaxValueValidator(12),
@@ -78,7 +78,7 @@ class SchoolStudent(models.Model):
         ])
     venue       = models.CharField(max_length=40, db_column='Venue', blank=True)
     paired = models.BooleanField(db_column='Paired', default=False)
-    award = models.CharField(max_length=3, db_column='Award', null=True, blank=True)
+    award = models.CharField(max_length=3, db_column='Award', null=True, blank=True, editable= False)
     location = models.CharField(max_length=3, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):
@@ -98,7 +98,7 @@ class Venue(models.Model):
     seats       = models.IntegerField(db_column='Seats')
     grade       = models.IntegerField(db_column='Grade', null=True, blank=True, choices = zip(range(8,13), range(8,13)))
     allocated_to_pairs = models.BooleanField(db_column='Allocated to PAIRS', default=False)
-    occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True, null=True)
+    occupied_seats = models.IntegerField(db_column='Occupied seats', blank=True, null=True, editable = False)
     location = models.CharField(max_length=3, choices=LOCATIONS, db_column='Location')
 
     def __str__(self):
