@@ -114,7 +114,7 @@ class DefaultAccountAdapter(object):
         """
         The URL to return to after successful e-mail confirmation.
         """
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             if app_settings.EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL:
                 return  \
                     app_settings.EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL

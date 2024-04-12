@@ -193,7 +193,7 @@ def entry_review(request):
         return HttpResponseRedirect('../students/')
     if request.method == 'POST' and 'resend_confirmation' in request.POST:  # If the form has been submitted.
         confirmation.send_confirmation(request, assigned_school, cc_admin=False) #Needs to only be bound to this user's email address
-        return HttpResponseRedirect('../')
+        return HttpResponseRedirect('../entry_review/')
 
     c.update(csrf(request))
     return render_to_response(request, 'entry_review.html', c)
@@ -246,14 +246,18 @@ def newstudents(request):
     if request.method == 'POST':  # If the form has been submitted...
         form = (request.POST) # A form bound to the POST data
 
-        #Delete all previously stored information
+        # Entry is cancelled and user returns to entry review
+        if 'cancel' in request.POST:
+            return HttpResponseRedirect('../entry_review/')
 
+        #Delete all previously stored information
         try:
             assigned_school.address ='%s, %s, %s' % (form.getlist('physical_address','')[0], form.getlist('code','')[0], form.getlist('city','')[0])
             assigned_school.language = form.getlist('language','')[0]
             assigned_school.phone = form.getlist('school_number','')[0]
             assigned_school.save()
-                
+
+
             #Register a single responsible teacher (assigned to that school)
             rtschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
             rtfirstname = form.getlist('rt_firstname','')[0]
@@ -276,6 +280,10 @@ def newstudents(request):
             rt_query.save()
             rt_query.reference=rt_query.id
             rt_query.save()
+            
+            #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission
+            responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
+
 
             #Register an alternate responsible teacher
             artschool = assigned_school #School.objects.get(pk=int(form.getlist('school','')[0]))
@@ -300,30 +308,9 @@ def newstudents(request):
             art_query.reference=art_query.id
             art_query.save()
 
-            num_pairs = 0
-            #Registering per grade
-            for grade in range (8,13):
-                #Registering the different pairs
-                #Information is set to null, only school name is given and reference
-                #Reference if the ID of the first person in the pair
+            #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission
+            alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
 
-                if compadmin.admin_number_of_pairs() == 0:
-                    break
-
-                for p in range(int(form.getlist("pairs",'')[grade-8])):
-                        firstname = 'Pair/Paar'
-                        surname = str(grade)+chr(65 + p)   # Maps 0, 1, 2, 3... to A, B, C...
-                        pair_number = 51 + p
-                        language = form.getlist('language','')[0]
-                        school = assigned_school
-                        reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
-                        paired = True
-                        location = assigned_school.location
-
-                        query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
-                                    school=school, grade=grade, paired=paired, location=location)
-                        query.save()
-                        num_pairs += 1
 
             num_invigilators = 0
             #Add invigilator information
@@ -353,6 +340,35 @@ def newstudents(request):
                     query.save()
                     num_invigilators += 1
 
+            #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission        
+            invigilator_list = Invigilator.objects.filter(school = assigned_school)
+
+
+            num_pairs = 0
+            #Registering per grade
+            for grade in range (8,13):
+                #Registering the different pairs
+                #Information is set to null, only school name is given and reference
+                #Reference if the ID of the first person in the pair
+
+                if compadmin.admin_number_of_pairs() == 0:
+                    break
+
+                for p in range(int(form.getlist("pairs",'')[grade-8])):
+                        firstname = 'Pair/Paar'
+                        surname = str(grade)+chr(65 + p)   # Maps 0, 1, 2, 3... to A, B, C...
+                        pair_number = 51 + p
+                        language = form.getlist('language','')[0]
+                        school = assigned_school
+                        reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
+                        paired = True
+                        location = assigned_school.location
+
+                        query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
+                                    school=school, grade=grade, paired=paired, location=location)
+                        query.save()
+                        num_pairs += 1
+ 
             num_individuals = 0
             #Registering students, maximum number of students 25
             #Returns an error if information entered incorrectly
@@ -378,18 +394,18 @@ def newstudents(request):
                 num_individuals += 1
 
             #Update data that is pre-fetched to populate the school form so no data is lossed upon failed form submission
-            student_list = SchoolStudent.objects.filter(school = assigned_school)
-            individual_list, pair_list = compadmin.processGrade(student_list)
+            new_student_list = SchoolStudent.objects.filter(school = assigned_school)
+            individual_list, pair_list = compadmin.processGrade(new_student_list)
             entries_per_grade = {}
             pairs_per_grade = {}
             for grade in range(8,13):
                 entries_per_grade[grade] = range(compadmin.admin_number_of_individuals() - len(individual_list[grade]))
                 pairs_per_grade[grade] = [pair_list[grade]]
                 pairs_per_grade[grade].extend([i for i in range(0, compadmin.admin_number_of_pairs() + 1) if i != pair_list[grade]])
-
-            if 'submit_form' in request.POST: #Send confirmation email and continue
-                enoughInvigilators.checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs)
-                if enoughInvigilators.enoughInvigilators: #Only proceed with submission if enough invigilators are entered
+            
+            enoughInvigilators.checkEnoughInvigilators(num_invigilators, num_individuals, num_pairs)
+            if enoughInvigilators.enoughInvigilators: #Only proceed with submission if enough invigilators are entered
+                if 'submit_form' in request.POST: #Send confirmation email and continue
                     assigned_school.entered=1 #The school has made an entry
                     assigned_school.save()
                     #The school has made an entry
@@ -399,8 +415,14 @@ def newstudents(request):
                     except Exception as e:
                         print(e)
                         return HttpResponseRedirect('../submitted/')
+                else:
+                    print('This should not happen')
             else:
-                print('This should not happen')
+                # Undo updates to datebase upon failed submission
+                for student in new_student_list:
+                    student.delete()
+                for student in student_list:
+                    student.save()
 
         except Exception as e:
             error = "%s: Incorrect information inserted into fields. Please insert correct information" % e
@@ -426,12 +448,6 @@ def newstudents(request):
     address = full[0].strip()
     code = full[1].strip()
     city = full[2].strip()
-
-    student_list = SchoolStudent.objects.filter(school = assigned_school)
-    individual_list, pair_list = compadmin.processGrade(student_list) #processGrade is defined below this method
-    entries_per_grade = {} #Dictionary with grade:range(...)
-    for grade in range(8,13):
-        entries_per_grade[grade] = range(compadmin.admin_number_of_individuals() - len(individual_list[grade]))
 
     c = {'type':'Students',
         'schooln':assigned_school,
@@ -459,7 +475,6 @@ def newstudents(request):
         'maxEntries': compadmin.get_max_entries()}
 
     c.update(csrf(request))
-    #TODO Cancel button (Go back to 'Entry Review' - if possible)
     return render_to_response(request, 'newstudents.html', c)
 
 class enoughInvigilators():

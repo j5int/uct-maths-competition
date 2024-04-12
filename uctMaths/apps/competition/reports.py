@@ -1,10 +1,10 @@
 import pytz
 from django.conf import settings
-from models import ResponsibleTeacher
+from .models import ResponsibleTeacher
 from django.core.mail import EmailMessage
 import datetime
 
-import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
+from . import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
                  # report email.
 from io import StringIO
 import os
@@ -124,7 +124,7 @@ This email contains part of the collection of answer sheets for all students, se
         [
             {
                 "name": os.path.basename(pdf_attachment_filename), 
-                "value": StringIO(f.read()).getvalue(), 
+                "value": StringIO(str(f.read())).getvalue(), 
                 "type": "application/pdf"
             }
         ],
