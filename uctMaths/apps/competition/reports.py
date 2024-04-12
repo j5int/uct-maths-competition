@@ -91,24 +91,25 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
         recipient_list
     )
 
-    arteacher = ResponsibleTeacher.objects.filter(school=school.id).filter(is_primary=False)[0]
-    alt_output_string = 'Dear %s, \n\n' \
-                    'This email contains answer sheets for %s for the upcoming UCT Mathematics Competition. ' \
-                    'your students will write on. \n\n' \
-                    'Regards,\n\n' \
-                    'The UCT Mathematics Competition team'%(arteacher.firstname + " " + arteacher.surname, school.name)
-    alt_output_string += UMC_header("Answer Sheets")
-    alt_output_string += 'Answer sheets for %s\n%s\n'%(school.name, UMC_datetime())
-    recipient_list = [arteacher.email_school]
-    if cc_admin:
-        recipient_list.append(compadmin.admin_emailaddress())
-    send_email(
-        "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
-        alt_output_string,
-        'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
-        [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
-        recipient_list
-    )
+    arteacher = ResponsibleTeacher.objects.filter(school=school.id).filter(is_primary=False)
+    if arteacher:
+        alt_output_string = 'Dear %s, \n\n' \
+                        'This email contains answer sheets for %s for the upcoming UCT Mathematics Competition. ' \
+                        'your students will write on. \n\n' \
+                        'Regards,\n\n' \
+                        'The UCT Mathematics Competition team'%(arteacher.firstname + " " + arteacher.surname, school.name)
+        alt_output_string += UMC_header("Answer Sheets")
+        alt_output_string += 'Answer sheets for %s\n%s\n'%(school.name, UMC_datetime())
+        recipient_list = [arteacher.email_school]
+        if cc_admin:
+            recipient_list.append(compadmin.admin_emailaddress())
+        send_email(
+            "(Do not reply) UCT Mathematics Competition %s Answer Sheets" % (school.name),
+            alt_output_string,
+            'UCT Mathematics Competition <%s>'%(settings.DEFAULT_FROM_EMAIL),#from
+            [{"name": "%s" % (compadmin.get_answer_sheet_name(school)), "value": answer_sheet.getvalue(), "type": "application/pdf"}],
+            recipient_list
+        )
 
 def send_grade_answer_sheets_to_organiser(pdf_attachment_filename):
     print("Emailing " + os.path.basename(pdf_attachment_filename) + " to organiser.")
