@@ -220,6 +220,7 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
             path("output_assign_awards/", self.output_assign_awards),
             path("output_PRN_files/", self.output_PRN_files),
             path("assign_student_awards/", self.assign_student_awards),
+            path("generate_result_fillout/", self.generate_result_fillout),
         ]
         return my_urls + urls
     def upload_results(self, request):
@@ -238,6 +239,9 @@ class SchoolStudentAdmin(ImportExportModelAdmin):
     def assign_student_awards(self, request):
         compadmin.assign_student_awards()
         return HttpResponseRedirect("../")
+    
+    def generate_result_fillout(self, request):
+        return compadmin.generate_result_fillout(request)
     #Adds all students in the SchoolStudent table to the Archived table, and adds the current date
     def archive_student(modeladmin, request, queryset):
         cursor = connection.cursor()

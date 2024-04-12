@@ -31,8 +31,8 @@ DATABASES = {
 #Email settings
 SMTP_ENABLED = config.get('email', 'SMTP_ENABLED', fallback=False)
 EMAIL_BACKEND = config.get('email', 'EMAIL_BACKEND', fallback='django.core.mail.backends.console.EmailBackend')
-EMAIL_USE_TLS = config.get('email', 'EMAIL_USE_TLS', fallback=False)
-EMAIL_USE_SSL = config.get('email', 'EMAIL_USE_SSL', fallback=False) #MAYBE REMOVE
+EMAIL_USE_TLS = config.getboolean('email', 'EMAIL_USE_TLS', fallback=False)
+EMAIL_USE_SSL = config.getboolean('email', 'EMAIL_USE_SSL', fallback=False) #MAYBE REMOVE
 EMAIL_HOST = config.get('email', 'EMAIL_HOST', fallback='localhost')
 EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER', fallback='')
 EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD', fallback='')
@@ -44,7 +44,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["CPT-XSHOFMEYR01.ingrnet.com", "127.0.0.1", "192.168.0.119"]
+ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -246,12 +246,4 @@ LOGGING = {
             'level': 'ERROR'
        },
     }
-}
-
-
-Q_CLUSTER = {
-    'redis': {
-        'host': 'cpt-xshofmeyr01.ingrnet.com',
-        'port': 6379,
-        'db': 0, }
 }
