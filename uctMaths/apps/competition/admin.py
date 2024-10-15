@@ -104,7 +104,7 @@ class SchoolAdmin(ImportExportModelAdmin):
 
     @admin.action(permissions=["reset"], description="Reset school data for next Competition")
     def reset_school_data(self, request, queryset):
-         queryset.update(rank=None,score=None,entered=None,answer_sheets_emailed=None,report_emailed=None,
+         queryset.update(rank=None,score=None,entered=None,answer_sheets_emailed=False,report_emailed=False,
                          assigned_to=None)
 
     def remove_user_associations(self, request, queryset):

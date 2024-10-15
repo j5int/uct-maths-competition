@@ -51,8 +51,8 @@ class School(models.Model):
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True, on_delete=_on_delete) #ForeignKey (gets assigned a single user)
     rank = models.IntegerField(null=True, db_column='Rank', blank=True, editable = False)
     location = models.CharField(max_length=3, choices=LOCATIONS, db_column='Location')
-    answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", blank=True, verbose_name="Answer sheets emailed to teacher")
-    report_emailed = models.DateTimeField(db_column="report_emailed", blank=True, verbose_name="Results report emailed to teacher")
+    answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", null=True, default=None, blank=True, verbose_name="Answer sheets emailed to teacher")
+    report_emailed = models.DateTimeField(db_column="report_emailed", null=True, default=None, blank=True, verbose_name="Results report emailed to teacher")
 
     def __str__(self):
         return self.name
@@ -169,7 +169,7 @@ class ResponsibleTeacher(models.Model):
     # ResponsibleTeacher registered by SchoolUser
     # One Primary ResponsibleTeacher and one Alternate ResponsibleTeacher to one school
 
-    school      = models.ForeignKey('School', db_column='School', on_delete=lambda x:x)
+    school      = models.ForeignKey('School', db_column='School', on_delete=_on_delete)
     firstname   = models.CharField(max_length=255, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255, db_column='Surname')
     phone_primary = models.CharField(max_length=15, db_column='Phone (Primary)', blank=True)
