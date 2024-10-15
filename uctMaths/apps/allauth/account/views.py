@@ -203,7 +203,6 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         return get_adapter().get_email_confirmation_redirect_url(self.request)
 
 confirm_email = ConfirmEmailView.as_view()
-for i in User.objects.all(): print(i)
 
 @login_required
 def email(request, **kwargs):
