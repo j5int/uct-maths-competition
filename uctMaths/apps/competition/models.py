@@ -11,6 +11,10 @@ LOCATIONS = (
     ('GEO', 'George')
 )
 
+def _on_delete(*args, **kwargs):
+    #TODO
+    pass
+
 class Competition(models.Model):
     newentries_Opendate = models.DateField(db_column='newentries_Opendate', verbose_name="Opening date for entries")
     newentries_Closedate = models.DateField(db_column='newentries_Closedate', verbose_name="Closing date for entries")
@@ -47,8 +51,8 @@ class School(models.Model):
     assigned_to = models.ForeignKey(User, default=None, null=True, db_column='Assigned to', blank=True, on_delete=_on_delete) #ForeignKey (gets assigned a single user)
     rank = models.IntegerField(null=True, db_column='Rank', blank=True, editable = False)
     location = models.CharField(max_length=3, choices=LOCATIONS, db_column='Location')
-    answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", blank=True, verbose_name="Answer sheets emailed to teacher")
-    report_emailed = models.DateTimeField(db_column="report_emailed", blank=True, verbose_name="Results report emailed to teacher")
+    answer_sheets_emailed = models.DateTimeField(db_column="answer_sheets_emailed", null=True, default=None, blank=True, verbose_name="Answer sheets emailed to teacher")
+    report_emailed = models.DateTimeField(db_column="report_emailed", null=True, default=None, blank=True, verbose_name="Results report emailed to teacher")
 
     def __str__(self):
         return self.name
@@ -68,7 +72,7 @@ class SchoolStudent(models.Model):
 		('b', 'Bilingual')
     ), db_column = 'Language')
     reference   = models.CharField(max_length=7, db_column='Reference') 
-    school      = models.ForeignKey('School', db_column='School', on_delete=lambda x:x)
+    school      = models.ForeignKey('School', db_column='School', on_delete=_on_delete)
     score       = models.IntegerField(null=True, db_column='Score', blank=True, editable = False)
     rank        = models.IntegerField(null=True, db_column='Rank', blank=True, editable = False)
     grade       = models.IntegerField(db_column='Grade', 
@@ -113,10 +117,10 @@ class Invigilator(models.Model):
     # Invigilators registered by SchoolUsers. Many Invigilators to one School.
     # Many Invigilators to one Venue.
 
-    school      = models.ForeignKey('School', db_column='School', on_delete=lambda x:x)
+    school      = models.ForeignKey('School', db_column='School', on_delete=_on_delete)
     firstname   = models.CharField(max_length=255, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255, db_column='Surname')
-    venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True, on_delete=lambda x:x) #Admin feature, implement later
+    venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True, on_delete=_on_delete) #Admin feature, implement later
     phone_primary = models.CharField(max_length=15, db_column='Phone (Primary)', blank=True)
     phone_alt = models.CharField(max_length=15, db_column='Phone (Alternative)', blank=True)
     email       = models.CharField(max_length=50, db_column='Email', blank=False)
@@ -165,7 +169,7 @@ class ResponsibleTeacher(models.Model):
     # ResponsibleTeacher registered by SchoolUser
     # One Primary ResponsibleTeacher and one Alternate ResponsibleTeacher to one school
 
-    school      = models.ForeignKey('School', db_column='School', on_delete=lambda x:x)
+    school      = models.ForeignKey('School', db_column='School', on_delete=_on_delete)
     firstname   = models.CharField(max_length=255, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255, db_column='Surname')
     phone_primary = models.CharField(max_length=15, db_column='Phone (Primary)', blank=True)
@@ -197,7 +201,7 @@ class SchoolStudentArchive(models.Model):
 		('b', 'Bilingual')
     ), db_column = 'Language')
     reference   = models.CharField(max_length=7, db_column='Reference') 
-    school      = models.ForeignKey('School', db_column='School', on_delete=lambda x:x)
+    school      = models.ForeignKey('School', db_column='School', on_delete=_on_delete)
     score       = models.IntegerField(null=True, db_column='Score', blank=True) 
     rank        = models.IntegerField(null=True, db_column='Rank', blank=True) 
     grade       = models.IntegerField(db_column='Grade', 
@@ -223,10 +227,10 @@ class InvigilatorArchive(models.Model):
     # Generated from the admin page     
 
     archived    = models.DateField(null=True, blank=True, db_column='Date_Archived', verbose_name="Date Archived")
-    school      = models.ForeignKey('School', db_column='School', on_delete=lambda x:x)
+    school      = models.ForeignKey('School', db_column='School', on_delete=_on_delete)
     firstname   = models.CharField(max_length=255, db_column='First_name', verbose_name="First name")
     surname     = models.CharField(max_length=255, db_column='Surname')
-    venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True, on_delete=lambda x:x)
+    venue       = models.ForeignKey('Venue', db_column='Venue', null=True, blank=True, on_delete=_on_delete)
     phone_primary = models.CharField(max_length=15, db_column='Phone (Primary)', blank=True)
     phone_alt   = models.CharField(max_length=15, db_column='Phone (Alternative)', blank=True) 
     email       = models.CharField(max_length=50, db_column='Email', blank=False)
