@@ -26,7 +26,6 @@ from django.template.context_processors import csrf
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from .models import LOCATIONS
-from math import ceil
 
 
 import shutil
@@ -198,12 +197,10 @@ def processGrade(student_list):
     try:
         for student in student_list:
             if student.paired:
-                #Count number of pairs (i.e. teams of 2) for each grade
-                pair_list[student.grade]+=1
-            else:
+                #Count number of pairs for each grade
+                pair_list[student.grade]+=1 
+            else: 
                 individual_list[student.grade].append(student)
-        for grade, num_students in pair_list.items():
-            pair_list[grade] = ceil(num_students / 2)  # num_pairs
     except IndexError:
         print('Index Error')
 
@@ -963,9 +960,9 @@ def school_summary_sheet(school_list, wb_sheet, rank_extend=False):
             count_individuals = 0
             count_pairs = 0
 
-            for i in range(8, 13):
-                count_pairs = count_pairs + ceil(len(grade_summary[i, True, 'ALL']) / 2)
-                count_individuals = count_individuals + len(grade_summary[i, False, 'ALL'])
+            for i in range(8,13):
+                count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
+                count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
 
             cell_row_offset = cell_row_offset + 1
             wb_sheet.write(cell_row_offset,0,str(school_obj.name))
@@ -1402,16 +1399,15 @@ def generate_school_confirmation(request, school_list):
         grade_summary = gradeBucket(student_list) #Bin into categories (Grade, Is Paired, Location)
         count_individuals = 0
         count_pairs = 0
-
-        for i in range(8, 13):
-            count_pairs = count_pairs + ceil(len(grade_summary[i, True, 'ALL']) / 2)
-            count_individuals = count_individuals + len(grade_summary[i, False, 'ALL'])
-
-        invigilator_list = Invigilator.objects.filter(school=assigned_school)
-        responsible_teacher = ResponsibleTeacher.objects.filter(school=assigned_school).filter(is_primary=True)
-        alt_responsible_teacher = ResponsibleTeacher.objects.filter(school=assigned_school).filter(is_primary=False)
-        timestamp = str(
-            datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg")).strftime('%d %B %Y at %H:%M (local time)'))
+        
+        for i in range(8,13):
+            count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
+            count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
+        
+        invigilator_list = Invigilator.objects.filter(school = assigned_school)
+        responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = True)
+        alt_responsible_teacher = ResponsibleTeacher.objects.filter(school = assigned_school).filter(is_primary = False)
+        timestamp = str(datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg")).strftime('%d %B %Y at %H:%M (local time)'))
         year = str(datetime.datetime.now(tz=pytz.timezone("Africa/Johannesburg")).strftime('%Y'))
         if responsible_teacher:
             responsible_teacher = responsible_teacher[0]

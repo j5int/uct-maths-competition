@@ -10,7 +10,6 @@ from .forms import StudentForm
 from .models import SchoolStudent, School, Invigilator, ResponsibleTeacher
 from django.core import exceptions
 from django.contrib.auth.decorators import login_required
-from math import ceil
 
 from . import confirmation
 from . import compadmin
@@ -114,13 +113,13 @@ def submitted(request):
     for i in range(8,13):
         grade_summary_text = 'Grade %d: %d individuals' % (i, len(grade_summary[i,False,'ALL']))
         if compadmin.admin_number_of_pairs() > 0:
-            grade_summary_text += " and %d pairs" % (ceil(len(grade_summary[i, True, 'ALL']) / 2))
+            grade_summary_text += " and %d pairs" % (len(grade_summary[i,True,'ALL']))
         school_summary_info.append(grade_summary_text)
-        count_pairs = count_pairs + ceil(len(grade_summary[i, True, 'ALL']) / 2)
-        count_individuals = count_individuals + len(grade_summary[i, False, 'ALL'])
-
-    school_summary_statistics = 'You have successfully registered %d students' % (count_pairs * 2 + count_individuals)
-
+        count_pairs = count_pairs + len(grade_summary[i,True,'ALL'])
+        count_individuals = count_individuals + len(grade_summary[i,False,'ALL'])
+        
+    school_summary_statistics = 'You have successfully registered %d students' % (count_pairs*2+count_individuals)
+    
     if compadmin.admin_number_of_pairs() > 0:
         school_summary_statistics += ' (%d individuals and %d pairs).' % (count_individuals, count_pairs)
 
