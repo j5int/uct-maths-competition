@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from .models import SchoolStudent, Invigilator, ResponsibleTeacher
 from django.core.mail import EmailMessage
 import datetime
-from math import ceil
 
 from . import compadmin #import the competition administrator (secretary's) email (to be CC'd in the
                  # confirmation email.
@@ -75,10 +74,8 @@ def print_students(student_list,width=40):
         for student in student_list:
             if student.paired: # Better pair condition logic for this!
                 pair_list[student.grade] += 1
-            else:
+            else: 
                 single_list[student.grade].append((student.firstname, student.surname))
-        for grade, num_students in pair_list.items():
-            pair_list[grade] = ceil(num_students/2)
 
     except IndexError: #If the user submitted an empty form
         print('Index Error (Confirmation email)')
