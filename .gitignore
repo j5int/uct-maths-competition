@@ -219,7 +219,6 @@ pip-log.txt
 .mr.developer.cfg
 
 uctMaths/generated_grade_answer_sheets/
-uctMaths/apps/competition/migrations/*
 uctMaths/Declaration/
 
 .idea
