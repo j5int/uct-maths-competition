@@ -364,7 +364,7 @@ def newstudents(request):
                         school = assigned_school
                         reference = '%3s%2s%2s' % (str(school.id).zfill(3), str(grade).zfill(2), str(pair_number).zfill(2))
                         paired = True
-                        location = assigned_school.location
+                        location = 'CPT' #all students write in CPT
 
                         query = SchoolStudent(firstname=firstname , surname=surname, language=language, reference=reference,
                                     school=school, grade=grade, paired=paired, location=location)
