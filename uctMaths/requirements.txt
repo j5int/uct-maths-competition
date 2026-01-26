@@ -35,7 +35,7 @@ pycparser==2.21
 pyHanko==0.20.1
 pyhanko-certvalidator==0.24.1
 PyJWT==2.8.0
-pypdf==3.17.1
+pypdf==6.6.2
 PyPDF2==3.0.1
 pypng==0.20220715.0
 python-bidi==0.4.2
