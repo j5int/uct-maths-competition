@@ -1155,8 +1155,6 @@ def email_school_reports(request, school_list):
 
 def email_custom_message_to_schools(request, school_list, subject, message):
     """Send a custom email to selected schools"""
-    from django.http import HttpResponse
-    
     successes = []
     errors = []
     
@@ -1164,7 +1162,7 @@ def email_custom_message_to_schools(request, school_list, subject, message):
         teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
         
         if not teacher_assigned:
-            txt = "(Key %s) %s: no responsible teacher assigned.\n" % (str(school.key), school.name.strip())
+            txt = "(Key %s) %s: no responsible teacher assigned." % (str(school.key), school.name.strip())
             errors.append(txt)
         else:
             async_task('uctMaths.background_tasks.bg_send_custom_email',
@@ -1173,9 +1171,9 @@ def email_custom_message_to_schools(request, school_list, subject, message):
     
     text = ""
     if len(successes) > 0:
-        text += "Sending custom emails to the following schools: " + ", ".join(successes) + "\n\n"
+        text += "Sending custom emails to the following %d schools:\n" % len(successes) + "\n".join(successes) + "\n\n"
     if len(errors) > 0:
-        text += "Emails will not be sent to the following schools:\n" + "".join(errors)
+        text += "Emails will not be sent to the following %d schools:\n" % len(errors) + "\n".join(errors)
     
     response = HttpResponse(text)
     filename = 'CustomEmailStatus(%s).txt' % (timestamp_now())

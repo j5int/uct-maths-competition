@@ -142,7 +142,6 @@ def handle_uploaded_file(inputf):
 def send_custom_email_form(request):
     """ Display form to send custom email to schools. This is an intermediate page for the admin action."""
     from . import compadmin
-    from django.http import HttpResponse
     
     handler_output = []  # Sent to html template for feedback to user
     
