@@ -4,8 +4,8 @@ import os
 import shutil
 from django.shortcuts import render as render_to_response
 from django.template.context_processors import csrf
-from apps.competition.forms import UploadResultsForm, UploadDeclarationForm
-from apps.competition.models import SchoolStudent
+from apps.competition.forms import UploadResultsForm, UploadDeclarationForm, CustomEmailForm
+from apps.competition.models import SchoolStudent, School
 #from django.contrib.contenttypes import *
 from django.core import exceptions
 from django.contrib.auth.decorators import login_required
@@ -136,3 +136,52 @@ def handle_uploaded_file(inputf):
 
     #Return error list
     return dne_list
+
+
+@login_required
+def send_custom_email_form(request):
+    """ Display form to send custom email to schools. This is an intermediate page for the admin action."""
+    from . import compadmin
+    from django.http import HttpResponse
+    
+    handler_output = []  # Sent to html template for feedback to user
+    
+    # Get the school IDs from the query string (passed from admin action)
+    school_ids = request.GET.get('schools', '')
+    
+    if not school_ids:
+        handler_output = ['No schools selected. Please go back and select schools from the admin list.']
+        email_form = CustomEmailForm()
+    else:
+        school_id_list = [int(id) for id in school_ids.split(',')]
+        schools = School.objects.filter(id__in=school_id_list)
+        
+        # Once the user has pressed 'Submit'
+        if request.method == 'POST':
+            email_form = CustomEmailForm(request.POST)
+            
+            if email_form.is_valid():
+                subject = email_form.cleaned_data['subject']
+                message = email_form.cleaned_data['message']
+                
+                # Call the function to actually send the emails
+                return compadmin.email_custom_message_to_schools(request, schools, subject, message)
+            else:
+                handler_output = ['Please correct the errors in the form.']
+        else:
+            # Present empty form
+            email_form = CustomEmailForm()
+            handler_output = [
+                f'You have selected {schools.count()} school(s) to send an email to:',
+                ', '.join([school.name for school in schools[:10]]) + ('...' if schools.count() > 10 else '')
+            ]
+    
+    # Present form and handler message to the user
+    c = {
+        'email_form': email_form,
+        'handler_output': handler_output,
+        'school_count': School.objects.filter(id__in=school_ids.split(',') if school_ids else []).count()
+    }
+    c.update(csrf(request))
+    
+    return render_to_response(request, 'admin/send_custom_email.html', c)

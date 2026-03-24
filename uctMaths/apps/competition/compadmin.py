@@ -1153,6 +1153,37 @@ def email_school_reports(request, school_list):
         return response
 
 
+def email_custom_message_to_schools(request, school_list, subject, message):
+    """Send a custom email to selected schools"""
+    from django.http import HttpResponse
+    
+    successes = []
+    errors = []
+    
+    for school in school_list:
+        teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
+        
+        if not teacher_assigned:
+            txt = "(Key %s) %s: no responsible teacher assigned.\n" % (str(school.key), school.name.strip())
+            errors.append(txt)
+        else:
+            async_task('uctMaths.background_tasks.bg_send_custom_email',
+                       school.id, subject, message)
+            successes.append(school.name.strip())
+    
+    text = ""
+    if len(successes) > 0:
+        text += "Sending custom emails to the following schools: " + ", ".join(successes) + "\n\n"
+    if len(errors) > 0:
+        text += "Emails will not be sent to the following schools:\n" + "".join(errors)
+    
+    response = HttpResponse(text)
+    filename = 'CustomEmailStatus(%s).txt' % (timestamp_now())
+    response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
+    response['Content-Type'] = 'application/txt'
+    return response
+
+
 def get_school_report_name(school):
     return "UCTMaths_School_Report_%s.pdf" % (str(school.name).strip().replace(" ", "_"))
 

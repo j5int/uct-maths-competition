@@ -13,6 +13,7 @@ urlpatterns = [
 	path('accounts/profile/', views.profile),
 	path('admin/upload_results/', compadmin_views.upload_results, name='upload_results'),
 	path('admin/upload_declaration/', compadmin_views.upload_declaration, name='upload_declaration'),
+	path('admin/competition/send_custom_email/', compadmin_views.send_custom_email_form, name='send_custom_email_form'),
 	path('register/school_results/', views.school_results, name='school_results'),
 	path('register/answer_sheets/', views.answer_sheets, name="answer_sheets"),
 	path('register/school_certificates/', views.school_certificates, name="school_certificates")

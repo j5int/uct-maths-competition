@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% block title %}Send Custom Email to Schools{% endblock %}
+ 
+{% block content %}
+<h1>Send Custom Email to Selected Schools</h1>
+
+<div style="margin: 20px 0; padding: 10px; background-color: #f0f0f0; border-left: 4px solid #007bff;">
+    {%for message in handler_output%}
+    {{message}}<br>
+    {% endfor %}
+</div>
+
+<p>Fill out the form below to send a custom email to the responsible teachers at the selected schools.</p>
+
+<form method="post">
+   {% csrf_token %}   
+   <table>
+       {{email_form.as_table}}
+    </table>
+    <div style="margin-top: 20px;">
+        <input type="submit" value="Send Email" class="default" style="padding: 8px 20px; font-size: 14px;"/>
+        <a href="/admin/competition/school/" style="margin-left: 10px; padding: 8px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px;">Cancel</a>
+    </div>
+</form>
+
+<div style="margin-top: 30px; padding: 15px; background-color: #fff3cd; border: 1px solid #ffc107;">
+    <strong>Note:</strong> The email will be sent to the primary responsible teacher's school email address for each selected school. 
+    Schools without a responsible teacher assigned will be skipped.
+</div>
+    
+{% endblock %}

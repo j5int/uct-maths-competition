@@ -123,3 +123,17 @@ class UploadDeclarationForm(forms.Form):
         upload_file = forms.FileField(
                         label='Select a file'
         )
+
+#*****************************************
+class CustomEmailForm(forms.Form):
+        subject = forms.CharField(
+                        label='Email Subject',
+                        max_length=200,
+                        initial='(Do not reply) UCT Mathematics Competition Announcement',
+                        widget=forms.TextInput(attrs={'size': '80'})
+        )
+        message = forms.CharField(
+                        label='Email Message',
+                        widget=forms.Textarea(attrs={'rows': 15, 'cols': 80}),
+                        help_text='This message will be sent to the responsible teacher at each selected school.'
+        )

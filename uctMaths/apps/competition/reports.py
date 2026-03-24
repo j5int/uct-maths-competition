@@ -133,6 +133,33 @@ This email contains part of the collection of answer sheets for all students, se
     )
     f.close()
 
+def send_custom_message(school, subject, message_body, cc_admin=True):
+    """Send a custom message to a school's responsible teachers"""
+    rteachers = ResponsibleTeacher.objects.filter(school=school.id)
+    if not rteachers:
+        print("No responsible teacher for school!")
+        return
+    
+    for rteacher in rteachers:
+            
+        output_string = f'Dear {rteacher.firstname} {rteacher.surname}, \n\n'
+        output_string += message_body
+        output_string += '\n\nRegards,\n\nThe UCT Mathematics Competition team'
+        output_string += UMC_header("Announcement")
+        output_string += UMC_datetime()
+        
+        recipient_list = [rteacher.email_school]
+        if cc_admin:
+            recipient_list.append(compadmin.admin_emailaddress())
+        
+        send_email(
+            subject + " - " + school.name,
+            output_string,
+            'UCT Mathematics Competition <%s>' % (settings.DEFAULT_FROM_EMAIL),
+            [],  # No attachments
+            recipient_list
+        )
+
 def send_email(subject, body, sender, attachments, recipient_list):
     email = EmailMessage(
                         subject, body, sender, recipient_list,
