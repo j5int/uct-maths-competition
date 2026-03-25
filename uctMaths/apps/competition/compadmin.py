@@ -1159,15 +1159,15 @@ def email_custom_message_to_schools(request, school_list, subject, message):
     errors = []
     
     for school in school_list:
-        teacher_assigned = len(ResponsibleTeacher.objects.filter(school=school.id)) > 0
+        teachers_assigned = len(ResponsibleTeacher.objects.filter(school=school.id))
         
-        if not teacher_assigned:
+        if teachers_assigned == 0:
             txt = "(Key %s) %s: no responsible teacher assigned." % (str(school.key), school.name.strip())
             errors.append(txt)
         else:
             async_task('uctMaths.background_tasks.bg_send_custom_email',
                        school.id, subject, message)
-            successes.append(school.name.strip())
+            successes.append(school.name.strip() + ', ' + str(teachers_assigned))
     
     text = ""
     if len(successes) > 0:
