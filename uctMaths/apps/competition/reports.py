@@ -3,6 +3,8 @@ from django.conf import settings
 from .models import ResponsibleTeacher
 from django.core.mail import EmailMessage
 import datetime
+import traceback
+import sys
 
 from . import compadmin #import the competition administrator (secretary's) email (to be CC'd in the 
                  # report email.
@@ -132,6 +134,59 @@ This email contains part of the collection of answer sheets for all students, se
         [compadmin.admin_emailaddress()]
     )
     f.close()
+
+def send_custom_message(school, subject, message_body, cc_admin=True):
+    """Send a custom message to a school's responsible teachers"""
+    rteachers = ResponsibleTeacher.objects.filter(school=school.id)
+    if not rteachers:
+        error_msg = f"No responsible teacher assigned for school: {school.name} (ID: {school.id}, Key: {school.key})"
+        raise Exception(error_msg)
+    
+    errors = []
+    for rteacher in rteachers:
+        try:
+            output_string = f'Dear {rteacher.firstname} {rteacher.surname}, \n\n'
+            output_string += message_body
+            output_string += '\n\nRegards,\n\nThe UCT Mathematics Competition team'
+            output_string += UMC_header("Announcement")
+            output_string += UMC_datetime()
+            
+            recipient_list = [rteacher.email_school]
+            if cc_admin:
+                recipient_list.append(compadmin.admin_emailaddress())
+            
+            send_email(
+                subject + " - " + school.name,
+                output_string,
+                'UCT Mathematics Competition <%s>' % (settings.DEFAULT_FROM_EMAIL),
+                [],  # No attachments
+                recipient_list
+            )
+        except Exception as e:
+            tb_str = ''.join(traceback.format_exception(*sys.exc_info()))
+            error_detail = (
+                f"Failed to send email to {rteacher.firstname} {rteacher.surname} "
+                f"at {rteacher.email_school}\n"
+                f"School: {school.name} (ID: {school.id}, Key: {school.key})\n"
+                f"Error: {str(e)}\n"
+                f"Traceback:\n{tb_str}"
+            )
+            errors.append(error_detail)
+            print(error_detail)
+    
+    # If all emails failed, raise an exception with all error details
+    if errors:
+        if len(errors) == len(rteachers):
+            raise Exception(
+                f"Failed to send custom email to all {len(errors)} teacher(s) for school {school.name}:\n\n" +
+                "\n\n".join(errors)
+            )
+        else:
+            raise Exception(
+                f"Partial failure sending custom email for school {school.name}. "
+                f"{len(errors)} of {len(rteachers)} failed:\n\n" +
+                "\n\n".join(errors)
+            )
 
 def send_email(subject, body, sender, attachments, recipient_list):
     email = EmailMessage(

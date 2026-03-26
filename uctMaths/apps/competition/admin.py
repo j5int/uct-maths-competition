@@ -86,10 +86,24 @@ class SchoolAdmin(ImportExportModelAdmin):
 
     # Action items (require selections)
     actions = [    
-                'remove_user_associations', 'output_schooltaglist','print_school_confirmations','generate_school_reports',
-                'generate_multi_school_reports','email_school_reports','generate_school_answer_sheets',
-                'email_school_answer_sheets','export_courier_address', "reset_school_data"
-            ]
+        'send_custom_email',
+        'remove_user_associations', 'output_schooltaglist','print_school_confirmations','generate_school_reports',
+        'generate_multi_school_reports','email_school_reports','generate_school_answer_sheets',
+        'email_school_answer_sheets','export_courier_address', "reset_school_data"
+    ]
+
+    def send_custom_email(self, request, queryset):
+        """Redirect to form page to collect email subject and message"""
+        from django.http import HttpResponseRedirect
+        
+        # Get the selected school IDs and pass them to the form view via query string
+        selected = queryset.values_list('id', flat=True)
+        selected_ids = ','.join(str(id) for id in selected)
+        
+        # Redirect to the custom email form page
+        return HttpResponseRedirect(f'/apps/competition/admin/competition/send_custom_email/?schools={selected_ids}')
+
+    send_custom_email.short_description = 'Send custom email to selected school(s)'
 
     #import school dataset
     #Expects csv (comma-separated) file with the first line being:

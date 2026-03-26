@@ -55,6 +55,21 @@ def bg_generate_school_answer_sheets(school_id):
     school.save()
     print("%s: Finished sending answer sheet email for %s." % (current_time(), school.name))
 
+def bg_send_custom_email(school_id, custom_subject, custom_message):
+    """Send a custom email to a school's responsible teachers"""
+    from apps.competition.reports import send_custom_message
+    
+    print("%s: Sending custom email to school with ID: %s" % (current_time(), str(school_id)))
+    
+    school = School.objects.filter(id=school_id)[0]
+    rteachers = ResponsibleTeacher.objects.filter(school=school.id)
+    if len(rteachers) == 0:
+        print("%s: %s has not been allocated a responsible teacher!" % (current_time(), school.name))
+        return
+    
+    send_custom_message(school, custom_subject, custom_message)
+    print("%s: Finished sending custom email to %s." % (current_time(), school.name))
+
 def bg_generate_as_grade_distinction(grade, paired):
     from apps.competition.compadmin import get_student_answer_sheet
     from io import StringIO
