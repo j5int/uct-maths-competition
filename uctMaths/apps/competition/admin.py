@@ -3,7 +3,6 @@
 # sets up how each model is displayed (list_display in each <Model>Admin class)
 # methods for archiving student and invigilators
 from __future__ import unicode_literals
-from urllib import request
 
 from django.contrib import admin
 from django.contrib.auth import get_permission_codename
