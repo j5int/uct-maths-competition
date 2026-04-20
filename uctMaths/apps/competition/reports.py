@@ -93,7 +93,7 @@ def send_answer_sheets(school, answer_sheet, cc_admin=False):
         recipient_list
     )
 
-    arteacher = ResponsibleTeacher.objects.filter(school=school.id).filter(is_primary=False)
+    arteacher = rteachers.filter(is_primary=False)[0]
     if arteacher:
         alt_output_string = 'Dear %s, \n\n' \
                         'This email contains answer sheets for %s for the upcoming UCT Mathematics Competition. ' \
