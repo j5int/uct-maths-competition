@@ -97,7 +97,7 @@ def handle_uploaded_file(inputf):
     for chunk in inputf.chunks():
         input_fstring += chunk.decode('utf-8','replace') #Replace accented characters with unicode equivalents
 
-    results = csv.DictReader(input_fstring)
+    results = csv.DictReader(io.StringIO(input_fstring))
 
     dne_list = [] #Hold "list of errors" to be placed on template. Called "Does Not Exist (DNE) list"
 
