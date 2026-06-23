@@ -54,7 +54,7 @@ tinycss2==1.2.1
 typing_extensions==4.8.0
 tzlocal==5.2
 uritools==4.0.2
-urllib3==2.1.0
+urllib3==2.6.3
 webencodings==0.5.1
 xhtml2pdf==0.2.13
 xlrd==2.0.1
