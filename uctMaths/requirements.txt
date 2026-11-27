@@ -1,5 +1,5 @@
 arabic-reshaper==3.0.0
-asgiref==3.7.2
+asgiref==3.13.0
 asn1crypto==1.5.1
 certifi==2023.7.22
 cffi==1.16.0
@@ -10,7 +10,7 @@ cryptography==41.0.5
 cssselect2==0.7.0
 defusedxml==0.7.1
 diff-match-patch==20230430
-Django==4.2.7
+Django==5.2.19
 django-allauth==0.58.2
 django-import-export==3.3.3
 django-q2
