@@ -9,7 +9,7 @@ import tempfile
 from wsgiref.util import FileWrapper
 
 import pytz
-from PyPDF2 import PdfMerger
+from pypdf import PdfWriter
 
 from .models import SchoolStudent, School, Invigilator, Venue, ResponsibleTeacher, Competition
 from datetime import date, datetime
@@ -1523,20 +1523,24 @@ def printer_answer_sheet(request, assigned_school=None):
         register_result = generate_school_confirmation(request, [assigned_school])
 
     status, answer_sheets_result = build_full_pdf(answer_sheets_html)
+    if status.err:
+        return None
 
-    merger = PdfMerger()
+    # rewind BytesIO streams in case helper functions left the cursor at the end
+    register_result.seek(0)
+    answer_sheets_result.seek(0)
+
+    merger = PdfWriter()
     outpdf = io.BytesIO()
     merger.append(register_result)
     merger.append(os.path.join(os.path.dirname(__file__), "../..", "Declaration", "Declaration.pdf"))
     merger.append(answer_sheets_result)
     merger.write(outpdf)
     merger.close()
-    if not status.err:
-        return outpdf
-    else:
-        pass
 
-    
+    # Rewinds output buffer so caller can read it from the beginning
+    outpdf.seek(0)
+    return outpdf
 
 def venue_assigned(student):
     # Check that the student has a venue allocated
